@@ -9,6 +9,9 @@ namespace alekseev {
     BSTree_node * left, * right, * parent;
   };
 
+  template< class Key, class Value >
+  void clear(BSTree_node< Key, Value > * root, BSTree_node< Key, Value > * fake_leaf);
+
   template< class Key, class Value, class Compare >
   struct BSTree {
     explicit BSTree(Compare comp);
@@ -29,6 +32,17 @@ namespace alekseev {
       Compare comp_;
       BSTree_node< Key, Value > * fake_leaf_;
   };
+
+  template< class Key, class Value >
+  void clear(BSTree_node< Key, Value > * root, BSTree_node< Key, Value > * fake_leaf)
+  {
+    if (root == fake_leaf) {
+      return;
+    }
+    clear(root->left, fake_leaf);
+    clear(root->right, fake_leaf);
+    delete root;
+  }
 
   template< class Key, class Value, class Compare >
   BSTree< Key, Value, Compare >::BSTree(Compare comp):
@@ -63,6 +77,12 @@ namespace alekseev {
   {
     swap(rhs);
     return *this;
+  }
+
+  template< class Key, class Value, class Compare >
+  void BSTree< Key, Value, Compare >::clear()
+  {
+    alekseev::clear(root_, fake_leaf_);
   }
 }
 
