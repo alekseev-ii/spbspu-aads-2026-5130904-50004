@@ -1,7 +1,7 @@
 #ifndef GRAPH_H
 #define GRAPH_H
 
-#include "hash_table.h"
+#include "../common/hash_table.h"
 #include "../common/vector.h"
 
 namespace alekseev {

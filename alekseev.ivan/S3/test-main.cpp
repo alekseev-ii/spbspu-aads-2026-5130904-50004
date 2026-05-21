@@ -2,7 +2,7 @@
 #include <boost/test/included/unit_test.hpp>
 #include <stdexcept>
 #include "graph.h"
-#include "hash_table.h"
+#include "../common/hash_table.h"
 
 using namespace alekseev;
 

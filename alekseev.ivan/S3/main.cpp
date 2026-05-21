@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include "hash_table.h"
+#include "../common/hash_table.h"
 #include "graph.h"
 
 namespace alekseev {

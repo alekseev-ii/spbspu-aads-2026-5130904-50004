@@ -1,8 +1,8 @@
 #ifndef HASH_TABLE_H
 #define HASH_TABLE_H
 
-#include "../common/List.h"
-#include "../common/vector.h"
+#include "List.h"
+#include "vector.h"
 #include <cstddef>
 #include <stdexcept>
 
