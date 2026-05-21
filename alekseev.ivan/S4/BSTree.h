@@ -15,10 +15,14 @@ namespace alekseev {
     ~BSTree();
     BSTree(BSTree & rhs);
     BSTree & operator=(BSTree & rhs);
-    BSTree(BSTree && rhs);
-    BSTree & operator=(BSTree && rhs);
+    BSTree(BSTree && rhs) noexcept;
+    BSTree & operator=(BSTree && rhs) noexcept;
 
     void clear();
+    void swap(BSTree & rhs) noexcept;
+    void push(const Key & key, const Value & value);
+    Value get(const Key & key) const;
+    void remove(const Key & key);
 
     private:
       BSTree_node< Key, Value > * root_;
@@ -39,7 +43,26 @@ namespace alekseev {
   BSTree< Key, Value, Compare >::~BSTree()
   {
     clear();
-    ::operator delete(fake_leaf_);
+    if (fake_leaf_ != nullptr) {
+      ::operator delete(fake_leaf_);
+    }
+  }
+
+  template< class Key, class Value, class Compare >
+  BSTree< Key, Value, Compare >::BSTree(BSTree && rhs) noexcept:
+    root_(rhs.root_),
+    comp_(rhs.comp_),
+    fake_leaf_(rhs.fake_leaf_)
+  {
+    rhs.root_ = nullptr;
+    rhs.fake_leaf_ = nullptr;
+  }
+
+  template< class Key, class Value, class Compare >
+  BSTree< Key, Value, Compare > & BSTree< Key, Value, Compare >::operator=(BSTree && rhs) noexcept
+  {
+    swap(rhs);
+    return *this;
   }
 }
 
