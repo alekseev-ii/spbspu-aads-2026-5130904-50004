@@ -84,6 +84,14 @@ namespace alekseev {
   {
     alekseev::clear(root_, fake_leaf_);
   }
+
+  template< class Key, class Value, class Compare >
+  void BSTree< Key, Value, Compare >::swap(BSTree & rhs) noexcept
+  {
+    std::swap(root_, rhs.root_);
+    std::swap(comp_, rhs.comp_);
+    std::swap(fake_leaf_, rhs.fake_leaf_);
+  }
 }
 
 #endif
