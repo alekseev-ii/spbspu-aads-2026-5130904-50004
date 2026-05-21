@@ -2,6 +2,8 @@
 #define BSTREE_H
 #include <utility>
 
+#include "../../../../../../Program Files/JetBrains/CLion 2025.2/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/stdexcept"
+
 namespace alekseev {
   template< class Key, class Value >
   struct BSTree_node {
@@ -115,6 +117,22 @@ namespace alekseev {
     } else {
       current->right = new_node;
     }
+  }
+
+  template< class Key, class Value, class Compare >
+  Value BSTree< Key, Value, Compare >::get(const Key & key) const
+  {
+    BSTree_node< Key, Value > * current = root_;
+    while (current != fake_leaf_) {
+      if (comp_(key, current->key)) {
+        current = current->left;
+      } else if (comp_(current->key, key)) {
+        current = current->right;
+      } else {
+        return current->value;
+      }
+    }
+    throw std::out_of_range("Key not found");
   }
 }
 
