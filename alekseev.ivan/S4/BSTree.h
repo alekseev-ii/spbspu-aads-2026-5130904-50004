@@ -1,8 +1,8 @@
 #ifndef BSTREE_H
 #define BSTREE_H
-#include <utility>
 
-#include "../../../../../../Program Files/JetBrains/CLion 2025.2/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/stdexcept"
+#include <utility>
+#include <stdexcept>
 
 namespace alekseev {
   template< class Key, class Value >
@@ -14,6 +14,8 @@ namespace alekseev {
 
   template< class Key, class Value >
   void clear(BSTree_node< Key, Value > * root, BSTree_node< Key, Value > * fake_leaf);
+  template< class Key, class Value >
+  void swap(BSTree_node< Key, Value > & a, BSTree_node< Key, Value > & b);
 
   template< class Key, class Value, class Compare >
   struct BSTree {
@@ -24,6 +26,8 @@ namespace alekseev {
     BSTree(BSTree && rhs) noexcept;
     BSTree & operator=(BSTree && rhs) noexcept;
 
+    using BST_n = BSTree_node< Key, Value >;
+
     void clear();
     void swap(BSTree & rhs) noexcept;
     void push(const Key & key, const Value & value);
@@ -31,9 +35,9 @@ namespace alekseev {
     void remove(const Key & key);
 
     private:
-      BSTree_node< Key, Value > * root_;
+      BST_n * root_;
       Compare comp_;
-      BSTree_node< Key, Value > * fake_leaf_;
+      BST_n * fake_leaf_;
   };
 
   template< class Key, class Value >
@@ -49,11 +53,10 @@ namespace alekseev {
 
   template< class Key, class Value, class Compare >
   BSTree< Key, Value, Compare >::BSTree(Compare comp):
-    root_(nullptr),
     comp_(comp)
   {
-    fake_leaf_ = static_cast< BSTree_node< Key, Value > * >(::operator new(
-        sizeof(BSTree_node< Key, Value >)));
+    fake_leaf_ = static_cast< BST_n * >(::operator new(sizeof(BST_n)));
+    root_ = fake_leaf_;
   }
 
   template< class Key, class Value, class Compare >
@@ -99,7 +102,10 @@ namespace alekseev {
   template< class Key, class Value, class Compare >
   void BSTree< Key, Value, Compare >::push(const Key & key, const Value & value)
   {
-    BSTree_node< Key, Value > * current = root_;
+    if (root_ == fake_leaf_) {
+      root_ = new BST_n{key, value, fake_leaf_, fake_leaf_, nullptr};
+    }
+    BST_n * current = root_;
     while (current != fake_leaf_) {
       if (comp_(key, current->key)) {
         current = current->left;
@@ -111,7 +117,7 @@ namespace alekseev {
       }
     }
     current = current->parent;
-    auto * new_node = new BSTree_node< Key, Value >{key, value, fake_leaf_, fake_leaf_, current};
+    auto * new_node = new BST_n{key, value, fake_leaf_, fake_leaf_, current};
     if (comp_(key, current->key)) {
       current->left = new_node;
     } else {
@@ -122,7 +128,7 @@ namespace alekseev {
   template< class Key, class Value, class Compare >
   Value BSTree< Key, Value, Compare >::get(const Key & key) const
   {
-    BSTree_node< Key, Value > * current = root_;
+    BST_n * current = root_;
     while (current != fake_leaf_) {
       if (comp_(key, current->key)) {
         current = current->left;
@@ -133,6 +139,26 @@ namespace alekseev {
       }
     }
     throw std::out_of_range("Key not found");
+  }
+
+  template< class Key, class Value, class Compare >
+  void BSTree< Key, Value, Compare >::remove(const Key & key)
+  {
+    BST_n * current = root_;
+    while (current != fake_leaf_) {
+      if (comp_(key, current->key)) {
+        current = current->left;
+      } else if (comp_(current->key, key)) {
+        current = current->right;
+      } else {
+        break;
+      }
+    }
+    if (current == fake_leaf_) {
+      return;
+    }
+    BST_n * parent = current->parent, * left = current->left, * right = current->right;
+    BST_n * ya_parent = nullptr, * ya_left = nullptr, * ya_right = nullptr;
   }
 }
 
