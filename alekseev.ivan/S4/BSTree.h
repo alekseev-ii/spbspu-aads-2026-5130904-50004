@@ -5,7 +5,8 @@
 namespace alekseev {
   template< class Key, class Value >
   struct BSTree_node {
-    std::pair< Key, Value > data;
+    Key key;
+    Value value;
     BSTree_node * left, * right, * parent;
   };
 
@@ -91,6 +92,29 @@ namespace alekseev {
     std::swap(root_, rhs.root_);
     std::swap(comp_, rhs.comp_);
     std::swap(fake_leaf_, rhs.fake_leaf_);
+  }
+
+  template< class Key, class Value, class Compare >
+  void BSTree< Key, Value, Compare >::push(const Key & key, const Value & value)
+  {
+    BSTree_node< Key, Value > * current = root_;
+    while (current != fake_leaf_) {
+      if (comp_(key, current->key)) {
+        current = current->left;
+      } else if (comp_(current->key, key)) {
+        current = current->right;
+      } else {
+        current->value = value;
+        return;
+      }
+    }
+    current = current->parent;
+    auto * new_node = new BSTree_node< Key, Value >{key, value, fake_leaf_, fake_leaf_, current};
+    if (comp_(key, current->key)) {
+      current->left = new_node;
+    } else {
+      current->right = new_node;
+    }
   }
 }
 
