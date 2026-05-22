@@ -24,6 +24,9 @@ namespace alekseev {
   template< class Key, class Value >
   void clear(BSTree_node< Key, Value > * root, BSTree_node< Key, Value > * fake_leaf);
   template< class Key, class Value >
+  BSTree_node< Key, Value > * copy(BSTree_node< Key, Value > * root,
+      BSTree_node< Key, Value > * new_parent, BSTree_node< Key, Value > * fake_leaf);
+  template< class Key, class Value >
   void swap_ptrs(BSTree_node< Key, Value > & a, BSTree_node< Key, Value > & b) noexcept;
   template< class Key, class Value >
   void swap_data(BSTree_node< Key, Value > & a, BSTree_node< Key, Value > & b);
@@ -89,6 +92,22 @@ namespace alekseev {
   {
     std::swap(a.key, b.key);
     std::swap(a.value, b.value);
+  }
+
+  template< class Key, class Value >
+  BSTree_node< Key, Value > * copy(BSTree_node< Key, Value > * root,
+      BSTree_node< Key, Value > * new_parent, BSTree_node< Key, Value > * fake_leaf)
+  {
+    if (root == fake_leaf) {
+      return fake_leaf;
+    }
+    auto * new_node = new BSTree_node< Key, Value >;
+    new_node->key = root->key;
+    new_node->value = root->value;
+    new_node->left = copy(root->left, new_node, fake_leaf);
+    new_node->right = copy(root->right, new_node, fake_leaf);
+    new_node->parent = new_parent;
+    return new_node;
   }
 
   template< class Key, class Value, class Compare >
