@@ -25,7 +25,8 @@ namespace alekseev {
   void clear(BSTree_node< Key, Value > * root, BSTree_node< Key, Value > * fake_leaf);
   template< class Key, class Value >
   BSTree_node< Key, Value > * copy(BSTree_node< Key, Value > * root,
-      BSTree_node< Key, Value > * new_parent, BSTree_node< Key, Value > * fake_leaf);
+      BSTree_node< Key, Value > * fake_leaf, BSTree_node< Key, Value > * new_parent,
+      BSTree_node< Key, Value > * new_fake_leaf);
   template< class Key, class Value >
   void swap_ptrs(BSTree_node< Key, Value > & a, BSTree_node< Key, Value > & b) noexcept;
   template< class Key, class Value >
@@ -80,6 +81,23 @@ namespace alekseev {
   }
 
   template< class Key, class Value >
+  BSTree_node< Key, Value > * copy(BSTree_node< Key, Value > * root,
+      BSTree_node< Key, Value > * fake_leaf, BSTree_node< Key, Value > * new_parent,
+      BSTree_node< Key, Value > * new_fake_leaf)
+  {
+    if (root == fake_leaf) {
+      return new_fake_leaf;
+    }
+    auto * new_node = new BSTree_node< Key, Value >;
+    new_node->key = root->key;
+    new_node->value = root->value;
+    new_node->left = copy(root->left, new_node, fake_leaf);
+    new_node->right = copy(root->right, new_node, fake_leaf);
+    new_node->parent = new_parent;
+    return new_node;
+  }
+
+  template< class Key, class Value >
   void swap_ptrs(BSTree_node< Key, Value > & a, BSTree_node< Key, Value > & b) noexcept
   {
     std::swap(a.left, b.left);
@@ -92,22 +110,6 @@ namespace alekseev {
   {
     std::swap(a.key, b.key);
     std::swap(a.value, b.value);
-  }
-
-  template< class Key, class Value >
-  BSTree_node< Key, Value > * copy(BSTree_node< Key, Value > * root,
-      BSTree_node< Key, Value > * new_parent, BSTree_node< Key, Value > * fake_leaf)
-  {
-    if (root == fake_leaf) {
-      return fake_leaf;
-    }
-    auto * new_node = new BSTree_node< Key, Value >;
-    new_node->key = root->key;
-    new_node->value = root->value;
-    new_node->left = copy(root->left, new_node, fake_leaf);
-    new_node->right = copy(root->right, new_node, fake_leaf);
-    new_node->parent = new_parent;
-    return new_node;
   }
 
   template< class Key, class Value, class Compare >
@@ -144,6 +146,22 @@ namespace alekseev {
     if (fake_leaf_ != nullptr) {
       ::operator delete(fake_leaf_);
     }
+  }
+
+  template< class Key, class Value, class Compare >
+  BSTree< Key, Value, Compare >::BSTree(BSTree & rhs):
+    comp_(rhs.comp_),
+    fake_leaf_(static_cast< BST_n * >(::operator new(sizeof(BST_n))))
+  {
+    root_ = copy(rhs.root_, rhs.fake_leaf_, nullptr, fake_leaf_);
+  }
+
+  template< class Key, class Value, class Compare >
+  BSTree< Key, Value, Compare > & BSTree< Key, Value, Compare >::operator=(BSTree & rhs)
+  {
+    BST_n * temp_root = copy(rhs.root_, rhs.fake_leaf_, nullptr, fake_leaf_);
+    alekseev::clear(root_, fake_leaf_);
+    root_ = temp_root;
   }
 
   template< class Key, class Value, class Compare >
