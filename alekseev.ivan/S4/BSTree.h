@@ -30,8 +30,7 @@ namespace alekseev {
 
   template< class Key, class Value, class Compare >
   struct BSTIterator {
-    BSTIterator(BSTree_node< Key, Value > * root, Compare comp);
-    BSTIterator(BSTree< Key, Value, Compare > * tree);
+    explicit BSTIterator(BSTree< Key, Value, Compare > * tree);
     ~BSTIterator() = default;
     BSTIterator(BSTIterator & rhs);
     BSTIterator & operator=(BSTIterator & rhs);
@@ -39,7 +38,7 @@ namespace alekseev {
     BSTIterator & operator=(BSTIterator && rhs);
 
     private:
-      BSTree< Key, Value, Compare > & tree;
+      BSTree< Key, Value, Compare > & tree_;
   };
 
   template< class Key, class Value, class Compare >
@@ -90,6 +89,25 @@ namespace alekseev {
   {
     std::swap(a.key, b.key);
     std::swap(a.value, b.value);
+  }
+
+  template< class Key, class Value, class Compare >
+  BSTIterator< Key, Value, Compare >::BSTIterator(BSTree< Key, Value, Compare > * tree):
+    tree_(tree)
+  {
+  }
+
+  template< class Key, class Value, class Compare >
+  BSTIterator< Key, Value, Compare >::BSTIterator(BSTIterator & rhs):
+    tree_(rhs.tree_)
+  {
+  }
+
+  template< class Key, class Value, class Compare >
+  BSTIterator< Key, Value, Compare > & BSTIterator< Key, Value, Compare >::operator=(
+      BSTIterator & rhs)
+  {
+    tree_ = rhs.tree_;
   }
 
   template< class Key, class Value, class Compare >
