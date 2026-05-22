@@ -49,8 +49,8 @@ namespace alekseev {
   struct BSTree {
     explicit BSTree(Compare comp);
     ~BSTree();
-    BSTree(BSTree & rhs);
-    BSTree & operator=(BSTree & rhs);
+    BSTree(const BSTree & rhs);
+    BSTree & operator=(const BSTree & rhs);
     BSTree(BSTree && rhs) noexcept;
     BSTree & operator=(BSTree && rhs) noexcept;
 
@@ -149,7 +149,7 @@ namespace alekseev {
   }
 
   template< class Key, class Value, class Compare >
-  BSTree< Key, Value, Compare >::BSTree(BSTree & rhs):
+  BSTree< Key, Value, Compare >::BSTree(const BSTree & rhs):
     comp_(rhs.comp_),
     fake_leaf_(static_cast< BST_n * >(::operator new(sizeof(BST_n))))
   {
@@ -157,11 +157,12 @@ namespace alekseev {
   }
 
   template< class Key, class Value, class Compare >
-  BSTree< Key, Value, Compare > & BSTree< Key, Value, Compare >::operator=(BSTree & rhs)
+  BSTree< Key, Value, Compare > & BSTree< Key, Value, Compare >::operator=(const BSTree & rhs)
   {
     BST_n * temp_root = copy(rhs.root_, rhs.fake_leaf_, nullptr, fake_leaf_);
     alekseev::clear(root_, fake_leaf_);
     root_ = temp_root;
+    return *this;
   }
 
   template< class Key, class Value, class Compare >
