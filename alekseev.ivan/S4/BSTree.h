@@ -15,7 +15,9 @@ namespace alekseev {
   template< class Key, class Value >
   void clear(BSTree_node< Key, Value > * root, BSTree_node< Key, Value > * fake_leaf);
   template< class Key, class Value >
-  void swap(BSTree_node< Key, Value > & a, BSTree_node< Key, Value > & b);
+  void swap_ptrs(BSTree_node< Key, Value > & a, BSTree_node< Key, Value > & b) noexcept;
+  template< class Key, class Value >
+  void swap_data(BSTree_node< Key, Value > & a, BSTree_node< Key, Value > & b);
 
   template< class Key, class Value, class Compare >
   struct BSTree {
@@ -49,6 +51,21 @@ namespace alekseev {
     clear(root->left, fake_leaf);
     clear(root->right, fake_leaf);
     delete root;
+  }
+
+  template< class Key, class Value >
+  void swap_ptrs(BSTree_node< Key, Value > & a, BSTree_node< Key, Value > & b) noexcept
+  {
+    std::swap(a.left, b.left);
+    std::swap(a.right, b.right);
+    std::swap(a.parent, b.parent);
+  }
+
+  template< class Key, class Value >
+  void swap_data(BSTree_node< Key, Value > & a, BSTree_node< Key, Value > & b)
+  {
+    std::swap(a.key, b.key);
+    std::swap(a.value, b.value);
   }
 
   template< class Key, class Value, class Compare >
@@ -157,8 +174,25 @@ namespace alekseev {
     if (current == fake_leaf_) {
       return;
     }
-    BST_n * parent = current->parent, * left = current->left, * right = current->right;
-    BST_n * ya_parent = nullptr, * ya_left = nullptr, * ya_right = nullptr;
+    BST_n * found = current;
+    if (current->right != fake_leaf_) {
+      current = current->right;
+      while (current->left != fake_leaf_) {
+        current = current->left;
+      }
+      swap_ptrs(current, found);
+      found->parent->left = found->right;
+      found->right->parent = found->parent;
+      delete found;
+    } else {
+      if (current->parent->left == current) {
+        current->parent->left = current->left;
+      } else {
+        current->parent->right = current->left;
+      }
+      found->left->parent = current->parent;
+      delete current;
+    }
   }
 }
 
