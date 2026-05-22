@@ -33,7 +33,8 @@ namespace alekseev {
     void clear();
     void swap(BSTree & rhs) noexcept;
     void push(const Key & key, const Value & value);
-    Value get(const Key & key) const;
+    Value & at(const Key & key);
+    const Value & at(const Key & key) const;
     void remove(const Key & key);
 
     private:
@@ -143,7 +144,13 @@ namespace alekseev {
   }
 
   template< class Key, class Value, class Compare >
-  Value BSTree< Key, Value, Compare >::get(const Key & key) const
+  Value & BSTree< Key, Value, Compare >::at(const Key & key)
+  {
+    return const_cast< Value & >(static_cast< const BSTree >(*this).at(key));
+  }
+
+  template< class Key, class Value, class Compare >
+  const Value & BSTree< Key, Value, Compare >::at(const Key & key) const
   {
     BST_n * current = root_;
     while (current != fake_leaf_) {
@@ -181,14 +188,18 @@ namespace alekseev {
         current = current->left;
       }
       swap_ptrs(current, found);
-      found->parent->left = found->right;
+      if (found->parent != nullptr) {
+        found->parent->left = found->right;
+      }
       found->right->parent = found->parent;
       delete found;
     } else {
-      if (current->parent->left == current) {
-        current->parent->left = current->left;
-      } else {
-        current->parent->right = current->left;
+      if (current->parent != nullptr) {
+        if (current->parent->left == current) {
+          current->parent->left = current->left;
+        } else {
+          current->parent->right = current->left;
+        }
       }
       found->left->parent = current->parent;
       delete current;
