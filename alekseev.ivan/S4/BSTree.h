@@ -6,6 +6,15 @@
 
 namespace alekseev {
   template< class Key, class Value >
+  struct BSTree_node;
+  template< class Key, class Value, class Compare >
+  struct BSTree;
+  template< class Key, class Value, class Compare >
+  struct BSTIterator;
+  template< class Key, class Value, class Compare >
+  struct BSTConstIterator;
+
+  template< class Key, class Value >
   struct BSTree_node {
     Key key;
     Value value;
@@ -18,6 +27,20 @@ namespace alekseev {
   void swap_ptrs(BSTree_node< Key, Value > & a, BSTree_node< Key, Value > & b) noexcept;
   template< class Key, class Value >
   void swap_data(BSTree_node< Key, Value > & a, BSTree_node< Key, Value > & b);
+
+  template< class Key, class Value, class Compare >
+  struct BSTIterator {
+    BSTIterator(BSTree_node< Key, Value > * root, Compare comp);
+    BSTIterator(BSTree< Key, Value, Compare > * tree);
+    ~BSTIterator() = default;
+    BSTIterator(BSTIterator & rhs);
+    BSTIterator & operator=(BSTIterator & rhs);
+    BSTIterator(BSTIterator && rhs);
+    BSTIterator & operator=(BSTIterator && rhs);
+
+    private:
+      BSTree< Key, Value, Compare > & tree;
+  };
 
   template< class Key, class Value, class Compare >
   struct BSTree {
