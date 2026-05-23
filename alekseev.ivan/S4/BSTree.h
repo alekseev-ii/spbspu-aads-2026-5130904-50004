@@ -43,6 +43,8 @@ namespace alekseev {
   template< class Key, class Value >
   BSTree_node< Key, Value > * prev(BSTree_node< Key, Value > * current,
       BSTree_node< Key, Value > * fake_leaf);
+  template< class Key, class Value >
+  size_t height(BSTree_node< Key, Value > * root, BSTree_node< Key, Value > * fake_leaf);
 
   template< class Key, class Value >
   struct BSTIterator {
@@ -132,6 +134,9 @@ namespace alekseev {
     using const_it = BSTConstIterator< Key, Value >;
     const_it begin() const;
     const_it end() const;
+
+    size_t height(const_it it) const;
+    size_t height() const;
 
     private:
       BST_n * root_;
@@ -250,6 +255,15 @@ namespace alekseev {
       }
     }
     return current->parent;
+  }
+
+  template< class Key, class Value >
+  size_t height(BSTree_node< Key, Value > * root, BSTree_node< Key, Value > * fake_leaf)
+  {
+    if (root == fake_leaf) {
+      return 0;
+    }
+    return std::max({1ull, heigh(root->left, fake_leaf), heigh(root->right, fake_leaf)});
   }
 
   template< class Key, class Value >
@@ -601,6 +615,18 @@ namespace alekseev {
   BSTConstIterator< Key, Value > BSTree< Key, Value, Compare >::end() const
   {
     return alekseev::end< Key, Value, const_it >(root_, fake_leaf_);
+  }
+
+  template< class Key, class Value, class Compare >
+  size_t BSTree< Key, Value, Compare >::height(const_it it) const
+  {
+    return alekseev::height(it.current_, fake_leaf_);
+  }
+
+  template< class Key, class Value, class Compare >
+  size_t BSTree< Key, Value, Compare >::height() const
+  {
+    return alekseev::height(root_, fake_leaf_);
   }
 }
 
