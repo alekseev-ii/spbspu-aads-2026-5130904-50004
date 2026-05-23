@@ -64,6 +64,9 @@ namespace alekseev {
     template< class OtherBSTIterator >
     bool operator!=(OtherBSTIterator rhs);
 
+    Value & operator*() const;
+    Value * operator->() const;
+
     private:
       BSTree_node< Key, Value > * current_;
       BSTree_node< Key, Value > * fake_leaf_;
@@ -271,6 +274,18 @@ namespace alekseev {
   bool BSTIterator< Key, Value >::operator!=(OtherBSTIterator rhs)
   {
     return current_ != rhs.current_;
+  }
+
+  template< class Key, class Value >
+  Value & BSTIterator< Key, Value >::operator*() const
+  {
+    return current_->value;
+  }
+
+  template< class Key, class Value >
+  Value * BSTIterator< Key, Value >::operator->() const
+  {
+    return std::addressof(current_->value);
   }
 
   template< class Key, class Value, class Compare >
