@@ -9,9 +9,9 @@ namespace alekseev {
   struct BSTree_node;
   template< class Key, class Value, class Compare >
   struct BSTree;
-  template< class Key, class Value, class Compare >
+  template< class Key, class Value >
   struct BSTIterator;
-  template< class Key, class Value, class Compare >
+  template< class Key, class Value >
   struct BSTConstIterator;
 
   template< class Key, class Value >
@@ -32,17 +32,19 @@ namespace alekseev {
   template< class Key, class Value >
   void swap_data(BSTree_node< Key, Value > & a, BSTree_node< Key, Value > & b);
 
-  template< class Key, class Value, class Compare >
+  template< class Key, class Value >
   struct BSTIterator {
-    explicit BSTIterator(BSTree< Key, Value, Compare > * tree);
+    explicit BSTIterator(BSTree_node< Key, Value > * current,
+        BSTree_node< Key, Value > * fake_leaf);
     ~BSTIterator() = default;
-    BSTIterator(BSTIterator & rhs);
-    BSTIterator & operator=(BSTIterator & rhs);
-    BSTIterator(BSTIterator && rhs);
-    BSTIterator & operator=(BSTIterator && rhs);
+    BSTIterator(const BSTIterator & rhs) = default;
+    BSTIterator & operator=(const BSTIterator & rhs) = default;
+    BSTIterator(BSTIterator && rhs) noexcept;
+    BSTIterator & operator=(BSTIterator && rhs) noexcept;
 
     private:
-      BSTree< Key, Value, Compare > & tree_;
+      BSTree_node< Key, Value > * current_;
+      BSTree_node< Key, Value > * fake_leaf_;
   };
 
   template< class Key, class Value, class Compare >
@@ -112,23 +114,27 @@ namespace alekseev {
     std::swap(a.value, b.value);
   }
 
-  template< class Key, class Value, class Compare >
-  BSTIterator< Key, Value, Compare >::BSTIterator(BSTree< Key, Value, Compare > * tree):
-    tree_(tree)
+  template< class Key, class Value >
+  BSTIterator< Key, Value >::BSTIterator(BSTree_node< Key, Value > * current,
+      BSTree_node< Key, Value > * fake_leaf):
+    current_(current),
+    fake_leaf_(fake_leaf)
   {
   }
 
-  template< class Key, class Value, class Compare >
-  BSTIterator< Key, Value, Compare >::BSTIterator(BSTIterator & rhs):
-    tree_(rhs.tree_)
+  template< class Key, class Value >
+  BSTIterator< Key, Value >::BSTIterator(BSTIterator && rhs) noexcept:
+    current_(rhs.current_),
+    fake_leaf_(rhs.fake_leaf_)
   {
   }
 
-  template< class Key, class Value, class Compare >
-  BSTIterator< Key, Value, Compare > & BSTIterator< Key, Value, Compare >::operator=(
-      BSTIterator & rhs)
+  template< class Key, class Value >
+  BSTIterator< Key, Value > & BSTIterator< Key, Value >::operator=(BSTIterator && rhs) noexcept
   {
-    tree_ = rhs.tree_;
+    current_ = rhs.current_;
+    fake_leaf_ = rhs.fake_leaf_;
+    return *this;
   }
 
   template< class Key, class Value, class Compare >
