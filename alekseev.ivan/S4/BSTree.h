@@ -3,6 +3,7 @@
 
 #include <utility>
 #include <stdexcept>
+#include <algorithm>
 
 namespace alekseev {
   template< class Key, class Value >
@@ -28,9 +29,7 @@ namespace alekseev {
       BSTree_node< Key, Value > * fake_leaf, BSTree_node< Key, Value > * new_parent,
       BSTree_node< Key, Value > * new_fake_leaf);
   template< class Key, class Value >
-  void swap_ptrs(BSTree_node< Key, Value > & a, BSTree_node< Key, Value > & b) noexcept;
-  template< class Key, class Value >
-  void swap_data(BSTree_node< Key, Value > & a, BSTree_node< Key, Value > & b);
+  void swap_ptrs(BSTree_node< Key, Value > * a, BSTree_node< Key, Value > * b) noexcept;
   template< class Key, class Value >
   BSTree_node< Key, Value > * fall_left(BSTree_node< Key, Value > * current,
       BSTree_node< Key, Value > * fake_leaf);
@@ -169,20 +168,50 @@ namespace alekseev {
       return new_fake_leaf;
     }
     auto * new_node = new BSTree_node< Key, Value >;
-    new_node->key = root->key;
-    new_node->value = root->value;
-    new_node->left = copy(root->left, new_node, fake_leaf);
-    new_node->right = copy(root->right, new_node, fake_leaf);
+    try {
+      new_node->key = root->key;
+      new_node->value = root->value;
+    } catch (...) {
+      delete new_node;
+      throw;
+    }
+    new_node->left = new_fake_leaf;
+    new_node->right = new_fake_leaf;
     new_node->parent = new_parent;
+    if (root->parent != nullptr) {
+      if (root->parent->left == new_node) {
+        new_parent->left = new_node;
+      } else {
+        new_parent->right = new_node;
+      }
+    }
+    new_node->left = copy(root->left, fake_leaf, new_node, new_fake_leaf);
+    new_node->right = copy(root->right, fake_leaf, new_node, new_fake_leaf);
     return new_node;
   }
 
   template< class Key, class Value >
-  void swap_ptrs(BSTree_node< Key, Value > & a, BSTree_node< Key, Value > & b) noexcept
+  void swap_ptrs(BSTree_node< Key, Value > * a, BSTree_node< Key, Value > * b) noexcept
   {
-    std::swap(a.left, b.left);
-    std::swap(a.right, b.right);
-    std::swap(a.parent, b.parent);
+    std::swap(a->left->parent, b->left->parent);
+    std::swap(a->right->parent, b->right->parent);
+    if (a->parent != nullptr) {
+      if (a->parent->left == a) {
+        a->parent->left = b;
+      } else {
+        a->parent->right = b;
+      }
+    }
+    if (b->parent != nullptr) {
+      if (b->parent->left == b) {
+        b->parent->left = a;
+      } else {
+        b->parent->right = a;
+      }
+    }
+    std::swap(a->left, b->left);
+    std::swap(a->right, b->right);
+    std::swap(a->parent, b->parent);
   }
 
   template< class Key, class Value >
@@ -268,7 +297,7 @@ namespace alekseev {
     if (root == fake_leaf) {
       return 0;
     }
-    return std::max({1ull, heigh(root->left, fake_leaf), heigh(root->right, fake_leaf)});
+    return std::max({1ull, height(root->left, fake_leaf), height(root->right, fake_leaf)});
   }
 
   template< class Key, class Value >
@@ -461,6 +490,9 @@ namespace alekseev {
     comp_(comp)
   {
     fake_leaf_ = static_cast< BST_n * >(::operator new(sizeof(BST_n)));
+    fake_leaf_->parent = nullptr;
+    fake_leaf_->left = fake_leaf_;
+    fake_leaf_->right = fake_leaf_;
     root_ = fake_leaf_;
   }
 
@@ -475,17 +507,32 @@ namespace alekseev {
 
   template< class Key, class Value, class Compare >
   BSTree< Key, Value, Compare >::BSTree(const BSTree & rhs):
+    root_(nullptr),
     comp_(rhs.comp_),
-    fake_leaf_(static_cast< BST_n * >(::operator new(sizeof(BST_n))))
+    fake_leaf_(nullptr)
   {
-    root_ = copy(rhs.root_, rhs.fake_leaf_, nullptr, fake_leaf_);
+    fake_leaf_ = static_cast< BST_n * >(::operator new(sizeof(BST_n)));
+    fake_leaf_->parent = fake_leaf_;
+    fake_leaf_->left = fake_leaf_;
+    fake_leaf_->right = fake_leaf_;
+    try {
+      root_ = new BST_n{rhs.root_->key, rhs.root_->value, fake_leaf_, fake_leaf_, nullptr};
+      copy(rhs.root_, rhs.fake_leaf_, root_, fake_leaf_);
+    } catch (...) {
+      if (root_ != nullptr) {
+        clear();
+      }
+      ::operator delete(fake_leaf_);
+    }
   }
 
   template< class Key, class Value, class Compare >
-  BSTree< Key, Value, Compare > & BSTree< Key, Value, Compare >::operator=(const BSTree & rhs)
+  BSTree< Key, Value, Compare > & BSTree< Key, Value, Compare >::operator=(
+      const BSTree< Key, Value, Compare > & rhs)
   {
-    BST_n * temp_root = copy(rhs.root_, rhs.fake_leaf_, nullptr, fake_leaf_);
-    alekseev::clear(root_, fake_leaf_);
+    auto * temp_root = new BST_n{rhs.root_->key, rhs.root_->value, fake_leaf_, fake_leaf_, nullptr};
+    copy(rhs.root_, rhs.fake_leaf_, temp_root, fake_leaf_);
+    clear();
     root_ = temp_root;
     return *this;
   }
@@ -526,19 +573,23 @@ namespace alekseev {
   {
     if (root_ == fake_leaf_) {
       root_ = new BST_n{key, value, fake_leaf_, fake_leaf_, nullptr};
+      return;
     }
     BST_n * current = root_;
+    BST_n * parent = current->parent;
     while (current != fake_leaf_) {
       if (comp_(key, current->key)) {
+        parent = current;
         current = current->left;
       } else if (comp_(current->key, key)) {
+        parent = current;
         current = current->right;
       } else {
         current->value = value;
         return;
       }
     }
-    current = current->parent;
+    current = parent;
     auto * new_node = new BST_n{key, value, fake_leaf_, fake_leaf_, current};
     if (comp_(key, current->key)) {
       current->left = new_node;
@@ -583,6 +634,12 @@ namespace alekseev {
       }
     }
     if (current == fake_leaf_) {
+      return;
+    }
+    if (current->parent == nullptr) {
+      delete current;
+      root_ = fake_leaf_;
+      root_->parent = nullptr;
       return;
     }
     BST_n * found = current;
@@ -639,9 +696,9 @@ namespace alekseev {
     current->parent = parent->parent;
     if (current->parent != nullptr) {
       if (current->parent->left == parent) {
-        current->parent->left == current;
+        current->parent->left = current;
       } else {
-        current->parent->right == current;
+        current->parent->right = current;
       }
     }
 
@@ -667,9 +724,9 @@ namespace alekseev {
     current->parent = parent->parent;
     if (current->parent != nullptr) {
       if (current->parent->left == parent) {
-        current->parent->left == current;
+        current->parent->left = current;
       } else {
-        current->parent->right == current;
+        current->parent->right = current;
       }
     }
 
