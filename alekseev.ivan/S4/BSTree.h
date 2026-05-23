@@ -136,6 +136,7 @@ namespace alekseev {
     Value & at(const Key & key);
     const Value & at(const Key & key) const;
     void remove(const Key & key);
+    bool contains(const Key & key) const;
 
     friend struct BSTConstIterator< Key, Value >;
     friend struct BSTIterator< Key, Value >;
@@ -616,50 +617,23 @@ namespace alekseev {
       } else if (comp_(current->key, key)) {
         current = current->right;
       } else {
-        // std::cout << key << " already exists\n";
         current->value = value;
         return;
       }
     }
-    // std::cout << (root_ == current) << " " << (current == fake_leaf_) << " " << (parent == root_) <<
-    //     "\n";
-    // std::cout << "before " << fake_leaf_ << " " << parent->left << " " << parent->right << " " <<
-    //     parent->parent << "\n";
-    // std::cout << "before " << fake_leaf_ << " " << root_->left << " " << root_->right << " " <<
-    //     root_->parent << "\n";
     auto * new_node = new BST_n{key, value, fake_leaf_, fake_leaf_, parent};
     if (comp_(key, parent->key)) {
-      // std::cout << key << " is lesser than" << parent->key << "\n";
       parent->left = new_node;
-      // std::cout << "in " << fake_leaf_ << " " << parent->left << " " << parent->right << " " <<
-      //     parent->parent << "\n";
-      // std::cout << "in " << fake_leaf_ << " " << root_->left << " " << root_->right << " " << root_
-      //     ->parent << "\n";
     } else {
-      // std::cout << key << " is greater than" << parent->key << "\n";
       parent->right = new_node;
-      // std::cout << "in " << fake_leaf_ << " " << parent->left << " " << parent->right << " " <<
-      //     parent->parent << "\n";
-      // std::cout << "in " << fake_leaf_ << " " << root_->left << " " << root_->right << " " << root_
-      //     ->parent << "\n";
     }
-    // std::cout << "after " << fake_leaf_ << " " << parent->left << " " << parent->right << " " <<
-    //     parent->parent << "\n";
-    // std::cout << "after " << fake_leaf_ << " " << root_->left << " " << root_->right << " " << root_
-    //     ->parent << "\n\n";
   }
 
   template< class Key, class Value, class Compare >
   Value & BSTree< Key, Value, Compare >::at(const Key & key)
   {
-    // std::cout << "\t find: " << key << "\n";
-    // std::cout << fake_leaf_ << " " << root_ << " " << root_->left << " " << root_->right << " " <<
-    //     root_->parent << "\n";
     BST_n * current = root_;
     while (current != fake_leaf_) {
-      // std::cout << "current key: " << current->key << "\n";
-      // std::cout << fake_leaf_ << " " << current->left << " " << current->right << " " << current->
-      // parent << "\n";
       if (comp_(key, current->key)) {
         current = current->left;
       } else if (comp_(current->key, key)) {
@@ -674,14 +648,8 @@ namespace alekseev {
   template< class Key, class Value, class Compare >
   const Value & BSTree< Key, Value, Compare >::at(const Key & key) const
   {
-    // std::cout << "\t find: " << key << "\n";
-    // std::cout << fake_leaf_ << " " << root_ << " " << root_->left << " " << root_->right << " " <<
-    //     root_->parent << "\n";
     BST_n * current = root_;
     while (current != fake_leaf_) {
-      // std::cout << "current key: " << current->key << "\n";
-      // std::cout << fake_leaf_ << " " << current->left << " " << current->right << " " << current->
-      //     parent << "\n";
       if (comp_(key, current->key)) {
         current = current->left;
       } else if (comp_(current->key, key)) {
@@ -752,6 +720,22 @@ namespace alekseev {
       child->parent = to_remove->parent;
     }
     delete to_remove;
+  }
+
+  template< class Key, class Value, class Compare >
+  bool BSTree< Key, Value, Compare >::contains(const Key & key) const
+  {
+    BST_n * current = root_;
+    while (current != fake_leaf_) {
+      if (comp_(key, current->key)) {
+        current = current->left;
+      } else if (comp_(current->key, key)) {
+        current = current->right;
+      } else {
+        return true;
+      }
+    }
+    return false;
   }
 
   template< class Key, class Value, class Compare >
