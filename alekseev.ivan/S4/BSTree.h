@@ -59,6 +59,11 @@ namespace alekseev {
     BSTIterator & operator--();
     BSTIterator operator--(int);
 
+    template< class OtherBSTIterator >
+    bool operator==(OtherBSTIterator rhs);
+    template< class OtherBSTIterator >
+    bool operator!=(OtherBSTIterator rhs);
+
     private:
       BSTree_node< Key, Value > * current_;
       BSTree_node< Key, Value > * fake_leaf_;
@@ -252,6 +257,20 @@ namespace alekseev {
     BSTIterator tmp = *this;
     --(*this);
     return tmp;
+  }
+
+  template< class Key, class Value >
+  template< class OtherBSTIterator >
+  bool BSTIterator< Key, Value >::operator==(OtherBSTIterator rhs)
+  {
+    return current_ == rhs.current_;
+  }
+
+  template< class Key, class Value >
+  template< class OtherBSTIterator >
+  bool BSTIterator< Key, Value >::operator!=(OtherBSTIterator rhs)
+  {
+    return current_ != rhs.current_;
   }
 
   template< class Key, class Value, class Compare >
