@@ -54,6 +54,11 @@ namespace alekseev {
     BSTIterator(BSTIterator && rhs) noexcept;
     BSTIterator & operator=(BSTIterator && rhs) noexcept;
 
+    BSTIterator & operator++();
+    BSTIterator operator++(int);
+    BSTIterator & operator--();
+    BSTIterator operator--(int);
+
     private:
       BSTree_node< Key, Value > * current_;
       BSTree_node< Key, Value > * fake_leaf_;
@@ -217,6 +222,36 @@ namespace alekseev {
     current_ = rhs.current_;
     fake_leaf_ = rhs.fake_leaf_;
     return *this;
+  }
+
+  template< class Key, class Value >
+  BSTIterator< Key, Value > & BSTIterator< Key, Value >::operator++()
+  {
+    current_ = next(current_, fake_leaf_);
+    return *this;
+  }
+
+  template< class Key, class Value >
+  BSTIterator< Key, Value > BSTIterator< Key, Value >::operator++(int)
+  {
+    BSTIterator tmp = *this;
+    ++(*this);
+    return tmp;
+  }
+
+  template< class Key, class Value >
+  BSTIterator< Key, Value > & BSTIterator< Key, Value >::operator--()
+  {
+    current_ = prev(current_, fake_leaf_);
+    return *this;
+  }
+
+  template< class Key, class Value >
+  BSTIterator< Key, Value > BSTIterator< Key, Value >::operator--(int)
+  {
+    BSTIterator tmp = *this;
+    --(*this);
+    return tmp;
   }
 
   template< class Key, class Value, class Compare >
