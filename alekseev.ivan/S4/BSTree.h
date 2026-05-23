@@ -31,6 +31,18 @@ namespace alekseev {
   void swap_ptrs(BSTree_node< Key, Value > & a, BSTree_node< Key, Value > & b) noexcept;
   template< class Key, class Value >
   void swap_data(BSTree_node< Key, Value > & a, BSTree_node< Key, Value > & b);
+  template< class Key, class Value >
+  BSTree_node< Key, Value > * fall_left(BSTree_node< Key, Value > * current,
+      BSTree_node< Key, Value > * fake_leaf);
+  template< class Key, class Value >
+  BSTree_node< Key, Value > * fall_right(BSTree_node< Key, Value > * current,
+      BSTree_node< Key, Value > * fake_leaf);
+  template< class Key, class Value >
+  BSTree_node< Key, Value > * next(BSTree_node< Key, Value > * current,
+      BSTree_node< Key, Value > * fake_leaf);
+  template< class Key, class Value >
+  BSTree_node< Key, Value > * prev(BSTree_node< Key, Value > * current,
+      BSTree_node< Key, Value > * fake_leaf);
 
   template< class Key, class Value >
   struct BSTIterator {
@@ -112,6 +124,64 @@ namespace alekseev {
   {
     std::swap(a.key, b.key);
     std::swap(a.value, b.value);
+  }
+
+  template< class Key, class Value >
+  BSTree_node< Key, Value > * fall_left(BSTree_node< Key, Value > * current,
+      BSTree_node< Key, Value > * fake_leaf)
+  {
+    if (current == fake_leaf) {
+      return fake_leaf;
+    }
+    while (current->left != fake_leaf) {
+      current = current->left;
+    }
+    return current;
+  }
+
+  template< class Key, class Value >
+  BSTree_node< Key, Value > * fall_right(BSTree_node< Key, Value > * current,
+      BSTree_node< Key, Value > * fake_leaf)
+  {
+    if (current == fake_leaf) {
+      return fake_leaf;
+    }
+    while (current->right != fake_leaf) {
+      current = current->right;
+    }
+    return current;
+  }
+
+  template< class Key, class Value >
+  BSTree_node< Key, Value > * next(BSTree_node< Key, Value > * current,
+      BSTree_node< Key, Value > * fake_leaf)
+  {
+    if (current == fake_leaf) {
+      return fake_leaf;
+    }
+    if (current->right != fake_leaf) {
+      return fall_left(current->right, fake_leaf);
+    }
+    while (current->parent->left != current) {
+      current = current->parent;
+    }
+    return current->parent;
+  }
+
+  template< class Key, class Value >
+  BSTree_node< Key, Value > * prev(BSTree_node< Key, Value > * current,
+      BSTree_node< Key, Value > * fake_leaf)
+  {
+    if (current == fake_leaf) {
+      return fake_leaf;
+    }
+    if (current->left != fake_leaf) {
+      return fall_right(current->left, fake_leaf);
+    }
+    while (current->parent->right != current) {
+      current = current->parent;
+    }
+    return current->parent;
   }
 
   template< class Key, class Value >
