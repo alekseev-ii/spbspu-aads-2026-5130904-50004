@@ -135,6 +135,11 @@ namespace alekseev {
     const_it begin() const;
     const_it end() const;
 
+    const_it rotateLeft(const_it it);
+    const_it rotateRight(const_it it);
+    const_it rotateLargeLeft(const_it it);
+    const_it rotateLargeRight(const_it it);
+
     size_t height(const_it it) const;
     size_t height() const;
 
@@ -615,6 +620,33 @@ namespace alekseev {
   BSTConstIterator< Key, Value > BSTree< Key, Value, Compare >::end() const
   {
     return alekseev::end< Key, Value, const_it >(root_, fake_leaf_);
+  }
+
+  template< class Key, class Value, class Compare >
+  typename BSTree< Key, Value, Compare >::const_it BSTree< Key, Value, Compare >::rotateLeft(
+      const_it it)
+  {
+    BST_n * current = it.current_;
+    if (current->parent == nullptr) {
+      throw std::invalid_argument("it is a root!");
+    }
+    BST_n * parent = current->parent;
+    BST_n * left = current->left;
+
+    parent->right = left;
+    left->parent = parent;
+
+    current->parent = parent->parent;
+    if (current->parent == nullptr) {
+      if (current->parent->left == parent) {
+        current->parent->left == current;
+      } else {
+        current->parent->right == current;
+      }
+    }
+
+    current->left = parent;
+    parent->parent = current;
   }
 
   template< class Key, class Value, class Compare >
