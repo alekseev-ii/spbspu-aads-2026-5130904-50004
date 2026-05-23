@@ -157,13 +157,19 @@ namespace alekseev {
       BSTree_node< Key, Value > * fake_leaf)
   {
     if (current == fake_leaf) {
-      return fake_leaf;
+      return nullptr;
     }
     if (current->right != fake_leaf) {
       return fall_left(current->right, fake_leaf);
     }
+    if (current->parent == nullptr) {
+      return nullptr;
+    }
     while (current->parent->left != current) {
       current = current->parent;
+      if (current->parent == nullptr) {
+        return nullptr;
+      }
     }
     return current->parent;
   }
@@ -173,13 +179,19 @@ namespace alekseev {
       BSTree_node< Key, Value > * fake_leaf)
   {
     if (current == fake_leaf) {
-      return fake_leaf;
+      return nullptr;
     }
     if (current->left != fake_leaf) {
       return fall_right(current->left, fake_leaf);
     }
+    if (current->parent == nullptr) {
+      return nullptr;
+    }
     while (current->parent->right != current) {
       current = current->parent;
+      if (current->parent == nullptr) {
+        return nullptr;
+      }
     }
     return current->parent;
   }
