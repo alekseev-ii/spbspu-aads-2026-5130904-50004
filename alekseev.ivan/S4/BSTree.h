@@ -129,6 +129,10 @@ namespace alekseev {
     const Value & at(const Key & key) const;
     void remove(const Key & key);
 
+    using const_it = BSTConstIterator< Key, Value >;
+    const_it begin() const;
+    const_it end() const;
+
     private:
       BST_n * root_;
       Compare comp_;
@@ -585,6 +589,18 @@ namespace alekseev {
       found->left->parent = current->parent;
       delete current;
     }
+  }
+
+  template< class Key, class Value, class Compare >
+  BSTConstIterator< Key, Value > BSTree< Key, Value, Compare >::begin() const
+  {
+    return alekseev::begin< Key, Value, const_it >(root_, fake_leaf_);
+  }
+
+  template< class Key, class Value, class Compare >
+  BSTConstIterator< Key, Value > BSTree< Key, Value, Compare >::end() const
+  {
+    return alekseev::end< Key, Value, const_it >(root_, fake_leaf_);
   }
 }
 
