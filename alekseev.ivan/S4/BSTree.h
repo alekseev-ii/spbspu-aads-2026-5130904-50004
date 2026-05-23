@@ -23,7 +23,7 @@ namespace alekseev {
   };
 
   template< class Key, class Value >
-  void clear(BSTree_node< Key, Value > * root, BSTree_node< Key, Value > * fake_leaf);
+  void clear(BSTree_node< Key, Value > * root, BSTree_node< Key, Value > * fake_leaf) noexcept;
   template< class Key, class Value >
   BSTree_node< Key, Value > * copy(BSTree_node< Key, Value > * root,
       BSTree_node< Key, Value > * fake_leaf, BSTree_node< Key, Value > * new_parent,
@@ -123,23 +123,26 @@ namespace alekseev {
 
     using BST_n = BSTree_node< Key, Value >;
 
-    void clear();
+    void clear() noexcept;
     void swap(BSTree & rhs) noexcept;
     void push(const Key & key, const Value & value);
     Value & at(const Key & key);
     const Value & at(const Key & key) const;
     void remove(const Key & key);
 
-    using const_it = BSTConstIterator< Key, Value >;
-    const_it begin() const;
-    const_it end() const;
+    using const_iter_t = BSTConstIterator< Key, Value >;
+    using iter_t = BSTConstIterator< Key, Value >;
+    const_iter_t cbegin() const;
+    const_iter_t cend() const;
+    iter_t begin();
+    iter_t end();
 
-    const_it rotateLeft(const_it it);
-    const_it rotateRight(const_it it);
-    const_it rotateLargeLeft(const_it it);
-    const_it rotateLargeRight(const_it it);
+    const_iter_t rotateLeft(const_iter_t it);
+    const_iter_t rotateRight(const_iter_t it);
+    const_iter_t rotateLargeLeft(const_iter_t it);
+    const_iter_t rotateLargeRight(const_iter_t it);
 
-    size_t height(const_it it) const;
+    size_t height(const_iter_t it) const;
     size_t height() const;
 
     private:
@@ -149,7 +152,7 @@ namespace alekseev {
   };
 
   template< class Key, class Value >
-  void clear(BSTree_node< Key, Value > * root, BSTree_node< Key, Value > * fake_leaf)
+  void clear(BSTree_node< Key, Value > * root, BSTree_node< Key, Value > * fake_leaf) noexcept
   {
     if (root == fake_leaf) {
       return;
@@ -179,7 +182,7 @@ namespace alekseev {
     new_node->right = new_fake_leaf;
     new_node->parent = new_parent;
     if (root->parent != nullptr) {
-      if (root->parent->left == new_node) {
+      if (root->parent->left == root) {
         new_parent->left = new_node;
       } else {
         new_parent->right = new_node;
@@ -467,10 +470,10 @@ namespace alekseev {
   }
 
   template< class Key, class Value, class IterType >
-  IterType end(BSTree_node< Key, Value > * root,
+  IterType end(BSTree_node< Key, Value > *,
       BSTree_node< Key, Value > * fake_leaf)
   {
-    return IterType(fall_right(root, fake_leaf), fake_leaf);
+    return IterType(fake_leaf, fake_leaf);
   }
 
   template< class Key, class Value, class Compare, class IterType >
@@ -527,8 +530,7 @@ namespace alekseev {
   }
 
   template< class Key, class Value, class Compare >
-  BSTree< Key, Value, Compare > & BSTree< Key, Value, Compare >::operator=(
-      const BSTree< Key, Value, Compare > & rhs)
+  BSTree< Key, Value, Compare > & BSTree< Key, Value, Compare >::operator=(const BSTree & rhs)
   {
     auto * temp_root = new BST_n{rhs.root_->key, rhs.root_->value, fake_leaf_, fake_leaf_, nullptr};
     copy(rhs.root_, rhs.fake_leaf_, temp_root, fake_leaf_);
@@ -555,7 +557,7 @@ namespace alekseev {
   }
 
   template< class Key, class Value, class Compare >
-  void BSTree< Key, Value, Compare >::clear()
+  void BSTree< Key, Value, Compare >::clear() noexcept
   {
     alekseev::clear(root_, fake_leaf_);
   }
@@ -668,20 +670,32 @@ namespace alekseev {
   }
 
   template< class Key, class Value, class Compare >
-  BSTConstIterator< Key, Value > BSTree< Key, Value, Compare >::begin() const
+  BSTConstIterator< Key, Value > BSTree< Key, Value, Compare >::cbegin() const
   {
-    return alekseev::begin< Key, Value, const_it >(root_, fake_leaf_);
+    return alekseev::begin< Key, Value, const_iter_t >(root_, fake_leaf_);
   }
 
   template< class Key, class Value, class Compare >
-  BSTConstIterator< Key, Value > BSTree< Key, Value, Compare >::end() const
+  BSTConstIterator< Key, Value > BSTree< Key, Value, Compare >::cend() const
   {
-    return alekseev::end< Key, Value, const_it >(root_, fake_leaf_);
+    return alekseev::end< Key, Value, const_iter_t >(root_, fake_leaf_);
+  }
+
+  template< class Key, class Value, class Compare >
+  typename BSTree< Key, Value, Compare >::iter_t BSTree< Key, Value, Compare >::begin()
+  {
+    return alekseev::begin< Key, Value, iter_t >(root_, fake_leaf_);
+  }
+
+  template< class Key, class Value, class Compare >
+  typename BSTree< Key, Value, Compare >::iter_t BSTree< Key, Value, Compare >::end()
+  {
+    return alekseev::end< Key, Value, iter_t >(root_, fake_leaf_);
   }
 
   template< class Key, class Value, class Compare >
   BSTConstIterator< Key, Value > BSTree< Key, Value, Compare >::rotateLeft(
-      const_it it)
+      const_iter_t it)
   {
     BST_n * current = it.current_;
     if (current == fake_leaf_ || current->parent == nullptr) {
@@ -700,16 +714,18 @@ namespace alekseev {
       } else {
         current->parent->right = current;
       }
+    } else {
+      root_ = current;
     }
 
     current->left = parent;
     parent->parent = current;
-    return BSTConstIterator< Key, Value >(current->right, fake_leaf_);
+    return it;
   }
 
   template< class Key, class Value, class Compare >
   BSTConstIterator< Key, Value > BSTree< Key, Value, Compare >::rotateRight(
-      const_it it)
+      const_iter_t it)
   {
     BST_n * current = it.current_;
     if (current == fake_leaf_ || current->parent == nullptr) {
@@ -728,33 +744,31 @@ namespace alekseev {
       } else {
         current->parent->right = current;
       }
+    } else {
+      root_ = current;
     }
 
     current->right = parent;
     parent->parent = current;
-    return BSTConstIterator< Key, Value >(current->left, fake_leaf_);
+    return it;
   }
 
   template< class Key, class Value, class Compare >
   BSTConstIterator< Key, Value > BSTree< Key, Value, Compare >::
-  rotateLargeLeft(const_it it)
+  rotateLargeLeft(const_iter_t it)
   {
-    rotateRight(it);
-    rotateLeft(it);
-    return BSTConstIterator< Key, Value >(it.current_->right->left, fake_leaf_);
+    return rotateLeft(rotateRight(it));
   }
 
   template< class Key, class Value, class Compare >
-  typename BSTree< Key, Value, Compare >::const_it BSTree< Key, Value, Compare >::
-  rotateLargeRight(const_it it)
+  typename BSTree< Key, Value, Compare >::const_iter_t BSTree< Key, Value, Compare >::
+  rotateLargeRight(const_iter_t it)
   {
-    rotateLeft(it);
-    rotateRight(it);
-    return BSTConstIterator< Key, Value >(it.current_->left->right, fake_leaf_);
+    return rotateRight(rotateLeft(it));
   }
 
   template< class Key, class Value, class Compare >
-  size_t BSTree< Key, Value, Compare >::height(const_it it) const
+  size_t BSTree< Key, Value, Compare >::height(const_iter_t it) const
   {
     return alekseev::height(it.current_, fake_leaf_);
   }
