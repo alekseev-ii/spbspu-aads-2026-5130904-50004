@@ -627,7 +627,7 @@ namespace alekseev {
       const_it it)
   {
     BST_n * current = it.current_;
-    if (current->parent == nullptr) {
+    if (current == fake_leaf_ || current->parent == nullptr) {
       throw std::invalid_argument("it is a root!");
     }
     BST_n * parent = current->parent;
@@ -637,7 +637,7 @@ namespace alekseev {
     left->parent = parent;
 
     current->parent = parent->parent;
-    if (current->parent == nullptr) {
+    if (current->parent != nullptr) {
       if (current->parent->left == parent) {
         current->parent->left == current;
       } else {
@@ -646,6 +646,34 @@ namespace alekseev {
     }
 
     current->left = parent;
+    parent->parent = current;
+    return current->right;
+  }
+
+  template< class Key, class Value, class Compare >
+  typename BSTree< Key, Value, Compare >::const_it BSTree< Key, Value, Compare >::rotateRight(
+      const_it it)
+  {
+    BST_n * current = it.current_;
+    if (current == fake_leaf_ || current->parent == nullptr) {
+      throw std::invalid_argument("it is a root!");
+    }
+    BST_n * parent = current->parent;
+    BST_n * right = current->right;
+
+    parent->left = right;
+    right->parent = parent;
+
+    current->parent = parent->parent;
+    if (current->parent != nullptr) {
+      if (current->parent->left == parent) {
+        current->parent->left == current;
+      } else {
+        current->parent->right == current;
+      }
+    }
+
+    current->right = parent;
     parent->parent = current;
   }
 
