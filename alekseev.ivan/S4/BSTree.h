@@ -103,9 +103,8 @@ namespace alekseev {
     const Value & operator*() const;
     const Value * operator->() const;
 
-    private:
-      BSTree_node< Key, Value > * current_;
-      BSTree_node< Key, Value > * fake_leaf_;
+    BSTree_node< Key, Value > * current_;
+    BSTree_node< Key, Value > * fake_leaf_;
   };
 
   template< class Key, class Value, class IterType >
