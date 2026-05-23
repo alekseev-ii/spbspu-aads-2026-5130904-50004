@@ -72,6 +72,34 @@ namespace alekseev {
       BSTree_node< Key, Value > * fake_leaf_;
   };
 
+  template< class Key, class Value >
+  struct BSTConstIterator {
+    explicit BSTConstIterator(BSTree_node< Key, Value > * current,
+        BSTree_node< Key, Value > * fake_leaf);
+    ~BSTConstIterator() = default;
+    BSTConstIterator(const BSTConstIterator & rhs) = default;
+    BSTConstIterator & operator=(const BSTConstIterator & rhs) = default;
+    BSTConstIterator(BSTConstIterator && rhs) noexcept;
+    BSTConstIterator & operator=(BSTConstIterator && rhs) noexcept;
+
+    BSTConstIterator & operator++();
+    BSTConstIterator operator++(int);
+    BSTConstIterator & operator--();
+    BSTConstIterator operator--(int);
+
+    template< class OtherBSTIterator >
+    bool operator==(OtherBSTIterator rhs);
+    template< class OtherBSTIterator >
+    bool operator!=(OtherBSTIterator rhs);
+
+    const Value & operator*() const;
+    const Value * operator->() const;
+
+    private:
+      BSTree_node< Key, Value > * current_;
+      BSTree_node< Key, Value > * fake_leaf_;
+  };
+
   template< class Key, class Value, class Compare >
   struct BSTree {
     explicit BSTree(Compare comp);
@@ -284,6 +312,86 @@ namespace alekseev {
 
   template< class Key, class Value >
   Value * BSTIterator< Key, Value >::operator->() const
+  {
+    return std::addressof(current_->value);
+  }
+
+  template< class Key, class Value >
+  BSTConstIterator< Key, Value >::BSTConstIterator(BSTree_node< Key, Value > * current,
+      BSTree_node< Key, Value > * fake_leaf):
+    current_(current),
+    fake_leaf_(fake_leaf)
+  {
+  }
+
+  template< class Key, class Value >
+  BSTConstIterator< Key, Value >::BSTConstIterator(BSTConstIterator && rhs) noexcept:
+    current_(rhs.current_),
+    fake_leaf_(rhs.fake_leaf_)
+  {
+  }
+
+  template< class Key, class Value >
+  BSTConstIterator< Key, Value > & BSTConstIterator< Key, Value >::operator=(
+      BSTConstIterator && rhs) noexcept
+  {
+    current_ = rhs.current_;
+    fake_leaf_ = rhs.fake_leaf_;
+    return *this;
+  }
+
+  template< class Key, class Value >
+  BSTConstIterator< Key, Value > & BSTConstIterator< Key, Value >::operator++()
+  {
+    current_ = next(current_, fake_leaf_);
+    return *this;
+  }
+
+  template< class Key, class Value >
+  BSTConstIterator< Key, Value > BSTConstIterator< Key, Value >::operator++(int)
+  {
+    BSTConstIterator tmp = *this;
+    ++(*this);
+    return tmp;
+  }
+
+  template< class Key, class Value >
+  BSTConstIterator< Key, Value > & BSTConstIterator< Key, Value >::operator--()
+  {
+    current_ = prev(current_, fake_leaf_);
+    return *this;
+  }
+
+  template< class Key, class Value >
+  BSTConstIterator< Key, Value > BSTConstIterator< Key, Value >::operator--(int)
+  {
+    BSTConstIterator tmp = *this;
+    --(*this);
+    return tmp;
+  }
+
+  template< class Key, class Value >
+  template< class OtherBSTIterator >
+  bool BSTConstIterator< Key, Value >::operator==(OtherBSTIterator rhs)
+  {
+    return current_ == rhs.current_;
+  }
+
+  template< class Key, class Value >
+  template< class OtherBSTIterator >
+  bool BSTConstIterator< Key, Value >::operator!=(OtherBSTIterator rhs)
+  {
+    return current_ != rhs.current_;
+  }
+
+  template< class Key, class Value >
+  const Value & BSTConstIterator< Key, Value >::operator*() const
+  {
+    return current_->value;
+  }
+
+  template< class Key, class Value >
+  const Value * BSTConstIterator< Key, Value >::operator->() const
   {
     return std::addressof(current_->value);
   }
