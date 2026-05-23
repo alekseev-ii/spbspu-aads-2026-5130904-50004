@@ -623,7 +623,7 @@ namespace alekseev {
   }
 
   template< class Key, class Value, class Compare >
-  typename BSTree< Key, Value, Compare >::const_it BSTree< Key, Value, Compare >::rotateLeft(
+  BSTConstIterator< Key, Value > BSTree< Key, Value, Compare >::rotateLeft(
       const_it it)
   {
     BST_n * current = it.current_;
@@ -647,11 +647,11 @@ namespace alekseev {
 
     current->left = parent;
     parent->parent = current;
-    return current->right;
+    return BSTConstIterator< Key, Value >(current->right, fake_leaf_);
   }
 
   template< class Key, class Value, class Compare >
-  typename BSTree< Key, Value, Compare >::const_it BSTree< Key, Value, Compare >::rotateRight(
+  BSTConstIterator< Key, Value > BSTree< Key, Value, Compare >::rotateRight(
       const_it it)
   {
     BST_n * current = it.current_;
@@ -675,6 +675,25 @@ namespace alekseev {
 
     current->right = parent;
     parent->parent = current;
+    return BSTConstIterator< Key, Value >(current->left, fake_leaf_);
+  }
+
+  template< class Key, class Value, class Compare >
+  BSTConstIterator< Key, Value > BSTree< Key, Value, Compare >::
+  rotateLargeLeft(const_it it)
+  {
+    rotateRight(it);
+    rotateLeft(it);
+    return BSTConstIterator< Key, Value >(it.current_->right->left, fake_leaf_);
+  }
+
+  template< class Key, class Value, class Compare >
+  typename BSTree< Key, Value, Compare >::const_it BSTree< Key, Value, Compare >::
+  rotateLargeRight(const_it it)
+  {
+    rotateLeft(it);
+    rotateRight(it);
+    return BSTConstIterator< Key, Value >(it.current_->left->right, fake_leaf_);
   }
 
   template< class Key, class Value, class Compare >
