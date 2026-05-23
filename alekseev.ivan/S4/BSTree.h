@@ -131,7 +131,7 @@ namespace alekseev {
     void remove(const Key & key);
 
     using const_iter_t = BSTConstIterator< Key, Value >;
-    using iter_t = BSTConstIterator< Key, Value >;
+    using iter_t = BSTIterator< Key, Value >;
     const_iter_t cbegin() const;
     const_iter_t cend() const;
     iter_t begin();
@@ -636,12 +636,6 @@ namespace alekseev {
       }
     }
     if (current == fake_leaf_) {
-      return;
-    }
-    if (current->parent == nullptr) {
-      delete current;
-      root_ = fake_leaf_;
-      root_->parent = nullptr;
       return;
     }
     BST_n * found = current;
