@@ -100,6 +100,17 @@ namespace alekseev {
       BSTree_node< Key, Value > * fake_leaf_;
   };
 
+  template< class Key, class Value, class IterType >
+  IterType begin(BSTree_node< Key, Value > * root,
+      BSTree_node< Key, Value > * fake_leaf);
+  template< class Key, class Value, class IterType >
+  IterType end(BSTree_node< Key, Value > * root,
+      BSTree_node< Key, Value > * fake_leaf);
+  template< class Key, class Value, class Compare, class IterType >
+  IterType begin(const BSTree< Key, Value, Compare > & tree);
+  template< class Key, class Value, class Compare, class IterType >
+  IterType end(const BSTree< Key, Value, Compare > & tree);
+
   template< class Key, class Value, class Compare >
   struct BSTree {
     explicit BSTree(Compare comp);
@@ -394,6 +405,32 @@ namespace alekseev {
   const Value * BSTConstIterator< Key, Value >::operator->() const
   {
     return std::addressof(current_->value);
+  }
+
+  template< class Key, class Value, class IterType >
+  IterType begin(BSTree_node< Key, Value > * root,
+      BSTree_node< Key, Value > * fake_leaf)
+  {
+    return IterType(fall_left(root, fake_leaf), fake_leaf);
+  }
+
+  template< class Key, class Value, class IterType >
+  IterType end(BSTree_node< Key, Value > * root,
+      BSTree_node< Key, Value > * fake_leaf)
+  {
+    return IterType(fall_right(root, fake_leaf), fake_leaf);
+  }
+
+  template< class Key, class Value, class Compare, class IterType >
+  IterType begin(const BSTree< Key, Value, Compare > & tree)
+  {
+    return begin< Key, Value, IterType >(tree.root_, tree.fake_leaf_);
+  }
+
+  template< class Key, class Value, class Compare, class IterType >
+  IterType end(const BSTree< Key, Value, Compare > & tree)
+  {
+    return end< Key, Value, IterType >(tree.root_, tree.fake_leaf_);
   }
 
   template< class Key, class Value, class Compare >
