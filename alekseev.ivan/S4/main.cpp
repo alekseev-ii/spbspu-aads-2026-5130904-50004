@@ -145,3 +145,27 @@ void alekseev::Exec::operator()(const std::string & line)
   args.insert(0, words, 1, words.getSize());
   cmds.at(words[0])(bigTree, args);
 }
+
+std::ifstream & alekseev::Exec::input_dicts(std::ifstream & is)
+{
+  if (!is) {
+    return is;
+  }
+  std::string line;
+  while (std::getline(is, line)) {
+    Vector< std::string > words = split(line, ' ');
+    if (words.isEmpty()) {
+      continue;
+    }
+    if (words.getSize() % 2 != 1) {
+      throw std::invalid_argument("wrong input");
+    }
+    std::string name = words[0];
+    BSTree< int, std::string, std::less< > > dataset(std::less< >{});
+    for (size_t i = 1; i < words.getSize(); i += 2) {
+      dataset.push(std::stoi(words[i]), words[i + 1]);
+    }
+    bigTree.push(name, dataset);
+  }
+  return is;
+}
