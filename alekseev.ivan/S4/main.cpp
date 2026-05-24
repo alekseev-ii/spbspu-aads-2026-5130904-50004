@@ -21,7 +21,35 @@ namespace alekseev {
   };
 }
 
-int main();
+int main(int argc, char * argv[])
+{
+  if (argc != 2) {
+    std::cerr << "Usage: " << argv[0] << " input_file\n";
+    return 1;
+  }
+  std::ifstream input_file(argv[1]);
+  if (!input_file.is_open()) {
+    std::cerr << "Failed to open file " << argv[1] << "\n";
+  }
+  alekseev::Exec exec;
+  exec.input_dicts(input_file);
+  input_file.close();
+  std::string line;
+  while (std::getline(std::cin, line)) {
+    try {
+      exec(line);
+    } catch (std::invalid_argument & e) {
+      std::cout << "<INVALID COMMAND>" << "\n";
+    } catch (std::exception & e) {
+      std::cerr << e.what() << "\n";
+      return 1;
+    }
+    if (!std::cin.eof()) {
+      std::cerr << "Input fail" << "\n";
+      return 1;
+    }
+  }
+}
 
 alekseev::Vector< std::string > alekseev::split(const std::string & s, char delim)
 {
