@@ -5,19 +5,19 @@
 
 namespace alekseev {
   using big_tree_t = BSTree< std::string, BSTree< int, std::string, std::less< > >, std::less< > >;
-  std::ifstream & input_dicts(std::ifstream & is, big_tree_t bigTree);
   Vector< std::string > split(const std::string & s, char delim = ' ');
 
-  void print(big_tree_t bigTree, Vector< std::string > args);
-  void complement(big_tree_t bigTree, Vector< std::string > args);
-  void intersect(big_tree_t bigTree, Vector< std::string > args);
-  void union_(big_tree_t bigTree, Vector< std::string > args);
+  void print(big_tree_t & bigTree, const Vector< std::string > & args);
+  void complement(big_tree_t & bigTree, const Vector< std::string > & args);
+  void intersect(big_tree_t & bigTree, const Vector< std::string > & args);
+  void union_(big_tree_t & bigTree, const Vector< std::string > & args);
 
   struct Exec {
     big_tree_t bigTree;
-    BSTree< std::string, void(*)(big_tree_t, Vector< std::string >), std::less< > > cmds;
+    BSTree< std::string, void(*)(big_tree_t &, const Vector< std::string > &), std::less< > > cmds;
     Exec();
-    void operator()(std::string args);
+    void operator()(const std::string & line);
+    std::ifstream & input_dicts(std::ifstream & is);
   };
 }
 
@@ -40,7 +40,7 @@ alekseev::Vector< std::string > alekseev::split(const std::string & s, char deli
   return res;
 }
 
-void alekseev::print(big_tree_t bigTree, Vector< std::string > args)
+void alekseev::print(big_tree_t & bigTree, const Vector< std::string > & args)
 {
   if (args.getSize() != 1) {
     throw std::invalid_argument("Wrong number of arguments");
@@ -56,7 +56,7 @@ void alekseev::print(big_tree_t bigTree, Vector< std::string > args)
   std::cout << "\n";
 }
 
-void alekseev::complement(big_tree_t bigTree, Vector< std::string > args)
+void alekseev::complement(big_tree_t & bigTree, const Vector< std::string > & args)
 {
   if (args.getSize() != 3) {
     throw std::invalid_argument("Wrong number of arguments");
@@ -78,7 +78,7 @@ void alekseev::complement(big_tree_t bigTree, Vector< std::string > args)
   bigTree.push(args[0], res);
 }
 
-void alekseev::intersect(big_tree_t bigTree, Vector< std::string > args)
+void alekseev::intersect(big_tree_t & bigTree, const Vector< std::string > & args)
 {
   if (args.getSize() != 3) {
     throw std::invalid_argument("Wrong number of arguments");
@@ -100,7 +100,7 @@ void alekseev::intersect(big_tree_t bigTree, Vector< std::string > args)
   bigTree.push(args[0], res);
 }
 
-void alekseev::union_(big_tree_t bigTree, Vector< std::string > args)
+void alekseev::union_(big_tree_t & bigTree, const Vector< std::string > & args)
 {
   if (args.getSize() != 3) {
     throw std::invalid_argument("Wrong number of arguments");
@@ -120,4 +120,28 @@ void alekseev::union_(big_tree_t bigTree, Vector< std::string > args)
     }
   }
   bigTree.push(args[0], res);
+}
+
+alekseev::Exec::Exec():
+  bigTree(std::less< >{}),
+  cmds(std::less< >{})
+{
+  cmds.push("print", print);
+  cmds.push("complement", complement);
+  cmds.push("intersect", intersect);
+  cmds.push("union", union_);
+}
+
+void alekseev::Exec::operator()(const std::string & line)
+{
+  Vector< std::string > words = split(line, ' ');
+  if (words.isEmpty()) {
+    throw std::invalid_argument("wrong input");
+  }
+  if (!cmds.contains(words[0])) {
+    throw std::invalid_argument("wrong command name");
+  }
+  Vector< std::string > args;
+  args.insert(0, words, 1, words.getSize());
+  cmds.at(words[0])(bigTree, args);
 }
