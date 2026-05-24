@@ -8,14 +8,14 @@ namespace alekseev {
   std::ifstream & input_dicts(std::ifstream & is, big_tree_t bigTree);
   Vector< std::string > split(const std::string & s, char delim = ' ');
 
-  void print(big_tree_t bigTree, std::string args);
-  void complement(big_tree_t bigTree, std::string args);
-  void intersect(big_tree_t bigTree, std::string args);
-  void union_(big_tree_t bigTree, std::string args);
+  void print(big_tree_t bigTree, Vector< std::string > args);
+  void complement(big_tree_t bigTree, Vector< std::string > args);
+  void intersect(big_tree_t bigTree, Vector< std::string > args);
+  void union_(big_tree_t bigTree, Vector< std::string > args);
 
   struct Exec {
     big_tree_t bigTree;
-    BSTree< std::string, void(*)(big_tree_t, std::string), std::less< > > cmds;
+    BSTree< std::string, void(*)(big_tree_t, Vector< std::string >), std::less< > > cmds;
     Exec();
     void operator()(std::string args);
   };
@@ -38,4 +38,20 @@ alekseev::Vector< std::string > alekseev::split(const std::string & s, char deli
   }
   res.pushBack(s.substr(start, i - start));
   return res;
+}
+
+void alekseev::print(big_tree_t bigTree, Vector< std::string > args)
+{
+  if (args.getSize() != 1) {
+    throw std::invalid_argument("Wrong number of arguments");
+  }
+
+  BSTree< int, std::string, std::less< > > & tree = bigTree.at(args[0]);
+  BSTConstIterator< int, std::string > current = tree.cbegin();
+  BSTConstIterator< int, std::string > end = tree.cend();
+  std::cout << args[0];
+  for (; current != end; ++current) {
+    std::cout << ' ' << current.current_->key << ' ' << *current;
+  }
+  std::cout << "\n";
 }
