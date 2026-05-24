@@ -76,3 +76,24 @@ void alekseev::complement(big_tree_t bigTree, Vector< std::string > args)
   }
   bigTree.push(args[0], res);
 }
+
+void alekseev::intersect(big_tree_t bigTree, Vector< std::string > args)
+{
+  if (args.getSize() != 3) {
+    throw std::invalid_argument("Wrong number of arguments");
+  }
+  if (bigTree.contains(args[0])) {
+    throw std::invalid_argument("newdataset already exists");
+  }
+  BSTree< int, std::string, std::less< > > & a = bigTree.at(args[1]);
+  BSTConstIterator< int, std::string > current = a.cbegin();
+  BSTConstIterator< int, std::string > end = a.cend();
+  BSTree< int, std::string, std::less< > > & b = bigTree.at(args[2]);
+  BSTree< int, std::string, std::less< > > res(std::less< >{});
+  for (; current != end; ++current) {
+    if (a.contains(current.current_->key) && b.contains(current.current_->key)) {
+      res.push(current.current_->key, *current);
+    }
+  }
+  bigTree.push(args[0], res);
+}
