@@ -40,14 +40,16 @@ int main(int argc, char * argv[])
       exec(line);
     } catch (std::invalid_argument & e) {
       std::cout << "<INVALID COMMAND>" << "\n";
+    } catch (std::out_of_range & e) {
+      std::cout << "<INVALID COMMAND>" << "\n";
     } catch (std::exception & e) {
       std::cerr << e.what() << "\n";
       return 1;
     }
-    if (!std::cin.eof()) {
-      std::cerr << "Input fail" << "\n";
-      return 1;
-    }
+  }
+  if (!std::cin.eof()) {
+    std::cerr << "Input fail" << "\n";
+    return 1;
   }
 }
 
