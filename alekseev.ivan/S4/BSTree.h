@@ -136,6 +136,7 @@ namespace alekseev {
     const Value & at(const Key & key) const;
     void remove(const Key & key);
     bool contains(const Key & key) const;
+    bool empty() const;
 
     friend struct BSTConstIterator< Key, Value >;
     friend struct BSTIterator< Key, Value >;
@@ -735,6 +736,12 @@ namespace alekseev {
       }
     }
     return false;
+  }
+
+  template< class Key, class Value, class Compare >
+  bool BSTree< Key, Value, Compare >::empty() const
+  {
+    return root_ == fake_leaf_;
   }
 
   template< class Key, class Value, class Compare >

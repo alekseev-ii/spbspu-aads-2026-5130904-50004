@@ -77,6 +77,10 @@ void alekseev::print(big_tree_t & bigTree, const Vector< std::string > & args)
   }
 
   BSTree< int, std::string, std::less< > > & tree = bigTree.at(args[0]);
+  if (tree.empty()) {
+    std::cout << "<EMPTY>\n";
+    return;
+  }
   BSTConstIterator< int, std::string > current = tree.cbegin();
   BSTConstIterator< int, std::string > end = tree.cend();
   std::cout << args[0];
@@ -90,9 +94,6 @@ void alekseev::complement(big_tree_t & bigTree, const Vector< std::string > & ar
 {
   if (args.getSize() != 3) {
     throw std::invalid_argument("Wrong number of arguments");
-  }
-  if (bigTree.contains(args[0])) {
-    throw std::invalid_argument("newdataset already exists");
   }
   BSTree< int, std::string, std::less< > > & a = bigTree.at(args[1]);
   BSTConstIterator< int, std::string > current = a.cbegin();
@@ -113,9 +114,6 @@ void alekseev::intersect(big_tree_t & bigTree, const Vector< std::string > & arg
   if (args.getSize() != 3) {
     throw std::invalid_argument("Wrong number of arguments");
   }
-  if (bigTree.contains(args[0])) {
-    throw std::invalid_argument("newdataset already exists");
-  }
   BSTree< int, std::string, std::less< > > & a = bigTree.at(args[1]);
   BSTConstIterator< int, std::string > current = a.cbegin();
   BSTConstIterator< int, std::string > end = a.cend();
@@ -134,9 +132,6 @@ void alekseev::union_(big_tree_t & bigTree, const Vector< std::string > & args)
 {
   if (args.getSize() != 3) {
     throw std::invalid_argument("Wrong number of arguments");
-  }
-  if (bigTree.contains(args[0])) {
-    throw std::invalid_argument("newdataset already exists");
   }
   BSTree< int, std::string, std::less< > > & a = bigTree.at(args[1]);
   BSTree< int, std::string, std::less< > > & b = bigTree.at(args[2]);
