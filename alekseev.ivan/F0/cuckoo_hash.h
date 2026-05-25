@@ -18,13 +18,19 @@ namespace alekseev {
     void swap(CuckooHash & rhs) noexcept;
     void rehash(size_t new_cap = 0);
     void reserve(size_t cap);
-    void insert(const Key & k, const Value & v);
-    void remove(Key & k);
-    Value & at(const Key & k);
-    const Value & at(const Key & k) const;
-    Vector< Key > keys() const;
 
-    bool contains(const Key & k) const noexcept;
+    template< class Forward_Key, class Forward_Value >
+    void insert(Forward_Key && k, Forward_Value && v);
+    template< class Forward_Key >
+    void remove(Forward_Key && k);
+    template< class Forward_Key >
+    Value & at(Forward_Key && k);
+    template< class Forward_Key >
+    const Value & at(Forward_Key && k) const;
+    template< class Forward_Key >
+    bool contains(Forward_Key && k) const noexcept;
+
+    Vector< Key > keys() const;
     size_t size() const noexcept;
     size_t capacity() const noexcept;
     double load_factor() const noexcept;
@@ -157,19 +163,20 @@ namespace alekseev {
   }
 
   template< class Key, class Value, class Hash1, class Hash2, class Equal >
-  void CuckooHash< Key, Value, Hash1, Hash2, Equal >::insert(const Key & k, const Value & v)
+  template< class Forward_Key, class Forward_Value >
+  void CuckooHash< Key, Value, Hash1, Hash2, Equal >::insert(Forward_Key && k, Forward_Value && v)
   {
-    size_t pos1 = hasher1_(k);
+    size_t pos1 = hasher1_(std::forward< Forward_Key >(k));
     if (table1_[pos1] != nullptr) {
-      if (equal(table1_[pos1]->first, k)) {
-        table1_[pos1]->second = v;
+      if (equal(table1_[pos1]->first, std::forward< Forward_Key >(k))) {
+        table1_[pos1]->second = std::forward< Forward_Key >(v);
         return;
       }
     }
-    size_t pos2 = hasher2_(k);
+    size_t pos2 = hasher2_(std::forward< Forward_Key >(k));
     if (table2_[pos2] != nullptr) {
-      if (equal(table2_[pos2]->first, k)) {
-        table2_[pos2]->second = v;
+      if (equal(table2_[pos2]->first, std::forward< Forward_Key >(k))) {
+        table2_[pos2]->second = std::forward< Forward_Key >(v);
         return;
       }
     }
@@ -177,7 +184,8 @@ namespace alekseev {
     if ((temp.size() + 1.0) / static_cast< double >(temp.capacity_) > temp.max_load_factor_) {
       temp.rehash(temp.capacity() * 2);
     }
-    auto * new_element = new std::pair< Key, Value >(k, v);
+    auto * new_element = new std::pair< Key, Value >(std::forward< Forward_Key >(k),
+        std::forward< Forward_Key >(v));
     size_t tries = 0;
     while (tries < 3) {
       pos1 = hasher1_(new_element->first);
@@ -216,20 +224,21 @@ namespace alekseev {
   }
 
   template< class Key, class Value, class Hash1, class Hash2, class Equal >
-  void CuckooHash< Key, Value, Hash1, Hash2, Equal >::remove(Key & k)
+  template< class Forward_Key >
+  void CuckooHash< Key, Value, Hash1, Hash2, Equal >::remove(Forward_Key && k)
   {
-    size_t pos1 = hasher1_(k) % capacity();
+    size_t pos1 = hasher1_(std::forward< Forward_Key >(k)) % capacity();
     if (table1_[pos1] != nullptr) {
-      if (equal_(table1_[pos1]->first, k)) {
+      if (equal_(table1_[pos1]->first, std::forward< Forward_Key >(k))) {
         delete table1_[pos1];
         table1_[pos1] = nullptr;
         --size_;
         return;
       }
     }
-    size_t pos2 = hasher2_(k) % capacity();
+    size_t pos2 = hasher2_(std::forward< Forward_Key >(k)) % capacity();
     if (table2_[pos2] != nullptr) {
-      if (equal_(table2_[pos2]->first, k)) {
+      if (equal_(table2_[pos2]->first, std::forward< Forward_Key >(k))) {
         delete table2_[pos2];
         table2_[pos2] = nullptr;
         --size_;
@@ -239,23 +248,26 @@ namespace alekseev {
   }
 
   template< class Key, class Value, class Hash1, class Hash2, class Equal >
-  Value & CuckooHash< Key, Value, Hash1, Hash2, Equal >::at(const Key & k)
+  template< class Forward_Key >
+  Value & CuckooHash< Key, Value, Hash1, Hash2, Equal >::at(Forward_Key && k)
   {
-    return const_cast< Value & >(static_cast< const CuckooHash * >(this)->at(k));
+    return const_cast< Value & >(static_cast< const CuckooHash * >(this)->at(
+        std::forward< Forward_Key >(k)));
   }
 
   template< class Key, class Value, class Hash1, class Hash2, class Equal >
-  const Value & CuckooHash< Key, Value, Hash1, Hash2, Equal >::at(const Key & k) const
+  template< class Forward_Key >
+  const Value & CuckooHash< Key, Value, Hash1, Hash2, Equal >::at(Forward_Key && k) const
   {
-    size_t pos1 = hasher1_(k) % capacity();
+    size_t pos1 = hasher1_(std::forward< Forward_Key >(k)) % capacity();
     if (table1_[pos1] != nullptr) {
-      if (equal_(table1_[pos1]->first, k)) {
+      if (equal_(table1_[pos1]->first, std::forward< Forward_Key >(k))) {
         return table1_[pos1]->second;
       }
     }
-    size_t pos2 = hasher2_(k) % capacity();
+    size_t pos2 = hasher2_(std::forward< Forward_Key >(k)) % capacity();
     if (table2_[pos2] != nullptr) {
-      if (equal_(table2_[pos2]->first, k)) {
+      if (equal_(table2_[pos2]->first, std::forward< Forward_Key >(k))) {
         return table2_[pos2]->second;
       }
     }
@@ -279,17 +291,18 @@ namespace alekseev {
   }
 
   template< class Key, class Value, class Hash1, class Hash2, class Equal >
-  bool CuckooHash< Key, Value, Hash1, Hash2, Equal >::contains(const Key & k) const noexcept
+  template< class Forward_Key >
+  bool CuckooHash< Key, Value, Hash1, Hash2, Equal >::contains(Forward_Key && k) const noexcept
   {
-    size_t pos1 = hasher1_(k) % capacity();
+    size_t pos1 = hasher1_(std::forward< Forward_Key >(k)) % capacity();
     if (table1_[pos1] != nullptr) {
-      if (equal_(table1_[pos1]->first, k)) {
+      if (equal_(table1_[pos1]->first, std::forward< Forward_Key >(k))) {
         return true;
       }
     }
-    size_t pos2 = hasher2_(k) % capacity();
+    size_t pos2 = hasher2_(std::forward< Forward_Key >(k)) % capacity();
     if (table2_[pos2] != nullptr) {
-      if (equal_(table2_[pos2]->first, k)) {
+      if (equal_(table2_[pos2]->first, std::forward< Forward_Key >(k))) {
         return true;
       }
     }
