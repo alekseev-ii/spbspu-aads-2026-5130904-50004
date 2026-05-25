@@ -139,6 +139,24 @@ namespace alekseev {
   {
     return size_ == 0;
   }
+
+  template< class Key, class Value, class Hash1, class Hash2, class Equal >
+  void CuckooHash< Key, Value, Hash1, Hash2, Equal >::clear()
+  {
+    for (size_t i = 0; i < capacity_; ++i) {
+      if (table1_[i] != nullptr) {
+        delete table1_[i];
+        table1_[i] = nullptr;
+      }
+      if (table2_[i] != nullptr) {
+        delete table2_[i];
+        table2_[i] = nullptr;
+      }
+    }
+    table1_.~Vector();
+    table2_.~Vector();
+    size_ = 0;
+  }
 }
 
 #endif
