@@ -9,18 +9,18 @@ namespace alekseev {
   struct CuckooHash {
     CuckooHash(Hash1 h1, Hash2 h2, Equal e);
     ~CuckooHash();
-    CuckooHash(CuckooHash const & rhs);
-    CuckooHash & operator=(CuckooHash const & rhs);
+    CuckooHash(const CuckooHash & rhs);
+    CuckooHash & operator=(const CuckooHash & rhs);
     CuckooHash(CuckooHash && rhs) noexcept;
     CuckooHash & operator=(CuckooHash && rhs) noexcept;
 
     void swap(CuckooHash & rhs) noexcept;
     void rehash();
-    void push(Key const & k, Value const & v);
-    Value & at(Key const & k);
-    const Value & at(Key const & k) const;
-    Value & operator[](Key const & k);
-    const Value & operator[](Key const & k) const;
+    void push(Key & k, Value & v);
+    Value & at(const Key & k);
+    const Value & at(const Key & k) const;
+    Value & operator[](const Key & k);
+    const Value & operator[](const Key & k) const;
     size_t size() const;
     size_t capacity() const;
     double load_factor() const;
@@ -56,7 +56,7 @@ namespace alekseev {
   }
 
   template< class Key, class Value, class Hash1, class Hash2, class Equal >
-  CuckooHash< Key, Value, Hash1, Hash2, Equal >::CuckooHash(CuckooHash const & rhs):
+  CuckooHash< Key, Value, Hash1, Hash2, Equal >::CuckooHash(const CuckooHash & rhs):
     table1_(rhs.capacity(), nullptr),
     hasher1_(rhs.hasher1_),
     table2_(rhs.capacity(), nullptr),
@@ -77,7 +77,7 @@ namespace alekseev {
 
   template< class Key, class Value, class Hash1, class Hash2, class Equal >
   CuckooHash< Key, Value, Hash1, Hash2, Equal > & CuckooHash< Key, Value, Hash1, Hash2, Equal >::
-  operator=(CuckooHash const & rhs)
+  operator=(const CuckooHash & rhs)
   {
     CuckooHash temp(rhs);
     swap(temp);
@@ -114,6 +114,45 @@ namespace alekseev {
     std::swap(equal_, rhs.equal_);
     std::swap(size_, rhs.size_);
     std::swap(capacity_, rhs.capacity_);
+  }
+
+  template< class Key, class Value, class Hash1, class Hash2, class Equal >
+  void CuckooHash< Key, Value, Hash1, Hash2, Equal >::push(Key & k, Value & v)
+  {
+    size_t pos1 = hasher1_(k) % capacity();
+    if (table1_[pos1] == nullptr) {
+      table1_[pos1] = new std::pair< Key, Value >(k, v);
+      ++size_;
+      return;
+    }
+    std::pair< Key, Value > * old = table1_[pos1];
+    table1_[pos1] = new std::pair< Key, Value >(k, v);
+    for (size_t attempt = 0; attempt < 16; ++attempt) {
+      size_t pos2 = hasher2_(old->first) % capacity();
+      if (table2_[pos2] == nullptr) {
+        table2_[pos2] = old;
+        ++size_;
+        return;
+      }
+      std::swap(table2_[pos2], old);
+
+      pos1 = hasher1_(old->first) % capacity();
+      if (table1_[pos1] == nullptr) {
+        table1_[pos1] = old;
+        ++size_;
+        return;
+      }
+      std::swap(table1_[pos1], old);
+    }
+    try {
+      rehash();
+    } catch (...) {
+      k = old->first;
+      v = old->second;
+      delete old;
+      throw;
+    }
+    push(old->first, old->second);
   }
 
   template< class Key, class Value, class Hash1, class Hash2, class Equal >
