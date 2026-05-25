@@ -14,7 +14,7 @@ namespace alekseev {
     CuckooHash(CuckooHash && rhs) noexcept;
     CuckooHash & operator=(CuckooHash && rhs) noexcept;
 
-    swap(CuckooHash & rhs);
+    void swap(CuckooHash & rhs) noexcept;
     void rehash();
     void push(Key const & k, Value const & v);
     Value & at(Key const & k);
@@ -94,6 +94,18 @@ namespace alekseev {
   {
     swap(rhs);
     return *this;
+  }
+
+  template< class Key, class Value, class Hash1, class Hash2, class Equal >
+  void CuckooHash< Key, Value, Hash1, Hash2, Equal >::swap(CuckooHash & rhs) noexcept
+  {
+    table1_.swap(rhs.table1_);
+    std::swap(hasher1_, rhs.hasher1_);
+    table2_.swap(rhs.table2_);
+    std::swap(hasher2_, rhs.hasher2_);
+    std::swap(equal_, rhs.equal_);
+    std::swap(size_, rhs.size_);
+    std::swap(capacity_, rhs.capacity_);
   }
 }
 
