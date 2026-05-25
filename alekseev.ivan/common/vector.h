@@ -39,6 +39,7 @@ namespace alekseev {
     void erase(size_t begin, size_t end);
 
     void bubbleSort(bool (* less)(T, T));
+    void resize(size_t new_capacity);
 
     private:
       explicit Vector(size_t size);
@@ -318,6 +319,18 @@ void alekseev::Vector< T >::bubbleSort(bool (* less)(T, T))
     }
   }
   swap(temp);
+}
+
+template< class T >
+void alekseev::Vector< T >::resize(size_t new_capacity)
+{
+  T * temp = new T[new_capacity];
+  for (size_t i = 0; i < getSize(); ++i) {
+    temp[i] = data_[i];
+  }
+  delete [] data_;
+  data_ = temp;
+  capacity_ = new_capacity;
 }
 
 template< class T >
