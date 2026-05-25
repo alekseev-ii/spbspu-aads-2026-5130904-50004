@@ -143,6 +143,10 @@ namespace alekseev {
       ++size_;
       return;
     }
+    if (equal_(table1_[pos1]->first, k)) {
+      table1_[pos1]->second = v;
+      return;
+    }
     std::pair< Key, Value > * old = table1_[pos1];
     table1_[pos1] = new std::pair< Key, Value >(k, v);
     for (size_t attempt = 0; attempt < 16; ++attempt) {
