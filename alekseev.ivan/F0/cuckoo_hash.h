@@ -36,6 +36,24 @@ namespace alekseev {
       size_t size_;
       size_t capacity_;
   };
+
+  template< class Key, class Value, class Hash1, class Hash2, class Equal >
+  CuckooHash< Key, Value, Hash1, Hash2, Equal >::CuckooHash(Hash1 h1, Hash2 h2, Equal e):
+    table1(nullptr),
+    hasher1_(h1),
+    table2(nullptr),
+    hasher2_(h2),
+    equal_(e),
+    size_(0),
+    capacity_(0)
+  {
+  }
+
+  template< class Key, class Value, class Hash1, class Hash2, class Equal >
+  CuckooHash<Key, Value, Hash1, Hash2, Equal>::~CuckooHash()
+  {
+    clear();
+  }
 }
 
 #endif
