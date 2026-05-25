@@ -175,6 +175,30 @@ namespace alekseev {
   }
 
   template< class Key, class Value, class Hash1, class Hash2, class Equal >
+  Value & CuckooHash< Key, Value, Hash1, Hash2, Equal >::at(const Key & k)
+  {
+    return const_cast< Value & >(static_cast< const CuckooHash * >(this)->at(k));
+  }
+
+  template< class Key, class Value, class Hash1, class Hash2, class Equal >
+  const Value & CuckooHash< Key, Value, Hash1, Hash2, Equal >::at(const Key & k) const
+  {
+    size_t pos1 = hasher1_(k) % capacity();
+    if (table1_[pos1] != nullptr) {
+      if (equal_(table1_[pos1]->first, k)) {
+        return table1_[pos1]->second;
+      }
+    }
+    size_t pos2 = hasher2_(k) % capacity();
+    if (table2_[pos2] != nullptr) {
+      if (equal_(table2_[pos2]->first, k)) {
+        return table2_[pos2]->second;
+      }
+    }
+    throw std::out_of_range("Key not found");
+  }
+
+  template< class Key, class Value, class Hash1, class Hash2, class Equal >
   size_t CuckooHash< Key, Value, Hash1, Hash2, Equal >::size() const
   {
     return size_;
