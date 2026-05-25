@@ -1,8 +1,8 @@
 #ifndef CUCKOO_HASH_H
 #define CUCKOO_HASH_H
 
-#include <cstddef>
 #include <utility>
+#include "../common/vector.h"
 
 namespace alekseev {
   template< class Key, class Value, class Hash1, class Hash2, class Equal >
@@ -28,9 +28,9 @@ namespace alekseev {
     void clear();
 
     private:
-      std::pair< Key, Value > ** table1;
+      Vector< std::pair< Key, Value > > table1_;
       Hash1 hasher1_;
-      std::pair< Key, Value > ** table2;
+      Vector< std::pair< Key, Value > > table2_;
       Hash2 hasher2_;
       Equal equal_;
       size_t size_;
@@ -39,9 +39,9 @@ namespace alekseev {
 
   template< class Key, class Value, class Hash1, class Hash2, class Equal >
   CuckooHash< Key, Value, Hash1, Hash2, Equal >::CuckooHash(Hash1 h1, Hash2 h2, Equal e):
-    table1(nullptr),
+    table1_(),
     hasher1_(h1),
-    table2(nullptr),
+    table2_(),
     hasher2_(h2),
     equal_(e),
     size_(0),
@@ -50,9 +50,30 @@ namespace alekseev {
   }
 
   template< class Key, class Value, class Hash1, class Hash2, class Equal >
-  CuckooHash<Key, Value, Hash1, Hash2, Equal>::~CuckooHash()
+  CuckooHash< Key, Value, Hash1, Hash2, Equal >::~CuckooHash()
   {
     clear();
+  }
+
+  template< class Key, class Value, class Hash1, class Hash2, class Equal >
+  CuckooHash< Key, Value, Hash1, Hash2, Equal >::CuckooHash(CuckooHash const & rhs):
+    table1_(rhs.table1_),
+    hasher1_(rhs.hasher1_),
+    table2_(rhs.table2_),
+    hasher2_(rhs.hasher2_),
+    equal_(rhs.equal_),
+    size_(rhs.size_),
+    capacity_(rhs.capacity_)
+  {
+  }
+
+  template< class Key, class Value, class Hash1, class Hash2, class Equal >
+  CuckooHash< Key, Value, Hash1, Hash2, Equal > & CuckooHash< Key, Value, Hash1, Hash2, Equal >::
+  operator=(CuckooHash const & rhs)
+  {
+    CuckooHash temp(rhs);
+    swap(temp);
+    return *this;
   }
 }
 
