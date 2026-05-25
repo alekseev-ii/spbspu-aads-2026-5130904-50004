@@ -17,10 +17,9 @@ namespace alekseev {
     void swap(CuckooHash & rhs) noexcept;
     void rehash();
     void push(Key & k, Value & v);
+    void remove(Key & k);
     Value & at(const Key & k);
     const Value & at(const Key & k) const;
-    Value & operator[](const Key & k);
-    const Value & operator[](const Key & k) const;
     size_t size() const;
     size_t capacity() const;
     double load_factor() const;
@@ -172,6 +171,29 @@ namespace alekseev {
       throw;
     }
     push(old->first, old->second);
+  }
+
+  template< class Key, class Value, class Hash1, class Hash2, class Equal >
+  void CuckooHash< Key, Value, Hash1, Hash2, Equal >::remove(Key & k)
+  {
+    size_t pos1 = hasher1_(k) % capacity();
+    if (table1_[pos1] != nullptr) {
+      if (equal_(table1_[pos1]->first, k)) {
+        delete table1_[pos1];
+        table1_[pos1] = nullptr;
+        --size_;
+        return;
+      }
+    }
+    size_t pos2 = hasher2_(k) % capacity();
+    if (table2_[pos2] != nullptr) {
+      if (equal_(table2_[pos2]->first, k)) {
+        delete table2_[pos2];
+        table2_[pos2] = nullptr;
+        --size_;
+        return;
+      }
+    }
   }
 
   template< class Key, class Value, class Hash1, class Hash2, class Equal >
