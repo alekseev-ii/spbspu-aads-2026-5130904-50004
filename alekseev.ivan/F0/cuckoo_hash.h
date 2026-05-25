@@ -107,6 +107,30 @@ namespace alekseev {
     std::swap(size_, rhs.size_);
     std::swap(capacity_, rhs.capacity_);
   }
+
+  template< class Key, class Value, class Hash1, class Hash2, class Equal >
+  size_t CuckooHash< Key, Value, Hash1, Hash2, Equal >::size() const
+  {
+    return size_;
+  }
+
+  template< class Key, class Value, class Hash1, class Hash2, class Equal >
+  size_t CuckooHash< Key, Value, Hash1, Hash2, Equal >::capacity() const
+  {
+    return capacity_;
+  }
+
+  template< class Key, class Value, class Hash1, class Hash2, class Equal >
+  double CuckooHash< Key, Value, Hash1, Hash2, Equal >::load_factor() const
+  {
+    return static_cast< double >(size_) / static_cast< double >(capacity_);
+  }
+
+  template< class Key, class Value, class Hash1, class Hash2, class Equal >
+  bool CuckooHash<Key, Value, Hash1, Hash2, Equal>::empty() const
+  {
+    return size_ == 0;
+  }
 }
 
 #endif
