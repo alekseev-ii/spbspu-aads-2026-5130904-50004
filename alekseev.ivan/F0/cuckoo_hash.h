@@ -7,7 +7,7 @@
 namespace alekseev {
   template< class Key, class Value, class Hash1, class Hash2, class Equal >
   struct CuckooHash {
-    CuckooHash(Hash1 h1, Hash2 h2, Equal e);
+    CuckooHash(Hash1 h1, Hash2 h2, Equal e, size_t cap = 128);
     ~CuckooHash();
     CuckooHash(const CuckooHash & rhs);
     CuckooHash & operator=(const CuckooHash & rhs);
@@ -16,7 +16,7 @@ namespace alekseev {
 
     void swap(CuckooHash & rhs) noexcept;
     void rehash();
-    void push(Key & k, Value & v);
+    void insert(Key & k, Value & v);
     void remove(Key & k);
     Value & at(const Key & k);
     const Value & at(const Key & k) const;
@@ -38,14 +38,15 @@ namespace alekseev {
   };
 
   template< class Key, class Value, class Hash1, class Hash2, class Equal >
-  CuckooHash< Key, Value, Hash1, Hash2, Equal >::CuckooHash(Hash1 h1, Hash2 h2, Equal e):
-    table1_(),
+  CuckooHash< Key, Value, Hash1, Hash2,
+    Equal >::CuckooHash(Hash1 h1, Hash2 h2, Equal e, size_t cap):
+    table1_(cap, nullptr),
     hasher1_(h1),
-    table2_(),
+    table2_(cap, nullptr),
     hasher2_(h2),
     equal_(e),
     size_(0),
-    capacity_(0)
+    capacity_(cap)
   {
   }
 
@@ -67,10 +68,10 @@ namespace alekseev {
   {
     for (size_t i = 0; i < rhs.capacity_; ++i) {
       if (rhs.table1_[i] != nullptr) {
-        *table1_[i] = *rhs.table1_[i];
+        table1_[i] = new std::pair< Key, Value >(*rhs.table1_[i]);
       }
       if (rhs.table2_[i] != nullptr) {
-        *table2_[i] = *rhs.table2_[i];
+        table2_[i] = new std::pair< Key, Value >(*rhs.table2_[i]);
       }
     }
   }
@@ -119,24 +120,22 @@ namespace alekseev {
   template< class Key, class Value, class Hash1, class Hash2, class Equal >
   void CuckooHash< Key, Value, Hash1, Hash2, Equal >::rehash()
   {
-    CuckooHash temp(hasher1_, hasher2_, equal_);
-    temp.table1_.resize(capacity_ * 2);
-    temp.table2_.resize(capacity_ * 2);
+    CuckooHash temp(hasher1_, hasher2_, equal_, capacity() * 2);
     for (size_t i = 0; i < capacity_; ++i) {
       if (table1_[i] != nullptr) {
         std::pair< Key, Value > e = *table1_[i];
-        temp.push(e->first, e->second);
+        temp.insert(e.first, e.second);
       }
       if (table2_[i] != nullptr) {
         std::pair< Key, Value > e = *table2_[i];
-        temp.push(e->first, e->second);
+        temp.insert(e.first, e.second);
       }
     }
     swap(temp);
   }
 
   template< class Key, class Value, class Hash1, class Hash2, class Equal >
-  void CuckooHash< Key, Value, Hash1, Hash2, Equal >::push(Key & k, Value & v)
+  void CuckooHash< Key, Value, Hash1, Hash2, Equal >::insert(Key & k, Value & v)
   {
     size_t pos1 = hasher1_(k) % capacity();
     if (table1_[pos1] == nullptr) {
@@ -175,7 +174,7 @@ namespace alekseev {
       delete old;
       throw;
     }
-    push(old->first, old->second);
+    insert(old->first, old->second);
   }
 
   template< class Key, class Value, class Hash1, class Hash2, class Equal >
@@ -228,7 +227,8 @@ namespace alekseev {
   template< class Key, class Value, class Hash1, class Hash2, class Equal >
   Vector< Key > CuckooHash< Key, Value, Hash1, Hash2, Equal >::keys() const
   {
-    Vector< Key > result(size(), Value());
+    Vector< Key > result;
+    result.resize(capacity());
     for (size_t i = 0; i < capacity(); ++i) {
       if (table1_[i] != nullptr) {
         result.pushBack(table1_[i]->first);
@@ -277,8 +277,6 @@ namespace alekseev {
         table2_[i] = nullptr;
       }
     }
-    table1_.~Vector();
-    table2_.~Vector();
     size_ = 0;
   }
 }
