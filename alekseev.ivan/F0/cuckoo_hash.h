@@ -117,6 +117,25 @@ namespace alekseev {
   }
 
   template< class Key, class Value, class Hash1, class Hash2, class Equal >
+  void CuckooHash< Key, Value, Hash1, Hash2, Equal >::rehash()
+  {
+    CuckooHash temp(hasher1_, hasher2_, equal_);
+    temp.table1_.resize(capacity_ * 2);
+    temp.table2_.resize(capacity_ * 2);
+    for (size_t i = 0; i < capacity_; ++i) {
+      if (table1_[i] != nullptr) {
+        std::pair< Key, Value > e = *table1_[i];
+        temp.push(e->first, e->second);
+      }
+      if (table2_[i] != nullptr) {
+        std::pair< Key, Value > e = *table2_[i];
+        temp.push(e->first, e->second);
+      }
+    }
+    swap(temp);
+  }
+
+  template< class Key, class Value, class Hash1, class Hash2, class Equal >
   void CuckooHash< Key, Value, Hash1, Hash2, Equal >::push(Key & k, Value & v)
   {
     size_t pos1 = hasher1_(k) % capacity();
