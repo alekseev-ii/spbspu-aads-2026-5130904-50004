@@ -101,15 +101,16 @@ namespace alekseev {
 
   template< class Key, class Value, class Hash1, class Hash2, class Equal >
   CuckooHash< Key, Value, Hash1, Hash2, Equal >::CuckooHash(CuckooHash && rhs) noexcept:
-    table1_(std::move(rhs.table1_)),
+    table1_(),
     hasher1_(rhs.hasher1_),
-    table2_(std::move(rhs.table2_)),
+    table2_(),
     hasher2_(rhs.hasher2_),
     equal_(rhs.equal_),
-    size_(rhs.size_),
-    capacity_(rhs.capacity_),
+    size_(0),
+    capacity_(0),
     max_load_factor_(rhs.max_load_factor_)
   {
+    swap(rhs);
   }
 
   template< class Key, class Value, class Hash1, class Hash2, class Equal >
@@ -166,14 +167,14 @@ namespace alekseev {
   template< class Forward_Key, class Forward_Value >
   void CuckooHash< Key, Value, Hash1, Hash2, Equal >::insert(Forward_Key && k, Forward_Value && v)
   {
-    size_t pos1 = hasher1_(std::forward< Forward_Key >(k));
+    size_t pos1 = hasher1_(std::forward< Forward_Key >(k)) % capacity();
     if (table1_[pos1] != nullptr) {
       if (equal_(table1_[pos1]->first, std::forward< Forward_Key >(k))) {
         table1_[pos1]->second = std::forward< Forward_Value >(v);
         return;
       }
     }
-    size_t pos2 = hasher2_(std::forward< Forward_Key >(k));
+    size_t pos2 = hasher2_(std::forward< Forward_Key >(k)) % capacity();
     if (table2_[pos2] != nullptr) {
       if (equal_(table2_[pos2]->first, std::forward< Forward_Key >(k))) {
         table2_[pos2]->second = std::forward< Forward_Value >(v);
@@ -188,7 +189,7 @@ namespace alekseev {
         std::forward< Forward_Value >(v));
     size_t tries = 0;
     while (tries < 3) {
-      pos1 = hasher1_(new_element->first);
+      pos1 = hasher1_(new_element->first) % capacity();
       if (temp.table1_[pos1] == nullptr) {
         temp.table1_[pos1] = new_element;
         ++temp.size_;
@@ -198,7 +199,7 @@ namespace alekseev {
       std::pair< Key, Value > * victim = temp.table1_[pos1];
       temp.table1_[pos1] = new_element;
       for (size_t i = 0; i < 16; ++i) {
-        pos2 = temp.hasher2_(victim->first);
+        pos2 = temp.hasher2_(victim->first) % capacity();
         if (temp.table2_[pos2] == nullptr) {
           temp.table2_[pos2] = victim;
           ++temp.size_;
@@ -207,7 +208,7 @@ namespace alekseev {
         }
         std::swap(temp.table2_[pos2], victim);
 
-        pos1 = temp.hasher1_(victim->first);
+        pos1 = temp.hasher1_(victim->first) % capacity();
         if (temp.table1_[pos1] == nullptr) {
           temp.table1_[pos1] = victim;
           ++temp.size_;
