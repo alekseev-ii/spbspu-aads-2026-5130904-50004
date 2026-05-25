@@ -20,6 +20,7 @@ namespace alekseev {
     void remove(Key & k);
     Value & at(const Key & k);
     const Value & at(const Key & k) const;
+    Vector< Key > keys() const;
     size_t size() const;
     size_t capacity() const;
     double load_factor() const;
@@ -222,6 +223,21 @@ namespace alekseev {
       }
     }
     throw std::out_of_range("Key not found");
+  }
+
+  template< class Key, class Value, class Hash1, class Hash2, class Equal >
+  Vector< Key > CuckooHash< Key, Value, Hash1, Hash2, Equal >::keys() const
+  {
+    Vector< Key > result(size(), Value());
+    for (size_t i = 0; i < capacity(); ++i) {
+      if (table1_[i] != nullptr) {
+        result.pushBack(table1_[i]->first);
+      }
+      if (table2_[i] != nullptr) {
+        result.pushBack(table2_[i]->first);
+      }
+    }
+    return result;
   }
 
   template< class Key, class Value, class Hash1, class Hash2, class Equal >
