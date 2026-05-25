@@ -11,8 +11,8 @@ namespace alekseev {
     ~CuckooHash();
     CuckooHash(CuckooHash const & rhs);
     CuckooHash & operator=(CuckooHash const & rhs);
-    CuckooHash(CuckooHash && rhs);
-    CuckooHash & operator=(CuckooHash && rhs);
+    CuckooHash(CuckooHash && rhs) noexcept;
+    CuckooHash & operator=(CuckooHash && rhs) noexcept;
 
     swap(CuckooHash & rhs);
     void rehash();
@@ -73,6 +73,26 @@ namespace alekseev {
   {
     CuckooHash temp(rhs);
     swap(temp);
+    return *this;
+  }
+
+  template< class Key, class Value, class Hash1, class Hash2, class Equal >
+  CuckooHash< Key, Value, Hash1, Hash2, Equal >::CuckooHash(CuckooHash && rhs) noexcept:
+    table1_(std::move(rhs.table1_)),
+    hasher1_(rhs.hasher1_),
+    table2_(std::move(rhs.table2_)),
+    hasher2_(rhs.hasher2_),
+    equal_(rhs.equal_),
+    size_(rhs.size_),
+    capacity_(rhs.capacity_)
+  {
+  }
+
+  template< class Key, class Value, class Hash1, class Hash2, class Equal >
+  CuckooHash< Key, Value, Hash1, Hash2, Equal > & CuckooHash< Key, Value, Hash1, Hash2, Equal >::
+  operator=(CuckooHash && rhs) noexcept
+  {
+    swap(rhs);
     return *this;
   }
 }
