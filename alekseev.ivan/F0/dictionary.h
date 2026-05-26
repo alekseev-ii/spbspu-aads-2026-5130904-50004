@@ -4,6 +4,7 @@
 #include <string>
 #include "../common/vector.h"
 #include "cuckoo_hash.h"
+#include <fstream>
 
 namespace alekseev {
   enum pos {
@@ -57,12 +58,16 @@ namespace alekseev {
   bool equal(str_cr s1, str_cr s2);
 
   struct Dictionary {
-    ~Dictionary();
-    Dictionary(const Dictionary &);
-    Dictionary & operator=(const Dictionary &);
-    Dictionary(Dictionary &&) noexcept;
-    Dictionary & operator=(Dictionary &&) noexcept;
-    Dictionary(str_cr file_name);
+    ~Dictionary() = default;
+    Dictionary(const Dictionary &) = default;
+    Dictionary & operator=(const Dictionary &) = default;
+    Dictionary(Dictionary &&) noexcept = default;
+    Dictionary & operator=(Dictionary &&) noexcept = default;
+
+    Dictionary();
+    explicit Dictionary(str_cr file_name);
+
+    std::ifstream & read(std::ifstream & is);
 
     private:
       CuckooHash< std::string, Lemma, size_t (*)(str_cr), size_t (*)(str_cr), bool(*)(str_cr,

@@ -23,3 +23,21 @@ bool alekseev::equal(str_cr s1, str_cr s2)
 {
   return s1 == s2;
 }
+
+alekseev::Dictionary::Dictionary():
+  lemmas_(djb2_hash, poly_hash, equal, 16384)
+{
+}
+
+alekseev::Dictionary::Dictionary(str_cr file_name):
+  lemmas_(djb2_hash, poly_hash, equal, 16384)
+{
+  std::ifstream is(file_name);
+  try {
+    read(is);
+  } catch (...) {
+    is.close();
+    throw;
+  }
+  is.close();
+}
