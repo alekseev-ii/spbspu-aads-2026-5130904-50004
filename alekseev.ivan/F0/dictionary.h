@@ -56,6 +56,7 @@ namespace alekseev {
   size_t djb2_hash(str_cr line);
   size_t poly_hash(str_cr line);
   bool equal(str_cr s1, str_cr s2);
+  Vector< std::string > split(const std::string & s, char delim);
 
   struct Dictionary {
     ~Dictionary() = default;
