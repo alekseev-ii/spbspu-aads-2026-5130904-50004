@@ -12,15 +12,15 @@ namespace alekseev {
   };
 
   enum gender {
-    nn_gender, female, male, neuter
+    nn_gender, feminine, masculine, neuter
   };
 
   enum number {
-    nn_count, singular, plural
+    nn_number, singular, plural
   };
 
   enum case_ {
-    nn_case, nom, gen, dat, acc, ins, pre
+    nn_case, nominative, genitive, dative, accusative, instrumental, prepositional
   };
 
   enum tense {
@@ -28,7 +28,7 @@ namespace alekseev {
   };
 
   enum person {
-    nn_person, fst, scd, thd
+    nn_person, first, second, third
   };
 
   enum aspect {
@@ -36,6 +36,7 @@ namespace alekseev {
   };
 
   struct WordForm {
+    WordForm();
     std::string word_;
     pos pos_;
     gender gender_;
@@ -43,13 +44,16 @@ namespace alekseev {
     case_ case_;
     tense tense_;
     person person_;
-    aspect aspect_;
+
+    bool operator==(const WordForm &other) const;
   };
 
   struct Lemma {
     std::string lemma_;
     Vector< WordForm > forms_;
-    pos default_pos;
+    pos pos_;
+    gender noun_gender_;
+    aspect verb_aspect_;
   };
 
   using str_cr = const std::string &;
