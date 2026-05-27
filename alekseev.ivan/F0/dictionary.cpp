@@ -80,6 +80,9 @@ alekseev::Dictionary::Dictionary(str_cr file_name):
 
 std::ifstream & alekseev::Dictionary::read(std::ifstream & is)
 {
+  if (!is.is_open() || !is.good()) {
+    return is;
+  }
   std::string line;
   Lemma lemma;
   while (std::getline(is, line)) {
@@ -187,4 +190,82 @@ std::ifstream & alekseev::Dictionary::read(std::ifstream & is)
     }
   }
   return is;
+}
+
+std::ofstream & alekseev::Dictionary::write(std::ofstream & os)
+{
+  if (!os.is_open() || !os.good()) {
+    return os;
+  }
+  Vector< std::string > keys = lemmas_.keys();
+  for (size_t i = 0; i < keys.getSize(); ++i) {
+    Lemma & lemma = lemmas_.at(keys[i]);
+    os << lemma.lemma_ << " ";
+    if (lemma.pos_ == noun) {
+      os << "noun" << " ";
+      if (lemma.noun_gender_ == masculine) {
+        os << "masc";
+      } else if (lemma.noun_gender_ == feminine) {
+        os << "fem";
+      } else if (lemma.noun_gender_ == neuter) {
+        os << "neut";
+      }
+      os << "\n";
+    } else if (lemma.pos_ == adj) {
+      os << "adj" << "\n";
+    } else {
+      os << "verb" << " ";
+      if (lemma.verb_aspect_ == perf) {
+        os << "perf";
+      } else {
+        os << "imperf";
+      }
+      os << "\n";
+    }
+    for (size_t j = 0; j < lemma.forms_.getSize(); ++j) {
+      WordForm wf = lemma.forms_[j];
+      os << "\t" << wf.word_ << " ";
+      if (wf.gender_ == masculine) {
+        os << "masc" << " ";
+      } else if (wf.gender_ == feminine) {
+        os << "fem" << " ";
+      } else if (wf.gender_ == neuter) {
+        os << "neut" << " ";
+      }
+      if (wf.number_ == singular) {
+        os << "sing" << " ";
+      } else if (wf.number_ == plural) {
+        os << "pl" << " ";
+      }
+      if (wf.case_ == nominative) {
+        os << "nom" << " ";
+      } else if (wf.case_ == genitive) {
+        os << "gen" << " ";
+      } else if (wf.case_ == dative) {
+        os << "dat" << " ";
+      } else if (wf.case_ == accusative) {
+        os << "acc" << " ";
+      } else if (wf.case_ == instrumental) {
+        os << "ins" << " ";
+      } else if (wf.case_ == prepositional) {
+        os << "pre" << " ";
+      }
+      if (wf.tense_ == past) {
+        os << "past" << " ";
+      } else if (wf.tense_ == future) {
+        os << "fut" << " ";
+      } else if (wf.tense_ == present) {
+        os << "pres" << " ";
+      }
+      if (wf.person_ == first) {
+        os << "1" << " ";
+      } else if (wf.person_ == second) {
+        os << "2" << " ";
+      } else if (wf.person_ == third) {
+        os << "3" << " ";
+      }
+      os << "\n";
+    }
+  }
+  return os;
 }

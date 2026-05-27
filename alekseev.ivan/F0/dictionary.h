@@ -38,7 +38,6 @@ namespace alekseev {
   struct WordForm {
     WordForm();
     std::string word_;
-    pos pos_;
     gender gender_;
     number number_;
     case_ case_;
@@ -73,6 +72,7 @@ namespace alekseev {
     explicit Dictionary(str_cr file_name);
 
     std::ifstream & read(std::ifstream & is);
+    std::ofstream & write(std::ofstream & os);
 
     private:
       CuckooHash< std::string, Lemma, size_t (*)(str_cr), size_t (*)(str_cr), bool(*)(str_cr,
