@@ -44,7 +44,7 @@ namespace alekseev {
     tense tense_;
     person person_;
 
-    bool operator==(const WordForm &other) const;
+    bool operator==(const WordForm &rhs) const;
   };
 
   struct Lemma {
@@ -73,6 +73,7 @@ namespace alekseev {
 
     std::ifstream & read(std::ifstream & is);
     std::ofstream & write(std::ofstream & os);
+    size_t size() const;
 
     private:
       CuckooHash< std::string, Lemma, size_t (*)(str_cr), size_t (*)(str_cr), bool(*)(str_cr,

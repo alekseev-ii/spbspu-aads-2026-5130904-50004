@@ -2,7 +2,6 @@
 
 alekseev::WordForm::WordForm():
   word_(),
-  pos_(noun),
   gender_(nn_gender),
   number_(nn_number),
   case_(nn_case),
@@ -11,12 +10,12 @@ alekseev::WordForm::WordForm():
 {
 }
 
-bool alekseev::WordForm::operator==(const WordForm & other) const
+bool alekseev::WordForm::operator==(const WordForm & rhs) const
 {
-  bool result = word_ == other.word_ && pos_ == other.pos_;
-  result = result && gender_ == other.gender_ && number_ == other.number_;
-  result = result && case_ == other.case_ && tense_ == other.tense_;
-  return result && person_ == other.person_;
+  bool result = word_ == rhs.word_;
+  result = result && gender_ == rhs.gender_ && number_ == rhs.number_;
+  result = result && case_ == rhs.case_ && tense_ == rhs.tense_;
+  return result && person_ == rhs.person_;
 }
 
 size_t alekseev::djb2_hash(str_cr line)
@@ -135,8 +134,7 @@ std::ifstream & alekseev::Dictionary::read(std::ifstream & is)
       }
       WordForm wf;
       wf.word_ = words[0];
-      wf.gender_ = lemma.noun_gender_;
-      for (size_t i = 0; i < words.getSize(); ++i) {
+      for (size_t i = 1; i < words.getSize(); ++i) {
         WordForm pre = wf;
         if (lemma.pos_ == noun || lemma.pos_ == adj) {
           if (words[i] == "nom") {
@@ -151,15 +149,6 @@ std::ifstream & alekseev::Dictionary::read(std::ifstream & is)
             wf.case_ = instrumental;
           } else if (words[i] == "pre") {
             wf.case_ = prepositional;
-          }
-        }
-        if (lemma.pos_ == adj || lemma.pos_ == verb) {
-          if (words[i] == "masc") {
-            wf.gender_ = masculine;
-          } else if (words[i] == "fem") {
-            wf.gender_ = feminine;
-          } else if (words[i] == "neut") {
-            wf.gender_ = neuter;
           }
         }
         if (lemma.pos_ == verb) {
@@ -183,11 +172,22 @@ std::ifstream & alekseev::Dictionary::read(std::ifstream & is)
         } else if (words[i] == "pl") {
           wf.number_ = plural;
         }
+        if (words[i] == "masc") {
+          wf.gender_ = masculine;
+        } else if (words[i] == "fem") {
+          wf.gender_ = feminine;
+        } else if (words[i] == "neut") {
+          wf.gender_ = neuter;
+        }
         if (pre == wf) {
-          throw std::invalid_argument("Bad tag");
+          throw std::invalid_argument("Bad tag: " + words[i]);
         }
       }
+      lemma.forms_.pushBack(wf);
     }
+  }
+  if (!lemma.lemma_.empty()) {
+    lemmas_.insert(lemma.lemma_, lemma);
   }
   return is;
 }
@@ -266,6 +266,12 @@ std::ofstream & alekseev::Dictionary::write(std::ofstream & os)
       }
       os << "\n";
     }
+    os << "\n";
   }
   return os;
+}
+
+size_t alekseev::Dictionary::size() const
+{
+  return lemmas_.size();
 }
