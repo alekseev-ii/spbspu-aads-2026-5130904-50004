@@ -92,6 +92,9 @@ namespace alekseev {
     void remove_lemma(const std::string & lemma);
     void remove_form(const std::string & wordform);
     void update_form(const std::string& old_wordform, const WordForm& new_form);
+
+    bool contains_lemma(const std::string & lemma) const;
+    bool contains_form(const std::string & wordform) const;
     size_t size() const;
 
     private:

@@ -333,6 +333,16 @@ void alekseev::Dictionary::update_form(const std::string & old_wordform, const W
       new_form.tense_, new_form.person_);
 }
 
+bool alekseev::Dictionary::contains_lemma(const std::string & lemma) const
+{
+  return lemmas_.contains(lemma);
+}
+
+bool alekseev::Dictionary::contains_form(const std::string & wordform) const
+{
+  return forms_.contains(wordform);
+}
+
 size_t alekseev::Dictionary::size() const
 {
   return lemmas_.size();
