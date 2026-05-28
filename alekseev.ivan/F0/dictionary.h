@@ -91,6 +91,7 @@ namespace alekseev {
         number n = nn_number, case_ c = nn_case, tense t = nn_tense, person p = nn_person);
     void remove_lemma(const std::string & lemma);
     void remove_form(const std::string & wordform);
+    void update_form(const std::string& old_wordform, const WordForm& new_form);
     size_t size() const;
 
     private:

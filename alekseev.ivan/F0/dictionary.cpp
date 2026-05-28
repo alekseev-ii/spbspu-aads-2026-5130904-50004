@@ -322,6 +322,17 @@ void alekseev::Dictionary::remove_form(const std::string & wordform)
   forms_.remove(wordform);
 }
 
+void alekseev::Dictionary::update_form(const std::string & old_wordform, const WordForm & new_form)
+{
+  if (!forms_.contains(old_wordform)) {
+    return;
+  }
+  std::string lemma = forms_.at(old_wordform).first;
+  remove_form(old_wordform);
+  add_form(lemma, new_form.word_, new_form.gender_, new_form.number_, new_form.case_,
+      new_form.tense_, new_form.person_);
+}
+
 size_t alekseev::Dictionary::size() const
 {
   return lemmas_.size();
