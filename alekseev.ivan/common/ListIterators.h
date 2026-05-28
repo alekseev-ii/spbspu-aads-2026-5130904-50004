@@ -6,7 +6,38 @@
 
 namespace alekseev {
   template< class T, class Derived >
-  struct ListIteratorBase {
+  struct ListIteratorBase;
+  template< class T >
+  struct LIter;
+  template< class T >
+  struct LCIter;
+
+  template< class T, class U >
+  LIter< T > insert_after(LIter< T > & element, U && value);
+  template< class T >
+  LIter< T > erase_after(LIter< T > & element);
+  template< class T >
+  LIter< T > clear(LIter< T > & start, LIter< T > & end);
+  template< class T >
+  LIter< T > begin(List< T > * fake_node);
+  template< class T >
+  LIter< T > before_begin(List< T > * fake_node);
+  template< class T >
+  LIter< T > end(List< T > * fake_node);
+  template< class T >
+  LCIter< T > begin(const List< T > * fake_node);
+  template< class T >
+  LCIter< T > before_begin(const List< T > * fake_node);
+  template< class T >
+  LCIter< T > end(const List< T > * fake_node);
+  template< class Iter >
+  Iter next(Iter it);
+  template< class Iter >
+  void destroy(Iter iterator_on_fake);
+
+  template< class T, class Derived >
+  struct ListIteratorBase
+  {
     List< T > * node_;
 
     friend class List< T >;
@@ -28,14 +59,12 @@ namespace alekseev {
   template< class T, class Derived >
   ListIteratorBase< T, Derived >::ListIteratorBase():
     node_(nullptr)
-  {
-  }
+  { }
 
   template< class T, class Derived >
   ListIteratorBase< T, Derived >::ListIteratorBase(List< T > * node):
     node_(node)
-  {
-  }
+  { }
 
   template< class T, class Derived >
   Derived & ListIteratorBase< T, Derived >::operator++()
@@ -69,7 +98,8 @@ namespace alekseev {
   }
 
   template< class T >
-  struct LIter: ListIteratorBase< T, LIter< T > > {
+  struct LIter: ListIteratorBase< T, LIter< T > >
+  {
     using ListIteratorBase< T, LIter< T > >::ListIteratorBase;
 
     LIter(const ListIteratorBase< T, LIter< T > > & base);
@@ -81,8 +111,7 @@ namespace alekseev {
   template< class T >
   LIter< T >::LIter(const ListIteratorBase< T, LIter< T > > & base):
     ListIteratorBase< T, LIter< T > >(base)
-  {
-  }
+  { }
 
   template< class T >
   T & LIter< T >::operator*() const
@@ -118,7 +147,8 @@ namespace alekseev {
   }
 
   template< class T >
-  struct LCIter: ListIteratorBase< T, LCIter< T > > {
+  struct LCIter: ListIteratorBase< T, LCIter< T > >
+  {
     using ListIteratorBase< T, LCIter< T > >::ListIteratorBase;
 
     LCIter(const LIter< T > & rhs);
@@ -131,14 +161,12 @@ namespace alekseev {
   template< class T >
   LCIter< T >::LCIter(const LIter< T > & rhs):
     ListIteratorBase< T, LCIter< T > >(rhs.node_)
-  {
-  }
+  { }
 
   template< class T >
   LCIter< T >::LCIter(const ListIteratorBase< T, LCIter< T > > & base):
     ListIteratorBase< T, LCIter< T > >(base)
-  {
-  }
+  { }
 
   template< class T >
   const T & LCIter< T >::operator*() const

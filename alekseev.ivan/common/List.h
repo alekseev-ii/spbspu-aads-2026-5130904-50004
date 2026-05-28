@@ -5,13 +5,25 @@
 
 namespace alekseev {
   template< class T >
-  struct List {
+  struct List
+  {
     T data;
     List< T > * next;
   };
 
   template< class T >
-  List< T > * fake(List< T > * head = nullptr)
+  List< T > * fake(List< T > * head = nullptr);
+  template< class T >
+  List< T > * rmfake(List< T > * fake_node);
+  template< class T, class U >
+  List< T > * insert_after(List< T > * element, U && value);
+  template< class T >
+  List< T > * erase_after(List< T > * element);
+  template< class T >
+  List< T > * clear(List< T > * start, List< T > * end);
+
+  template< class T >
+  List< T > * fake(List< T > * head)
   {
     List< T > * fake_node = static_cast< List< T > * >(::operator new(sizeof(List< T >)));
     if (head) {
