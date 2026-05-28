@@ -362,11 +362,12 @@ bool alekseev::Dictionary::contains_form(const WordForm & wordform) const
   }
   Vector< std::pair< std::string, size_t > > wfs = forms_.at(wordform.word_);
   for (size_t i = 0; i < wfs.getSize(); ++i) {
-    Lemma & l = lemmas_.at(wordform.word_);
+    const Lemma & l = lemmas_.at(wordform.word_);
     if (l.forms_[wfs[i].second] == wordform) {
       return true;
     }
   }
+  return false;
 }
 
 alekseev::Vector< std::pair< std::string, size_t > > & alekseev::Dictionary::find_forms(
