@@ -317,7 +317,7 @@ void alekseev::Dictionary::remove_form(const std::string & wordform)
   if (!forms_.contains(wordform)) {
     return;
   }
-  std::pair< std::string, size_t > wf = forms_.at(wordform);
+  std::pair< std::string, size_t > wf = find_form(wordform);
   lemmas_.at(wf.first).forms_.erase(wf.second);
   forms_.remove(wordform);
 }
@@ -327,7 +327,7 @@ void alekseev::Dictionary::update_form(const std::string & old_wordform, const W
   if (!forms_.contains(old_wordform)) {
     return;
   }
-  std::string lemma = forms_.at(old_wordform).first;
+  std::string lemma = find_form(old_wordform).first;
   remove_form(old_wordform);
   add_form(lemma, new_form.word_, new_form.gender_, new_form.number_, new_form.case_,
       new_form.tense_, new_form.person_);
@@ -341,6 +341,21 @@ bool alekseev::Dictionary::contains_lemma(const std::string & lemma) const
 bool alekseev::Dictionary::contains_form(const std::string & wordform) const
 {
   return forms_.contains(wordform);
+}
+
+std::pair< std::string, size_t > alekseev::Dictionary::find_form(const std::string & wordform) const
+{
+  return forms_.at(wordform);
+}
+
+const alekseev::Vector< alekseev::WordForm > & alekseev::Dictionary::get_forms(str_cr lemma) const
+{
+  return lemmas_.at(lemma).forms_;
+}
+
+alekseev::Vector< std::string > alekseev::Dictionary::get_lemmas() const
+{
+  return lemmas_.keys();
 }
 
 size_t alekseev::Dictionary::size() const

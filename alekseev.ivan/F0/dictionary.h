@@ -70,7 +70,7 @@ namespace alekseev {
   size_t djb2_hash(str_cr line);
   size_t poly_hash(str_cr line);
   bool equal(str_cr s1, str_cr s2);
-  Vector< std::string > split(const std::string & s, char delim);
+  Vector< std::string > split(str_cr s, char delim);
 
   struct Dictionary
   {
@@ -85,16 +85,19 @@ namespace alekseev {
 
     std::ifstream & read(std::ifstream & is);
     std::ofstream & write(std::ofstream & os);
-    void add_lemma(const std::string & lemma, pos pos, gender noun_gender = nn_gender,
+    void add_lemma(str_cr lemma, pos pos, gender noun_gender = nn_gender,
         aspect verb_aspect = nn_aspect);
-    void add_form(const std::string & lemma, const std::string & wordform, gender g = nn_gender,
-        number n = nn_number, case_ c = nn_case, tense t = nn_tense, person p = nn_person);
-    void remove_lemma(const std::string & lemma);
-    void remove_form(const std::string & wordform);
-    void update_form(const std::string& old_wordform, const WordForm& new_form);
+    void add_form(str_cr lemma, str_cr wordform, gender g = nn_gender, number n = nn_number,
+        case_ c = nn_case, tense t = nn_tense, person p = nn_person);
+    void remove_lemma(str_cr lemma);
+    void remove_form(str_cr wordform);
+    void update_form(str_cr old_wordform, const WordForm & new_form);
 
-    bool contains_lemma(const std::string & lemma) const;
-    bool contains_form(const std::string & wordform) const;
+    bool contains_lemma(str_cr lemma) const;
+    bool contains_form(str_cr wordform) const;
+    std::pair< std::string, size_t > find_form(str_cr wordform) const;
+    const Vector< WordForm > & get_forms(str_cr lemma) const;
+    Vector< std::string > get_lemmas() const;
     size_t size() const;
 
     private:
