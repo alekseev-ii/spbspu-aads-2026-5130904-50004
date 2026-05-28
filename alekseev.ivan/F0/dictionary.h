@@ -83,6 +83,8 @@ namespace alekseev {
 
     std::ifstream & read(std::ifstream & is);
     std::ofstream & write(std::ofstream & os);
+    void add_lemma(const std::string & lemma, pos pos, gender noun_gender = nn_gender,
+        aspect verb_aspect = nn_aspect);
     size_t size() const;
 
     private:

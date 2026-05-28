@@ -269,6 +269,13 @@ std::ofstream & alekseev::Dictionary::write(std::ofstream & os)
   return os;
 }
 
+void alekseev::Dictionary::add_lemma(const std::string & lemma, pos pos, gender noun_gender,
+    aspect verb_aspect)
+{
+  Lemma l{lemma, Vector< WordForm >(), pos, noun_gender, verb_aspect};
+  lemmas_.insert(lemma, l);
+}
+
 size_t alekseev::Dictionary::size() const
 {
   return lemmas_.size();
