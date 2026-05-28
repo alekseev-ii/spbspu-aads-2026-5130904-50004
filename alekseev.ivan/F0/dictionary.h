@@ -89,6 +89,7 @@ namespace alekseev {
         aspect verb_aspect = nn_aspect);
     void add_form(const std::string & lemma, const std::string & wordform, gender g = nn_gender,
         number n = nn_number, case_ c = nn_case, tense t = nn_tense, person p = nn_person);
+    void remove_lemma(const std::string & lemma);
     size_t size() const;
 
     private:

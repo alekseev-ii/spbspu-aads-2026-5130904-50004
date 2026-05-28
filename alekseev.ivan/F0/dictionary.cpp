@@ -300,6 +300,18 @@ void alekseev::Dictionary::add_form(const std::string & lemma, const std::string
   forms_.insert(wordform, std::make_pair(lemma, l.forms_.getSize() - 1));
 }
 
+void alekseev::Dictionary::remove_lemma(const std::string & lemma)
+{
+  if (!lemmas_.contains(lemma)) {
+    return;
+  }
+  Lemma l = lemmas_.at(lemma);
+  lemmas_.remove(lemma);
+  for (size_t i = 0; i < l.forms_.getSize(); ++i) {
+    forms_.remove(l.forms_[i].word_);
+  }
+}
+
 size_t alekseev::Dictionary::size() const
 {
   return lemmas_.size();
