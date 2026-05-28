@@ -85,11 +85,12 @@ int main()
   alekseev::List< size_t > * sums = nullptr;
   try {
     iterators = new alekseev::LCIter< size_t >[matter_size];
-    for (size_t i = 0; i < matter_size; ++i) {
+
+    ++matter_iter;
+    std::cout << matter_iter->first;
+    iterators[0] = alekseev::before_begin(matter_iter->second);
+    for (size_t i = 1; i < matter_size; ++i) {
       ++matter_iter;
-      if (i) {
-        std::cout << " ";
-      }
       std::cout << matter_iter->first;
       iterators[i] = alekseev::before_begin(matter_iter->second);
     }
