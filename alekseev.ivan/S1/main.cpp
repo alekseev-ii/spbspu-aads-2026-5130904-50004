@@ -91,7 +91,7 @@ int main()
     iterators[0] = alekseev::before_begin(matter_iter->second);
     for (size_t i = 1; i < matter_size; ++i) {
       ++matter_iter;
-      std::cout << matter_iter->first;
+      std::cout << " " << matter_iter->first;
       iterators[i] = alekseev::before_begin(matter_iter->second);
     }
     std::cout << "\n";
