@@ -66,7 +66,10 @@ alekseev::Vector< std::string > alekseev::split(const std::string & s, char deli
       start = i + 1;
     }
   }
-  res.pushBack(s.substr(start, i - start));
+  std::string last = s.substr(start, i - start);
+  if (!last.empty()) {
+    res.pushBack(s.substr(start, i - start));
+  }
   return res;
 }
 
@@ -100,7 +103,7 @@ std::ifstream & alekseev::Dictionary::read(std::ifstream & is)
     if (line.empty()) {
       continue;
     }
-    if (line[1] == '#') {
+    if (line[0] == '#') {
       continue;
     }
     Vector< std::string > words = split(line, ' ');
@@ -114,6 +117,9 @@ std::ifstream & alekseev::Dictionary::read(std::ifstream & is)
       }
       lemma.lemma_ = words[0];
       if (words[1] == "noun") {
+        if (words.getSize() != 3) {
+          throw std::invalid_argument("Bad number of tags for noun");
+        }
         lemma.pos_ = noun;
         lemma.verb_aspect_ = nn_aspect;
         if (words[2] == "masc") {
@@ -126,6 +132,9 @@ std::ifstream & alekseev::Dictionary::read(std::ifstream & is)
           throw std::invalid_argument("Invalid noun gender");
         }
       } else if (words[1] == "verb") {
+        if (words.getSize() != 3) {
+          throw std::invalid_argument("Bad number of tags for verb");
+        }
         lemma.pos_ = verb;
         lemma.noun_gender_ = nn_gender;
         if (words[2] == "perf") {
@@ -136,6 +145,9 @@ std::ifstream & alekseev::Dictionary::read(std::ifstream & is)
           throw std::invalid_argument("Invalid verb aspect");
         }
       } else if (words[1] == "adj") {
+        if (words.getSize() != 2) {
+          throw std::invalid_argument("Bad number of tags for adjective");
+        }
         lemma.pos_ = adj;
         lemma.noun_gender_ = nn_gender;
         lemma.verb_aspect_ = nn_aspect;
@@ -331,9 +343,9 @@ void alekseev::Dictionary::remove_form(const WordForm & wordform)
   if (!forms_.contains(wordform.word_)) {
     return;
   }
-  Vector< std::pair< std::string, size_t > > wfs = find_forms(wordform.word_);
+  Vector< std::pair< std::string, size_t > > & wfs = find_forms(wordform.word_);
   for (size_t i = 0; i < wfs.getSize(); ++i) {
-    Lemma & l = lemmas_.at(wordform.word_);
+    Lemma & l = lemmas_.at(wfs[i].first);
     if (l.forms_[wfs[i].second] == wordform) {
       l.forms_.erase(wfs[i].second);
       wfs.erase(i);
@@ -362,7 +374,7 @@ bool alekseev::Dictionary::contains_form(const WordForm & wordform) const
   }
   Vector< std::pair< std::string, size_t > > wfs = forms_.at(wordform.word_);
   for (size_t i = 0; i < wfs.getSize(); ++i) {
-    const Lemma & l = lemmas_.at(wordform.word_);
+    const Lemma & l = lemmas_.at(wfs[i].first);
     if (l.forms_[wfs[i].second] == wordform) {
       return true;
     }
