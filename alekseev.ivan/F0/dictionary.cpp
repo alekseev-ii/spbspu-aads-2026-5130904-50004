@@ -1,5 +1,7 @@
 #include "dictionary.h"
 
+#include <utility>
+
 alekseev::WordForm::WordForm():
   word_(),
   gender_(nn_gender),
@@ -7,6 +9,16 @@ alekseev::WordForm::WordForm():
   case_(nn_case),
   tense_(nn_tense),
   person_(nn_person)
+{ }
+
+alekseev::WordForm::WordForm(std::string wordform, gender g, number n, alekseev::case_ c, tense t,
+    person p):
+  word_(std::move(wordform)),
+  gender_(g),
+  number_(n),
+  case_(c),
+  tense_(t),
+  person_(p)
 { }
 
 bool alekseev::WordForm::operator==(const WordForm & rhs) const
@@ -277,6 +289,15 @@ void alekseev::Dictionary::add_lemma(const std::string & lemma, pos pos, gender 
 {
   Lemma l{lemma, Vector< WordForm >(), pos, noun_gender, verb_aspect};
   lemmas_.insert(lemma, l);
+}
+
+void alekseev::Dictionary::add_form(const std::string & lemma, const std::string & wordform,
+    gender g, number n, case_ c, tense t, person p)
+{
+  WordForm wf(wordform, g, n, c, t, p);
+  Lemma & l = lemmas_.at(lemma);
+  l.forms_.pushBack(wf);
+  forms_.insert(wordform, std::make_pair(lemma, l.forms_.getSize() - 1));
 }
 
 size_t alekseev::Dictionary::size() const
