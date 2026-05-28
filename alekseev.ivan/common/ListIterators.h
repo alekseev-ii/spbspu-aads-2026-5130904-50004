@@ -44,7 +44,7 @@ namespace alekseev {
 
     ListIteratorBase();
 
-    ListIteratorBase(List< T > * node);
+    explicit ListIteratorBase(List< T > * node);
 
     Derived & operator++();
     Derived operator++(int);
@@ -98,7 +98,8 @@ namespace alekseev {
   }
 
   template< class T >
-  struct LIter: ListIteratorBase< T, LIter< T > >
+  struct LIter: ListIteratorBase< T, LIter< T > >,
+      std::iterator< std::forward_iterator_tag, T, std::ptrdiff_t, T *, T & >
   {
     using ListIteratorBase< T, LIter< T > >::ListIteratorBase;
 
@@ -147,7 +148,8 @@ namespace alekseev {
   }
 
   template< class T >
-  struct LCIter: ListIteratorBase< T, LCIter< T > >
+  struct LCIter: ListIteratorBase< T, LCIter< T > >,
+      std::iterator< std::forward_iterator_tag, T, std::ptrdiff_t, const T *, const T & >
   {
     using ListIteratorBase< T, LCIter< T > >::ListIteratorBase;
 
