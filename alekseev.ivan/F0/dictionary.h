@@ -7,35 +7,43 @@
 #include <fstream>
 
 namespace alekseev {
-  enum pos {
+  enum pos
+  {
     noun, verb, adj
   };
 
-  enum gender {
+  enum gender
+  {
     nn_gender, feminine, masculine, neuter
   };
 
-  enum number {
+  enum number
+  {
     nn_number, singular, plural
   };
 
-  enum case_ {
+  enum case_
+  {
     nn_case, nominative, genitive, dative, accusative, instrumental, prepositional
   };
 
-  enum tense {
+  enum tense
+  {
     nn_tense, past, present, future
   };
 
-  enum person {
+  enum person
+  {
     nn_person, first, second, third
   };
 
-  enum aspect {
+  enum aspect
+  {
     nn_aspect, perf, imperf
   };
 
-  struct WordForm {
+  struct WordForm
+  {
     WordForm();
     std::string word_;
     gender gender_;
@@ -44,10 +52,11 @@ namespace alekseev {
     tense tense_;
     person person_;
 
-    bool operator==(const WordForm &rhs) const;
+    bool operator==(const WordForm & rhs) const;
   };
 
-  struct Lemma {
+  struct Lemma
+  {
     std::string lemma_;
     Vector< WordForm > forms_;
     pos pos_;
@@ -61,7 +70,8 @@ namespace alekseev {
   bool equal(str_cr s1, str_cr s2);
   Vector< std::string > split(const std::string & s, char delim);
 
-  struct Dictionary {
+  struct Dictionary
+  {
     ~Dictionary() = default;
     Dictionary(const Dictionary &) = default;
     Dictionary & operator=(const Dictionary &) = default;

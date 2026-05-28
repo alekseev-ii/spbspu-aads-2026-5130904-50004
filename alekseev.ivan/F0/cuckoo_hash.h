@@ -7,7 +7,8 @@
 
 namespace alekseev {
   template< class Key, class Value, class Hash1, class Hash2, class Equal >
-  struct CuckooHash {
+  struct CuckooHash
+  {
     CuckooHash(Hash1 h1, Hash2 h2, Equal e, size_t cap = 128, double max_load_factor = 0.5);
     ~CuckooHash();
     CuckooHash(const CuckooHash & rhs);
@@ -50,8 +51,8 @@ namespace alekseev {
   };
 
   template< class Key, class Value, class Hash1, class Hash2, class Equal >
-  CuckooHash< Key, Value, Hash1, Hash2,
-    Equal >::CuckooHash(Hash1 h1, Hash2 h2, Equal e, size_t cap, double max_load_factor):
+  CuckooHash< Key, Value, Hash1, Hash2, Equal >::CuckooHash(Hash1 h1, Hash2 h2, Equal e, size_t cap,
+      double max_load_factor):
     table1_(cap, nullptr),
     hasher1_(h1),
     table2_(cap, nullptr),
@@ -60,8 +61,7 @@ namespace alekseev {
     size_(0),
     capacity_(cap),
     max_load_factor_(max_load_factor)
-  {
-  }
+  { }
 
   template< class Key, class Value, class Hash1, class Hash2, class Equal >
   CuckooHash< Key, Value, Hash1, Hash2, Equal >::~CuckooHash()
@@ -91,8 +91,8 @@ namespace alekseev {
   }
 
   template< class Key, class Value, class Hash1, class Hash2, class Equal >
-  CuckooHash< Key, Value, Hash1, Hash2, Equal > & CuckooHash< Key, Value, Hash1, Hash2, Equal >::
-  operator=(const CuckooHash & rhs)
+  CuckooHash< Key, Value, Hash1, Hash2, Equal > & CuckooHash< Key, Value, Hash1, Hash2,
+    Equal >::operator=(const CuckooHash & rhs)
   {
     CuckooHash temp(rhs);
     swap(temp);
@@ -114,8 +114,8 @@ namespace alekseev {
   }
 
   template< class Key, class Value, class Hash1, class Hash2, class Equal >
-  CuckooHash< Key, Value, Hash1, Hash2, Equal > & CuckooHash< Key, Value, Hash1, Hash2, Equal >::
-  operator=(CuckooHash && rhs) noexcept
+  CuckooHash< Key, Value, Hash1, Hash2, Equal > & CuckooHash< Key, Value, Hash1, Hash2,
+    Equal >::operator=(CuckooHash && rhs) noexcept
   {
     swap(rhs);
     return *this;

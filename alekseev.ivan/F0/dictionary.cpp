@@ -7,8 +7,7 @@ alekseev::WordForm::WordForm():
   case_(nn_case),
   tense_(nn_tense),
   person_(nn_person)
-{
-}
+{ }
 
 bool alekseev::WordForm::operator==(const WordForm & rhs) const
 {
@@ -61,8 +60,7 @@ alekseev::Vector< std::string > alekseev::split(const std::string & s, char deli
 
 alekseev::Dictionary::Dictionary():
   lemmas_(djb2_hash, poly_hash, equal, 16384)
-{
-}
+{ }
 
 alekseev::Dictionary::Dictionary(str_cr file_name):
   lemmas_(djb2_hash, poly_hash, equal, 16384)
