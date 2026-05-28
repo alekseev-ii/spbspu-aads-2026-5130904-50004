@@ -90,12 +90,12 @@ namespace alekseev {
     void add_form(str_cr lemma, str_cr wordform, gender g = nn_gender, number n = nn_number,
         case_ c = nn_case, tense t = nn_tense, person p = nn_person);
     void remove_lemma(str_cr lemma);
-    void remove_form(str_cr wordform);
-    void update_form(str_cr old_wordform, const WordForm & new_form);
+    void remove_form(const WordForm & wordform);
 
     bool contains_lemma(str_cr lemma) const;
     bool contains_form(str_cr wordform) const;
-    std::pair< std::string, size_t > find_form(str_cr wordform) const;
+    bool contains_form(const WordForm & wordform) const;
+    Vector< std::pair< std::string, size_t > > & find_forms(str_cr wordform);
     const Vector< WordForm > & get_forms(str_cr lemma) const;
     Vector< std::string > get_lemmas() const;
     size_t size() const;
@@ -103,8 +103,8 @@ namespace alekseev {
     private:
       CuckooHash< std::string, Lemma, size_t (*)(str_cr), size_t (*)(str_cr), bool(*)(str_cr,
           str_cr) > lemmas_;
-      CuckooHash< std::string, std::pair< std::string, size_t >, size_t (*)(str_cr), size_t (
-        *)(str_cr), bool(*)(str_cr, str_cr) > forms_;
+      CuckooHash< std::string, Vector< std::pair< std::string, size_t > >, size_t (*)(str_cr),
+        size_t (*)(str_cr), bool(*)(str_cr, str_cr) > forms_;
   };
 }
 

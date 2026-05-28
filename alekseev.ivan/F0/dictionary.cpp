@@ -196,7 +196,10 @@ std::ifstream & alekseev::Dictionary::read(std::ifstream & is)
         }
       }
       lemma.forms_.pushBack(wf);
-      forms_.insert(wf.word_, std::make_pair(lemma.lemma_, lemma.forms_.getSize() - 1));
+      if (!forms_.contains(wf.word_)) {
+        forms_.insert(wf.word_, Vector< std::pair< std::string, size_t > >());
+      }
+      forms_.at(wf.word_).pushBack(std::make_pair(lemma.lemma_, lemma.forms_.getSize() - 1));
     }
   }
   if (!lemma.lemma_.empty()) {
@@ -297,7 +300,10 @@ void alekseev::Dictionary::add_form(const std::string & lemma, const std::string
   WordForm wf(wordform, g, n, c, t, p);
   Lemma & l = lemmas_.at(lemma);
   l.forms_.pushBack(wf);
-  forms_.insert(wordform, std::make_pair(lemma, l.forms_.getSize() - 1));
+  if (!forms_.contains(wf.word_)) {
+    forms_.insert(wf.word_, Vector< std::pair< std::string, size_t > >());
+  }
+  forms_.at(wf.word_).pushBack(std::make_pair(l.lemma_, l.forms_.getSize() - 1));
 }
 
 void alekseev::Dictionary::remove_lemma(const std::string & lemma)
@@ -308,29 +314,35 @@ void alekseev::Dictionary::remove_lemma(const std::string & lemma)
   Lemma l = lemmas_.at(lemma);
   lemmas_.remove(lemma);
   for (size_t i = 0; i < l.forms_.getSize(); ++i) {
-    forms_.remove(l.forms_[i].word_);
+    Vector< std::pair< std::string, size_t > > & wfs = find_forms(l.forms_[i].word_);
+    for (size_t j = 0; j < wfs.getSize(); ++j) {
+      if (wfs[j].first == lemma) {
+        wfs.erase(j);
+      }
+    }
+    if (wfs.isEmpty()) {
+      forms_.remove(l.forms_[i].word_);
+    }
   }
 }
 
-void alekseev::Dictionary::remove_form(const std::string & wordform)
+void alekseev::Dictionary::remove_form(const WordForm & wordform)
 {
-  if (!forms_.contains(wordform)) {
+  if (!forms_.contains(wordform.word_)) {
     return;
   }
-  std::pair< std::string, size_t > wf = find_form(wordform);
-  lemmas_.at(wf.first).forms_.erase(wf.second);
-  forms_.remove(wordform);
-}
-
-void alekseev::Dictionary::update_form(const std::string & old_wordform, const WordForm & new_form)
-{
-  if (!forms_.contains(old_wordform)) {
-    return;
+  Vector< std::pair< std::string, size_t > > wfs = find_forms(wordform.word_);
+  for (size_t i = 0; i < wfs.getSize(); ++i) {
+    Lemma & l = lemmas_.at(wordform.word_);
+    if (l.forms_[wfs[i].second] == wordform) {
+      l.forms_.erase(wfs[i].second);
+      wfs.erase(i);
+      if (wfs.isEmpty()) {
+        forms_.remove(wordform.word_);
+      }
+      return;
+    }
   }
-  std::string lemma = find_form(old_wordform).first;
-  remove_form(old_wordform);
-  add_form(lemma, new_form.word_, new_form.gender_, new_form.number_, new_form.case_,
-      new_form.tense_, new_form.person_);
 }
 
 bool alekseev::Dictionary::contains_lemma(const std::string & lemma) const
@@ -343,7 +355,22 @@ bool alekseev::Dictionary::contains_form(const std::string & wordform) const
   return forms_.contains(wordform);
 }
 
-std::pair< std::string, size_t > alekseev::Dictionary::find_form(const std::string & wordform) const
+bool alekseev::Dictionary::contains_form(const WordForm & wordform) const
+{
+  if (!forms_.contains(wordform.word_)) {
+    return false;
+  }
+  Vector< std::pair< std::string, size_t > > wfs = forms_.at(wordform.word_);
+  for (size_t i = 0; i < wfs.getSize(); ++i) {
+    Lemma & l = lemmas_.at(wordform.word_);
+    if (l.forms_[wfs[i].second] == wordform) {
+      return true;
+    }
+  }
+}
+
+alekseev::Vector< std::pair< std::string, size_t > > & alekseev::Dictionary::find_forms(
+    const std::string & wordform)
 {
   return forms_.at(wordform);
 }
