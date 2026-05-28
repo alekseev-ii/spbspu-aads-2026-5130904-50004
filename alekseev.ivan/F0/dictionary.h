@@ -90,6 +90,8 @@ namespace alekseev {
     private:
       CuckooHash< std::string, Lemma, size_t (*)(str_cr), size_t (*)(str_cr), bool(*)(str_cr,
           str_cr) > lemmas_;
+      CuckooHash< std::string, std::pair< std::string, size_t >, size_t (*)(str_cr), size_t (
+        *)(str_cr), bool(*)(str_cr, str_cr) > forms_;
   };
 }
 

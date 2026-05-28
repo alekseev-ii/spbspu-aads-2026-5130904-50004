@@ -59,11 +59,13 @@ alekseev::Vector< std::string > alekseev::split(const std::string & s, char deli
 }
 
 alekseev::Dictionary::Dictionary():
-  lemmas_(djb2_hash, poly_hash, equal, 16384)
+  lemmas_(djb2_hash, poly_hash, equal, 4096),
+  forms_(djb2_hash, poly_hash, equal, 16384)
 { }
 
 alekseev::Dictionary::Dictionary(str_cr file_name):
-  lemmas_(djb2_hash, poly_hash, equal, 16384)
+  lemmas_(djb2_hash, poly_hash, equal, 4096),
+  forms_(djb2_hash, poly_hash, equal, 16384)
 {
   std::ifstream is(file_name);
   try {
@@ -182,6 +184,7 @@ std::ifstream & alekseev::Dictionary::read(std::ifstream & is)
         }
       }
       lemma.forms_.pushBack(wf);
+      forms_.insert(wf.word_, std::make_pair(lemma.lemma_, lemma.forms_.getSize() - 1));
     }
   }
   if (!lemma.lemma_.empty()) {
