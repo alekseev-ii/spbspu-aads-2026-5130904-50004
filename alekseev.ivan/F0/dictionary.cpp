@@ -312,6 +312,21 @@ void alekseev::Dictionary::remove_lemma(const std::string & lemma)
   }
 }
 
+void alekseev::Dictionary::remove_form(const std::string & lemma, const std::string & wordform)
+{
+  if (!lemmas_.contains(lemma) || !forms_.contains(wordform)) {
+    return;
+  }
+  forms_.remove(wordform);
+  Lemma l = lemmas_.at(lemma);
+  for (size_t i = 0; i < l.forms_.getSize(); ++i) {
+    if (l.forms_[i].word_ == wordform) {
+      l.forms_.erase(i);
+      return;
+    }
+  }
+}
+
 size_t alekseev::Dictionary::size() const
 {
   return lemmas_.size();
