@@ -73,6 +73,36 @@ alekseev::Vector< std::string > alekseev::split(const std::string & s, char deli
   return res;
 }
 
+size_t alekseev::damerau_levenshtein(str_cr a, str_cr b)
+{
+  if (a == b) {
+    return 0;
+  }
+  size_t n = a.size() + 1, m = b.size() + 1;
+  size_t * mtx = new size_t[n * m]{0};
+  for (size_t i = 0; i < n; ++i) {
+    mtx[i * m + 0] = i;
+  }
+  for (size_t j = 0; j < m; ++j) {
+    mtx[0 * m + j] = j;
+  }
+  for (size_t i = 1; i < n; ++i) {
+    for (size_t j = 1; j < m; ++j) {
+      size_t candidate0 = mtx[(i - 1) * m + (j - 1)] + (a[i - 1] == b[j - 1] ? 0 : 1);
+      size_t candidate1 = std::min(mtx[(i - 1) * m + j] + 1, mtx[i * m + (j - 1)] + 1);
+      mtx[i * m + j] = std::min(candidate0, candidate1);
+      if (i > 1 && j > 1) {
+        if (a[i - 1] == b[j - 2] && a[i - 2] == b[j - 1]) {
+          mtx[i * m + j] = std::min(mtx[i * m + j], mtx[(i - 2) * m + (j - 2)] + 1);
+        }
+      }
+    }
+  }
+  size_t ans = mtx[(n * m - 1)];
+  delete[] mtx;
+  return ans;
+}
+
 alekseev::Dictionary::Dictionary():
   lemmas_(djb2_hash, poly_hash, equal, 4096),
   forms_(djb2_hash, poly_hash, equal, 16384)

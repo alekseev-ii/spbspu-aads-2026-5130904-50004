@@ -71,6 +71,7 @@ namespace alekseev {
   size_t poly_hash(str_cr line);
   bool equal(str_cr s1, str_cr s2);
   Vector< std::string > split(str_cr s, char delim);
+  size_t damerau_levenshtein(str_cr a, str_cr b);
 
   struct Dictionary
   {
