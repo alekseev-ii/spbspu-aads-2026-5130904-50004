@@ -1,7 +1,11 @@
 #include "dictionary.h"
-#include <fstream>
+#include <iostream>
 
-int main()
-{
-  std::cout << alekseev::damerau_levenshtein(L"лабрадор", L"гибралтар") << "\n";
+int main() {
+  alekseev::ConsoleSetup c;
+
+  std::wcout << L"Работает!" << std::endl;
+  std::wcout << L"Привет, мир!" << std::endl;
+
+  return 0;
 }

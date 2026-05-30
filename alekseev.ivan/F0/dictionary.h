@@ -5,6 +5,8 @@
 #include "../common/vector.h"
 #include "cuckoo_hash.h"
 #include <fstream>
+#include <windows.h>
+#include <fcntl.h>
 
 namespace alekseev {
   enum pos
@@ -72,6 +74,16 @@ namespace alekseev {
   bool equal(wstr_cr s1, wstr_cr s2);
   Vector< std::wstring > split(wstr_cr s, wchar_t delim);
   size_t damerau_levenshtein(wstr_cr a, wstr_cr b);
+
+  struct ConsoleSetup
+  {
+    ConsoleSetup();
+    ~ConsoleSetup();
+
+    private:
+      int old_cin_mode_, old_cout_mode_, old_cerr_mode_;
+      UINT old_output_cp_, old_input_cp_;
+  };
 
   struct Dictionary
   {
