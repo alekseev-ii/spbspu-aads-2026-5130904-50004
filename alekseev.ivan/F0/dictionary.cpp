@@ -352,6 +352,9 @@ void alekseev::Dictionary::remove_form(const WordForm & wordform)
       if (wfs.isEmpty()) {
         forms_.remove(wordform.word_);
       }
+      for (size_t j = wfs[i].second; j < l.forms_.getSize(); ++j) {
+        find_lemma(l.forms_[j]).second--;
+      }
       return;
     }
   }
@@ -386,6 +389,17 @@ alekseev::Vector< std::pair< std::string, size_t > > & alekseev::Dictionary::fin
     const std::string & wordform)
 {
   return forms_.at(wordform);
+}
+
+std::pair< std::string, size_t > & alekseev::Dictionary::find_lemma(const WordForm & wordform)
+{
+  Vector< std::pair< std::string, size_t > > & wfs = find_forms(wordform.word_);
+  for (size_t i = 0; i < wfs.getSize(); ++i) {
+    Lemma & l = lemmas_.at(wfs[i].first);
+    if (l.forms_[wfs[i].second] == wordform) {
+      return wfs[i];
+    }
+  }
 }
 
 const alekseev::Vector< alekseev::WordForm > & alekseev::Dictionary::get_forms(str_cr lemma) const

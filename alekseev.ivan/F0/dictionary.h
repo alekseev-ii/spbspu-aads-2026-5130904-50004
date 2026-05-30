@@ -96,6 +96,7 @@ namespace alekseev {
     bool contains_form(str_cr wordform) const;
     bool contains_form(const WordForm & wordform) const;
     Vector< std::pair< std::string, size_t > > & find_forms(str_cr wordform);
+    std::pair< std::string, size_t > & find_lemma(const WordForm & wordform);
     const Vector< WordForm > & get_forms(str_cr lemma) const;
     Vector< std::string > get_lemmas() const;
     size_t size() const;
