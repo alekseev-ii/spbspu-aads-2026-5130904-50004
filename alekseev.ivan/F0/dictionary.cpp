@@ -1,7 +1,5 @@
 #include "dictionary.h"
 
-#include <utility>
-
 alekseev::WordForm::WordForm():
   word_(),
   gender_(nn_gender),
@@ -11,7 +9,7 @@ alekseev::WordForm::WordForm():
   person_(nn_person)
 { }
 
-alekseev::WordForm::WordForm(std::string wordform, gender g, number n, alekseev::case_ c, tense t,
+alekseev::WordForm::WordForm(std::wstring wordform, gender g, number n, alekseev::case_ c, tense t,
     person p):
   word_(std::move(wordform)),
   gender_(g),
@@ -29,7 +27,7 @@ bool alekseev::WordForm::operator==(const WordForm & rhs) const
   return result && person_ == rhs.person_;
 }
 
-size_t alekseev::djb2_hash(str_cr line)
+size_t alekseev::djb2_hash(wstr_cr line)
 {
   size_t hash = 5381;
   for (size_t i = 0; i < line.size(); ++i) {
@@ -38,7 +36,7 @@ size_t alekseev::djb2_hash(str_cr line)
   return hash;
 }
 
-size_t alekseev::poly_hash(str_cr line)
+size_t alekseev::poly_hash(wstr_cr line)
 {
   size_t hash = 0;
   int p = 67;
@@ -48,15 +46,15 @@ size_t alekseev::poly_hash(str_cr line)
   return hash;
 }
 
-bool alekseev::equal(str_cr s1, str_cr s2)
+bool alekseev::equal(wstr_cr s1, wstr_cr s2)
 {
   return s1 == s2;
 }
 
-alekseev::Vector< std::string > alekseev::split(const std::string & s, char delim)
+alekseev::Vector< std::wstring > alekseev::split(const std::wstring & s, wchar_t delim)
 {
   size_t start = 0;
-  Vector< std::string > res;
+  Vector< std::wstring > res;
   size_t i = 0;
   for (; i < s.size(); ++i) {
     if (s[i] == delim) {
@@ -66,14 +64,14 @@ alekseev::Vector< std::string > alekseev::split(const std::string & s, char deli
       start = i + 1;
     }
   }
-  std::string last = s.substr(start, i - start);
+  std::wstring last = s.substr(start, i - start);
   if (!last.empty()) {
     res.pushBack(s.substr(start, i - start));
   }
   return res;
 }
 
-size_t alekseev::damerau_levenshtein(str_cr a, str_cr b)
+size_t alekseev::damerau_levenshtein(wstr_cr a, wstr_cr b)
 {
   if (a == b) {
     return 0;
@@ -108,11 +106,11 @@ alekseev::Dictionary::Dictionary():
   forms_(djb2_hash, poly_hash, equal, 16384)
 { }
 
-alekseev::Dictionary::Dictionary(str_cr file_name):
+alekseev::Dictionary::Dictionary(wstr_cr file_name):
   lemmas_(djb2_hash, poly_hash, equal, 4096),
   forms_(djb2_hash, poly_hash, equal, 16384)
 {
-  std::ifstream is(file_name);
+  std::wifstream is(file_name.data());
   try {
     read(is);
   } catch (...) {
@@ -122,12 +120,12 @@ alekseev::Dictionary::Dictionary(str_cr file_name):
   is.close();
 }
 
-std::ifstream & alekseev::Dictionary::read(std::ifstream & is)
+std::wifstream & alekseev::Dictionary::read(std::wifstream & is)
 {
   if (!is.is_open() || !is.good()) {
     return is;
   }
-  std::string line;
+  std::wstring line;
   Lemma lemma;
   while (std::getline(is, line)) {
     if (line.empty()) {
@@ -136,7 +134,7 @@ std::ifstream & alekseev::Dictionary::read(std::ifstream & is)
     if (line[0] == '#') {
       continue;
     }
-    Vector< std::string > words = split(line, ' ');
+    Vector< std::wstring > words = split(line, ' ');
     if (words.isEmpty()) {
       continue;
     }
@@ -146,35 +144,35 @@ std::ifstream & alekseev::Dictionary::read(std::ifstream & is)
         lemma = Lemma();
       }
       lemma.lemma_ = words[0];
-      if (words[1] == "noun") {
+      if (words[1] == L"noun") {
         if (words.getSize() != 3) {
           throw std::invalid_argument("Bad number of tags for noun");
         }
         lemma.pos_ = noun;
         lemma.verb_aspect_ = nn_aspect;
-        if (words[2] == "masc") {
+        if (words[2] == L"masc") {
           lemma.noun_gender_ = masculine;
-        } else if (words[2] == "fem") {
+        } else if (words[2] == L"fem") {
           lemma.noun_gender_ = feminine;
-        } else if (words[2] == "neut") {
+        } else if (words[2] == L"neut") {
           lemma.noun_gender_ = neuter;
         } else {
           throw std::invalid_argument("Invalid noun gender");
         }
-      } else if (words[1] == "verb") {
+      } else if (words[1] == L"verb") {
         if (words.getSize() != 3) {
           throw std::invalid_argument("Bad number of tags for verb");
         }
         lemma.pos_ = verb;
         lemma.noun_gender_ = nn_gender;
-        if (words[2] == "perf") {
+        if (words[2] == L"perf") {
           lemma.verb_aspect_ = perf;
-        } else if (words[2] == "imperf") {
+        } else if (words[2] == L"imperf") {
           lemma.verb_aspect_ = imperf;
         } else {
           throw std::invalid_argument("Invalid verb aspect");
         }
-      } else if (words[1] == "adj") {
+      } else if (words[1] == L"adj") {
         if (words.getSize() != 2) {
           throw std::invalid_argument("Bad number of tags for adjective");
         }
@@ -191,55 +189,55 @@ std::ifstream & alekseev::Dictionary::read(std::ifstream & is)
       for (size_t i = 1; i < words.getSize(); ++i) {
         WordForm pre = wf;
         if (lemma.pos_ == noun || lemma.pos_ == adj) {
-          if (words[i] == "nom") {
+          if (words[i] == L"nom") {
             wf.case_ = nominative;
-          } else if (words[i] == "gen") {
+          } else if (words[i] == L"gen") {
             wf.case_ = genitive;
-          } else if (words[i] == "dat") {
+          } else if (words[i] == L"dat") {
             wf.case_ = dative;
-          } else if (words[i] == "acc") {
+          } else if (words[i] == L"acc") {
             wf.case_ = accusative;
-          } else if (words[i] == "ins") {
+          } else if (words[i] == L"ins") {
             wf.case_ = instrumental;
-          } else if (words[i] == "pre") {
+          } else if (words[i] == L"pre") {
             wf.case_ = prepositional;
           }
         }
         if (lemma.pos_ == verb) {
-          if (words[i] == "pres") {
+          if (words[i] == L"pres") {
             wf.tense_ = present;
-          } else if (words[i] == "past") {
+          } else if (words[i] == L"past") {
             wf.tense_ = past;
-          } else if (words[i] == "fut") {
+          } else if (words[i] == L"fut") {
             wf.tense_ = future;
           }
-          if (words[i] == "1") {
+          if (words[i] == L"1") {
             wf.person_ = first;
-          } else if (words[i] == "2") {
+          } else if (words[i] == L"2") {
             wf.person_ = second;
-          } else if (words[i] == "3") {
+          } else if (words[i] == L"3") {
             wf.person_ = third;
           }
         }
-        if (words[i] == "sing") {
+        if (words[i] == L"sing") {
           wf.number_ = singular;
-        } else if (words[i] == "pl") {
+        } else if (words[i] == L"pl") {
           wf.number_ = plural;
         }
-        if (words[i] == "masc") {
+        if (words[i] == L"masc") {
           wf.gender_ = masculine;
-        } else if (words[i] == "fem") {
+        } else if (words[i] == L"fem") {
           wf.gender_ = feminine;
-        } else if (words[i] == "neut") {
+        } else if (words[i] == L"neut") {
           wf.gender_ = neuter;
         }
         if (pre == wf) {
-          throw std::invalid_argument("Bad tag: " + words[i]);
+          throw std::invalid_argument("Bad tag: " + std::string(words[i].begin(), words[i].end()));
         }
       }
       lemma.forms_.pushBack(wf);
       if (!forms_.contains(wf.word_)) {
-        forms_.insert(wf.word_, Vector< std::pair< std::string, size_t > >());
+        forms_.insert(wf.word_, Vector< std::pair< std::wstring, size_t > >());
       }
       forms_.at(wf.word_).pushBack(std::make_pair(lemma.lemma_, lemma.forms_.getSize() - 1));
     }
@@ -250,105 +248,105 @@ std::ifstream & alekseev::Dictionary::read(std::ifstream & is)
   return is;
 }
 
-std::ofstream & alekseev::Dictionary::write(std::ofstream & os)
+std::wofstream & alekseev::Dictionary::write(std::wofstream & os)
 {
   if (!os.is_open() || !os.good()) {
     return os;
   }
-  Vector< std::string > keys = lemmas_.keys();
+  Vector< std::wstring > keys = lemmas_.keys();
   for (size_t i = 0; i < keys.getSize(); ++i) {
     Lemma & lemma = lemmas_.at(keys[i]);
-    os << lemma.lemma_ << " ";
+    os << lemma.lemma_ << L" ";
     if (lemma.pos_ == noun) {
-      os << "noun" << " ";
+      os << L"noun" << L" ";
       if (lemma.noun_gender_ == masculine) {
-        os << "masc";
+        os << L"masc";
       } else if (lemma.noun_gender_ == feminine) {
-        os << "fem";
+        os << L"fem";
       } else if (lemma.noun_gender_ == neuter) {
-        os << "neut";
+        os << L"neut";
       }
-      os << "\n";
+      os << L"\n";
     } else if (lemma.pos_ == adj) {
-      os << "adj" << "\n";
+      os << L"adj" << L"\n";
     } else {
-      os << "verb" << " ";
+      os << L"verb" << L" ";
       if (lemma.verb_aspect_ == perf) {
-        os << "perf";
+        os << L"perf";
       } else {
-        os << "imperf";
+        os << L"imperf";
       }
-      os << "\n";
+      os << L"\n";
     }
     for (size_t j = 0; j < lemma.forms_.getSize(); ++j) {
       WordForm wf = lemma.forms_[j];
-      os << "\t" << wf.word_ << " ";
+      os << L"\t" << wf.word_ << L" ";
       if (wf.gender_ == masculine) {
-        os << "masc" << " ";
+        os << L"masc" << L" ";
       } else if (wf.gender_ == feminine) {
-        os << "fem" << " ";
+        os << L"fem" << L" ";
       } else if (wf.gender_ == neuter) {
-        os << "neut" << " ";
+        os << L"neut" << L" ";
       }
       if (wf.number_ == singular) {
-        os << "sing" << " ";
+        os << L"sing" << L" ";
       } else if (wf.number_ == plural) {
-        os << "pl" << " ";
+        os << L"pl" << L" ";
       }
       if (wf.case_ == nominative) {
-        os << "nom" << " ";
+        os << L"nom" << L" ";
       } else if (wf.case_ == genitive) {
-        os << "gen" << " ";
+        os << L"gen" << L" ";
       } else if (wf.case_ == dative) {
-        os << "dat" << " ";
+        os << L"dat" << L" ";
       } else if (wf.case_ == accusative) {
-        os << "acc" << " ";
+        os << L"acc" << L" ";
       } else if (wf.case_ == instrumental) {
-        os << "ins" << " ";
+        os << L"ins" << L" ";
       } else if (wf.case_ == prepositional) {
-        os << "pre" << " ";
+        os << L"pre" << L" ";
       }
       if (wf.tense_ == past) {
-        os << "past" << " ";
+        os << L"past" << L" ";
       } else if (wf.tense_ == future) {
-        os << "fut" << " ";
+        os << L"fut" << L" ";
       } else if (wf.tense_ == present) {
-        os << "pres" << " ";
+        os << L"pres" << L" ";
       }
       if (wf.person_ == first) {
-        os << "1" << " ";
+        os << L"1" << L" ";
       } else if (wf.person_ == second) {
-        os << "2" << " ";
+        os << L"2" << L" ";
       } else if (wf.person_ == third) {
-        os << "3" << " ";
+        os << L"3" << L" ";
       }
-      os << "\n";
+      os << L"\n";
     }
-    os << "\n";
+    os << L"\n";
   }
   return os;
 }
 
-void alekseev::Dictionary::add_lemma(const std::string & lemma, pos pos, gender noun_gender,
+void alekseev::Dictionary::add_lemma(const std::wstring & lemma, pos pos, gender noun_gender,
     aspect verb_aspect)
 {
   Lemma l{lemma, Vector< WordForm >(), pos, noun_gender, verb_aspect};
   lemmas_.insert(lemma, l);
 }
 
-void alekseev::Dictionary::add_form(const std::string & lemma, const std::string & wordform,
+void alekseev::Dictionary::add_form(const std::wstring & lemma, const std::wstring & wordform,
     gender g, number n, case_ c, tense t, person p)
 {
   WordForm wf(wordform, g, n, c, t, p);
   Lemma & l = lemmas_.at(lemma);
   l.forms_.pushBack(wf);
   if (!forms_.contains(wf.word_)) {
-    forms_.insert(wf.word_, Vector< std::pair< std::string, size_t > >());
+    forms_.insert(wf.word_, Vector< std::pair< std::wstring, size_t > >());
   }
   forms_.at(wf.word_).pushBack(std::make_pair(l.lemma_, l.forms_.getSize() - 1));
 }
 
-void alekseev::Dictionary::remove_lemma(const std::string & lemma)
+void alekseev::Dictionary::remove_lemma(const std::wstring & lemma)
 {
   if (!lemmas_.contains(lemma)) {
     return;
@@ -356,7 +354,7 @@ void alekseev::Dictionary::remove_lemma(const std::string & lemma)
   Lemma l = lemmas_.at(lemma);
   lemmas_.remove(lemma);
   for (size_t i = 0; i < l.forms_.getSize(); ++i) {
-    Vector< std::pair< std::string, size_t > > & wfs = find_forms(l.forms_[i].word_);
+    Vector< std::pair< std::wstring, size_t > > & wfs = find_forms(l.forms_[i].word_);
     for (size_t j = 0; j < wfs.getSize(); ++j) {
       if (wfs[j].first == lemma) {
         wfs.erase(j);
@@ -373,7 +371,7 @@ void alekseev::Dictionary::remove_form(const WordForm & wordform)
   if (!forms_.contains(wordform.word_)) {
     return;
   }
-  Vector< std::pair< std::string, size_t > > & wfs = find_forms(wordform.word_);
+  Vector< std::pair< std::wstring, size_t > > & wfs = find_forms(wordform.word_);
   for (size_t i = 0; i < wfs.getSize(); ++i) {
     Lemma & l = lemmas_.at(wfs[i].first);
     if (l.forms_[wfs[i].second] == wordform) {
@@ -390,12 +388,12 @@ void alekseev::Dictionary::remove_form(const WordForm & wordform)
   }
 }
 
-bool alekseev::Dictionary::contains_lemma(const std::string & lemma) const
+bool alekseev::Dictionary::contains_lemma(const std::wstring & lemma) const
 {
   return lemmas_.contains(lemma);
 }
 
-bool alekseev::Dictionary::contains_form(const std::string & wordform) const
+bool alekseev::Dictionary::contains_form(const std::wstring & wordform) const
 {
   return forms_.contains(wordform);
 }
@@ -405,7 +403,7 @@ bool alekseev::Dictionary::contains_form(const WordForm & wordform) const
   if (!forms_.contains(wordform.word_)) {
     return false;
   }
-  Vector< std::pair< std::string, size_t > > wfs = forms_.at(wordform.word_);
+  Vector< std::pair< std::wstring, size_t > > wfs = forms_.at(wordform.word_);
   for (size_t i = 0; i < wfs.getSize(); ++i) {
     const Lemma & l = lemmas_.at(wfs[i].first);
     if (l.forms_[wfs[i].second] == wordform) {
@@ -415,15 +413,15 @@ bool alekseev::Dictionary::contains_form(const WordForm & wordform) const
   return false;
 }
 
-alekseev::Vector< std::pair< std::string, size_t > > & alekseev::Dictionary::find_forms(
-    const std::string & wordform)
+alekseev::Vector< std::pair< std::wstring, size_t > > & alekseev::Dictionary::find_forms(
+    const std::wstring & wordform)
 {
   return forms_.at(wordform);
 }
 
-std::pair< std::string, size_t > & alekseev::Dictionary::find_lemma(const WordForm & wordform)
+std::pair< std::wstring, size_t > & alekseev::Dictionary::find_lemma(const WordForm & wordform)
 {
-  Vector< std::pair< std::string, size_t > > & wfs = find_forms(wordform.word_);
+  Vector< std::pair< std::wstring, size_t > > & wfs = find_forms(wordform.word_);
   for (size_t i = 0; i < wfs.getSize(); ++i) {
     Lemma & l = lemmas_.at(wfs[i].first);
     if (l.forms_[wfs[i].second] == wordform) {
@@ -432,12 +430,12 @@ std::pair< std::string, size_t > & alekseev::Dictionary::find_lemma(const WordFo
   }
 }
 
-const alekseev::Vector< alekseev::WordForm > & alekseev::Dictionary::get_forms(str_cr lemma) const
+const alekseev::Vector< alekseev::WordForm > & alekseev::Dictionary::get_forms(wstr_cr lemma) const
 {
   return lemmas_.at(lemma).forms_;
 }
 
-alekseev::Vector< std::string > alekseev::Dictionary::get_lemmas() const
+alekseev::Vector< std::wstring > alekseev::Dictionary::get_lemmas() const
 {
   return lemmas_.keys();
 }

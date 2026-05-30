@@ -45,9 +45,9 @@ namespace alekseev {
   struct WordForm
   {
     WordForm();
-    explicit WordForm(std::string wordform, gender g = nn_gender, number n = nn_number,
+    explicit WordForm(std::wstring wordform, gender g = nn_gender, number n = nn_number,
         case_ c = nn_case, tense t = nn_tense, person p = nn_person);
-    std::string word_;
+    std::wstring word_;
     gender gender_;
     number number_;
     case_ case_;
@@ -59,19 +59,19 @@ namespace alekseev {
 
   struct Lemma
   {
-    std::string lemma_;
+    std::wstring lemma_;
     Vector< WordForm > forms_;
     pos pos_;
     gender noun_gender_;
     aspect verb_aspect_;
   };
 
-  using str_cr = const std::string &;
-  size_t djb2_hash(str_cr line);
-  size_t poly_hash(str_cr line);
-  bool equal(str_cr s1, str_cr s2);
-  Vector< std::string > split(str_cr s, char delim);
-  size_t damerau_levenshtein(str_cr a, str_cr b);
+  using wstr_cr = const std::wstring &;
+  size_t djb2_hash(wstr_cr line);
+  size_t poly_hash(wstr_cr line);
+  bool equal(wstr_cr s1, wstr_cr s2);
+  Vector< std::wstring > split(wstr_cr s, wchar_t delim);
+  size_t damerau_levenshtein(wstr_cr a, wstr_cr b);
 
   struct Dictionary
   {
@@ -82,31 +82,31 @@ namespace alekseev {
     Dictionary & operator=(Dictionary &&) noexcept = default;
 
     Dictionary();
-    explicit Dictionary(str_cr file_name);
+    explicit Dictionary(wstr_cr file_name);
 
-    std::ifstream & read(std::ifstream & is);
-    std::ofstream & write(std::ofstream & os);
-    void add_lemma(str_cr lemma, pos pos, gender noun_gender = nn_gender,
+    std::wifstream & read(std::wifstream & is);
+    std::wofstream & write(std::wofstream & os);
+    void add_lemma(wstr_cr lemma, pos pos, gender noun_gender = nn_gender,
         aspect verb_aspect = nn_aspect);
-    void add_form(str_cr lemma, str_cr wordform, gender g = nn_gender, number n = nn_number,
+    void add_form(wstr_cr lemma, wstr_cr wordform, gender g = nn_gender, number n = nn_number,
         case_ c = nn_case, tense t = nn_tense, person p = nn_person);
-    void remove_lemma(str_cr lemma);
+    void remove_lemma(wstr_cr lemma);
     void remove_form(const WordForm & wordform);
 
-    bool contains_lemma(str_cr lemma) const;
-    bool contains_form(str_cr wordform) const;
+    bool contains_lemma(wstr_cr lemma) const;
+    bool contains_form(wstr_cr wordform) const;
     bool contains_form(const WordForm & wordform) const;
-    Vector< std::pair< std::string, size_t > > & find_forms(str_cr wordform);
-    std::pair< std::string, size_t > & find_lemma(const WordForm & wordform);
-    const Vector< WordForm > & get_forms(str_cr lemma) const;
-    Vector< std::string > get_lemmas() const;
+    Vector< std::pair< std::wstring, size_t > > & find_forms(wstr_cr wordform);
+    std::pair< std::wstring, size_t > & find_lemma(const WordForm & wordform);
+    const Vector< WordForm > & get_forms(wstr_cr lemma) const;
+    Vector< std::wstring > get_lemmas() const;
     size_t size() const;
 
     private:
-      CuckooHash< std::string, Lemma, size_t (*)(str_cr), size_t (*)(str_cr), bool(*)(str_cr,
-          str_cr) > lemmas_;
-      CuckooHash< std::string, Vector< std::pair< std::string, size_t > >, size_t (*)(str_cr),
-        size_t (*)(str_cr), bool(*)(str_cr, str_cr) > forms_;
+      CuckooHash< std::wstring, Lemma, size_t (*)(wstr_cr), size_t (*)(wstr_cr), bool(*)(wstr_cr,
+          wstr_cr) > lemmas_;
+      CuckooHash< std::wstring, Vector< std::pair< std::wstring, size_t > >, size_t (*)(wstr_cr),
+        size_t (*)(wstr_cr), bool(*)(wstr_cr, wstr_cr) > forms_;
   };
 }
 

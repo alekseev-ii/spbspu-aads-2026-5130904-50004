@@ -3,5 +3,5 @@
 
 int main()
 {
-  std::cout << alekseev::damerau_levenshtein("string", "stroka") << "\n";
+  std::cout << alekseev::damerau_levenshtein(L"лабрадор", L"гибралтар") << "\n";
 }
