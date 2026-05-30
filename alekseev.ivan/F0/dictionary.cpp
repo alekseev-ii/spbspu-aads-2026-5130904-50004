@@ -430,9 +430,14 @@ std::pair< std::wstring, size_t > & alekseev::Dictionary::find_lemma(const WordF
   }
 }
 
-const alekseev::Vector< alekseev::WordForm > & alekseev::Dictionary::get_forms(wstr_cr lemma) const
+alekseev::Vector< alekseev::WordForm > alekseev::Dictionary::get_forms(wstr_cr wordform) const
 {
-  return lemmas_.at(lemma).forms_;
+  Vector< WordForm > res;
+  const Vector< std::pair< std::wstring, size_t > > & wfs = forms_.at(wordform);
+  for (size_t i = 0; i < wfs.getSize(); ++i) {
+    res.pushBack(lemmas_.at(wfs[i].first).forms_[wfs[i].second]);
+  }
+  return res;
 }
 
 alekseev::Vector< std::wstring > alekseev::Dictionary::get_lemmas() const
@@ -443,4 +448,22 @@ alekseev::Vector< std::wstring > alekseev::Dictionary::get_lemmas() const
 size_t alekseev::Dictionary::size() const
 {
   return lemmas_.size();
+}
+
+alekseev::Vector< alekseev::WordForm > alekseev::Dictionary::damerau_find(wstr_cr bad_word)
+{
+  if (forms_.contains(bad_word)) {
+    return get_forms(bad_word);
+  }
+  Vector< WordForm > res;
+  Vector< std::wstring > wfs = forms_.keys();
+  for (size_t i = 0; i < wfs.getSize(); ++i) {
+    if (wfs[i].size() - bad_word.size() < 3) {
+      if (damerau_levenshtein(wfs[i], bad_word) < 3) {
+        Vector< WordForm > found = get_forms(wfs[i]);
+        res.insert(0, found, 0, found.getSize());
+      }
+    }
+  }
+  return res;
 }

@@ -96,11 +96,15 @@ namespace alekseev {
     bool contains_lemma(wstr_cr lemma) const;
     bool contains_form(wstr_cr wordform) const;
     bool contains_form(const WordForm & wordform) const;
+
     Vector< std::pair< std::wstring, size_t > > & find_forms(wstr_cr wordform);
     std::pair< std::wstring, size_t > & find_lemma(const WordForm & wordform);
-    const Vector< WordForm > & get_forms(wstr_cr lemma) const;
+    Vector< WordForm > get_forms(wstr_cr wordform) const;
     Vector< std::wstring > get_lemmas() const;
+
     size_t size() const;
+
+    Vector< WordForm > damerau_find(wstr_cr bad_word);
 
     private:
       CuckooHash< std::wstring, Lemma, size_t (*)(wstr_cr), size_t (*)(wstr_cr), bool(*)(wstr_cr,
