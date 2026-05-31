@@ -75,7 +75,7 @@ namespace alekseev {
   Vector< std::wstring > split(wstr_cr s, wchar_t delim = L' ', bool need_trim = false);
   size_t damerau_levenshtein(wstr_cr a, wstr_cr b);
   std::wstring utf8_to_wstring(const std::string & str);
-  std::wstring trim(const std::wstring& str);
+  std::wstring trim(const std::wstring & str);
 
   struct ConsoleSetup
   {
@@ -112,10 +112,14 @@ namespace alekseev {
     bool contains_form(wstr_cr wordform) const;
     bool contains_form(const WordForm & wordform) const;
 
-    Vector< std::pair< std::wstring, size_t > > & find_forms(wstr_cr wordform);
-    std::pair< std::wstring, size_t > & find_lemma(const WordForm & wordform);
-    Vector< WordForm > get_forms(wstr_cr wordform) const;
+    Vector< std::pair< std::wstring, size_t > > & find_homoforms(wstr_cr wordform);
+    std::pair< std::wstring, size_t > & lemma_pair_by_wordform(const WordForm & wordform);
+    Vector< WordForm > get_homoforms(wstr_cr wordform) const;
     Vector< std::wstring > get_lemmas() const;
+    const Vector< WordForm > & forms_by_lemma(wstr_cr lemma) const;
+
+    bool matches_case(wstr_cr wordform, case_ expected_case) const;
+    bool matches_person(wstr_cr wordform, person expected_person) const;
 
     size_t size() const;
 

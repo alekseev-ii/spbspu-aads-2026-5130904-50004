@@ -51,7 +51,8 @@ bool alekseev::equal(wstr_cr s1, wstr_cr s2)
   return s1 == s2;
 }
 
-alekseev::Vector< std::wstring > alekseev::split(const std::wstring & s, wchar_t delim, bool need_trim)
+alekseev::Vector< std::wstring > alekseev::split(const std::wstring & s, wchar_t delim,
+    bool need_trim)
 {
   size_t start = 0;
   Vector< std::wstring > res;
@@ -135,7 +136,8 @@ std::wstring alekseev::trim(const std::wstring & str)
   }
   while (end > start) {
     wchar_t c = str[end - 1];
-    if (str[end - 1] == L' ' || str[end - 1] == L'\t' || str[end - 1] == L'\r' || str[end - 1] == L'\n') {
+    if (str[end - 1] == L' ' || str[end - 1] == L'\t' || str[end - 1] == L'\r' || str[end - 1] ==
+      L'\n') {
       --end;
     } else {
       break;
@@ -435,7 +437,7 @@ void alekseev::Dictionary::remove_lemma(const std::wstring & lemma)
   Lemma l = lemmas_.at(lemma);
   lemmas_.remove(lemma);
   for (size_t i = 0; i < l.forms_.getSize(); ++i) {
-    Vector< std::pair< std::wstring, size_t > > & wfs = find_forms(l.forms_[i].word_);
+    Vector< std::pair< std::wstring, size_t > > & wfs = find_homoforms(l.forms_[i].word_);
     for (size_t j = 0; j < wfs.getSize(); ++j) {
       if (wfs[j].first == lemma) {
         wfs.erase(j);
@@ -452,7 +454,7 @@ void alekseev::Dictionary::remove_form(const WordForm & wordform)
   if (!forms_.contains(wordform.word_)) {
     return;
   }
-  Vector< std::pair< std::wstring, size_t > > & wfs = find_forms(wordform.word_);
+  Vector< std::pair< std::wstring, size_t > > & wfs = find_homoforms(wordform.word_);
   for (size_t i = 0; i < wfs.getSize(); ++i) {
     Lemma & l = lemmas_.at(wfs[i].first);
     if (l.forms_[wfs[i].second] == wordform) {
@@ -462,7 +464,7 @@ void alekseev::Dictionary::remove_form(const WordForm & wordform)
         forms_.remove(wordform.word_);
       }
       for (size_t j = wfs[i].second; j < l.forms_.getSize(); ++j) {
-        find_lemma(l.forms_[j]).second--;
+        lemma_pair_by_wordform(l.forms_[j]).second--;
       }
       return;
     }
@@ -494,15 +496,16 @@ bool alekseev::Dictionary::contains_form(const WordForm & wordform) const
   return false;
 }
 
-alekseev::Vector< std::pair< std::wstring, size_t > > & alekseev::Dictionary::find_forms(
+alekseev::Vector< std::pair< std::wstring, size_t > > & alekseev::Dictionary::find_homoforms(
     const std::wstring & wordform)
 {
   return forms_.at(wordform);
 }
 
-std::pair< std::wstring, size_t > & alekseev::Dictionary::find_lemma(const WordForm & wordform)
+std::pair< std::wstring, size_t > & alekseev::Dictionary::lemma_pair_by_wordform(
+    const WordForm & wordform)
 {
-  Vector< std::pair< std::wstring, size_t > > & wfs = find_forms(wordform.word_);
+  Vector< std::pair< std::wstring, size_t > > & wfs = find_homoforms(wordform.word_);
   for (size_t i = 0; i < wfs.getSize(); ++i) {
     Lemma & l = lemmas_.at(wfs[i].first);
     if (l.forms_[wfs[i].second] == wordform) {
@@ -512,7 +515,7 @@ std::pair< std::wstring, size_t > & alekseev::Dictionary::find_lemma(const WordF
   throw std::out_of_range("Wordform not found");
 }
 
-alekseev::Vector< alekseev::WordForm > alekseev::Dictionary::get_forms(wstr_cr wordform) const
+alekseev::Vector< alekseev::WordForm > alekseev::Dictionary::get_homoforms(wstr_cr wordform) const
 {
   Vector< WordForm > res;
   const Vector< std::pair< std::wstring, size_t > > & wfs = forms_.at(wordform);
@@ -527,6 +530,40 @@ alekseev::Vector< std::wstring > alekseev::Dictionary::get_lemmas() const
   return lemmas_.keys();
 }
 
+const alekseev::Vector< alekseev::WordForm > & alekseev::Dictionary::forms_by_lemma(
+    wstr_cr lemma) const
+{
+  return lemmas_.at(lemma).forms_;
+}
+
+bool alekseev::Dictionary::matches_case(wstr_cr wordform, case_ expected_case) const
+{
+  if (!forms_.contains(wordform)) {
+    return false;
+  }
+  Vector< WordForm > wfs = get_homoforms(wordform);
+  for (size_t i = 0; i < wfs.getSize(); ++i) {
+    if (wfs[i].case_ == expected_case) {
+      return true;
+    }
+  }
+  return false;
+}
+
+bool alekseev::Dictionary::matches_person(wstr_cr wordform, person expected_person) const
+{
+  if (!forms_.contains(wordform)) {
+    return false;
+  }
+  Vector< WordForm > wfs = get_homoforms(wordform);
+  for (size_t i = 0; i < wfs.getSize(); ++i) {
+    if (wfs[i].person_ == expected_person) {
+      return true;
+    }
+  }
+  return false;
+}
+
 size_t alekseev::Dictionary::size() const
 {
   return forms_.size();
@@ -536,14 +573,14 @@ alekseev::Vector< alekseev::WordForm > alekseev::Dictionary::damerau_find(wstr_c
     size_t distance)
 {
   if (forms_.contains(bad_word)) {
-    return get_forms(bad_word);
+    return get_homoforms(bad_word);
   }
   Vector< WordForm > res;
   Vector< std::wstring > wfs = forms_.keys();
   for (size_t i = 0; i < wfs.getSize(); ++i) {
     if (wfs[i].size() - bad_word.size() < distance) {
       if (damerau_levenshtein(wfs[i], bad_word) < distance) {
-        Vector< WordForm > found = get_forms(wfs[i]);
+        Vector< WordForm > found = get_homoforms(wfs[i]);
         res += found;
       }
     }
