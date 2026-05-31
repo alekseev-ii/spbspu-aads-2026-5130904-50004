@@ -51,7 +51,7 @@ bool alekseev::equal(wstr_cr s1, wstr_cr s2)
   return s1 == s2;
 }
 
-alekseev::Vector< std::wstring > alekseev::split(const std::wstring & s, wchar_t delim)
+alekseev::Vector< std::wstring > alekseev::split(const std::wstring & s, wchar_t delim, bool need_trim)
 {
   size_t start = 0;
   Vector< std::wstring > res;
@@ -59,14 +59,21 @@ alekseev::Vector< std::wstring > alekseev::split(const std::wstring & s, wchar_t
   for (; i < s.size(); ++i) {
     if (s[i] == delim) {
       if (i > start) {
-        res.pushBack(s.substr(start, i - start));
+        std::wstring word = s.substr(start, i - start);
+        if (need_trim) {
+          word = trim(word);
+        }
+        res.pushBack(word);
       }
       start = i + 1;
     }
   }
   std::wstring last = s.substr(start, i - start);
   if (!last.empty()) {
-    res.pushBack(s.substr(start, i - start));
+    if (need_trim) {
+      last = trim(last);
+    }
+    res.pushBack(last);
   }
   return res;
 }
@@ -101,6 +108,42 @@ size_t alekseev::damerau_levenshtein(wstr_cr a, wstr_cr b)
   return ans;
 }
 
+std::wstring alekseev::utf8_to_wstring(const std::string & str)
+{
+  if (str.empty()) {
+    return {};
+  }
+
+  int size_needed = MultiByteToWideChar(CP_UTF8, 0, str.c_str(), static_cast< int >(str.size()),
+      nullptr, 0);
+  std::wstring wstr(size_needed, 0);
+  MultiByteToWideChar(CP_UTF8, 0, str.c_str(), static_cast< int >(str.size()), &wstr[0],
+      size_needed);
+  return wstr;
+}
+
+std::wstring alekseev::trim(const std::wstring & str)
+{
+  size_t start = 0, end = str.size();
+  while (start < end) {
+    wchar_t c = str[start];
+    if (c == L' ' || c == L'\t' || c == L'\r' || c == L'\n') {
+      ++start;
+    } else {
+      break;
+    }
+  }
+  while (end > start) {
+    wchar_t c = str[end - 1];
+    if (str[end - 1] == L' ' || str[end - 1] == L'\t' || str[end - 1] == L'\r' || str[end - 1] == L'\n') {
+      --end;
+    } else {
+      break;
+    }
+  }
+  return str.substr(start, end - start);
+}
+
 alekseev::ConsoleSetup::ConsoleSetup():
   old_cout_mode_(_setmode(_fileno(stdout), _O_U16TEXT)),
   old_cin_mode_(_setmode(_fileno(stdin), _O_U16TEXT)),
@@ -130,8 +173,14 @@ alekseev::Dictionary::Dictionary(wstr_cr file_name):
   lemmas_(djb2_hash, poly_hash, equal, 4096),
   forms_(djb2_hash, poly_hash, equal, 16384)
 {
-  std::wifstream is(file_name.data());
+  read(file_name);
+}
+
+void alekseev::Dictionary::read(wstr_cr file_name)
+{
+  std::ifstream is(file_name.data(), std::ios::binary);
   try {
+    std::wcout << L"p1\n";
     read(is);
   } catch (...) {
     is.close();
@@ -140,25 +189,37 @@ alekseev::Dictionary::Dictionary(wstr_cr file_name):
   is.close();
 }
 
-std::wifstream & alekseev::Dictionary::read(std::wifstream & is)
+std::ifstream & alekseev::Dictionary::read(std::ifstream & is)
 {
   if (!is.is_open() || !is.good()) {
     return is;
   }
-  std::wstring line;
+
+  std::wcout << L"p2\n";
+  std::string line;
   Lemma lemma;
   while (std::getline(is, line)) {
     if (line.empty()) {
       continue;
     }
-    if (line[0] == '#') {
+    if (static_cast< unsigned char >(line[0]) == 0xEF &&
+      static_cast< unsigned char >(line[1]) == 0xBB &&
+      static_cast< unsigned char >(line[2]) == 0xBF) {
+      line = line.substr(3);
+      if (line.empty()) {
+        continue;
+      }
+    }
+    if (line[0] == L'#') {
       continue;
     }
-    Vector< std::wstring > words = split(line, ' ');
+
+    std::wstring wline = utf8_to_wstring(line);
+    Vector< std::wstring > words = split(wline, L' ', true);
     if (words.isEmpty()) {
       continue;
     }
-    if (line[0] != ' ' && line[0] != '\t') {
+    if (wline[0] != L' ' && wline[0] != L'\t') {
       if (!lemma.lemma_.empty()) {
         lemmas_.insert(lemma.lemma_, lemma);
         lemma = Lemma();
@@ -448,6 +509,7 @@ std::pair< std::wstring, size_t > & alekseev::Dictionary::find_lemma(const WordF
       return wfs[i];
     }
   }
+  throw std::out_of_range("Wordform not found");
 }
 
 alekseev::Vector< alekseev::WordForm > alekseev::Dictionary::get_forms(wstr_cr wordform) const
@@ -467,10 +529,11 @@ alekseev::Vector< std::wstring > alekseev::Dictionary::get_lemmas() const
 
 size_t alekseev::Dictionary::size() const
 {
-  return lemmas_.size();
+  return forms_.size();
 }
 
-alekseev::Vector< alekseev::WordForm > alekseev::Dictionary::damerau_find(wstr_cr bad_word)
+alekseev::Vector< alekseev::WordForm > alekseev::Dictionary::damerau_find(wstr_cr bad_word,
+    size_t distance)
 {
   if (forms_.contains(bad_word)) {
     return get_forms(bad_word);
@@ -478,10 +541,10 @@ alekseev::Vector< alekseev::WordForm > alekseev::Dictionary::damerau_find(wstr_c
   Vector< WordForm > res;
   Vector< std::wstring > wfs = forms_.keys();
   for (size_t i = 0; i < wfs.getSize(); ++i) {
-    if (wfs[i].size() - bad_word.size() < 3) {
-      if (damerau_levenshtein(wfs[i], bad_word) < 3) {
+    if (wfs[i].size() - bad_word.size() < distance) {
+      if (damerau_levenshtein(wfs[i], bad_word) < distance) {
         Vector< WordForm > found = get_forms(wfs[i]);
-        res.insert(0, found, 0, found.getSize());
+        res += found;
       }
     }
   }

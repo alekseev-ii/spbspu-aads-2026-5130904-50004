@@ -72,8 +72,10 @@ namespace alekseev {
   size_t djb2_hash(wstr_cr line);
   size_t poly_hash(wstr_cr line);
   bool equal(wstr_cr s1, wstr_cr s2);
-  Vector< std::wstring > split(wstr_cr s, wchar_t delim);
+  Vector< std::wstring > split(wstr_cr s, wchar_t delim = L' ', bool need_trim = false);
   size_t damerau_levenshtein(wstr_cr a, wstr_cr b);
+  std::wstring utf8_to_wstring(const std::string & str);
+  std::wstring trim(const std::wstring& str);
 
   struct ConsoleSetup
   {
@@ -96,7 +98,8 @@ namespace alekseev {
     Dictionary();
     explicit Dictionary(wstr_cr file_name);
 
-    std::wifstream & read(std::wifstream & is);
+    void read(wstr_cr file_name);
+    std::ifstream & read(std::ifstream & is);
     std::wofstream & write(std::wofstream & os);
     void add_lemma(wstr_cr lemma, pos pos, gender noun_gender = nn_gender,
         aspect verb_aspect = nn_aspect);
@@ -116,7 +119,7 @@ namespace alekseev {
 
     size_t size() const;
 
-    Vector< WordForm > damerau_find(wstr_cr bad_word);
+    Vector< WordForm > damerau_find(wstr_cr bad_word, size_t distance = 3);
 
     private:
       CuckooHash< std::wstring, Lemma, size_t (*)(wstr_cr), size_t (*)(wstr_cr), bool(*)(wstr_cr,
