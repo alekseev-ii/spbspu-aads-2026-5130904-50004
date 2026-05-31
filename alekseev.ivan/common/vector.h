@@ -7,7 +7,8 @@
 
 namespace alekseev {
   template< class T >
-  struct Vector {
+  struct Vector
+  {
     ~Vector();
     Vector(const Vector< T > & rhs);
     Vector< T > & operator=(const Vector< T > & rhs);
@@ -37,6 +38,7 @@ namespace alekseev {
     void insert(size_t id, const Vector< T > & rhs, size_t begin, size_t end);
     void erase(size_t id);
     void erase(size_t begin, size_t end);
+    Vector & operator+=(const Vector & rhs);
 
     void bubbleSort(bool (* less)(T, T));
     void resize(size_t new_capacity);
@@ -53,8 +55,7 @@ alekseev::Vector< T >::Vector():
   data_(nullptr),
   size_(0),
   capacity_(0)
-{
-}
+{ }
 
 template< class T >
 alekseev::Vector< T >::~Vector()
@@ -300,6 +301,18 @@ void alekseev::Vector< T >::erase(size_t begin, size_t end)
 }
 
 template< class T >
+alekseev::Vector< T > & alekseev::Vector< T >::operator+=(const Vector & rhs)
+{
+  Vector temp(*this);
+  temp.resize(getSize() + rhs.getSize());
+  for (size_t i = 0; i < rhs.getSize(); ++i) {
+    temp.pushBack(rhs[i]);
+  }
+  swap(temp);
+  return *this;
+}
+
+template< class T >
 void alekseev::Vector< T >::bubbleSort(bool (* less)(T, T))
 {
   if (size_ <= 1) {
@@ -324,6 +337,9 @@ void alekseev::Vector< T >::bubbleSort(bool (* less)(T, T))
 template< class T >
 void alekseev::Vector< T >::resize(size_t new_capacity)
 {
+  if (new_capacity <= getSize()) {
+    return;
+  }
   T * temp = new T[new_capacity];
   for (size_t i = 0; i < getSize(); ++i) {
     temp[i] = data_[i];
@@ -338,7 +354,6 @@ alekseev::Vector< T >::Vector(size_t size):
   data_(size ? new T[size] : nullptr),
   size_(size),
   capacity_(size)
-{
-}
+{ }
 
 #endif
