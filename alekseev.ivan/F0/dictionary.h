@@ -131,6 +131,22 @@ namespace alekseev {
       CuckooHash< std::wstring, Vector< std::pair< std::wstring, size_t > >, size_t (*)(wstr_cr),
         size_t (*)(wstr_cr), bool(*)(wstr_cr, wstr_cr) > forms_;
   };
+
+  struct DictionaryManager
+  {
+    ~DictionaryManager() = default;
+    DictionaryManager(const DictionaryManager &) = default;
+    DictionaryManager & operator=(const DictionaryManager &) = default;
+    DictionaryManager(DictionaryManager &&) noexcept = default;
+    DictionaryManager & operator=(DictionaryManager &&) noexcept = default;
+
+    DictionaryManager();
+
+    private:
+      CuckooHash< std::wstring, Dictionary, size_t (*)(wstr_cr), size_t (*)(wstr_cr), bool(*)(
+          wstr_cr, wstr_cr) > dicts_;
+      std::wstring current_;
+  };
 }
 
 #endif
