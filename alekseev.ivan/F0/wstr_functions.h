@@ -2,6 +2,7 @@
 #define WSTR_FUNCTIONS_H
 #include <string>
 #include "../common/vector.h"
+#include <initializer_list>
 
 namespace alekseev {
   using wstr_cr = const std::wstring &;
@@ -14,6 +15,9 @@ namespace alekseev {
   std::wstring upper_case(wstr_cr str);
   Vector< bool > mask_from_case(wstr_cr str);
   std::wstring case_from_mask(wstr_cr str, const Vector< bool > & mask);
+  wchar_t yes_no(std::wstring answer);
+  bool endswith(wstr_cr str, wstr_cr substr);
+  bool endswith(wstr_cr str, std::initializer_list< std::wstring > substr);
 
   size_t damerau_levenshtein(wstr_cr a, wstr_cr b);
 }

@@ -139,6 +139,35 @@ std::wstring alekseev::case_from_mask(wstr_cr str, const Vector< bool > & mask)
   return res;
 }
 
+wchar_t alekseev::yes_no(std::wstring answer)
+{
+  answer = lower_case(answer);
+  if (answer == L"yes" || answer == L"y" || answer == L"да" || answer == L"д") {
+    return L'y';
+  } else if (answer == L"no" || answer == L"n" || answer == L"нет" || answer == L"н") {
+    return L'n';
+  } else {
+    return L'u';
+  }
+}
+
+bool alekseev::endswith(wstr_cr str, wstr_cr substr)
+{
+  if (str.size() < substr.size()) {
+    return false;
+  }
+  return str.substr(str.size() - substr.size(), substr.size()) == substr;
+}
+
+bool alekseev::endswith(wstr_cr str, std::initializer_list< std::wstring > substr)
+{
+  bool res = false;
+  for (auto i = substr.begin(); i != substr.end() && !res; ++i) {
+    res = res || endswith(str, *i);
+  }
+  return res;
+}
+
 size_t alekseev::damerau_levenshtein(wstr_cr a, wstr_cr b)
 {
   if (a == b) {
