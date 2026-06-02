@@ -6,7 +6,6 @@
 #include "cuckoo_hash.h"
 #include <fstream>
 #include <windows.h>
-#include <fcntl.h>
 
 namespace alekseev {
   enum pos
@@ -72,10 +71,6 @@ namespace alekseev {
   size_t djb2_hash(wstr_cr line);
   size_t poly_hash(wstr_cr line);
   bool equal(wstr_cr s1, wstr_cr s2);
-  Vector< std::wstring > split(wstr_cr s, wchar_t delim = L' ', bool need_trim = false);
-  size_t damerau_levenshtein(wstr_cr a, wstr_cr b);
-  std::wstring utf8_to_wstring(const std::string & str);
-  std::wstring trim(const std::wstring & str);
 
   struct ConsoleSetup
   {
