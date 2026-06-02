@@ -564,22 +564,22 @@ void alekseev::DictionaryManager::set_current(wstr_cr name_of_loaded_dict)
   current_ = name_of_loaded_dict;
 }
 
-void alekseev::DictionaryManager::add_word(std::wstring word, std::wistream & is,
-    std::wostream & os)
+void alekseev::DictionaryManager::add_word(wstr_cr word, std::wistream & is, std::wostream & os)
 {
   Dictionary & dict = dicts_.at(current_);
-  if (dict.contains_lemma(word)) {
+  std::wstring w = lower_case(word);
+  if (dict.contains_lemma(w)) {
     os << L"Word already exists in current dictionary \"" << current_ << L"\"\n";
     wchar_t ans = ask_yes_no(L"Do you want to replace it?", is, os, true);
     if (ans == L'y') {
-      dict.remove_lemma(word);
+      dict.remove_lemma(w);
     } else if (ans == L'n') {
       return;
     } else {
       throw std::invalid_argument("Bad input");
     }
   }
-  pos p = guess_pos(word);
+  pos p = guess_pos(w);
   wchar_t ans;
   if (p == verb) {
     ans = ask_yes_no(L"Is it a verb?", is, os);
@@ -592,7 +592,7 @@ void alekseev::DictionaryManager::add_word(std::wstring word, std::wistream & is
   }
   if (ans != L'y') {
     std::wstring answer;
-    os << "Input word class: ";
+    os << "Input word class (verb/adj/noun): ";
     p = unknown;
     while (p == unknown && std::getline(is, answer)) {
       if (answer == L"verb") {
@@ -603,8 +603,191 @@ void alekseev::DictionaryManager::add_word(std::wstring word, std::wistream & is
         p = noun;
       } else {
         os << L"Unknown word class: " << answer << L"\n";
-        os << "Input word class: ";
+        os << L"Input some of \"verb\", \"adj\", \"noun\"";
+        os << "Input word class (verb/adj/noun): ";
+      }
+    }
+    if (p == verb) {
+      add_verb(w, is, os);
+    } else if (p == adj) {
+      add_adj(w, is, os);
+    } else {
+      add_noun(w, is, os);
+    }
+  }
+}
+
+void alekseev::DictionaryManager::add_verb(wstr_cr word, std::wistream & is, std::wostream & os)
+{
+  Dictionary & dict = dicts_.at(current_);
+  aspect verb_aspect = nn_aspect;
+  wchar_t aspect = ask_yes_no(L"Is this verb is perfect?", is, os);
+  if (aspect == L'y') {
+    verb_aspect = perf;
+  } else {
+    verb_aspect = imperf;
+  }
+  dict.add_lemma(word, verb, nn_gender, verb_aspect);
+  std::wstring past_masc, past_fem, past_neut, past_pl;
+  os << L"Enter forms, leave the non-existing ones empty\n";
+  os << "Past tense:\n";
+  os << L"\tSingular masculine (he): ";
+  std::getline(is, past_masc);
+  os << L"\tSingular feminine (she): ";
+  std::getline(is, past_fem);
+  os << L"\tSingular neut (it): ";
+  std::getline(is, past_neut);
+  os << L"\tPlural (they): ";
+  std::getline(is, past_pl);
+
+  os << L"Present/Future tense:\n";
+  std::wstring pres_1s, pres_2s, pres_3s, pres_1p, pres_2p, pres_3p;
+  os << L"\t1st singular (I): ";
+  std::getline(is, pres_1s);
+  os << L"\t2nd singular (you): ";
+  std::getline(is, pres_2s);
+  os << L"\t3rd singular (he/she): ";
+  std::getline(is, pres_3s);
+  os << L"\t1st plural (we): ";
+  std::getline(is, pres_1p);
+  os << L"\t2nd plural (you): ";
+  std::getline(is, pres_2p);
+  os << L"\t3rd plural (they): ";
+  std::getline(is, pres_3p);
+
+  size_t c = 0;
+  if (!past_masc.empty()) {
+    dict.add_form(word, past_masc, masculine, singular, nn_case, past, nn_person);
+    ++c;
+  }
+  if (!past_fem.empty()) {
+    dict.add_form(word, past_fem, feminine, singular, nn_case, past, nn_person);
+    ++c;
+  }
+  if (!past_neut.empty()) {
+    dict.add_form(word, past_neut, neuter, singular, nn_case, past, nn_person);
+    ++c;
+  }
+  if (!past_pl.empty()) {
+    dict.add_form(word, past_pl, nn_gender, plural, nn_case, past, nn_person);
+    ++c;
+  }
+
+  tense t = verb_aspect == perf ? future : present;
+  if (!pres_1s.empty()) {
+    dict.add_form(word, pres_1s, nn_gender, singular, nn_case, t, first);
+    ++c;
+  }
+  if (!pres_2s.empty()) {
+    dict.add_form(word, pres_2s, nn_gender, singular, nn_case, t, second);
+    ++c;
+  }
+  if (!pres_3s.empty()) {
+    dict.add_form(word, pres_3s, nn_gender, singular, nn_case, t, third);
+    ++c;
+  }
+  if (!pres_1p.empty()) {
+    dict.add_form(word, pres_1p, nn_gender, plural, nn_case, t, first);
+    ++c;
+  }
+  if (!pres_2p.empty()) {
+    dict.add_form(word, pres_2p, nn_gender, plural, nn_case, t, second);
+    ++c;
+  }
+  if (!pres_3p.empty()) {
+    dict.add_form(word, pres_3p, nn_gender, plural, nn_case, t, third);
+    ++c;
+  }
+  os << L"Successfully added " << c << " forms!\n";
+}
+
+void alekseev::DictionaryManager::add_adj(wstr_cr word, std::wistream & is, std::wostream & os)
+{
+  Dictionary & dict = dicts_.at(word);
+  dict.add_lemma(word, adj, nn_gender, nn_aspect);
+  case_ cases[6]{nominative, genitive, dative, accusative, instrumental, prepositional};
+  const wchar_t * cases_names[6]{
+    L"Nominative",
+    L"Genitive",
+    L"Dative",
+    L"Accusative",
+    L"Instrumental",
+    L"Prepositional"
+  };
+  gender genders[3]{masculine, feminine, neuter};
+  const wchar_t * genders_names[3]{L"Masculine", L"Feminine", L"Neuter"};
+
+  size_t c = 0;
+  std::wstring form;
+  os << L"Enter forms, leave the non-existing ones empty\n";
+  for (size_t i = 0; i < 3; i++) {
+    os << "Singular " << genders_names[i] << ":\n";
+    for (size_t j = 0; j < 6; j++) {
+      os << "\t" << cases_names[j] << ": ";
+      getline(is, form);
+      if (!form.empty()) {
+        dict.add_form(word, form, genders[i], singular, cases[j], nn_tense, nn_person);
+        ++c;
       }
     }
   }
+
+  os << L"Plural:\n";
+  for (size_t i = 0; i < 6; i++) {
+    os << "\t" << cases_names[i] << ": ";
+    getline(is, form);
+    if (!form.empty()) {
+      dict.add_form(word, form, nn_gender, plural, cases[i], nn_tense, nn_person);
+      ++c;
+    }
+  }
+  os << L"Successfully added " << c << " forms!\n";
+}
+
+void alekseev::DictionaryManager::add_noun(wstr_cr word, std::wistream & is, std::wostream & os)
+{
+  Dictionary dict = dicts_.at(word);
+  os << L"Enter noun gender (masc/fem/neut): ";
+  std::wstring gender_ans;
+  gender g = nn_gender;
+  while (getline(is, gender_ans) && g == nn_gender) {
+    if (gender_ans == L"masc") {
+      g = masculine;
+    } else if (gender_ans == L"fem") {
+      g = feminine;
+    } else if (gender_ans == L"neut") {
+      g = neuter;
+    } else {
+      os << L"Bad noun gender: " << gender_ans << L"\n";
+      os << L"Enter noun gender (masc/fem/neut): ";
+    }
+  }
+  dict.add_lemma(word, noun, g, nn_aspect);
+  case_ cases[6]{nominative, genitive, dative, accusative, instrumental, prepositional};
+  const wchar_t * cases_names[6]{
+    L"Nominative",
+    L"Genitive",
+    L"Dative",
+    L"Accusative",
+    L"Instrumental",
+    L"Prepositional"
+  };
+  number numbers[2]{singular, plural};
+  const wchar_t * numbers_names[2]{L"Singular", L"Plural"};
+
+  os << L"Enter forms, leave the non-existing ones empty\n";
+  size_t c = 0;
+  std::wstring form;
+  for (size_t i = 0; i < 2; i++) {
+    os << numbers_names[i] << ":\n";
+    for (size_t j = 0; j < 6; j++) {
+      os << "\t" << cases_names[j] << ": ";
+      getline(is, form);
+      if (!form.empty()) {
+        dict.add_form(word, form, g, numbers[i], cases[j], nn_tense, nn_person);
+        ++c;
+      }
+    }
+  }
+  os << L"Successfully added " << c << " forms!\n";
 }

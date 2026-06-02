@@ -144,12 +144,16 @@ namespace alekseev {
     void save(wstr_cr name, wstr_cr file_name);
     void unload(wstr_cr name);
     void set_current(wstr_cr name_of_loaded_dict);
-    void add_word(std::wstring word, std::wistream & is, std::wostream & os);
+    void add_word(wstr_cr word, std::wistream & is, std::wostream & os);
 
     private:
       CuckooHash< std::wstring, Dictionary, size_t (*)(wstr_cr), size_t (*)(wstr_cr), bool(*)(
           wstr_cr, wstr_cr) > dicts_;
       std::wstring current_;
+
+      void add_verb(wstr_cr word, std::wistream & is, std::wostream & os);
+      void add_adj(wstr_cr word, std::wistream & is, std::wostream & os);
+      void add_noun(wstr_cr word, std::wistream & is, std::wostream & os);
   };
 }
 
