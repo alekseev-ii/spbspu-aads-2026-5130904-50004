@@ -67,6 +67,52 @@ std::wstring alekseev::trim(const std::wstring & str)
   return str.substr(start, end - start);
 }
 
+wchar_t alekseev::to_lower(wchar_t ch)
+{
+  if (ch >= L'A' && ch <= L'Z') {
+    return ch + (L'a' - L'A');
+  }
+  if (ch >= L'А' && ch <= L'Я') {
+    return ch + (L'А' - L'а');
+  }
+  if (ch == L'Ё') {
+    return L'ё';
+  }
+  return ch;
+}
+
+std::wstring alekseev::lower_case(wstr_cr str)
+{
+  std::wstring res;
+  for (size_t i = 0; i < str.size(); ++i) {
+    res[i] = to_lower(str[i]);
+  }
+  return res;
+}
+
+wchar_t alekseev::to_upper(wchar_t ch)
+{
+  if (ch >= L'a' && ch <= L'z') {
+    return ch - (L'a' - L'A');
+  }
+  if (ch >= L'а' && ch <= L'я') {
+    return ch - (L'а' - L'А');
+  }
+  if (ch == L'ё') {
+    return L'Ё';
+  }
+  return ch;
+}
+
+std::wstring alekseev::upper_case(wstr_cr str)
+{
+  std::wstring res;
+  for (size_t i = 0; i < str.size(); ++i) {
+    res[i] = to_upper(str[i]);
+  }
+  return res;
+}
+
 size_t alekseev::damerau_levenshtein(wstr_cr a, wstr_cr b)
 {
   if (a == b) {
