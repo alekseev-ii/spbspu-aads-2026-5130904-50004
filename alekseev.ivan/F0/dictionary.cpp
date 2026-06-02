@@ -330,6 +330,16 @@ std::ifstream & alekseev::Dictionary::read(std::ifstream & is)
   return is;
 }
 
+void alekseev::Dictionary::write(wstr_cr file_name)
+{
+  std::wofstream os(file_name.data());
+  if (!os.is_open()) {
+    throw std::invalid_argument("Failed to open file");
+  }
+  write(os);
+  os.close();
+}
+
 std::wofstream & alekseev::Dictionary::write(std::wofstream & os)
 {
   if (!os.is_open() || !os.good()) {
@@ -590,3 +600,40 @@ alekseev::Vector< alekseev::WordForm > alekseev::Dictionary::damerau_find(wstr_c
 alekseev::DictionaryManager::DictionaryManager():
   dicts_(djb2_hash, poly_hash, equal, 16)
 { }
+
+void alekseev::DictionaryManager::create(wstr_cr name)
+{
+  if (dicts_.contains(name)) {
+    throw std::invalid_argument("Dictionary already exists");
+  }
+  dicts_.insert(name, Dictionary());
+  current_ = name;
+}
+
+void alekseev::DictionaryManager::load(wstr_cr name, wstr_cr file_name)
+{
+  if (dicts_.contains(name)) {
+    throw std::invalid_argument("Dictionary already exists");
+  }
+  Dictionary d(file_name);
+  dicts_.insert(name, Dictionary(d));
+  current_ = name;
+}
+
+void alekseev::DictionaryManager::save(wstr_cr name, wstr_cr file_name)
+{
+  dicts_.at(name).write(file_name);
+}
+
+void alekseev::DictionaryManager::unload(wstr_cr name)
+{
+  dicts_.remove(name);
+}
+
+void alekseev::DictionaryManager::set_current(wstr_cr name_of_loaded_dict)
+{
+  if (!dicts_.contains(name_of_loaded_dict)) {
+    throw std::invalid_argument("Dictionary not found");
+  }
+  current_ = name_of_loaded_dict;
+}

@@ -100,6 +100,7 @@ namespace alekseev {
 
     void read(wstr_cr file_name);
     std::ifstream & read(std::ifstream & is);
+    void write(wstr_cr file_name);
     std::wofstream & write(std::wofstream & os);
     void add_lemma(wstr_cr lemma, pos pos, gender noun_gender = nn_gender,
         aspect verb_aspect = nn_aspect);
@@ -141,6 +142,12 @@ namespace alekseev {
     DictionaryManager & operator=(DictionaryManager &&) noexcept = default;
 
     DictionaryManager();
+
+    void create(wstr_cr name);
+    void load(wstr_cr name, wstr_cr file_name);
+    void save(wstr_cr name, wstr_cr file_name);
+    void unload(wstr_cr name);
+    void set_current(wstr_cr name_of_loaded_dict);
 
     private:
       CuckooHash< std::wstring, Dictionary, size_t (*)(wstr_cr), size_t (*)(wstr_cr), bool(*)(
