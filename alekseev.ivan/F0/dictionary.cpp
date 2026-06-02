@@ -53,6 +53,25 @@ bool alekseev::equal(wstr_cr s1, wstr_cr s2)
   return s1 == s2;
 }
 
+alekseev::pos alekseev::guess_pos(std::wstring word)
+{
+  if (word.size() < 3) {
+    return unknown;
+  }
+  word = lower_case(word);
+  std::wstring v;
+  if (endswith(word, {L"ся", L"сь"})) {
+    v = word.substr(0, word.size() - 2);
+  }
+  if (endswith(v, {L"ть", L"ти", L"чь"})) {
+    return verb;
+  }
+  if (endswith(word, {L"ый", L"ий", L"ой"})) {
+    return adj;
+  }
+  return noun;
+}
+
 alekseev::ConsoleSetup::ConsoleSetup():
   old_cin_mode_(_setmode(_fileno(stdin), _O_U16TEXT)),
   old_cout_mode_(_setmode(_fileno(stdout), _O_U16TEXT)),
@@ -543,4 +562,49 @@ void alekseev::DictionaryManager::set_current(wstr_cr name_of_loaded_dict)
     throw std::invalid_argument("Dictionary not found");
   }
   current_ = name_of_loaded_dict;
+}
+
+void alekseev::DictionaryManager::add_word(std::wstring word, std::wistream & is,
+    std::wostream & os)
+{
+  Dictionary & dict = dicts_.at(current_);
+  if (dict.contains_lemma(word)) {
+    os << L"Word already exists in current dictionary \"" << current_ << L"\"\n";
+    wchar_t ans = ask_yes_no(L"Do you want to replace it?", is, os, true);
+    if (ans == L'y') {
+      dict.remove_lemma(word);
+    } else if (ans == L'n') {
+      return;
+    } else {
+      throw std::invalid_argument("Bad input");
+    }
+  }
+  pos p = guess_pos(word);
+  wchar_t ans;
+  if (p == verb) {
+    ans = ask_yes_no(L"Is it a verb?", is, os);
+  } else if (p == adj) {
+    ans = ask_yes_no(L"Is it an adjective?", is, os);
+  } else if (p == noun) {
+    ans = ask_yes_no(L"Is it a noun?", is, os);
+  } else {
+    ans = L'u';
+  }
+  if (ans != L'y') {
+    std::wstring answer;
+    os << "Input word class: ";
+    p = unknown;
+    while (p == unknown && std::getline(is, answer)) {
+      if (answer == L"verb") {
+        p = verb;
+      } else if (answer == L"adj") {
+        p = adj;
+      } else if (answer == L"noun") {
+        p = noun;
+      } else {
+        os << L"Unknown word class: " << answer << L"\n";
+        os << "Input word class: ";
+      }
+    }
+  }
 }

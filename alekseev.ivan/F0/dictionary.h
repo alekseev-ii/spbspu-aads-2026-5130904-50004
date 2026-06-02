@@ -10,7 +10,7 @@
 namespace alekseev {
   enum pos
   {
-    noun, verb, adj
+    noun, verb, adj, unknown
   };
 
   enum gender
@@ -71,6 +71,7 @@ namespace alekseev {
   size_t djb2_hash(wstr_cr line);
   size_t poly_hash(wstr_cr line);
   bool equal(wstr_cr s1, wstr_cr s2);
+  pos guess_pos(std::wstring word);
 
   struct ConsoleSetup
   {
@@ -143,6 +144,7 @@ namespace alekseev {
     void save(wstr_cr name, wstr_cr file_name);
     void unload(wstr_cr name);
     void set_current(wstr_cr name_of_loaded_dict);
+    void add_word(std::wstring word, std::wistream & is, std::wostream & os);
 
     private:
       CuckooHash< std::wstring, Dictionary, size_t (*)(wstr_cr), size_t (*)(wstr_cr), bool(*)(
