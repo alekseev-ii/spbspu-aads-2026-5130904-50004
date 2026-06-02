@@ -12,6 +12,8 @@ namespace alekseev {
   std::wstring lower_case(wstr_cr str);
   wchar_t to_upper(wchar_t ch);
   std::wstring upper_case(wstr_cr str);
+  Vector< bool > mask_from_case(wstr_cr str);
+  std::wstring case_from_mask(wstr_cr str, const Vector< bool > & mask);
 
   size_t damerau_levenshtein(wstr_cr a, wstr_cr b);
 }

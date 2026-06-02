@@ -85,7 +85,7 @@ std::wstring alekseev::lower_case(wstr_cr str)
 {
   std::wstring res;
   for (size_t i = 0; i < str.size(); ++i) {
-    res[i] = to_lower(str[i]);
+    res += to_lower(str[i]);
   }
   return res;
 }
@@ -108,7 +108,33 @@ std::wstring alekseev::upper_case(wstr_cr str)
 {
   std::wstring res;
   for (size_t i = 0; i < str.size(); ++i) {
-    res[i] = to_upper(str[i]);
+    res += to_upper(str[i]);
+  }
+  return res;
+}
+
+alekseev::Vector< bool > alekseev::mask_from_case(wstr_cr str)
+{
+  Vector< bool > res(str.size(), false);
+  for (size_t i = 0; i < str.size(); ++i) {
+    wchar_t ch = str[i];
+    res[i] = (ch == to_upper(ch));
+  }
+  return res;
+}
+
+std::wstring alekseev::case_from_mask(wstr_cr str, const Vector< bool > & mask)
+{
+  std::wstring res;
+  for (size_t i = 0; i < std::min(str.size(), mask.getSize()); ++i) {
+    if (mask[i]) {
+      res += to_upper(str[i]);
+    } else {
+      res += to_lower(str[i]);
+    }
+  }
+  if (str.size() > mask.getSize()) {
+    res += str.substr(mask.getSize(), str.size() - mask.getSize());
   }
   return res;
 }

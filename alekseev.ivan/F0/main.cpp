@@ -1,6 +1,8 @@
 #include "dictionary.h"
 #include <iostream>
 
+#include "wstr_functions.h"
+
 int main()
 {
   alekseev::ConsoleSetup c;
