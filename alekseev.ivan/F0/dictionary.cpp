@@ -204,9 +204,8 @@ std::ifstream & alekseev::Dictionary::read(std::ifstream & is)
     if (line.empty()) {
       continue;
     }
-    if (static_cast< unsigned char >(line[0]) == 0xEF &&
-      static_cast< unsigned char >(line[1]) == 0xBB &&
-      static_cast< unsigned char >(line[2]) == 0xBF) {
+    if (static_cast< unsigned char >(line[0]) == 0xEF && static_cast< unsigned char >(line[1]) ==
+      0xBB && static_cast< unsigned char >(line[2]) == 0xBF) {
       line = line.substr(3);
       if (line.empty()) {
         continue;
@@ -587,3 +586,7 @@ alekseev::Vector< alekseev::WordForm > alekseev::Dictionary::damerau_find(wstr_c
   }
   return res;
 }
+
+alekseev::DictionaryManager::DictionaryManager():
+  dicts_(djb2_hash, poly_hash, equal, 16)
+{ }
