@@ -16,6 +16,8 @@ namespace alekseev {
   Vector< bool > mask_from_case(wstr_cr str);
   std::wstring case_from_mask(wstr_cr str, const Vector< bool > & mask);
   wchar_t yes_no(std::wstring answer);
+  wchar_t ask_yes_no(wstr_cr question, std::wistream & is, std::wostream & os,
+      bool need_cycle = false, bool add_variants = true);
   bool endswith(wstr_cr str, wstr_cr substr);
   bool endswith(wstr_cr str, std::initializer_list< std::wstring > substr);
 

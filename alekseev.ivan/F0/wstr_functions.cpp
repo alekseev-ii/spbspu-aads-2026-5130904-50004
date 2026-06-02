@@ -151,6 +151,29 @@ wchar_t alekseev::yes_no(std::wstring answer)
   }
 }
 
+wchar_t alekseev::ask_yes_no(wstr_cr question, std::wistream & is, std::wostream & os,
+    bool need_cycle, bool add_variants)
+{
+  os << question;
+  if (add_variants) {
+    os << L" (yes/no) ";
+  }
+  std::wstring answer;
+  while (std::getline(is, answer)) {
+    wchar_t ans = yes_no(answer);
+    if (ans == L'y' || ans == L'n' || !need_cycle) {
+      return ans;
+    } else {
+      os << L"Unknown answer: " << answer << L"\n";
+      os << question;
+      if (add_variants) {
+        os << L" (yes/no) ";
+      }
+    }
+  }
+  return L'u';
+}
+
 bool alekseev::endswith(wstr_cr str, wstr_cr substr)
 {
   if (str.size() < substr.size()) {
