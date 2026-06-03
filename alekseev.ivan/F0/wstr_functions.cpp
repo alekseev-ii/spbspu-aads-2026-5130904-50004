@@ -220,3 +220,17 @@ size_t alekseev::damerau_levenshtein(wstr_cr a, wstr_cr b)
   delete[] mtx;
   return ans;
 }
+
+alekseev::Vector<std::wstring> alekseev::damerau_find(wstr_cr bad_word,
+    const Vector<std::wstring> & candidates, size_t distance)
+{
+  Vector< std::wstring > res;
+  for (size_t i = 0; i < candidates.getSize(); ++i) {
+    if (candidates[i].size() - bad_word.size() <= distance) {
+      if (damerau_levenshtein(candidates[i], bad_word) <= distance) {
+        res.pushBack(candidates[i]);
+      }
+    }
+  }
+  return res;
+}
