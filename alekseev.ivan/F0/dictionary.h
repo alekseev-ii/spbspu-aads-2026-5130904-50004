@@ -48,6 +48,7 @@ namespace alekseev {
     WordForm();
     explicit WordForm(std::wstring wordform, gender g = nn_gender, number n = nn_number,
         case_ c = nn_case, tense t = nn_tense, person p = nn_person);
+     WordForm(std::wstring word, pos p, Vector< std::wstring > tags);
     std::wstring word_;
     gender gender_;
     number number_;
@@ -57,6 +58,9 @@ namespace alekseev {
 
     bool operator==(const WordForm & rhs) const;
   };
+
+  Vector< std::wstring > tags(const WordForm & wf);
+  std::wostream & operator<<(std::wostream & os, const WordForm & wf);
 
   struct Lemma
   {
@@ -113,14 +117,17 @@ namespace alekseev {
     std::pair< std::wstring, size_t > & lemma_pair_by_wordform(const WordForm & wordform);
     Vector< WordForm > get_homoforms(wstr_cr wordform) const;
     Vector< std::wstring > get_lemmas() const;
-    const Vector< WordForm > & forms_by_lemma(wstr_cr lemma) const;
+    Vector< WordForm > & forms_by_lemma(wstr_cr lemma);
+    pos pos_of_lemma(wstr_cr lemma) const;
 
     bool matches_case(wstr_cr wordform, case_ expected_case) const;
     bool matches_person(wstr_cr wordform, person expected_person) const;
 
     size_t size() const;
 
-    Vector< WordForm > damerau_find(wstr_cr bad_word, size_t distance = 3);
+    Vector< WordForm > damerau_find_wfs(wstr_cr bad_word, size_t distance = 2);
+    Vector< std::wstring > damerau_find_form(wstr_cr bad_form, size_t distance = 2) const;
+    Vector< std::wstring > damerau_find_lemma(wstr_cr bad_lemma, size_t distance = 2) const;
 
     private:
       CuckooHash< std::wstring, Lemma, size_t (*)(wstr_cr), size_t (*)(wstr_cr), bool(*)(wstr_cr,
@@ -145,6 +152,7 @@ namespace alekseev {
     void unload(wstr_cr name);
     void set_current(wstr_cr name_of_loaded_dict);
     void add_word(wstr_cr word, std::wistream & is, std::wostream & os);
+    void update_word(wstr_cr word, std::wistream & is, std::wostream & os);
 
     private:
       CuckooHash< std::wstring, Dictionary, size_t (*)(wstr_cr), size_t (*)(wstr_cr), bool(*)(

@@ -17,7 +17,7 @@ int main()
   }
   std::wcout << d.size() << L"\n";
   std::wcout << L"Dist: " << alekseev::damerau_levenshtein(L"стол", L"стола") << L"\n";
-  alekseev::Vector< alekseev::WordForm > wfs = d.damerau_find(L"стул", 2);
+  alekseev::Vector< alekseev::WordForm > wfs = d.damerau_find_wfs(L"стул", 2);
   std::wcout << wfs.getSize() << L"\n";
   for (size_t i = 0; i < wfs.getSize(); ++i) {
     std::wcout << wfs[i].word_ << L" " << wfs[i].case_ << L"\n";
