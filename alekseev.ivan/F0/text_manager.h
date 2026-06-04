@@ -5,11 +5,13 @@
 #include "wstr_functions.h"
 #include "../common/vector.h"
 #include "cuckoo_hash.h"
+#include "../common/queue.h"
 
 namespace alekseev {
   struct position_t
   {
     size_t sentence, word;
+    bool operator==(const position_t & rhs) const;
   };
 
   struct text_t
@@ -18,12 +20,12 @@ namespace alekseev {
     Vector< Vector< std::wstring > > original;
     Vector< Vector< std::wstring > > corrected;
     Vector< position_t > errors;
-    Vector< std::pair< std::wstring, position_t > > punctuations;
+    Queue< std::pair< std::wstring, position_t > > punctuations;
   };
 
   using wstr_cr = const std::wstring &;
-  text_t from_string(wstr_cr orig_text);
-  std::wstring to_wstring(text_t orig_text);
+  text_t from_wstring(wstr_cr orig_text);
+  std::wstring to_wstring(const text_t & orig_text, bool corrected = true);
 
   struct TextManager
   {

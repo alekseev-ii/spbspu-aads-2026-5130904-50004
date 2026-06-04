@@ -11,11 +11,11 @@ namespace alekseev {
   std::wstring trim(wstr_cr str);
   std::wstring ltrim(wstr_cr str);
   std::wstring rtrim(wstr_cr str);
-  template < class Cond >
+  template< class Cond >
   std::wstring trim(wstr_cr str, Cond condition);
-  template < class Cond >
+  template< class Cond >
   std::wstring ltrim(wstr_cr str, Cond condition);
-  template < class Cond >
+  template< class Cond >
   std::wstring rtrim(wstr_cr str, Cond condition);
 
   bool is_lower(wchar_t ch);
