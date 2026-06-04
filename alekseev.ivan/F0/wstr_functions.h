@@ -9,6 +9,14 @@ namespace alekseev {
   Vector< std::wstring > split(wstr_cr s, wchar_t delim = L' ', bool need_trim = false);
   std::wstring utf8_to_wstring(const std::string & str);
   std::wstring trim(wstr_cr str);
+  std::wstring ltrim(wstr_cr str);
+  std::wstring rtrim(wstr_cr str);
+  template < class Cond >
+  std::wstring trim(wstr_cr str, Cond condition);
+  template < class Cond >
+  std::wstring ltrim(wstr_cr str, Cond condition);
+  template < class Cond >
+  std::wstring rtrim(wstr_cr str, Cond condition);
 
   bool is_lower(wchar_t ch);
   wchar_t to_lower(wchar_t ch);
@@ -30,11 +38,48 @@ namespace alekseev {
   bool endswith(wstr_cr str, wstr_cr substr);
   bool endswith(wstr_cr str, std::initializer_list< std::wstring > substr);
   bool is_punctuation(wchar_t ch);
-  bool is_punctuation(wstr_cr str);
+  bool is_punctuation_str(wstr_cr str);
+  bool is_whitespace(wchar_t ch);
 
   size_t damerau_levenshtein(wstr_cr a, wstr_cr b);
   Vector< std::wstring > damerau_find(wstr_cr bad_word, const Vector< std::wstring > & candidates,
       size_t distance = 2);
+
+  template< class Cond >
+  std::wstring trim(wstr_cr str, Cond condition)
+  {
+    return ltrim(rtrim(str, condition), condition);
+  }
+
+  template< class Cond >
+  std::wstring ltrim(wstr_cr str, Cond condition)
+  {
+    size_t start = 0, end = str.size();
+    while (start < end) {
+      wchar_t c = str[start];
+      if (condition(c)) {
+        ++start;
+      } else {
+        break;
+      }
+    }
+    return str.substr(start, end - start);
+  }
+
+  template< class Cond >
+  std::wstring rtrim(wstr_cr str, Cond condition)
+  {
+    size_t end = str.size();
+    while (end > 0) {
+      wchar_t c = str[end - 1];
+      if (condition(c)) {
+        --end;
+      } else {
+        break;
+      }
+    }
+    return str.substr(0, end);
+  }
 
   template< class T >
   size_t choose(const Vector< T > & candidates, std::wistream & is, std::wostream & os,
@@ -69,6 +114,7 @@ namespace alekseev {
         throw std::invalid_argument("Bad input");
       }
     }
+    throw std::invalid_argument("Bad input");
   }
 }
 #endif

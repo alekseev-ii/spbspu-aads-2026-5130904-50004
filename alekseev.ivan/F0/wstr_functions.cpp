@@ -47,24 +47,17 @@ std::wstring alekseev::utf8_to_wstring(const std::string & str)
 
 std::wstring alekseev::trim(const std::wstring & str)
 {
-  size_t start = 0, end = str.size();
-  while (start < end) {
-    wchar_t c = str[start];
-    if (c == L' ' || c == L'\t' || c == L'\r' || c == L'\n') {
-      ++start;
-    } else {
-      break;
-    }
-  }
-  while (end > start) {
-    wchar_t c = str[end - 1];
-    if (c == L' ' || c == L'\t' || c == L'\r' || c == L'\n') {
-      --end;
-    } else {
-      break;
-    }
-  }
-  return str.substr(start, end - start);
+  return trim(str, is_whitespace);
+}
+
+std::wstring alekseev::ltrim(const std::wstring & str)
+{
+  return ltrim(str, is_whitespace);
+}
+
+std::wstring alekseev::rtrim(const std::wstring & str)
+{
+  return rtrim(str, is_whitespace);
 }
 
 bool alekseev::is_lower(wchar_t ch)
@@ -207,13 +200,18 @@ bool alekseev::is_punctuation(wchar_t ch)
   return res || ch == '-' || ch == '"' || ch == '\'' || ch == '(' || ch == ')';
 }
 
-bool alekseev::is_punctuation(wstr_cr str)
+bool alekseev::is_punctuation_str(wstr_cr str)
 {
   bool res = is_punctuation(str[0]);
   for (size_t i = 1; i < str.size() && res; ++i) {
     res = is_punctuation(str[i]);
   }
   return res;
+}
+
+bool alekseev::is_whitespace(wchar_t ch)
+{
+  return ch == L' ' || ch == L'\t' || ch == L'\r' || ch == L'\n';
 }
 
 size_t alekseev::damerau_levenshtein(wstr_cr a, wstr_cr b)
