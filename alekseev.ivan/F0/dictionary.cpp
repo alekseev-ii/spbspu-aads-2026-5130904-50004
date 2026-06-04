@@ -712,6 +712,29 @@ void alekseev::DictionaryManager::update_word(wstr_cr word, std::wistream & is, 
   dict.add_form(lemma, word, wf.gender_, wf.number_, wf.case_, wf.tense_, wf.person_);
 }
 
+void alekseev::DictionaryManager::delete_form(wstr_cr wordform, std::wistream & is,
+    std::wostream & os)
+{
+  Dictionary & dict = dicts_.at(current_);
+  std::pair< std::wstring, size_t > lp = choose_wordform(wordform, is, os);
+
+  if (!lp.first.empty()) {
+    const WordForm & word = dict.forms_by_lemma(lp.first)[lp.second];
+    dict.remove_form(word);
+  }
+}
+
+void alekseev::DictionaryManager::delete_lemma(wstr_cr lemma, std::wistream & is,
+    std::wostream & os)
+{
+  Dictionary & dict = dicts_.at(current_);
+  if (dict.contains_lemma(lemma)) {
+    dict.remove_lemma(lemma);
+  } else {
+    os << L"Lemma \"" << lemma << "\" does not exist\n";
+  }
+}
+
 void alekseev::DictionaryManager::add_verb(wstr_cr word, std::wistream & is, std::wostream & os)
 {
   Dictionary & dict = dicts_.at(current_);

@@ -156,6 +156,8 @@ namespace alekseev {
     void set_current(wstr_cr name_of_loaded_dict);
     void add_word(wstr_cr word, std::wistream & is, std::wostream & os);
     void update_word(wstr_cr word, std::wistream & is, std::wostream & os);
+    void delete_form(wstr_cr wordform, std::wistream & is, std::wostream & os);
+    void delete_lemma(wstr_cr lemma, std::wistream & is, std::wostream & os);
 
     private:
       CuckooHash< std::wstring, Dictionary, size_t (*)(wstr_cr), size_t (*)(wstr_cr), bool(*)(
