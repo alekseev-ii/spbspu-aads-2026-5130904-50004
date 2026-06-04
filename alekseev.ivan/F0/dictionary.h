@@ -48,7 +48,7 @@ namespace alekseev {
     WordForm();
     explicit WordForm(std::wstring wordform, gender g = nn_gender, number n = nn_number,
         case_ c = nn_case, tense t = nn_tense, person p = nn_person);
-     WordForm(std::wstring word, pos p, Vector< std::wstring > tags);
+    WordForm(std::wstring word, pos p, Vector< std::wstring > tags);
     std::wstring word_;
     gender gender_;
     number number_;
@@ -114,7 +114,10 @@ namespace alekseev {
     bool contains_form(const WordForm & wordform) const;
 
     Vector< std::pair< std::wstring, size_t > > & find_homoforms(wstr_cr wordform);
+    const Vector< std::pair< std::wstring, size_t > > & find_homoforms(wstr_cr wordform) const;
     std::pair< std::wstring, size_t > & lemma_pair_by_wordform(const WordForm & wordform);
+    const std::pair< std::wstring, size_t > & lemma_pair_by_wordform(
+        const WordForm & wordform) const;
     Vector< WordForm > get_homoforms(wstr_cr wordform) const;
     Vector< std::wstring > get_lemmas() const;
     Vector< WordForm > & forms_by_lemma(wstr_cr lemma);
@@ -125,7 +128,7 @@ namespace alekseev {
 
     size_t size() const;
 
-    Vector< WordForm > damerau_find_wfs(wstr_cr bad_word, size_t distance = 2);
+    Vector< WordForm > damerau_find_wfs(wstr_cr bad_word, size_t distance = 2) const;
     Vector< std::wstring > damerau_find_form(wstr_cr bad_form, size_t distance = 2) const;
     Vector< std::wstring > damerau_find_lemma(wstr_cr bad_lemma, size_t distance = 2) const;
 
@@ -162,6 +165,8 @@ namespace alekseev {
       void add_verb(wstr_cr word, std::wistream & is, std::wostream & os);
       void add_adj(wstr_cr word, std::wistream & is, std::wostream & os);
       void add_noun(wstr_cr word, std::wistream & is, std::wostream & os);
+      std::pair< std::wstring, size_t > choose_wordform(wstr_cr word, std::wistream & is,
+          std::wostream & os) const;
   };
 }
 

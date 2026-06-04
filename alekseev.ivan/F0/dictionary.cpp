@@ -459,12 +459,31 @@ alekseev::Vector< std::pair< std::wstring, size_t > > & alekseev::Dictionary::fi
   return forms_.at(wordform);
 }
 
+const alekseev::Vector< std::pair< std::wstring, size_t > > & alekseev::Dictionary::find_homoforms(
+    wstr_cr wordform) const
+{
+  return forms_.at(wordform);
+}
+
 std::pair< std::wstring, size_t > & alekseev::Dictionary::lemma_pair_by_wordform(
     const WordForm & wordform)
 {
   Vector< std::pair< std::wstring, size_t > > & wfs = find_homoforms(wordform.word_);
   for (size_t i = 0; i < wfs.getSize(); ++i) {
     Lemma & l = lemmas_.at(wfs[i].first);
+    if (l.forms_[wfs[i].second] == wordform) {
+      return wfs[i];
+    }
+  }
+  throw std::out_of_range("Wordform not found");
+}
+
+const std::pair< std::wstring, size_t > & alekseev::Dictionary::lemma_pair_by_wordform(
+    const WordForm & wordform) const
+{
+  const Vector< std::pair< std::wstring, size_t > > & wfs = find_homoforms(wordform.word_);
+  for (size_t i = 0; i < wfs.getSize(); ++i) {
+    const Lemma & l = lemmas_.at(wfs[i].first);
     if (l.forms_[wfs[i].second] == wordform) {
       return wfs[i];
     }
@@ -531,7 +550,7 @@ size_t alekseev::Dictionary::size() const
 }
 
 alekseev::Vector< alekseev::WordForm > alekseev::Dictionary::damerau_find_wfs(wstr_cr bad_word,
-    size_t distance)
+    size_t distance) const
 {
   if (forms_.contains(bad_word)) {
     return get_homoforms(bad_word);
@@ -664,25 +683,8 @@ void alekseev::DictionaryManager::add_word(wstr_cr word, std::wistream & is, std
 void alekseev::DictionaryManager::update_word(wstr_cr word, std::wistream & is, std::wostream & os)
 {
   Dictionary & dict = dicts_.at(current_);
-  Vector< WordForm > wfs;
-
-  if (dict.contains_form(word)) {
-    wfs = dict.get_homoforms(word);
-  } else {
-    os << L"Form " << word << " not found\n";
-    wchar_t need_find = ask_yes_no(L"Do you want to search using fuzzy search?", is, os);
-    if (need_find == L'y') {
-      wfs = dict.damerau_find_wfs(word, 1);
-      if (wfs.isEmpty()) {
-        os << L"No word found\n";
-        return;
-      }
-    }
-  }
-  if (!wfs.isEmpty()) {
-    size_t ind = choose(wfs, is, os, 0, L"Found form:", L"forms were found",
-        L"Which one do you want to change?");
-    std::pair< std::wstring, size_t > lp = dict.lemma_pair_by_wordform(wfs[ind]);
+  std::pair< std::wstring, size_t > lp = choose_wordform(word, is, os);
+  if (!lp.first.empty()) {
     WordForm & wf = dict.forms_by_lemma(lp.first)[lp.second];
     os << L"Enter new tags (enter all tags that you think this form should have):\n";
     std::wstring tags_string;
@@ -692,6 +694,7 @@ void alekseev::DictionaryManager::update_word(wstr_cr word, std::wistream & is, 
     wf = nwf;
     return;
   }
+
   wchar_t nf = ask_yes_no(L"Do you want to add a new form?", is, os);
   if (nf != L'y') {
     return;
@@ -882,4 +885,31 @@ void alekseev::DictionaryManager::add_noun(wstr_cr word, std::wistream & is, std
     }
   }
   os << L"Successfully added " << c << " forms!\n";
+}
+
+std::pair< std::wstring, size_t > alekseev::DictionaryManager::choose_wordform(wstr_cr word,
+    std::wistream & is, std::wostream & os) const
+{
+  const Dictionary & dict = dicts_.at(current_);
+  Vector< WordForm > wfs;
+
+  if (dict.contains_form(word)) {
+    wfs = dict.get_homoforms(word);
+  } else {
+    os << L"Form " << word << " not found\n";
+    wchar_t need_find = ask_yes_no(L"Do you want to search using fuzzy search?", is, os);
+    if (need_find == L'y') {
+      wfs = dict.damerau_find_wfs(word, 1);
+      if (wfs.isEmpty()) {
+        os << L"No word found\n";
+        return {{}, 0};
+      }
+    }
+  }
+  if (!wfs.isEmpty()) {
+    size_t ind = choose(wfs, is, os, 0, L"Found form:", L"forms were found",
+        L"Which one do you want to change?");
+    return dict.lemma_pair_by_wordform(wfs[ind]);
+  }
+  return {{}, 0};
 }
