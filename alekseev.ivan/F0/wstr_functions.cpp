@@ -67,6 +67,11 @@ std::wstring alekseev::trim(const std::wstring & str)
   return str.substr(start, end - start);
 }
 
+bool alekseev::is_lower(wchar_t ch)
+{
+  return ch == to_lower(ch);
+}
+
 wchar_t alekseev::to_lower(wchar_t ch)
 {
   if (ch >= L'A' && ch <= L'Z') {
@@ -88,6 +93,11 @@ std::wstring alekseev::lower_case(wstr_cr str)
     res += to_lower(str[i]);
   }
   return res;
+}
+
+bool alekseev::is_upper(wchar_t ch)
+{
+  return ch == to_upper(ch);
 }
 
 wchar_t alekseev::to_upper(wchar_t ch)
@@ -118,7 +128,7 @@ alekseev::Vector< bool > alekseev::mask_from_case(wstr_cr str)
   Vector< bool > res(str.size(), false);
   for (size_t i = 0; i < str.size(); ++i) {
     wchar_t ch = str[i];
-    res[i] = (ch == to_upper(ch));
+    res[i] = is_upper(ch);
   }
   return res;
 }
@@ -186,7 +196,22 @@ bool alekseev::endswith(wstr_cr str, std::initializer_list< std::wstring > subst
 {
   bool res = false;
   for (auto i = substr.begin(); i != substr.end() && !res; ++i) {
-    res = res || endswith(str, *i);
+    res = endswith(str, *i);
+  }
+  return res;
+}
+
+bool alekseev::is_punctuation(wchar_t ch)
+{
+  bool res = ch == '.' || ch == ',' || ch == '!' || ch == '?' || ch == ';' || ch == ':';
+  return res || ch == '-' || ch == '"' || ch == '\'' || ch == '(' || ch == ')';
+}
+
+bool alekseev::is_punctuation(wstr_cr str)
+{
+  bool res = is_punctuation(str[0]);
+  for (size_t i = 1; i < str.size() && res; ++i) {
+    res = is_punctuation(str[i]);
   }
   return res;
 }
@@ -221,8 +246,8 @@ size_t alekseev::damerau_levenshtein(wstr_cr a, wstr_cr b)
   return ans;
 }
 
-alekseev::Vector<std::wstring> alekseev::damerau_find(wstr_cr bad_word,
-    const Vector<std::wstring> & candidates, size_t distance)
+alekseev::Vector< std::wstring > alekseev::damerau_find(wstr_cr bad_word,
+    const Vector< std::wstring > & candidates, size_t distance)
 {
   Vector< std::wstring > res;
   for (size_t i = 0; i < candidates.getSize(); ++i) {
