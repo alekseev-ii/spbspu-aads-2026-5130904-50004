@@ -159,6 +159,9 @@ namespace alekseev {
     void delete_form(wstr_cr wordform, std::wistream & is, std::wostream & os);
     void delete_lemma(wstr_cr lemma, std::wistream & is, std::wostream & os);
 
+    Dictionary & current();
+    const Dictionary & current() const;
+
     private:
       CuckooHash< std::wstring, Dictionary, size_t (*)(wstr_cr), size_t (*)(wstr_cr), bool(*)(
           wstr_cr, wstr_cr) > dicts_;

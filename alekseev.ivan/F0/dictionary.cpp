@@ -629,7 +629,7 @@ void alekseev::DictionaryManager::set_current(wstr_cr name_of_loaded_dict)
 
 void alekseev::DictionaryManager::add_word(wstr_cr word, std::wistream & is, std::wostream & os)
 {
-  Dictionary & dict = dicts_.at(current_);
+  Dictionary & dict = current();
   std::wstring w = lower_case(word);
   if (dict.contains_lemma(w)) {
     os << L"Word already exists in current dictionary \"" << current_ << L"\"\n";
@@ -682,7 +682,7 @@ void alekseev::DictionaryManager::add_word(wstr_cr word, std::wistream & is, std
 
 void alekseev::DictionaryManager::update_word(wstr_cr word, std::wistream & is, std::wostream & os)
 {
-  Dictionary & dict = dicts_.at(current_);
+  Dictionary & dict = current();
   std::pair< std::wstring, size_t > lp = choose_wordform(word, is, os);
   if (!lp.first.empty()) {
     WordForm & wf = dict.forms_by_lemma(lp.first)[lp.second];
@@ -715,7 +715,7 @@ void alekseev::DictionaryManager::update_word(wstr_cr word, std::wistream & is, 
 void alekseev::DictionaryManager::delete_form(wstr_cr wordform, std::wistream & is,
     std::wostream & os)
 {
-  Dictionary & dict = dicts_.at(current_);
+  Dictionary & dict = current();
   std::pair< std::wstring, size_t > lp = choose_wordform(wordform, is, os);
 
   if (!lp.first.empty()) {
@@ -727,7 +727,7 @@ void alekseev::DictionaryManager::delete_form(wstr_cr wordform, std::wistream & 
 void alekseev::DictionaryManager::delete_lemma(wstr_cr lemma, std::wistream & is,
     std::wostream & os)
 {
-  Dictionary & dict = dicts_.at(current_);
+  Dictionary & dict = current();
   if (dict.contains_lemma(lemma)) {
     dict.remove_lemma(lemma);
   } else {
@@ -735,9 +735,19 @@ void alekseev::DictionaryManager::delete_lemma(wstr_cr lemma, std::wistream & is
   }
 }
 
+alekseev::Dictionary & alekseev::DictionaryManager::current()
+{
+  return dicts_.at(current_);
+}
+
+const alekseev::Dictionary & alekseev::DictionaryManager::current() const
+{
+  return dicts_.at(current_);
+}
+
 void alekseev::DictionaryManager::add_verb(wstr_cr word, std::wistream & is, std::wostream & os)
 {
-  Dictionary & dict = dicts_.at(current_);
+  Dictionary & dict = current();
   aspect verb_aspect = nn_aspect;
   wchar_t aspect = ask_yes_no(L"Is this verb is perfect?", is, os);
   if (aspect == L'y') {
@@ -913,7 +923,7 @@ void alekseev::DictionaryManager::add_noun(wstr_cr word, std::wistream & is, std
 std::pair< std::wstring, size_t > alekseev::DictionaryManager::choose_wordform(wstr_cr word,
     std::wistream & is, std::wostream & os) const
 {
-  const Dictionary & dict = dicts_.at(current_);
+  const Dictionary & dict = current();
   Vector< WordForm > wfs;
 
   if (dict.contains_form(word)) {
