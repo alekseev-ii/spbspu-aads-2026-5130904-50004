@@ -35,6 +35,9 @@ std::wstring alekseev::to_wstring(const text_t & orig_text, bool corrected)
 
 alekseev::TextManager::TextManager(DictionaryManager & dict):
   texts_(djb2_hash, poly_hash, equal, 32),
+  last_loaded_(L""),
+  last_parsed_(L""),
+  last_corrected_(L""),
   dict_(dict)
 { }
 
@@ -65,4 +68,27 @@ void alekseev::TextManager::parse(wstr_cr name)
       for_correct.errors.push(std::make_pair(i, dict_.damerau_find_form(word)));
     }
   }
+  last_parsed_ = (name != L"") ? name : last_loaded_;
+}
+
+void alekseev::TextManager::save(wstr_cr file_name, wstr_cr text_name)
+{
+  std::wstring name;
+  if (text_name != L"") {
+    name = text_name;
+  } else if (last_corrected_ != L"") {
+    name = last_corrected_;
+  } else if (last_loaded_ != L"") {
+    name = last_loaded_;
+  } else {
+    throw std::invalid_argument("Do not know what to save!");
+  }
+  text_t & text = texts_.at(name);
+  bool corrected = !text.errors.empty();
+  std::wofstream f(name.data());
+  if (!f.is_open()) {
+    throw std::invalid_argument("Can not open file!");
+  }
+  f << to_wstring(text, corrected);
+  f.close();
 }
