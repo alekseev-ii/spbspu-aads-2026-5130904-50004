@@ -6,6 +6,7 @@
 #include "../common/vector.h"
 #include "cuckoo_hash.h"
 #include "../common/queue.h"
+#include "dictionary.h"
 
 namespace alekseev {
   struct text_t
@@ -41,6 +42,7 @@ namespace alekseev {
       std::wstring last_loaded_;
       std::wstring last_parsed_;
       std::wstring last_corrected_;
+      DictionaryManager & dict_;
   };
 }
 

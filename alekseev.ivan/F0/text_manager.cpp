@@ -51,3 +51,16 @@ void alekseev::TextManager::read(wstr_cr file_name, wstr_cr text_name)
   texts_.insert(text_name, from_wstring(text_name, text));
   last_loaded_ = text_name;
 }
+
+void alekseev::TextManager::parse(wstr_cr name)
+{
+  if (name == L"" && last_loaded_ == L"") {
+    throw std::invalid_argument("No text loaded!");
+  }
+  text_t & for_correct = (name != L"") ? texts_.at(name) : texts_.at(last_loaded_);
+  for (size_t i = 0; i < for_correct.original.getSize(); ++i) {
+    if (for_correct.original[i] == L"") {
+
+    }
+  }
+}

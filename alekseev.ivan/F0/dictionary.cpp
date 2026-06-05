@@ -711,6 +711,58 @@ void alekseev::DictionaryManager::delete_lemma(wstr_cr lemma, std::wistream & is
   }
 }
 
+bool alekseev::DictionaryManager::contains_form(wstr_cr wordform) const
+{
+  Vector< std::wstring > names = dicts_.keys();
+  bool result = false;
+  for (size_t i = 0; i < names.getSize() && !result; ++i) {
+    result = dicts_.at(names[i]).contains_form(wordform);
+  }
+  return result;
+}
+
+alekseev::Vector< std::wstring > alekseev::DictionaryManager::damerau_find_form(wstr_cr wordform,
+    size_t distance) const
+{
+  Vector< std::wstring > names = dicts_.keys();
+  Vector< std::wstring > result{};
+  for (size_t i = 0; i < names.getSize(); ++i) {
+    result += dicts_.at(names[i]).damerau_find_form(wordform, distance);
+  }
+  return result;
+}
+
+alekseev::Vector< std::wstring > alekseev::DictionaryManager::damerau_find_lemma(wstr_cr wordform,
+    size_t distance) const
+{
+  Vector< std::wstring > names = dicts_.keys();
+  Vector< std::wstring > result{};
+  for (size_t i = 0; i < names.getSize(); ++i) {
+    result += dicts_.at(names[i]).damerau_find_lemma(wordform, distance);
+  }
+  return result;
+}
+
+bool alekseev::DictionaryManager::matches_case(wstr_cr wordform, case_ expected_case) const
+{
+  Vector< std::wstring > names = dicts_.keys();
+  bool result = false;
+  for (size_t i = 0; i < names.getSize() && !result; ++i) {
+    result = dicts_.at(names[i]).matches_case(wordform, expected_case);
+  }
+  return result;
+}
+
+bool alekseev::DictionaryManager::matches_person(wstr_cr wordform, person expected_person) const
+{
+  Vector< std::wstring > names = dicts_.keys();
+  bool result = false;
+  for (size_t i = 0; i < names.getSize() && !result; ++i) {
+    result = dicts_.at(names[i]).matches_person(wordform, expected_person);
+  }
+  return result;
+}
+
 alekseev::Dictionary & alekseev::DictionaryManager::current()
 {
   return dicts_.at(current_);

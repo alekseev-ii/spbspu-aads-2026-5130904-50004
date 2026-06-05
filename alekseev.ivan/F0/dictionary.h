@@ -156,6 +156,12 @@ namespace alekseev {
     void delete_form(wstr_cr wordform, std::wistream & is, std::wostream & os);
     void delete_lemma(wstr_cr lemma, std::wistream & is, std::wostream & os);
 
+    bool contains_form(wstr_cr wordform) const;
+    Vector< std::wstring > damerau_find_form(wstr_cr wordform, size_t distance = 2) const;
+    Vector< std::wstring > damerau_find_lemma(wstr_cr wordform, size_t distance = 2) const;
+    bool matches_case(wstr_cr wordform, case_ expected_case) const;
+    bool matches_person(wstr_cr wordform, person expected_person) const;
+
     Dictionary & current();
     const Dictionary & current() const;
 
