@@ -196,8 +196,13 @@ bool alekseev::endswith(wstr_cr str, std::initializer_list< std::wstring > subst
 
 bool alekseev::is_punctuation(wchar_t ch)
 {
-  bool res = ch == '.' || ch == ',' || ch == '!' || ch == '?' || ch == ';' || ch == ':';
-  return res || ch == '-' || ch == '"' || ch == '\'' || ch == '(' || ch == ')';
+  std::wstring punctuation = L"!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~«»„“—–…№";
+  for (size_t i = 0; i < punctuation.size(); ++i) {
+    if (punctuation[i] == ch) {
+      return true;
+    }
+  }
+  return false;
 }
 
 bool alekseev::is_punctuation_str(wstr_cr str)
@@ -211,7 +216,14 @@ bool alekseev::is_punctuation_str(wstr_cr str)
 
 bool alekseev::is_whitespace(wchar_t ch)
 {
-  return ch == L' ' || ch == L'\t' || ch == L'\r' || ch == L'\n';
+  std::wstring ws = L" \t\n\r\v\f\u00A0\u2000\u2001\u2002\u2003\u2004"
+      "\u2005\u2006\u2007\u2008\u2009\u200A\u2028\u2029\u202F\u205F\u3000";
+  for (size_t i = 0; i < ws.size(); ++i) {
+    if (ws[i] == ch) {
+      return true;
+    }
+  }
+  return false;
 }
 
 size_t alekseev::damerau_levenshtein(wstr_cr a, wstr_cr b)

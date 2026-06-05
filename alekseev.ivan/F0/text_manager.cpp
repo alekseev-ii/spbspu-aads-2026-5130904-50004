@@ -1,68 +1,29 @@
 #include "text_manager.h"
 
-bool alekseev::position_t::operator==(const position_t & rhs) const
+alekseev::text_t alekseev::from_wstring(wstr_cr name, wstr_cr orig_text)
 {
-  return sentence == rhs.sentence && word == rhs.word;
-}
-
-alekseev::text_t alekseev::from_wstring(wstr_cr orig_text)
-{
-  Vector< std::wstring > sentences = split(orig_text, L'.', true);
-  Vector< Vector< std::wstring > > words(sentences.getSize(), {});
-  Queue< std::pair< std::wstring, position_t > > punctuations;
-  for (size_t i = 0; i < sentences.getSize(); ++i) {
-    Vector< std::wstring > wds = split(sentences[i], L' ', true);
-    size_t punct_words = 0;
-    for (size_t j = 0; j < wds.getSize(); ++j) {
-      if (is_punctuation_str(wds[j])) {
-        punctuations.push(std::make_pair(L" " + wds[j] + L" ", position_t{i, j - ++punct_words}));
-      } else {
-        std::wstring & before = wds[j];
-        std::wstring after = trim(before, is_punctuation);
-        size_t trimmed = before.size() - after.size();
-        if (trimmed != 0) {
-          punctuations.push(std::make_pair(before.substr(before.size() - trimmed, trimmed),
-              position_t{i, j - punct_words}));
-        }
-        words[i].pushBack(after);
-      }
+  text_t res{name, {}, {}, {}, {}};
+  res.original = split(orig_text, L' ', true);
+  res.punctuations = Vector< std::wstring >(res.original.getSize(), {});
+  for (size_t i = 0; i < res.original.getSize(); ++i) {
+    std::wstring word = rtrim(res.original[i], is_punctuation);
+    size_t a = res.original[i].size(), b = word.size();
+    if (a != b) {
+      res.punctuations[i] = res.original[i].substr(b, a - b);
+      res.original[i] = word;
     }
   }
-  return {{}, words, {}, {}, punctuations};
+  return res;
 }
 
 std::wstring alekseev::to_wstring(const text_t & orig_text, bool corrected)
 {
-  Vector< Vector< std::wstring > > words = corrected ? orig_text.corrected : orig_text.original;
-  Queue< std::pair< std::wstring, position_t > > punctuations = orig_text.punctuations;
-  std::pair< std::wstring, position_t > dummy{{}, {0, 0}};
-  std::pair< std::wstring, position_t > & next_punct = dummy;
-  if (!punctuations.empty()) {
-    next_punct = punctuations.front();
-    punctuations.pop();
+  const Vector< std::wstring > * to_join = corrected ?
+                                       std::addressof(orig_text.corrected) :
+                                       std::addressof(orig_text.original);
+  std::wstring res;
+  for (size_t i = 0; i < to_join->getSize(); ++i) {
+    res += to_join->at(i) + orig_text.punctuations[i] + L" ";
   }
-  std::wstring result;
-
-  for (size_t i = 0; i < words.getSize(); ++i) {
-    if (i > 0) {
-      result += L" ";
-    }
-    for (size_t j = 0; j < words[i].getSize(); ++j) {
-      result += words[i][j];
-      if (next_punct != dummy) {
-        if (position_t{i, j} == next_punct.second) {
-          result += next_punct.first;
-          if (!punctuations.empty()) {
-            next_punct = punctuations.front();
-            punctuations.pop();
-          } else {
-            next_punct = dummy;
-          }
-        }
-      }
-      result += L" ";
-    }
-    result += L".";
-  }
-  return result;
+  return res;
 }

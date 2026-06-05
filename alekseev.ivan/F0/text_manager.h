@@ -8,23 +8,18 @@
 #include "../common/queue.h"
 
 namespace alekseev {
-  struct position_t
-  {
-    size_t sentence, word;
-    bool operator==(const position_t & rhs) const;
-  };
 
   struct text_t
   {
     std::wstring name;
-    Vector< Vector< std::wstring > > original;
-    Vector< Vector< std::wstring > > corrected;
-    Vector< position_t > errors;
-    Queue< std::pair< std::wstring, position_t > > punctuations;
+    Vector< std::wstring > original;
+    Vector< std::wstring > corrected;
+    Vector< std::wstring > punctuations;
+    Queue< std::pair< size_t, Vector< std::wstring > > > errors;
   };
 
   using wstr_cr = const std::wstring &;
-  text_t from_wstring(wstr_cr orig_text);
+  text_t from_wstring(wstr_cr name, wstr_cr orig_text);
   std::wstring to_wstring(const text_t & orig_text, bool corrected = true);
 
   struct TextManager
