@@ -180,12 +180,14 @@ alekseev::ConsoleSetup::~ConsoleSetup()
 
 alekseev::Dictionary::Dictionary():
   lemmas_(djb2_hash, poly_hash, equal, 4096),
-  forms_(djb2_hash, poly_hash, equal, 16384)
+  forms_(djb2_hash, poly_hash, equal, 16384),
+  requires_(djb2_hash, poly_hash, equal, 4096)
 { }
 
 alekseev::Dictionary::Dictionary(wstr_cr file_name):
   lemmas_(djb2_hash, poly_hash, equal, 4096),
-  forms_(djb2_hash, poly_hash, equal, 16384)
+  forms_(djb2_hash, poly_hash, equal, 16384),
+  requires_(djb2_hash, poly_hash, equal, 4096)
 {
   read(file_name);
 }
@@ -362,6 +364,12 @@ void alekseev::Dictionary::add_form(const std::wstring & lemma, const std::wstri
   forms_.at(wf.word_).pushBack(std::make_pair(l.lemma_, l.forms_.getSize() - 1));
 }
 
+void alekseev::Dictionary::add_require(wstr_cr require)
+{
+  Lemma r = {require, {}, pos::require, nn_gender, nn_aspect};
+  requires_.insert(require, r);
+}
+
 void alekseev::Dictionary::remove_lemma(const std::wstring & lemma)
 {
   if (!lemmas_.contains(lemma)) {
@@ -404,6 +412,11 @@ void alekseev::Dictionary::remove_form(const WordForm & wordform)
   }
 }
 
+void alekseev::Dictionary::remove_require(wstr_cr require)
+{
+  requires_.remove(require);
+}
+
 bool alekseev::Dictionary::contains_lemma(const std::wstring & lemma) const
 {
   return lemmas_.contains(lemma);
@@ -427,6 +440,11 @@ bool alekseev::Dictionary::contains_form(const WordForm & wordform) const
     }
   }
   return false;
+}
+
+bool alekseev::Dictionary::contains_require(wstr_cr req) const
+{
+  return requires_.contains(req);
 }
 
 alekseev::Vector< std::pair< std::wstring, size_t > > & alekseev::Dictionary::find_homoforms(
@@ -492,6 +510,16 @@ alekseev::pos alekseev::Dictionary::pos_of_lemma(wstr_cr lemma) const
   return lemmas_.at(lemma).pos_;
 }
 
+alekseev::Vector< alekseev::pos > alekseev::Dictionary::pos_of_form(wstr_cr wordform) const
+{
+  const Vector< std::pair< std::wstring, size_t > > & hwf = find_homoforms(wordform);
+  Vector< pos > res(hwf.getSize(), unknown);
+  for (size_t i = 0; i < hwf.getSize(); ++i) {
+    res[i] = pos_of_lemma(hwf[i].first);
+  }
+  return res;
+}
+
 bool alekseev::Dictionary::matches_case(wstr_cr wordform, case_ expected_case) const
 {
   if (!forms_.contains(wordform)) {
@@ -522,7 +550,7 @@ bool alekseev::Dictionary::matches_person(wstr_cr wordform, person expected_pers
 
 size_t alekseev::Dictionary::size() const
 {
-  return forms_.size();
+  return forms_.size() + requires_.size();
 }
 
 alekseev::Vector< alekseev::WordForm > alekseev::Dictionary::damerau_find_wfs(wstr_cr bad_word,

@@ -10,7 +10,7 @@
 namespace alekseev {
   enum pos
   {
-    noun, verb, adj, unknown
+    noun, verb, adj, unknown, require
   };
 
   enum gender
@@ -99,16 +99,20 @@ namespace alekseev {
     std::ifstream & read(std::ifstream & is);
     void write(wstr_cr file_name);
     std::wofstream & write(std::wofstream & os);
+
     void add_lemma(wstr_cr lemma, pos pos, gender noun_gender = nn_gender,
         aspect verb_aspect = nn_aspect);
     void add_form(wstr_cr lemma, wstr_cr wordform, gender g = nn_gender, number n = nn_number,
         case_ c = nn_case, tense t = nn_tense, person p = nn_person);
+    void add_require(wstr_cr require);
     void remove_lemma(wstr_cr lemma);
     void remove_form(const WordForm & wordform);
+    void remove_require(wstr_cr require);
 
     bool contains_lemma(wstr_cr lemma) const;
     bool contains_form(wstr_cr wordform) const;
     bool contains_form(const WordForm & wordform) const;
+    bool contains_require(wstr_cr req) const;
 
     Vector< std::pair< std::wstring, size_t > > & find_homoforms(wstr_cr wordform);
     const Vector< std::pair< std::wstring, size_t > > & find_homoforms(wstr_cr wordform) const;
@@ -119,6 +123,7 @@ namespace alekseev {
     Vector< std::wstring > get_lemmas() const;
     Vector< WordForm > & forms_by_lemma(wstr_cr lemma);
     pos pos_of_lemma(wstr_cr lemma) const;
+    Vector< pos > pos_of_form(wstr_cr wordform) const;
 
     bool matches_case(wstr_cr wordform, case_ expected_case) const;
     bool matches_person(wstr_cr wordform, person expected_person) const;
@@ -134,6 +139,8 @@ namespace alekseev {
           wstr_cr) > lemmas_;
       CuckooHash< std::wstring, Vector< std::pair< std::wstring, size_t > >, size_t (*)(wstr_cr),
         size_t (*)(wstr_cr), bool(*)(wstr_cr, wstr_cr) > forms_;
+      CuckooHash< std::wstring, Lemma, size_t (*)(wstr_cr), size_t (*)(wstr_cr), bool(*)(wstr_cr,
+          wstr_cr) > requires_;
   };
 
   struct DictionaryManager
