@@ -36,3 +36,18 @@ std::wstring alekseev::to_wstring(const text_t & orig_text, bool corrected)
 alekseev::TextManager::TextManager():
   texts_(djb2_hash, poly_hash, equal, 32)
 { }
+
+void alekseev::TextManager::read(wstr_cr file_name, wstr_cr text_name)
+{
+  std::wifstream f(file_name.data());
+  if (!f.is_open()) {
+    throw std::invalid_argument("Can not open file!");
+  }
+  std::wstring text;
+  while (std::getline(f, text)) {
+    text += L"\n";
+  }
+  f.close();
+  texts_.insert(text_name, from_wstring(text_name, text));
+  last_loaded_ = text_name;
+}
