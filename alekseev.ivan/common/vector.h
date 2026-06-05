@@ -38,6 +38,7 @@ namespace alekseev {
     void insert(size_t id, const Vector< T > & rhs, size_t begin, size_t end);
     void erase(size_t id);
     void erase(size_t begin, size_t end);
+    Vector operator+(const Vector & rhs) const;
     Vector & operator+=(const Vector & rhs);
 
     void bubbleSort(bool (* less)(T, T));
@@ -301,13 +302,22 @@ void alekseev::Vector< T >::erase(size_t begin, size_t end)
 }
 
 template< class T >
+alekseev::Vector< T > alekseev::Vector< T >::operator+(const Vector & rhs) const
+{
+  Vector temp(getSize() + rhs.getSize());
+  for (size_t i = 0; i < getSize(); ++i) {
+    temp[i] = (*this)[i];
+  }
+  for (size_t i = 0; i < rhs.getSize(); ++i) {
+    temp[i + getSize()] = rhs[i];
+  }
+  return temp;
+}
+
+template< class T >
 alekseev::Vector< T > & alekseev::Vector< T >::operator+=(const Vector & rhs)
 {
-  Vector temp(*this);
-  temp.resize(getSize() + rhs.getSize());
-  for (size_t i = 0; i < rhs.getSize(); ++i) {
-    temp.pushBack(rhs[i]);
-  }
+  Vector temp = *this + rhs;
   swap(temp);
   return *this;
 }
