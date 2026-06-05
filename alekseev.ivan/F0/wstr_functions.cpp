@@ -61,12 +61,25 @@ std::wstring alekseev::utf8_to_wstring(const std::string & str)
     return {};
   }
 
-  int size_needed = MultiByteToWideChar(CP_UTF8, 0, str.c_str(), static_cast< int >(str.size()),
+  size_t size_needed = MultiByteToWideChar(CP_UTF8, 0, str.c_str(), static_cast< int >(str.size()),
       nullptr, 0);
   std::wstring wstr(size_needed, 0);
   MultiByteToWideChar(CP_UTF8, 0, str.c_str(), static_cast< int >(str.size()), &wstr[0],
       size_needed);
   return wstr;
+}
+
+std::string alekseev::wstring_to_utf8(wstr_cr wstr)
+{
+  if (wstr.empty()) {
+    return {};
+  }
+  size_t size_needed = WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), static_cast< int >(wstr.size()),
+                                  nullptr, 0, nullptr, nullptr);
+  std::string result(size_needed, 0);
+  WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), static_cast< int >(wstr.size()),
+                      &result[0], size_needed, nullptr, nullptr);
+  return result;
 }
 
 std::wstring alekseev::trim(const std::wstring & str)

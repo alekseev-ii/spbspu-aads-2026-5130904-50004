@@ -12,6 +12,8 @@ namespace alekseev {
 
   Vector< std::wstring > split(wstr_cr s, wchar_t delim = L' ', bool need_trim = false);
   std::wstring utf8_to_wstring(const std::string & str);
+  std::string wstring_to_utf8(wstr_cr wstr);
+
   std::wstring trim(wstr_cr str);
   std::wstring ltrim(wstr_cr str);
   std::wstring rtrim(wstr_cr str);
