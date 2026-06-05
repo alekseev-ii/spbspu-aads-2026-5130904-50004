@@ -8,7 +8,6 @@
 #include "../common/queue.h"
 
 namespace alekseev {
-
   struct text_t
   {
     std::wstring name;
@@ -24,6 +23,13 @@ namespace alekseev {
 
   struct TextManager
   {
+    TextManager();
+    ~TextManager() = default;
+    TextManager(const TextManager &) = default;
+    TextManager & operator=(const TextManager &) = default;
+    TextManager(TextManager &&) noexcept = default;
+    TextManager & operator=(TextManager &&) noexcept = default;
+
     void read(wstr_cr file_name, wstr_cr text_name);
     void parse(wstr_cr name = L"");
     void correct(std::wistream & is, std::wostream & os, wstr_cr name = L"");

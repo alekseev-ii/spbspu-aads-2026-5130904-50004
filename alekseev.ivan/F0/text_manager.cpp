@@ -1,5 +1,7 @@
 #include "text_manager.h"
 
+#include "dictionary.h"
+
 alekseev::text_t alekseev::from_wstring(wstr_cr name, wstr_cr orig_text)
 {
   text_t res{name, {}, {}, {}, {}};
@@ -19,11 +21,15 @@ alekseev::text_t alekseev::from_wstring(wstr_cr name, wstr_cr orig_text)
 std::wstring alekseev::to_wstring(const text_t & orig_text, bool corrected)
 {
   const Vector< std::wstring > * to_join = corrected ?
-                                       std::addressof(orig_text.corrected) :
-                                       std::addressof(orig_text.original);
+                                             std::addressof(orig_text.corrected) :
+                                             std::addressof(orig_text.original);
   std::wstring res;
   for (size_t i = 0; i < to_join->getSize(); ++i) {
     res += to_join->at(i) + orig_text.punctuations[i] + L" ";
   }
   return res;
 }
+
+alekseev::TextManager::TextManager():
+  texts_(djb2_hash, poly_hash, equal, 32)
+{ }
