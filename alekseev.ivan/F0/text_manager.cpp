@@ -5,10 +5,13 @@
 alekseev::text_t alekseev::from_wstring(wstr_cr name, wstr_cr orig_text)
 {
   text_t res{name, {}, {}, {}, {}};
-  res.original = split(orig_text, L' ', true);
+  res.original = split(orig_text, L' ');
   res.punctuations = Vector< std::wstring >(res.original.getSize(), {});
   for (size_t i = 0; i < res.original.getSize(); ++i) {
-    std::wstring word = rtrim(res.original[i], is_punctuation);
+    std::wstring word = rtrim(res.original[i], [](wchar_t ch)
+    {
+      return is_punctuation(ch) || is_whitespace(ch);
+    });
     size_t a = res.original[i].size(), b = word.size();
     if (a != b) {
       res.punctuations[i] = res.original[i].substr(b, a - b);
