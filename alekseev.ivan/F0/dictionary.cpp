@@ -139,30 +139,6 @@ std::wostream & alekseev::operator<<(std::wostream & os, const WordForm & wf)
   return os;
 }
 
-size_t alekseev::djb2_hash(wstr_cr line)
-{
-  size_t hash = 5381;
-  for (size_t i = 0; i < line.size(); ++i) {
-    hash = ((hash << 5) + hash) + line[i];
-  }
-  return hash;
-}
-
-size_t alekseev::poly_hash(wstr_cr line)
-{
-  size_t hash = 0;
-  int p = 67;
-  for (size_t i = 0; i < line.size(); ++i) {
-    hash = hash * p + line[i];
-  }
-  return hash;
-}
-
-bool alekseev::equal(wstr_cr s1, wstr_cr s2)
-{
-  return s1 == s2;
-}
-
 alekseev::pos alekseev::guess_pos(std::wstring word)
 {
   if (word.size() < 3) {

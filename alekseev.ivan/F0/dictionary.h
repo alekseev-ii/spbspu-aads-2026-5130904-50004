@@ -72,9 +72,6 @@ namespace alekseev {
   };
 
   using wstr_cr = const std::wstring &;
-  size_t djb2_hash(wstr_cr line);
-  size_t poly_hash(wstr_cr line);
-  bool equal(wstr_cr s1, wstr_cr s2);
   pos guess_pos(std::wstring word);
 
   struct ConsoleSetup

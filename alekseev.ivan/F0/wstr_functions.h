@@ -6,6 +6,10 @@
 
 namespace alekseev {
   using wstr_cr = const std::wstring &;
+  size_t djb2_hash(wstr_cr line);
+  size_t poly_hash(wstr_cr line);
+  bool equal(wstr_cr s1, wstr_cr s2);
+
   Vector< std::wstring > split(wstr_cr s, wchar_t delim = L' ', bool need_trim = false);
   std::wstring utf8_to_wstring(const std::string & str);
   std::wstring trim(wstr_cr str);
