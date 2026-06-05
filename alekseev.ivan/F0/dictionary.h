@@ -10,7 +10,7 @@
 namespace alekseev {
   enum pos
   {
-    noun, verb, adj, unknown, require
+    unknown, noun, verb, adj, require
   };
 
   enum gender
@@ -60,6 +60,7 @@ namespace alekseev {
   };
 
   Vector< std::wstring > tags(const WordForm & wf);
+  std::wstring to_wstring(const WordForm & wf);
   std::wostream & operator<<(std::wostream & os, const WordForm & wf);
 
   struct Lemma
@@ -70,6 +71,9 @@ namespace alekseev {
     gender noun_gender_;
     aspect verb_aspect_;
   };
+
+  std::wstring to_wstring(const Lemma & lemma);
+  std::wostream & operator<<(std::wostream & os, const Lemma & lemma);
 
   using wstr_cr = const std::wstring &;
   pos guess_pos(std::wstring word);
@@ -98,7 +102,7 @@ namespace alekseev {
     void read(wstr_cr file_name);
     std::ifstream & read(std::ifstream & is);
     void write(wstr_cr file_name);
-    std::wofstream & write(std::wofstream & os);
+    std::ofstream & write(std::ofstream & os);
 
     void add_lemma(wstr_cr lemma, pos pos, gender noun_gender = nn_gender,
         aspect verb_aspect = nn_aspect);

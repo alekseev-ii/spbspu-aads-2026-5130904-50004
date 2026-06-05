@@ -2,6 +2,7 @@
 
 #include <fcntl.h>
 #include "wstr_functions.h"
+#include <sstream>
 
 alekseev::WordForm::WordForm():
   gender_(nn_gender),
@@ -21,56 +22,55 @@ alekseev::WordForm::WordForm(std::wstring wordform, gender g, number n, alekseev
   person_(p)
 { }
 
-alekseev::WordForm::WordForm(std::wstring word, pos p, Vector< std::wstring > tags)
+alekseev::WordForm::WordForm(std::wstring word, pos p, Vector< std::wstring > tags):
+  WordForm(word)
 {
-  WordForm wf;
-  wf.word_ = tags[0];
-  for (size_t i = 1; i < tags.getSize(); ++i) {
-    WordForm pre = wf;
-    if (p == noun || p == adj) {
+  for (size_t i = 0; i < tags.getSize(); ++i) {
+    WordForm pre = (*this);
+    if (p == noun || p == adj || p == require) {
       if (tags[i] == L"nom") {
-        wf.case_ = nominative;
+        case_ = nominative;
       } else if (tags[i] == L"gen") {
-        wf.case_ = genitive;
+        case_ = genitive;
       } else if (tags[i] == L"dat") {
-        wf.case_ = dative;
+        case_ = dative;
       } else if (tags[i] == L"acc") {
-        wf.case_ = accusative;
+        case_ = accusative;
       } else if (tags[i] == L"ins") {
-        wf.case_ = instrumental;
+        case_ = instrumental;
       } else if (tags[i] == L"pre") {
-        wf.case_ = prepositional;
+        case_ = prepositional;
       }
     }
-    if (p == verb) {
+    if (p == verb || p == require) {
       if (tags[i] == L"pres") {
-        wf.tense_ = present;
+        tense_ = present;
       } else if (tags[i] == L"past") {
-        wf.tense_ = past;
+        tense_ = past;
       } else if (tags[i] == L"fut") {
-        wf.tense_ = future;
+        tense_ = future;
       }
       if (tags[i] == L"1") {
-        wf.person_ = first;
+        person_ = first;
       } else if (tags[i] == L"2") {
-        wf.person_ = second;
+        person_ = second;
       } else if (tags[i] == L"3") {
-        wf.person_ = third;
+        person_ = third;
       }
     }
     if (tags[i] == L"sing") {
-      wf.number_ = singular;
+      number_ = singular;
     } else if (tags[i] == L"pl") {
-      wf.number_ = plural;
+      number_ = plural;
     }
     if (tags[i] == L"masc") {
-      wf.gender_ = masculine;
+      gender_ = masculine;
     } else if (tags[i] == L"fem") {
-      wf.gender_ = feminine;
+      gender_ = feminine;
     } else if (tags[i] == L"neut") {
-      wf.gender_ = neuter;
+      gender_ = neuter;
     }
-    if (pre == wf) {
+    if (pre == (*this)) {
       throw std::invalid_argument("Bad tag: " + std::string(tags[i].begin(), tags[i].end()));
     }
   }
@@ -86,7 +86,8 @@ bool alekseev::WordForm::operator==(const WordForm & rhs) const
 
 alekseev::Vector< std::wstring > alekseev::tags(const WordForm & wf)
 {
-  Vector< std::wstring > res(6, {});
+  Vector< std::wstring > res;
+  res.resize(6);
   if (wf.gender_ == feminine) {
     res.pushBack(L"fem");
   } else if (wf.gender_ == masculine) {
@@ -129,13 +130,63 @@ alekseev::Vector< std::wstring > alekseev::tags(const WordForm & wf)
   return res;
 }
 
+std::wstring alekseev::to_wstring(const WordForm & wf)
+{
+  std::wstring res(wf.word_);
+  Vector< std::wstring > t = tags(wf);
+  for (size_t i = 0; i < t.getSize(); ++i) {
+    res += L" " + t[i];
+  }
+  return res;
+}
+
 std::wostream & alekseev::operator<<(std::wostream & os, const WordForm & wf)
 {
   Vector< std::wstring > t = tags(wf);
   os << wf.word_;
   for (size_t i = 0; i < t.getSize(); ++i) {
-    os << " " << t[i];
+    os << L" " << t[i];
   }
+  return os;
+}
+
+std::wstring alekseev::to_wstring(const Lemma & lemma)
+{
+  std::wstring res;
+  res += lemma.lemma_ + L" ";
+  if (lemma.pos_ == noun) {
+    res += L"noun ";
+    if (lemma.noun_gender_ == masculine) {
+      res += L"masc";
+    } else if (lemma.noun_gender_ == feminine) {
+      res += L"fem";
+    } else if (lemma.noun_gender_ == neuter) {
+      res += L"neut";
+    }
+    res += L"\n";
+  } else if (lemma.pos_ == verb) {
+    res += L"verb ";
+    if (lemma.verb_aspect_ == perf) {
+      res += L"perf";
+    } else {
+      res += L"imperf";
+    }
+    res += L"\n";
+  } else if (lemma.pos_ == adj) {
+    res += L"adj\n";
+  } else if (lemma.pos_ == require) {
+    res += L"req\n";
+  }
+  for (size_t j = 0; j < lemma.forms_.getSize(); ++j) {
+    const WordForm & wf = lemma.forms_[j];
+    res += L"\t" + to_wstring(wf) + L"\n";
+  }
+  return res;
+}
+
+std::wostream & alekseev::operator<<(std::wostream & os, const Lemma & lemma)
+{
+  os << to_wstring(lemma);
   return os;
 }
 
@@ -195,8 +246,10 @@ alekseev::Dictionary::Dictionary(wstr_cr file_name):
 void alekseev::Dictionary::read(wstr_cr file_name)
 {
   std::ifstream is(file_name.data(), std::ios::binary);
+  if (!is.is_open()) {
+    throw std::invalid_argument("Failed to open file");
+  }
   try {
-    std::wcout << L"p1\n";
     read(is);
   } catch (...) {
     is.close();
@@ -211,18 +264,19 @@ std::ifstream & alekseev::Dictionary::read(std::ifstream & is)
     return is;
   }
 
-  std::wcout << L"p2\n";
   std::string line;
   Lemma lemma;
   while (std::getline(is, line)) {
     if (line.empty()) {
       continue;
     }
-    if (static_cast< unsigned char >(line[0]) == 0xEF && static_cast< unsigned char >(line[1]) ==
-      0xBB && static_cast< unsigned char >(line[2]) == 0xBF) {
-      line = line.substr(3);
-      if (line.empty()) {
-        continue;
+    if (line.size() > 2) {
+      if (static_cast< unsigned char >(line[0]) == 0xEF && static_cast< unsigned char >(line[1]) ==
+        0xBB && static_cast< unsigned char >(line[2]) == 0xBF) {
+        line = line.substr(3);
+        if (line.empty()) {
+          continue;
+        }
       }
     }
     if (line[0] == L'#') {
@@ -236,7 +290,11 @@ std::ifstream & alekseev::Dictionary::read(std::ifstream & is)
     }
     if (wline[0] != L' ' && wline[0] != L'\t') {
       if (!lemma.lemma_.empty()) {
-        lemmas_.insert(lemma.lemma_, lemma);
+        if (lemma.pos_ == require) {
+          requires_.insert(lemma.lemma_, lemma);
+        } else {
+          lemmas_.insert(lemma.lemma_, lemma);
+        }
         lemma = Lemma();
       }
       lemma.lemma_ = words[0];
@@ -275,72 +333,67 @@ std::ifstream & alekseev::Dictionary::read(std::ifstream & is)
         lemma.pos_ = adj;
         lemma.noun_gender_ = nn_gender;
         lemma.verb_aspect_ = nn_aspect;
+      } else if (words[1] == L"req") {
+        if (words.getSize() != 2) {
+          throw std::invalid_argument("Bad number of tags for require");
+        }
+        lemma.pos_ = require;
+        lemma.noun_gender_ = nn_gender;
+        lemma.verb_aspect_ = nn_aspect;
       }
     } else {
       if (lemma.lemma_.empty()) {
         throw std::invalid_argument("Bad format (Word form before lemma)");
       }
-      Vector< std::wstring > tags(words.getSize() - 1, {});
-      tags.insert(0, words, 1, words.getSize());
+      Vector< std::wstring > tags(words);
+      tags.erase(0);
       WordForm wf(words[0], lemma.pos_, tags);
       lemma.forms_.pushBack(wf);
-      if (!forms_.contains(wf.word_)) {
-        forms_.insert(wf.word_, Vector< std::pair< std::wstring, size_t > >());
+      if (lemma.pos_ != require) {
+        if (!forms_.contains(wf.word_)) {
+          forms_.insert(wf.word_, Vector< std::pair< std::wstring, size_t > >());
+        }
+        forms_.at(wf.word_).pushBack(std::make_pair(lemma.lemma_, lemma.forms_.getSize() - 1));
       }
-      forms_.at(wf.word_).pushBack(std::make_pair(lemma.lemma_, lemma.forms_.getSize() - 1));
     }
   }
   if (!lemma.lemma_.empty()) {
-    lemmas_.insert(lemma.lemma_, lemma);
+    if (lemma.pos_ == require) {
+      requires_.insert(lemma.lemma_, lemma);
+    } else {
+      lemmas_.insert(lemma.lemma_, lemma);
+    }
   }
   return is;
 }
 
 void alekseev::Dictionary::write(wstr_cr file_name)
 {
-  std::wofstream os(file_name.data());
+  std::ofstream os(file_name.data(), std::ios::binary);
   if (!os.is_open()) {
     throw std::invalid_argument("Failed to open file");
   }
-  write(os);
+  try {
+    write(os);
+  } catch (...) {
+    os.close();
+    throw;
+  }
   os.close();
 }
 
-std::wofstream & alekseev::Dictionary::write(std::wofstream & os)
+std::ofstream & alekseev::Dictionary::write(std::ofstream & os)
 {
   if (!os.is_open() || !os.good()) {
     return os;
   }
   Vector< std::wstring > keys = lemmas_.keys();
   for (size_t i = 0; i < keys.getSize(); ++i) {
-    Lemma & lemma = lemmas_.at(keys[i]);
-    os << lemma.lemma_ << L" ";
-    if (lemma.pos_ == noun) {
-      os << L"noun" << L" ";
-      if (lemma.noun_gender_ == masculine) {
-        os << L"masc";
-      } else if (lemma.noun_gender_ == feminine) {
-        os << L"fem";
-      } else if (lemma.noun_gender_ == neuter) {
-        os << L"neut";
-      }
-      os << L"\n";
-    } else if (lemma.pos_ == adj) {
-      os << L"adj" << L"\n";
-    } else {
-      os << L"verb" << L" ";
-      if (lemma.verb_aspect_ == perf) {
-        os << L"perf";
-      } else {
-        os << L"imperf";
-      }
-      os << L"\n";
-    }
-    for (size_t j = 0; j < lemma.forms_.getSize(); ++j) {
-      const WordForm & wf = lemma.forms_[j];
-      os << L"\t" << wf << L"\n";
-    }
-    os << L"\n";
+    os << wstring_to_utf8(to_wstring(lemmas_.at(keys[i]))) << "\n";
+  }
+  keys = requires_.keys();
+  for (size_t i = 0; i < keys.getSize(); ++i) {
+    os << wstring_to_utf8(to_wstring(requires_.at(keys[i]))) << "\n";
   }
   return os;
 }
@@ -550,7 +603,7 @@ bool alekseev::Dictionary::matches_person(wstr_cr wordform, person expected_pers
 
 size_t alekseev::Dictionary::size() const
 {
-  return forms_.size() + requires_.size();
+  return forms_.size();
 }
 
 alekseev::Vector< alekseev::WordForm > alekseev::Dictionary::damerau_find_wfs(wstr_cr bad_word,
@@ -887,7 +940,7 @@ void alekseev::DictionaryManager::add_verb(wstr_cr word, std::wistream & is, std
 
 void alekseev::DictionaryManager::add_adj(wstr_cr word, std::wistream & is, std::wostream & os)
 {
-  Dictionary & dict = dicts_.at(word);
+  Dictionary & dict = current();
   dict.add_lemma(word, adj, nn_gender, nn_aspect);
   case_ cases[6]{nominative, genitive, dative, accusative, instrumental, prepositional};
   const wchar_t * cases_names[6]{
@@ -930,7 +983,7 @@ void alekseev::DictionaryManager::add_adj(wstr_cr word, std::wistream & is, std:
 
 void alekseev::DictionaryManager::add_noun(wstr_cr word, std::wistream & is, std::wostream & os)
 {
-  Dictionary dict = dicts_.at(word);
+  Dictionary dict = current();
   os << L"Enter noun gender (masc/fem/neut): ";
   std::wstring gender_ans;
   gender g = nn_gender;
