@@ -24,7 +24,7 @@ namespace alekseev {
 
   struct TextManager
   {
-    TextManager();
+    TextManager(DictionaryManager & dict);
     ~TextManager() = default;
     TextManager(const TextManager &) = default;
     TextManager & operator=(const TextManager &) = default;

@@ -33,8 +33,9 @@ std::wstring alekseev::to_wstring(const text_t & orig_text, bool corrected)
   return res;
 }
 
-alekseev::TextManager::TextManager():
-  texts_(djb2_hash, poly_hash, equal, 32)
+alekseev::TextManager::TextManager(DictionaryManager & dict):
+  texts_(djb2_hash, poly_hash, equal, 32),
+  dict_(dict)
 { }
 
 void alekseev::TextManager::read(wstr_cr file_name, wstr_cr text_name)
@@ -59,8 +60,9 @@ void alekseev::TextManager::parse(wstr_cr name)
   }
   text_t & for_correct = (name != L"") ? texts_.at(name) : texts_.at(last_loaded_);
   for (size_t i = 0; i < for_correct.original.getSize(); ++i) {
-    if (for_correct.original[i] == L"") {
-
+    const std::wstring & word = for_correct.original[i];
+    if (!dict_.contains_form(word)) {
+      for_correct.errors.push(std::make_pair(i, dict_.damerau_find_form(word)));
     }
   }
 }
