@@ -592,7 +592,7 @@ alekseev::Vector< alekseev::WordForm > alekseev::Dictionary::get_homoforms(wstr_
   return res;
 }
 
-alekseev::Lemma alekseev::Dictionary::get_lemma(wstr_cr lemma) const
+const alekseev::Lemma & alekseev::Dictionary::get_lemma(wstr_cr lemma) const
 {
   if (lemmas_.contains(lemma)) {
     return lemmas_.at(lemma);
@@ -765,7 +765,7 @@ void alekseev::DictionaryManager::add_word(wstr_cr word, std::wistream & is, std
   bool l = dict.contains_lemma(w), r = dict.contains_require(w);
   if (l || r) {
     os << L"Word already exists in current dictionary \"" << current_ << L"\"\n";
-    wchar_t ans = ask_yes_no(L"Do you want to replace it?", is, os, true);
+    wchar_t ans = ask_yes_no(L"Do you want to replace it?", is, os);
     if (ans == L'y') {
       if (l) {
         dict.remove_lemma(w);
@@ -834,8 +834,11 @@ void alekseev::DictionaryManager::update_word(std::wstring word, std::wistream &
       Vector< std::wstring > opts = dict.damerau_find_lemma(word, 1) + dict.
           damerau_find_require(word, 1);
       std::wstring m1 = L"Only one lemma found:";
-      std::wstring m2 = L"lemmas found";
+      std::wstring m2 = L"What lemma do you want to update?";
       size_t ind = choose(opts, is, os, 5, m1, m2);
+      if (ind == opts.getSize()) {
+        return;
+      }
       word = opts[ind];
     } else if (ans == L'n') {
       return;
@@ -843,20 +846,23 @@ void alekseev::DictionaryManager::update_word(std::wstring word, std::wistream &
       throw std::invalid_argument("Bad input");
     }
   }
-  Lemma l = dict.get_lemma(word);
+  const Lemma & l = dict.get_lemma(word);
   os << "Found:\n";
   os << l;
   Vector< std::wstring > opts{
     L"New form",
-    L"Update an existing form",
-    L"It is not a correct word, cancel updating"
+    L"Update an existing form"
   };
-  size_t a = choose(opts, is, os, 2, L"", L"opts", L"What do you want to do?", true);
+  size_t a = choose(opts, is, os, 0, L"", L"What do you want to do?",
+    L"It is not a correct word, cancel updating");
   if (a == 2) {
     return;
   } else if (a == 1) {
-    size_t ind = choose(l.forms_, is, os, l.forms_.getSize(), L"Only one form can be updated:",
-        L"forms can be changed", L"What form do you want to change", true);
+    size_t ind = choose(l.forms_, is, os, 0, L"Only one form can be updated:",
+        L"What form do you want to update?");
+    if (ind == l.forms_.getSize()) {
+      return;
+    }
     dict.remove_req_form(word, ind);
   }
   os << "Enter new form with tags:\n";
@@ -890,7 +896,11 @@ void alekseev::DictionaryManager::delete_form(wstr_cr wordform, std::wistream & 
 
   if (!lp.first.empty()) {
     const WordForm & word = dict.forms_by_lemma(lp.first)[lp.second];
-    dict.remove_form(word);
+    if (dict.pos_of_lemma(lp.first) == require) {
+      dict.remove_req_form(lp.first, lp.second);
+    } else {
+      dict.remove_form(word);
+    }
   }
 }
 
@@ -900,8 +910,23 @@ void alekseev::DictionaryManager::delete_lemma(wstr_cr lemma, std::wistream & is
   Dictionary & dict = current();
   if (dict.contains_lemma(lemma)) {
     dict.remove_lemma(lemma);
+  } else if (dict.contains_require(lemma)) {
+    dict.remove_require(lemma);
   } else {
-    os << L"Lemma \"" << lemma << "\" does not exist\n";
+    os << L"Lemma \"" << lemma << "\" not found in current dictionary\n";
+    wchar_t ans = ask_yes_no(L"Do you want to search using fuzzy search?", is, os);
+    if (ans == 'y') {
+      Vector< std::wstring > opts = dict.damerau_find_lemma(lemma, 1) + dict.damerau_find_require(lemma);
+      size_t ind = choose(opts, is, os, 5, L"One lemma found:", L"What lemma you want to delete?");
+      if (ind == opts.getSize()) {
+        return;
+      }
+      if (dict.contains_lemma(lemma)) {
+        dict.remove_lemma(lemma);
+      } else if (dict.contains_require(lemma)) {
+        dict.remove_require(lemma);
+      }
+    }
   }
 }
 
@@ -1169,6 +1194,8 @@ std::pair< std::wstring, size_t > alekseev::DictionaryManager::choose_wordform(w
 
   if (dict.contains_form(word)) {
     wfs = dict.get_homoforms(word);
+  } else if (dict.contains_require(word)) {
+    wfs = dict.get_lemma(word).forms_;
   } else {
     os << L"Form " << word << " not found\n";
     wchar_t need_find = ask_yes_no(L"Do you want to search using fuzzy search?", is, os);
@@ -1181,9 +1208,10 @@ std::pair< std::wstring, size_t > alekseev::DictionaryManager::choose_wordform(w
     }
   }
   if (!wfs.isEmpty()) {
-    size_t ind = choose(wfs, is, os, 0, L"Found form:", L"forms were found",
-        L"Which one do you want to change?");
-    return dict.lemma_pair_by_wordform(wfs[ind]);
+    size_t ind = choose(wfs, is, os, 0, L"Found form:", L"Choose one form:");
+    if (ind < wfs.getSize()) {
+      return dict.lemma_pair_by_wordform(wfs[ind]);
+    }
   }
   return {{}, 0};
 }

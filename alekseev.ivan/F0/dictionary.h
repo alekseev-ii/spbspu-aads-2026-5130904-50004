@@ -131,7 +131,7 @@ namespace alekseev {
     const std::pair< std::wstring, size_t > & lemma_pair_by_wordform(
         const WordForm & wordform) const;
     Vector< WordForm > get_homoforms(wstr_cr wordform) const;
-    Lemma get_lemma(wstr_cr lemma) const;
+    const Lemma & get_lemma(wstr_cr lemma) const;
     Vector< std::wstring > get_lemmas() const;
     Vector< WordForm > & forms_by_lemma(wstr_cr lemma);
     pos pos_of_lemma(wstr_cr lemma) const;
@@ -173,8 +173,8 @@ namespace alekseev {
     void set_current(wstr_cr name_of_loaded_dict);
     void add_word(wstr_cr word, std::wistream & is, std::wostream & os);
     void update_word(std::wstring word, std::wistream & is, std::wostream & os);
-    void delete_form(wstr_cr wordform, std::wistream & is, std::wostream & os); //delete require
-    void delete_lemma(wstr_cr lemma, std::wistream & is, std::wostream & os); //delete require
+    void delete_form(wstr_cr wordform, std::wistream & is, std::wostream & os);
+    void delete_lemma(wstr_cr lemma, std::wistream & is, std::wostream & os);
 
     bool contains_form(wstr_cr wordform) const;
     Vector< std::wstring > damerau_find_form(wstr_cr wordform, size_t distance = 2) const;

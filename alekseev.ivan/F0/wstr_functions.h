@@ -35,11 +35,12 @@ namespace alekseev {
 
   wchar_t yes_no(std::wstring answer);
   wchar_t ask_yes_no(wstr_cr question, std::wistream & is, std::wostream & os,
-      bool need_cycle = false, bool add_variants = true);
+      bool need_cycle = true, bool add_variants = true);
   template< class T >
-  size_t choose(const Vector< T > & opts, std::wistream & is, std::wostream & os, size_t max_opts = 5,
-      wstr_cr m0 = L"Only one opt:", wstr_cr m1 = L"options are available",
-      wstr_cr m2 = L"Choose one of them", bool need_cycle = false);
+  size_t choose(const Vector< T > & opts, std::wistream & is, std::wostream & os,
+      size_t max_opts = 5, wstr_cr only_one_opt = L"Only one opt:",
+      wstr_cr what_is_your_choice = L"What is your choice?", wstr_cr no_one = L"No one of it",
+      bool need_cycle = true);
 
   bool endswith(wstr_cr str, wstr_cr substr);
   bool endswith(wstr_cr str, std::initializer_list< std::wstring > substr);
@@ -88,24 +89,24 @@ namespace alekseev {
   }
 
   template< class T >
-  size_t choose(const Vector< T > & opts, std::wistream & is, std::wostream & os,
-      size_t max_opts, wstr_cr m0, wstr_cr m1, wstr_cr m2, bool need_cycle)
+  size_t choose(const Vector< T > & opts, std::wistream & is, std::wostream & os, size_t max_opts,
+      wstr_cr only_one_opt, wstr_cr what_is_your_choice,wstr_cr no_one, bool need_cycle)
   {
     if (opts.isEmpty()) {
       throw std::invalid_argument("Empty candidates");
     }
     if (opts.getSize() == 1) {
-      os << m0 << L" " << opts[0] << L"\n";
+      os << only_one_opt << L" " << opts[0] << L"\n";
       return 0;
     }
     size_t s = opts.getSize();
     size_t n_opts = (max_opts == 0) ? s : std::min(max_opts, s);
-    os << n_opts << L" " << m1 << L"\n";
-
+    os << what_is_your_choice << L"\n";
     for (size_t i = 0; i < n_opts; ++i) {
       os << "\t" << i + 1 << ". " << opts[i] << L"\n";
     }
-    os << m2 << L" (1-" << n_opts << L") ";
+    os << "\t" << n_opts + 1 << ". " << no_one << L"\n";
+    os << L"(1-" << n_opts + 2 << L"): ";
     std::wstring answer;
     wchar_t * end_ptr = nullptr;
     while (std::getline(is, answer)) {
@@ -113,7 +114,7 @@ namespace alekseev {
       if (!(*end_ptr == L'\0')) {
         throw std::invalid_argument("Bad input");
       }
-      if (0 < ind && ind <= n_opts) {
+      if (0 < ind && ind <= n_opts + 1) {
         return ind - 1;
       }
       if (!need_cycle) {
