@@ -43,12 +43,15 @@ namespace alekseev {
     nn_aspect, perf, imperf
   };
 
+  using wstr_cr = const std::wstring &;
+
   struct WordForm
   {
     WordForm();
     explicit WordForm(std::wstring wordform, gender g = nn_gender, number n = nn_number,
         case_ c = nn_case, tense t = nn_tense, person p = nn_person);
-    WordForm(std::wstring word, pos p, Vector< std::wstring > tags);
+    WordForm(const Vector<std::wstring> & tags, pos p);
+    WordForm(wstr_cr wordform, pos p, const Vector<std::wstring> & tags);
     std::wstring word_;
     gender gender_;
     number number_;
@@ -59,12 +62,14 @@ namespace alekseev {
     bool operator==(const WordForm & rhs) const;
   };
 
-  Vector< std::wstring > tags(const WordForm & wf);
+  Vector< std::wstring > to_tags(const WordForm & wf);
+  WordForm from_tags(const Vector< std::wstring > & tags, pos p);
   std::wstring to_wstring(const WordForm & wf);
   std::wostream & operator<<(std::wostream & os, const WordForm & wf);
 
   struct Lemma
   {
+    Lemma();
     std::wstring lemma_;
     Vector< WordForm > forms_;
     pos pos_;
@@ -75,7 +80,6 @@ namespace alekseev {
   std::wstring to_wstring(const Lemma & lemma);
   std::wostream & operator<<(std::wostream & os, const Lemma & lemma);
 
-  using wstr_cr = const std::wstring &;
   pos guess_pos(std::wstring word);
 
   struct ConsoleSetup
@@ -106,12 +110,15 @@ namespace alekseev {
 
     void add_lemma(wstr_cr lemma, pos pos, gender noun_gender = nn_gender,
         aspect verb_aspect = nn_aspect);
-    void add_form(wstr_cr lemma, wstr_cr wordform, gender g = nn_gender, number n = nn_number,
-        case_ c = nn_case, tense t = nn_tense, person p = nn_person);
+    void add_form(wstr_cr lemma, wstr_cr wordform, gender g, number n,
+        case_ c, tense t, person p);
     void add_require(wstr_cr require);
+    void add_req_form(wstr_cr require, wstr_cr reqform, gender g, number n,
+        case_ c, tense t, person p);
     void remove_lemma(wstr_cr lemma);
     void remove_form(const WordForm & wordform);
     void remove_require(wstr_cr require);
+    void remove_req_form(wstr_cr require, size_t ind);
 
     bool contains_lemma(wstr_cr lemma) const;
     bool contains_form(wstr_cr wordform) const;
@@ -124,6 +131,7 @@ namespace alekseev {
     const std::pair< std::wstring, size_t > & lemma_pair_by_wordform(
         const WordForm & wordform) const;
     Vector< WordForm > get_homoforms(wstr_cr wordform) const;
+    Lemma get_lemma(wstr_cr lemma) const;
     Vector< std::wstring > get_lemmas() const;
     Vector< WordForm > & forms_by_lemma(wstr_cr lemma);
     pos pos_of_lemma(wstr_cr lemma) const;
@@ -137,6 +145,7 @@ namespace alekseev {
     Vector< WordForm > damerau_find_wfs(wstr_cr bad_word, size_t distance = 2) const;
     Vector< std::wstring > damerau_find_form(wstr_cr bad_form, size_t distance = 2) const;
     Vector< std::wstring > damerau_find_lemma(wstr_cr bad_lemma, size_t distance = 2) const;
+    Vector< std::wstring > damerau_find_require(wstr_cr bad_req, size_t distance = 2) const;
 
     private:
       CuckooHash< std::wstring, Lemma, size_t (*)(wstr_cr), size_t (*)(wstr_cr), bool(*)(wstr_cr,
@@ -163,9 +172,9 @@ namespace alekseev {
     void unload(wstr_cr name);
     void set_current(wstr_cr name_of_loaded_dict);
     void add_word(wstr_cr word, std::wistream & is, std::wostream & os);
-    void update_word(wstr_cr word, std::wistream & is, std::wostream & os);
-    void delete_form(wstr_cr wordform, std::wistream & is, std::wostream & os);
-    void delete_lemma(wstr_cr lemma, std::wistream & is, std::wostream & os);
+    void update_word(std::wstring word, std::wistream & is, std::wostream & os);
+    void delete_form(wstr_cr wordform, std::wistream & is, std::wostream & os); //delete require
+    void delete_lemma(wstr_cr lemma, std::wistream & is, std::wostream & os); //delete require
 
     bool contains_form(wstr_cr wordform) const;
     Vector< std::wstring > damerau_find_form(wstr_cr wordform, size_t distance = 2) const;
@@ -184,6 +193,7 @@ namespace alekseev {
       void add_verb(wstr_cr word, std::wistream & is, std::wostream & os);
       void add_adj(wstr_cr word, std::wistream & is, std::wostream & os);
       void add_noun(wstr_cr word, std::wistream & is, std::wostream & os);
+      void add_req(wstr_cr word, std::wistream & is, std::wostream & os);
       std::pair< std::wstring, size_t > choose_wordform(wstr_cr word, std::wistream & is,
           std::wostream & os) const;
   };

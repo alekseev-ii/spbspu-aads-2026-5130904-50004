@@ -37,7 +37,7 @@ namespace alekseev {
   wchar_t ask_yes_no(wstr_cr question, std::wistream & is, std::wostream & os,
       bool need_cycle = false, bool add_variants = true);
   template< class T >
-  size_t choose(const Vector< T > &, std::wistream & is, std::wostream & os, size_t max_opts = 5,
+  size_t choose(const Vector< T > & opts, std::wistream & is, std::wostream & os, size_t max_opts = 5,
       wstr_cr m0 = L"Only one opt:", wstr_cr m1 = L"options are available",
       wstr_cr m2 = L"Choose one of them", bool need_cycle = false);
 
@@ -88,22 +88,22 @@ namespace alekseev {
   }
 
   template< class T >
-  size_t choose(const Vector< T > & candidates, std::wistream & is, std::wostream & os,
+  size_t choose(const Vector< T > & opts, std::wistream & is, std::wostream & os,
       size_t max_opts, wstr_cr m0, wstr_cr m1, wstr_cr m2, bool need_cycle)
   {
-    if (candidates.isEmpty()) {
+    if (opts.isEmpty()) {
       throw std::invalid_argument("Empty candidates");
     }
-    if (candidates.getSize() == 1) {
-      os << m0 << L" " << candidates[0] << L"\n";
+    if (opts.getSize() == 1) {
+      os << m0 << L" " << opts[0] << L"\n";
       return 0;
     }
-    size_t s = candidates.getSize();
+    size_t s = opts.getSize();
     size_t n_opts = (max_opts == 0) ? s : std::min(max_opts, s);
     os << n_opts << L" " << m1 << L"\n";
 
     for (size_t i = 0; i < n_opts; ++i) {
-      os << "\t" << i + 1 << ". " << candidates[i] << L"\n";
+      os << "\t" << i + 1 << ". " << opts[i] << L"\n";
     }
     os << m2 << L" (1-" << n_opts << L") ";
     std::wstring answer;
