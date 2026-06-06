@@ -454,7 +454,7 @@ void alekseev::Dictionary::add_req_form(wstr_cr require, wstr_cr reqform, gender
     case_ c, tense t, person p)
 {
   WordForm wf(reqform, g, n, c, t, p);
-  Lemma & l = lemmas_.at(require);
+  Lemma & l = requires_.at(require);
   l.forms_.pushBack(wf);
 }
 
@@ -572,6 +572,14 @@ std::pair< std::wstring, size_t > & alekseev::Dictionary::lemma_pair_by_wordform
 const std::pair< std::wstring, size_t > & alekseev::Dictionary::lemma_pair_by_wordform(
     const WordForm & wordform) const
 {
+  if (contains_require(wordform.word_)) {
+    const Vector< WordForm > & wfs = requires_.at(wordform.word_).forms_;
+    for (size_t i = 0; i < wfs.getSize(); ++i) {
+      if (wfs[i] == wordform) {
+        return {wordform.word_, i};
+      }
+    }
+  }
   const Vector< std::pair< std::wstring, size_t > > & wfs = find_homoforms(wordform.word_);
   for (size_t i = 0; i < wfs.getSize(); ++i) {
     const Lemma & l = lemmas_.at(wfs[i].first);
@@ -652,6 +660,21 @@ bool alekseev::Dictionary::matches_case(wstr_cr wordform, case_ expected_case) c
   return false;
 }
 
+bool alekseev::Dictionary::matches_case(wstr_cr require, wstr_cr word) const
+{
+  if (!requires_.contains(require)) {
+    return false;
+  }
+  bool matches = false;
+  const Vector< WordForm > & rfs = requires_.at(require).forms_;
+  for (size_t i = 0; i < rfs.getSize() && !matches; ++i) {
+    if (rfs[i].case_ != nn_case) {
+      matches = matches_case(word, rfs[i].case_);
+    }
+  }
+  return matches;
+}
+
 bool alekseev::Dictionary::matches_person(wstr_cr wordform, person expected_person) const
 {
   if (!forms_.contains(wordform)) {
@@ -664,6 +687,21 @@ bool alekseev::Dictionary::matches_person(wstr_cr wordform, person expected_pers
     }
   }
   return false;
+}
+
+bool alekseev::Dictionary::matches_person(wstr_cr require, wstr_cr word) const
+{
+  if (!requires_.contains(require)) {
+    return false;
+  }
+  bool matches = false;
+  const Vector< WordForm > & rfs = requires_.at(require).forms_;
+  for (size_t i = 0; i < rfs.getSize() && !matches; ++i) {
+    if (rfs[i].person_ != nn_person) {
+      matches = matches_person(word, rfs[i].person_);
+    }
+  }
+  return matches;
 }
 
 size_t alekseev::Dictionary::size() const
@@ -849,12 +887,9 @@ void alekseev::DictionaryManager::update_word(std::wstring word, std::wistream &
   const Lemma & l = dict.get_lemma(word);
   os << "Found:\n";
   os << l;
-  Vector< std::wstring > opts{
-    L"New form",
-    L"Update an existing form"
-  };
+  Vector< std::wstring > opts{L"New form", L"Update an existing form"};
   size_t a = choose(opts, is, os, 0, L"", L"What do you want to do?",
-    L"It is not a correct word, cancel updating");
+      L"It is not a correct word, cancel updating");
   if (a == 2) {
     return;
   } else if (a == 1) {
@@ -863,7 +898,11 @@ void alekseev::DictionaryManager::update_word(std::wstring word, std::wistream &
     if (ind == l.forms_.getSize()) {
       return;
     }
-    dict.remove_req_form(word, ind);
+    if (l.pos_ == require) {
+      dict.remove_req_form(word, ind);
+    } else {
+      dict.remove_form(l.forms_[ind]);
+    }
   }
   os << "Enter new form with tags:\n";
   std::wstring form;
@@ -916,7 +955,8 @@ void alekseev::DictionaryManager::delete_lemma(wstr_cr lemma, std::wistream & is
     os << L"Lemma \"" << lemma << "\" not found in current dictionary\n";
     wchar_t ans = ask_yes_no(L"Do you want to search using fuzzy search?", is, os);
     if (ans == 'y') {
-      Vector< std::wstring > opts = dict.damerau_find_lemma(lemma, 1) + dict.damerau_find_require(lemma);
+      Vector< std::wstring > opts = dict.damerau_find_lemma(lemma, 1) + dict.
+          damerau_find_require(lemma);
       size_t ind = choose(opts, is, os, 5, L"One lemma found:", L"What lemma you want to delete?");
       if (ind == opts.getSize()) {
         return;
@@ -972,12 +1012,32 @@ bool alekseev::DictionaryManager::matches_case(wstr_cr wordform, case_ expected_
   return result;
 }
 
+bool alekseev::DictionaryManager::matches_case(wstr_cr require, wstr_cr word) const
+{
+  Vector< std::wstring > names = dicts_.keys();
+  bool result = false;
+  for (size_t i = 0; i < names.getSize() && !result; ++i) {
+    result = dicts_.at(names[i]).matches_case(require, word);
+  }
+  return result;
+}
+
 bool alekseev::DictionaryManager::matches_person(wstr_cr wordform, person expected_person) const
 {
   Vector< std::wstring > names = dicts_.keys();
   bool result = false;
   for (size_t i = 0; i < names.getSize() && !result; ++i) {
     result = dicts_.at(names[i]).matches_person(wordform, expected_person);
+  }
+  return result;
+}
+
+bool alekseev::DictionaryManager::matches_person(wstr_cr require, wstr_cr word) const
+{
+  Vector< std::wstring > names = dicts_.keys();
+  bool result = false;
+  for (size_t i = 0; i < names.getSize() && !result; ++i) {
+    result = dicts_.at(names[i]).matches_person(require, word);
   }
   return result;
 }
@@ -1121,7 +1181,7 @@ void alekseev::DictionaryManager::add_adj(wstr_cr word, std::wistream & is, std:
 
 void alekseev::DictionaryManager::add_noun(wstr_cr word, std::wistream & is, std::wostream & os)
 {
-  Dictionary dict = current();
+  Dictionary & dict = current();
   os << L"Enter noun gender (masc/fem/neut): ";
   std::wstring gender_ans;
   gender g = nn_gender;
@@ -1170,18 +1230,19 @@ void alekseev::DictionaryManager::add_noun(wstr_cr word, std::wistream & is, std
 void alekseev::DictionaryManager::add_req(wstr_cr word, std::wistream & is, std::wostream & os)
 {
   Dictionary dict = current();
-  Lemma req;
-  req.lemma_ = word;
-  req.pos_ = require;
+  dict.add_require(word);
+
   os << L"Enter the forms of the require, each on a separate line.\n";
   os << L"Leave the line empty to complete the input.\n";
+
   std::wstring line;
   size_t c = 0;
   getline(is, line);
   while (is && !line.empty()) {
     ++c;
     WordForm wf(split(line), require);
-    req.forms_.pushBack(wf);
+    dict.add_req_form(word, wf.word_, wf.gender_, wf.number_, wf.case_, wf.tense_, wf.person_);
+    std::getline(is, line);
   }
   os << L"Successfully added " << c << " forms!\n";
 }
@@ -1201,12 +1262,17 @@ std::pair< std::wstring, size_t > alekseev::DictionaryManager::choose_wordform(w
     wchar_t need_find = ask_yes_no(L"Do you want to search using fuzzy search?", is, os);
     if (need_find == L'y') {
       wfs = dict.damerau_find_wfs(word, 1);
+      Vector< std::wstring > reqs = dict.damerau_find_require(word, 1);
+      for (size_t i = 0; i < reqs.getSize(); ++i) {
+        wfs += dict.get_lemma(reqs[i]).forms_;
+      }
       if (wfs.isEmpty()) {
         os << L"No word found\n";
         return {{}, 0};
       }
     }
   }
+
   if (!wfs.isEmpty()) {
     size_t ind = choose(wfs, is, os, 0, L"Found form:", L"Choose one form:");
     if (ind < wfs.getSize()) {

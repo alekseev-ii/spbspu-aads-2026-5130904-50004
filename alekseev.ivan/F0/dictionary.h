@@ -138,7 +138,9 @@ namespace alekseev {
     Vector< pos > pos_of_form(wstr_cr wordform) const;
 
     bool matches_case(wstr_cr wordform, case_ expected_case) const;
+    bool matches_case(wstr_cr require, wstr_cr word) const;
     bool matches_person(wstr_cr wordform, person expected_person) const;
+    bool matches_person(wstr_cr require, wstr_cr word) const;
 
     size_t size() const;
 
@@ -180,7 +182,9 @@ namespace alekseev {
     Vector< std::wstring > damerau_find_form(wstr_cr wordform, size_t distance = 2) const;
     Vector< std::wstring > damerau_find_lemma(wstr_cr wordform, size_t distance = 2) const;
     bool matches_case(wstr_cr wordform, case_ expected_case) const;
+    bool matches_case(wstr_cr require, wstr_cr word) const;
     bool matches_person(wstr_cr wordform, person expected_person) const;
+    bool matches_person(wstr_cr require, wstr_cr word) const;
 
     Dictionary & current();
     const Dictionary & current() const;
