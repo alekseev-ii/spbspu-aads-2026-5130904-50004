@@ -11,7 +11,6 @@
 namespace alekseev {
   struct text_t
   {
-    std::wstring name;
     Vector< std::wstring > original;
     Vector< std::wstring > corrected;
     Vector< std::wstring > punctuations;
@@ -19,17 +18,17 @@ namespace alekseev {
   };
 
   using wstr_cr = const std::wstring &;
-  text_t from_wstring(wstr_cr name, wstr_cr orig_text);
+  text_t from_wstring(wstr_cr orig_text);
   std::wstring to_wstring(const text_t & orig_text, bool corrected = true);
 
   struct TextManager
   {
-    TextManager(DictionaryManager & dict);
+    explicit TextManager(DictionaryManager & dict);
     ~TextManager() = default;
-    TextManager(const TextManager &) = default;
-    TextManager & operator=(const TextManager &) = default;
-    TextManager(TextManager &&) noexcept = default;
-    TextManager & operator=(TextManager &&) noexcept = default;
+    TextManager(const TextManager &) = delete;
+    TextManager & operator=(const TextManager &) = delete;
+    TextManager(TextManager &&) noexcept = delete;
+    TextManager & operator=(TextManager &&) noexcept = delete;
 
     void read(wstr_cr file_name, wstr_cr text_name);
     void parse(wstr_cr name = L"");

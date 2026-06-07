@@ -43,6 +43,17 @@ bool alekseev::WordForm::operator==(const WordForm & rhs) const
   return result && person_ == rhs.person_;
 }
 
+bool alekseev::matches(const WordForm & lhs, const WordForm & rhs)
+{
+  bool res = lhs.word_.empty() || rhs.word_.empty() || lhs.word_ == rhs.word_;
+  res = res && (lhs.gender_ == nn_gender || rhs.gender_ == nn_gender || lhs.gender_ == rhs.gender_);
+  res = res && (lhs.number_ == nn_number || rhs.number_ == nn_number || lhs.number_ == rhs.number_);
+  res = res && (lhs.case_ == nn_case || rhs.case_ == nn_case || lhs.case_ == rhs.case_);
+  res = res && (lhs.tense_ == nn_tense || rhs.tense_ == nn_tense || lhs.tense_ == rhs.tense_);
+  res = res && (lhs.person_ == nn_person || rhs.person_ == nn_person || lhs.person_ == rhs.person_);
+  return res;
+}
+
 alekseev::Vector< std::wstring > alekseev::to_tags(const WordForm & wf)
 {
   Vector< std::wstring > res;
@@ -143,6 +154,15 @@ alekseev::WordForm alekseev::from_tags(const Vector< std::wstring > & tags, pos 
     }
   }
   return wf;
+}
+
+alekseev::Vector< std::wstring > alekseev::to_words(const Vector< WordForm > & wfs)
+{
+  Vector< std::wstring > res(wfs.getSize(), L"");
+  for (size_t i = 0; i < wfs.getSize(); ++i) {
+    res[i] = wfs[i].word_;
+  }
+  return res;
 }
 
 std::wstring alekseev::to_wstring(const WordForm & wf)
@@ -576,7 +596,7 @@ const std::pair< std::wstring, size_t > & alekseev::Dictionary::lemma_pair_by_wo
     const Vector< WordForm > & wfs = requires_.at(wordform.word_).forms_;
     for (size_t i = 0; i < wfs.getSize(); ++i) {
       if (wfs[i] == wordform) {
-        return {wordform.word_, i};
+        return std::make_pair(wordform.word_, i);
       }
     }
   }
@@ -646,6 +666,18 @@ alekseev::Vector< alekseev::pos > alekseev::Dictionary::pos_of_form(wstr_cr word
   return res;
 }
 
+alekseev::Vector< alekseev::WordForm > alekseev::Dictionary::filter_by_require(wstr_cr require,
+    const Vector< WordForm > & forms) const
+{
+  Vector< WordForm > res;
+  for (size_t i = 0; i < forms.getSize(); ++i) {
+    if (matches_require(require, forms[i])) {
+      res.pushBack(forms[i]);
+    }
+  }
+  return res;
+}
+
 bool alekseev::Dictionary::matches_case(wstr_cr wordform, case_ expected_case) const
 {
   if (!forms_.contains(wordform)) {
@@ -702,6 +734,35 @@ bool alekseev::Dictionary::matches_person(wstr_cr require, wstr_cr word) const
     }
   }
   return matches;
+}
+
+bool alekseev::Dictionary::matches_require(wstr_cr require, wstr_cr word) const
+{
+  if (!requires_.contains(require)) {
+    return false;
+  }
+  Vector< pos > v = pos_of_form(word);
+  bool res = false;
+  for (size_t i = 0; i < v.getSize() && !res; ++i) {
+    if (v[i] == noun) {
+      res = matches_case(require, word);
+    } else if (v[i] == verb) {
+      res = matches_person(require, word);
+    } else {
+      res = true;
+    }
+  }
+  return res;
+}
+
+bool alekseev::Dictionary::matches_require(wstr_cr require, const WordForm & word) const
+{
+  const Vector< WordForm > & rfs = requires_.at(require).forms_;
+  bool res = false;
+  for (size_t i = 0; i < rfs.getSize() && !res; ++i) {
+    res = matches(rfs[i], word);
+  }
+  return res;
 }
 
 size_t alekseev::Dictionary::size() const
@@ -822,6 +883,7 @@ void alekseev::DictionaryManager::add_word(wstr_cr word, std::wistream & is, std
     ans = ask_yes_no(L"Is it a verb?", is, os);
   } else if (p == adj) {
     ans = ask_yes_no(L"Is it an adjective?", is, os);
+    std::wcout << ans << L"\n";
   } else if (p == noun) {
     ans = ask_yes_no(L"Is it a noun?", is, os);
   } else if (p == require) {
@@ -848,15 +910,15 @@ void alekseev::DictionaryManager::add_word(wstr_cr word, std::wistream & is, std
         os << "Input word class (verb/adj/noun): ";
       }
     }
-    if (p == verb) {
-      add_verb(w, is, os);
-    } else if (p == adj) {
-      add_adj(w, is, os);
-    } else if (p == noun) {
-      add_noun(w, is, os);
-    } else if (p == require) {
-      add_req(w, is, os);
-    }
+  }
+  if (p == verb) {
+    add_verb(w, is, os);
+  } else if (p == adj) {
+    add_adj(w, is, os);
+  } else if (p == noun) {
+    add_noun(w, is, os);
+  } else if (p == require) {
+    add_req(w, is, os);
   }
 }
 
@@ -980,6 +1042,16 @@ bool alekseev::DictionaryManager::contains_form(wstr_cr wordform) const
   return result;
 }
 
+bool alekseev::DictionaryManager::is_require(wstr_cr word) const
+{
+  Vector< std::wstring > names = dicts_.keys();
+  bool result = false;
+  for (size_t i = 0; i < names.getSize() && !result; ++i) {
+    result = dicts_.at(names[i]).contains_require(word);
+  }
+  return result;
+}
+
 alekseev::Vector< std::wstring > alekseev::DictionaryManager::damerau_find_form(wstr_cr wordform,
     size_t distance) const
 {
@@ -998,6 +1070,22 @@ alekseev::Vector< std::wstring > alekseev::DictionaryManager::damerau_find_lemma
   Vector< std::wstring > result{};
   for (size_t i = 0; i < names.getSize(); ++i) {
     result += dicts_.at(names[i]).damerau_find_lemma(wordform, distance);
+  }
+  return result;
+}
+
+alekseev::Vector< std::wstring > alekseev::DictionaryManager::find_by_require(wstr_cr require,
+    wstr_cr wordform, size_t distance) const
+{
+  Vector< std::wstring > names = dicts_.keys();
+  Vector< std::wstring > result;
+  for (size_t i = 0; i < names.getSize(); ++i) {
+    Dictionary dict = dicts_.at(names[i]);
+    result += to_words(
+        dict.filter_by_require(require,
+            dict.damerau_find_wfs(wordform, distance)
+            )
+        );
   }
   return result;
 }
@@ -1038,6 +1126,16 @@ bool alekseev::DictionaryManager::matches_person(wstr_cr require, wstr_cr word) 
   bool result = false;
   for (size_t i = 0; i < names.getSize() && !result; ++i) {
     result = dicts_.at(names[i]).matches_person(require, word);
+  }
+  return result;
+}
+
+bool alekseev::DictionaryManager::matches_require(wstr_cr require, wstr_cr word) const
+{
+  Vector< std::wstring > names = dicts_.keys();
+  bool result = false;
+  for (size_t i = 0; i < names.getSize() && !result; ++i) {
+    result = dicts_.at(names[i]).matches_require(require, word);
   }
   return result;
 }
@@ -1158,8 +1256,9 @@ void alekseev::DictionaryManager::add_adj(wstr_cr word, std::wistream & is, std:
   for (size_t i = 0; i < 3; i++) {
     os << "Singular " << genders_names[i] << ":\n";
     for (size_t j = 0; j < 6; j++) {
-      os << "\t" << cases_names[j] << ": ";
+      os << "\t" << cases_names[j] << ":";
       getline(is, form);
+      std::wcout << L"|" << form << L"|" << L"\n";
       if (!form.empty()) {
         dict.add_form(word, form, genders[i], singular, cases[j], nn_tense, nn_person);
         ++c;

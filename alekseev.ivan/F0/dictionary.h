@@ -50,8 +50,8 @@ namespace alekseev {
     WordForm();
     explicit WordForm(std::wstring wordform, gender g = nn_gender, number n = nn_number,
         case_ c = nn_case, tense t = nn_tense, person p = nn_person);
-    WordForm(const Vector<std::wstring> & tags, pos p);
-    WordForm(wstr_cr wordform, pos p, const Vector<std::wstring> & tags);
+    WordForm(const Vector< std::wstring > & tags, pos p);
+    WordForm(wstr_cr wordform, pos p, const Vector< std::wstring > & tags);
     std::wstring word_;
     gender gender_;
     number number_;
@@ -62,8 +62,10 @@ namespace alekseev {
     bool operator==(const WordForm & rhs) const;
   };
 
+  bool matches(const WordForm & lhs, const WordForm & rhs);
   Vector< std::wstring > to_tags(const WordForm & wf);
   WordForm from_tags(const Vector< std::wstring > & tags, pos p);
+  Vector< std::wstring > to_words(const Vector< WordForm > & wfs);
   std::wstring to_wstring(const WordForm & wf);
   std::wostream & operator<<(std::wostream & os, const WordForm & wf);
 
@@ -136,11 +138,14 @@ namespace alekseev {
     Vector< WordForm > & forms_by_lemma(wstr_cr lemma);
     pos pos_of_lemma(wstr_cr lemma) const;
     Vector< pos > pos_of_form(wstr_cr wordform) const;
+    Vector< WordForm > filter_by_require(wstr_cr require, const Vector< WordForm > & forms) const;
 
     bool matches_case(wstr_cr wordform, case_ expected_case) const;
     bool matches_case(wstr_cr require, wstr_cr word) const;
     bool matches_person(wstr_cr wordform, person expected_person) const;
     bool matches_person(wstr_cr require, wstr_cr word) const;
+    bool matches_require(wstr_cr require, wstr_cr word) const;
+    bool matches_require(wstr_cr require, const WordForm & word) const;
 
     size_t size() const;
 
@@ -161,8 +166,8 @@ namespace alekseev {
   struct DictionaryManager
   {
     ~DictionaryManager() = default;
-    DictionaryManager(const DictionaryManager &) = default;
-    DictionaryManager & operator=(const DictionaryManager &) = default;
+    DictionaryManager(const DictionaryManager &) = delete;
+    DictionaryManager & operator=(const DictionaryManager &) = delete;
     DictionaryManager(DictionaryManager &&) noexcept = default;
     DictionaryManager & operator=(DictionaryManager &&) noexcept = default;
 
@@ -179,12 +184,17 @@ namespace alekseev {
     void delete_lemma(wstr_cr lemma, std::wistream & is, std::wostream & os);
 
     bool contains_form(wstr_cr wordform) const;
+    bool is_require(wstr_cr word) const;
     Vector< std::wstring > damerau_find_form(wstr_cr wordform, size_t distance = 2) const;
     Vector< std::wstring > damerau_find_lemma(wstr_cr wordform, size_t distance = 2) const;
+    Vector< std::wstring > find_by_require(wstr_cr require, wstr_cr wordform,
+        size_t distance = 2) const;
+
     bool matches_case(wstr_cr wordform, case_ expected_case) const;
     bool matches_case(wstr_cr require, wstr_cr word) const;
     bool matches_person(wstr_cr wordform, person expected_person) const;
     bool matches_person(wstr_cr require, wstr_cr word) const;
+    bool matches_require(wstr_cr require, wstr_cr word) const;
 
     Dictionary & current();
     const Dictionary & current() const;
