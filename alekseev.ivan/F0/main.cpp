@@ -7,15 +7,6 @@
 #include "cuckoo_hash.h"
 
 namespace alekseev {
-  struct parameters_t
-  {
-    Vector< std::wstring > & args_;
-    std::wistream & is_;
-    std::wostream & os_;
-    DictionaryManager & dicts_;
-    TextManager & texts_;
-  };
-
   struct Exec
   {
     Exec(std::wistream & is, std::wostream & os);
@@ -35,22 +26,22 @@ namespace alekseev {
       std::wistream & is_;
       std::wostream & os_;
 
-      void load_txt(Vector< std::wstring > & args_);
-      void save_txt(Vector< std::wstring > & args_);
-      void unload_txt(Vector< std::wstring > & args_);
-      void parse(Vector< std::wstring > & args_);
-      void correct(Vector< std::wstring > & args_);
-      void process(Vector< std::wstring > & args_);
+      void load_txt(Vector< std::wstring > & args);
+      void save_txt(Vector< std::wstring > & args);
+      void unload_txt(Vector< std::wstring > & args);
+      void parse(Vector< std::wstring > & args);
+      void correct(Vector< std::wstring > & args);
+      void process(Vector< std::wstring > & args);
 
-      void new_(Vector< std::wstring > & args_);
-      void load_dict(Vector< std::wstring > & args_);
-      void save_dict(Vector< std::wstring > & args_);
-      void unload_dict(Vector< std::wstring > & args_);
-      void current(Vector< std::wstring > & args_);
-      void add_word(Vector< std::wstring > & args_);
-      void update_form(Vector< std::wstring > & args_);
-      void delete_lemma(Vector< std::wstring > & args_);
-      void delete_form(Vector< std::wstring > & args_);
+      void new_(Vector< std::wstring > & args);
+      void load_dict(Vector< std::wstring > & args);
+      void save_dict(Vector< std::wstring > & args);
+      void unload_dict(Vector< std::wstring > & args);
+      void current(Vector< std::wstring > & args);
+      void add_word(Vector< std::wstring > & args);
+      void update_form(Vector< std::wstring > & args);
+      void delete_lemma(Vector< std::wstring > & args);
+      void delete_form(Vector< std::wstring > & args);
   };
 }
 
@@ -118,9 +109,101 @@ void alekseev::Exec::operator()(wstr_cr line)
     throw std::invalid_argument("Empty input!");
   }
   if (!functions_.contains(words[0])) {
-    throw std::invalid_argument("Bad command!");
+    throw std::invalid_argument("Bad command name!");
   }
   Vector< std::wstring > args = words;
   args.erase(0);
   functions_.at(words[0])(args);
+}
+
+void alekseev::Exec::load_txt(Vector< std::wstring > & args)
+{
+  if (args.getSize() != 2) {
+    throw std::invalid_argument("Bad arguments number!");
+  }
+  os_ << L"Loading text \"" << args[0] << "\" from " << args[1] << L"\n";
+  texts_.load(args[1], args[0]);
+  os_ << args[0] << L" successfully loaded\n";
+}
+
+void alekseev::Exec::save_txt(Vector< std::wstring > & args)
+{
+  if (args.getSize() == 1) {
+    os_ << texts_.save(args[0]) << L" successfully saved\n";
+  } else if (args.getSize() == 2) {
+    os_ << texts_.save(args[1], args[0]) << L" successfully saved\n";
+  } else {
+    throw std::invalid_argument("Bad arguments number!");
+  }
+}
+
+void alekseev::Exec::unload_txt(Vector< std::wstring > & args)
+{
+  if (args.getSize() == 1) {
+    if (!texts_.is_saved(args[0])) {
+      wchar_t need_save = ask_yes_no(L"Do you want to save text before unloading?", is_, os_);
+      if (need_save == 'y') {
+        os_ << "Enter file name for saving: ";
+        std::wstring file_name;
+        std::getline(is_, file_name);
+        os_ << L"Saving " << args[0] << L" to " << file_name << L"\n";
+        texts_.save(file_name, args[0]);
+        os_ << args[0] << L" successfully saved\n";
+      }
+    }
+    texts_.unload(args[0]);
+    os_ << args[0] << L" unloaded\n";
+  } else {
+    throw std::invalid_argument("Bad arguments number!");
+  }
+}
+
+void alekseev::Exec::parse(Vector< std::wstring > & args)
+{
+  if (args.isEmpty()) {
+    os_ << L"Parsing...\n";
+    os_ << texts_.parse() << L" successfully parsed";
+  } else if (args.getSize() == 1) {
+    os_ << L"Parsing...\n";
+    os_ << texts_.parse(args[0]) << L" successfully parsed";
+  } else {
+    throw std::invalid_argument("Bad arguments number!");
+  }
+}
+
+void alekseev::Exec::correct(Vector< std::wstring > & args)
+{
+  if (args.isEmpty()) {
+    texts_.correct(is_, os_);
+  } else if (args.getSize() == 1) {
+    texts_.correct(is_, os_, args[0]);
+  } else {
+    throw std::invalid_argument("Bad arguments number!");
+  }
+}
+
+void alekseev::Exec::process(Vector< std::wstring > & args)
+{
+  if (args.getSize() != 1) {
+    throw std::invalid_argument("Bad arguments number!");
+  }
+  std::wstring temp_name = L"__temporary_text_name_for_process__";
+  while (texts_.contains(temp_name)) {
+    temp_name += L"_";
+  }
+  texts_.load(args[0], temp_name);
+  os_ << L"Text loaded\nParsing...\n";
+  try {
+    texts_.parse(temp_name);
+    os_ << L"Text parsed\n";
+    texts_.correct(is_, os_, temp_name);
+    os_ << L"Saving...\n";
+    texts_.save(args[0], temp_name);
+    os_ << L"Saved\n";
+    texts_.unload(temp_name);
+    os_ << L"Unloaded\n";
+    os_ << args[0] << L" processed successfully!\n";
+  } catch (...) {
+    texts_.unload(temp_name);
+  }
 }

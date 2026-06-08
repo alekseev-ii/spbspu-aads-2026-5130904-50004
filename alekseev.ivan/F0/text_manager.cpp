@@ -4,7 +4,7 @@
 
 alekseev::text_t alekseev::from_wstring(wstr_cr orig_text)
 {
-  text_t res{{}, {}, {}, {}};
+  text_t res{{}, {}, {}, {}, false};
   res.original = split(orig_text, L' ');
   res.punctuations = Vector< std::wstring >(res.original.getSize(), {});
   for (size_t i = 0; i < res.original.getSize(); ++i) {
@@ -59,8 +59,7 @@ void alekseev::TextManager::load(wstr_cr file_name, wstr_cr text_name)
       }
       if (line.size() > 2) {
         if (static_cast< unsigned char >(line[0]) == 0xEF && static_cast< unsigned char >(line[1])
-          ==
-          0xBB && static_cast< unsigned char >(line[2]) == 0xBF) {
+          == 0xBB && static_cast< unsigned char >(line[2]) == 0xBF) {
           line = line.substr(3);
           if (line.empty()) {
             continue;
@@ -74,14 +73,16 @@ void alekseev::TextManager::load(wstr_cr file_name, wstr_cr text_name)
     throw;
   }
   f.close();
-  texts_.insert(text_name, from_wstring(text));
+  text_t t = from_wstring(text);
+  t.saved = true;
+  texts_.insert(text_name, t);
   last_loaded_ = text_name;
 }
 
-void alekseev::TextManager::parse(wstr_cr name)
+alekseev::wstr_cr alekseev::TextManager::parse(wstr_cr name)
 {
   if (name.empty() && last_loaded_.empty()) {
-    throw std::invalid_argument("No text loaded!");
+    throw std::invalid_argument("Bad text name for parse!!");
   }
   text_t & for_correct = !name.empty() ? texts_.at(name) : texts_.at(last_loaded_);
   std::wstring last_req;
@@ -97,6 +98,7 @@ void alekseev::TextManager::parse(wstr_cr name)
           Vector< std::wstring > corrections = dict_.find_by_require(last_req, word, max_variants_,
               distance_);
           for_correct.errors.push(std::make_pair(i, corrections));
+          for_correct.saved = false;
         }
       }
       was_require = false;
@@ -108,14 +110,20 @@ void alekseev::TextManager::parse(wstr_cr name)
         corrections = dict_.damerau_find_form(word, max_variants_, distance_);
       }
       for_correct.errors.push(std::make_pair(i, corrections));
+      for_correct.saved = false;
       was_require = false;
     }
   }
   last_parsed_ = !name.empty() ? name : last_loaded_;
+  return last_parsed_;
 }
 
-void alekseev::TextManager::correct(std::wistream & is, std::wostream & os, wstr_cr name)
+alekseev::wstr_cr alekseev::TextManager::correct(std::wistream & is, std::wostream & os,
+    wstr_cr name)
 {
+  if (name.empty() && last_parsed_.empty()) {
+    throw std::invalid_argument("Bad text name for correct!");
+  }
   text_t & for_correct = !name.empty() ? texts_.at(name) : texts_.at(last_parsed_);
   if (for_correct.errors.empty()) {
     throw std::invalid_argument("Text not parsed!");
@@ -141,53 +149,65 @@ void alekseev::TextManager::correct(std::wistream & is, std::wostream & os, wstr
       corrected[i] = err.second[ans];
     }
     for_correct.errors.pop();
+    for_correct.saved = false;
   }
   last_corrected_ = name;
+  return last_corrected_;
 }
 
-void alekseev::TextManager::save(wstr_cr file_name, wstr_cr text_name)
+alekseev::wstr_cr alekseev::TextManager::save(wstr_cr file_name, wstr_cr text_name)
 {
-  std::wstring name;
-  if (!text_name.empty()) {
-    name = text_name;
-  } else if (!last_corrected_.empty()) {
-    name = last_corrected_;
-  } else if (!last_loaded_.empty()) {
-    name = last_loaded_;
-  } else {
-    throw std::invalid_argument("Do not know what to save!");
+  if (text_name.empty() && last_corrected_.empty()) {
+    throw std::invalid_argument("Bad text name for save!");
   }
-  text_t & text = texts_.at(name);
+  text_t & for_save = text_name.empty() ? texts_.at(last_corrected_) : texts_.at(text_name);
   std::ofstream f(file_name.data(), std::ios::binary);
   if (!f.is_open()) {
     throw std::invalid_argument("Can not open file!");
   }
   try {
-    f << wstring_to_utf8(to_wstring(text, 0, 0, !text.errors.empty()));
+    f << wstring_to_utf8(to_wstring(for_save, 0, 0, !for_save.errors.empty()));
+    if (f.good()) {
+      for_save.saved = true;
+    }
   } catch (...) {
     f.close();
     throw;
   }
   f.close();
+  last_saved_ = text_name.empty() ? last_corrected_ : text_name;
+  return last_saved_;
 }
 
-void alekseev::TextManager::unload(wstr_cr name)
+void alekseev::TextManager::unload(wstr_cr name) noexcept
 {
-  if (name.empty() && last_saved_.empty()) {
-    throw std::invalid_argument("Dont know what to unload!");
+  if (name.empty()) {
+    return;
   }
-  std::wstring to_unload = name.empty() ? last_loaded_ : name;
+  if (!contains(name)) {
+    return;
+  }
   texts_.remove(name);
-  if (last_loaded_ == to_unload) {
+  if (last_loaded_ == name) {
     last_loaded_.clear();
   }
-  if (last_parsed_ == to_unload) {
+  if (last_parsed_ == name) {
     last_parsed_.clear();
   }
-  if (last_corrected_ == to_unload) {
+  if (last_corrected_ == name) {
     last_corrected_.clear();
   }
-  if (last_saved_ == to_unload) {
+  if (last_saved_ == name) {
     last_saved_.clear();
   }
+}
+
+bool alekseev::TextManager::contains(wstr_cr text_name) const noexcept
+{
+  return texts_.contains(text_name);
+}
+
+bool alekseev::TextManager::is_saved(wstr_cr name) const
+{
+  return texts_.at(name).saved;
 }

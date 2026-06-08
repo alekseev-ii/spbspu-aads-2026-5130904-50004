@@ -23,7 +23,7 @@ namespace alekseev {
     template< class Forward_Key, class Forward_Value >
     void insert(Forward_Key && k, Forward_Value && v);
     template< class Forward_Key >
-    void remove(Forward_Key && k);
+    void remove(Forward_Key && k) noexcept;
     template< class Forward_Key >
     Value & at(Forward_Key && k);
     template< class Forward_Key >
@@ -226,7 +226,7 @@ namespace alekseev {
 
   template< class Key, class Value, class Hash1, class Hash2, class Equal >
   template< class Forward_Key >
-  void CuckooHash< Key, Value, Hash1, Hash2, Equal >::remove(Forward_Key && k)
+  void CuckooHash< Key, Value, Hash1, Hash2, Equal >::remove(Forward_Key && k) noexcept
   {
     size_t pos1 = hasher1_(std::forward< Forward_Key >(k)) % capacity();
     if (table1_[pos1] != nullptr) {

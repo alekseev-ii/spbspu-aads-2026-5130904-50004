@@ -15,11 +15,13 @@ namespace alekseev {
     Vector< std::wstring > corrected;
     Vector< std::wstring > punctuations;
     Queue< std::pair< size_t, Vector< std::wstring > > > errors;
+    bool saved = false;
   };
 
   using wstr_cr = const std::wstring &;
   text_t from_wstring(wstr_cr orig_text);
-  std::wstring to_wstring(const text_t & orig_text, size_t start = 0, size_t end = 0, bool corrected = true);
+  std::wstring to_wstring(const text_t & orig_text, size_t start = 0, size_t end = 0,
+      bool corrected = true);
 
   struct TextManager
   {
@@ -31,10 +33,13 @@ namespace alekseev {
     TextManager & operator=(TextManager &&) noexcept = delete;
 
     void load(wstr_cr file_name, wstr_cr text_name);
-    void parse(wstr_cr name = L"");
-    void correct(std::wistream & is, std::wostream & os, wstr_cr name = L"");
-    void save(wstr_cr file_name, wstr_cr text_name = L"");
-    void unload(wstr_cr name = L"");
+    wstr_cr parse(wstr_cr name = L"");
+    wstr_cr correct(std::wistream & is, std::wostream & os, wstr_cr name = L"");
+    wstr_cr save(wstr_cr file_name, wstr_cr text_name = L"");
+    void unload(wstr_cr name) noexcept;
+
+    bool contains(wstr_cr text_name) const noexcept;
+    bool is_saved(wstr_cr name) const;
 
     private:
       CuckooHash< std::wstring, text_t, size_t (*)(wstr_cr), size_t (*)(wstr_cr), bool(*)(wstr_cr,
