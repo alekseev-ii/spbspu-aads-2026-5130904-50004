@@ -40,7 +40,8 @@ std::wstring alekseev::to_wstring(const text_t & orig_text, size_t start, size_t
 alekseev::TextManager::TextManager(DictionaryManager & dict):
   texts_(djb2_hash, poly_hash, equal, 32),
   dict_(dict),
-  max_variants_(4)
+  max_variants_(4),
+  distance_(2)
 { }
 
 void alekseev::TextManager::read(wstr_cr file_name, wstr_cr text_name)
@@ -74,13 +75,15 @@ void alekseev::TextManager::parse(wstr_cr name)
     } else if (dict_.contains_form(word)) {
       if (was_require) {
         if (!dict_.matches_require(last_req, word)) {
-          Vector< std::wstring > corrections = dict_.find_by_require(last_req, word);
+          Vector< std::wstring > corrections = dict_.find_by_require(last_req, word, max_variants_,
+              distance_);
           for_correct.errors.push(std::make_pair(i, corrections));
         }
       }
       was_require = false;
     } else {
-      for_correct.errors.push(std::make_pair(i, dict_.damerau_find_form(word)));
+      for_correct.errors.push(std::make_pair(i,
+          dict_.damerau_find_form(word, max_variants_, distance_)));
       was_require = false;
     }
   }
@@ -103,8 +106,9 @@ void alekseev::TextManager::correct(std::wistream & is, std::wostream & os, wstr
     size_t end = s - i > 5 ? i + 5 : s;
     os << to_wstring(for_correct, start, i, false) << L"[!]" << for_correct.original[i];
     os << L"[!]" << to_wstring(for_correct, i + 1, end, false) << L"\n";
-    size_t ans = choose(err.second, is, os, max_variants_, L"Choose correction:", L"Your variant...");
-    if (ans == max_variants_ + 1) {
+    size_t ans = choose(err.second, is, os, max_variants_, L"Choose correction:",
+        L"Your variant...");
+    if (ans == max_variants_) {
       os << "Enter your variant: ";
       std::wstring word;
       std::getline(is, word);

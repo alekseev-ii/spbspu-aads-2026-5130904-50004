@@ -149,10 +149,14 @@ namespace alekseev {
 
     size_t size() const;
 
-    Vector< WordForm > damerau_find_wfs(wstr_cr bad_word, size_t distance = 2) const;
-    Vector< std::wstring > damerau_find_form(wstr_cr bad_form, size_t distance = 2) const;
-    Vector< std::wstring > damerau_find_lemma(wstr_cr bad_lemma, size_t distance = 2) const;
-    Vector< std::wstring > damerau_find_require(wstr_cr bad_req, size_t distance = 2) const;
+    Vector< WordForm > damerau_find_wfs(wstr_cr bad_word, size_t max_number = 0,
+        size_t distance = 2) const;
+    Vector< std::wstring > damerau_find_form(wstr_cr bad_form, size_t max_number = 0,
+        size_t distance = 2) const;
+    Vector< std::wstring > damerau_find_lemma(wstr_cr bad_lemma, size_t max_number = 0,
+        size_t distance = 2) const;
+    Vector< std::wstring > damerau_find_require(wstr_cr bad_req, size_t max_number = 0,
+        size_t distance = 2) const;
 
     private:
       CuckooHash< std::wstring, Lemma, size_t (*)(wstr_cr), size_t (*)(wstr_cr), bool(*)(wstr_cr,
@@ -185,9 +189,11 @@ namespace alekseev {
 
     bool contains_form(wstr_cr wordform) const;
     bool is_require(wstr_cr word) const;
-    Vector< std::wstring > damerau_find_form(wstr_cr wordform, size_t distance = 2) const;
-    Vector< std::wstring > damerau_find_lemma(wstr_cr wordform, size_t distance = 2) const;
-    Vector< std::wstring > find_by_require(wstr_cr require, wstr_cr wordform,
+    Vector< std::wstring > damerau_find_form(wstr_cr wordform, size_t max_number = 0,
+        size_t distance = 2) const;
+    Vector< std::wstring > damerau_find_lemma(wstr_cr wordform, size_t max_number = 0,
+        size_t distance = 2) const;
+    Vector< std::wstring > find_by_require(wstr_cr require, wstr_cr wordform, size_t max_number = 0,
         size_t distance = 2) const;
 
     bool matches_case(wstr_cr wordform, case_ expected_case) const;
@@ -209,7 +215,7 @@ namespace alekseev {
       void add_noun(wstr_cr word, std::wistream & is, std::wostream & os);
       void add_req(wstr_cr word, std::wistream & is, std::wostream & os);
       std::pair< std::wstring, size_t > choose_wordform(wstr_cr word, std::wistream & is,
-          std::wostream & os) const;
+          std::wostream & os, size_t max_opts = 0, size_t distance = 1) const;
   };
 }
 

@@ -43,6 +43,7 @@ namespace alekseev {
       std::wstring last_corrected_;
       DictionaryManager & dict_;
       size_t max_variants_;
+      size_t distance_;
   };
 }
 

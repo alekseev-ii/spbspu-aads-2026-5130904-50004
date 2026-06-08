@@ -49,7 +49,7 @@ namespace alekseev {
 
   size_t damerau_levenshtein(wstr_cr a, wstr_cr b);
   Vector< std::wstring > damerau_find(wstr_cr bad_word, const Vector< std::wstring > & candidates,
-      size_t distance = 2);
+      size_t max_number = 0, size_t distance = 2);
 
   template< class Cond >
   std::wstring trim(wstr_cr str, Cond condition)

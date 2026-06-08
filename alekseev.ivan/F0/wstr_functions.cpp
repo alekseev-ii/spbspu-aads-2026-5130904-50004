@@ -74,11 +74,12 @@ std::string alekseev::wstring_to_utf8(wstr_cr wstr)
   if (wstr.empty()) {
     return {};
   }
-  size_t size_needed = WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), static_cast< int >(wstr.size()),
-                                  nullptr, 0, nullptr, nullptr);
+  size_t size_needed = WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(),
+      static_cast< int >(wstr.size()),
+      nullptr, 0, nullptr, nullptr);
   std::string result(size_needed, 0);
   WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), static_cast< int >(wstr.size()),
-                      &result[0], size_needed, nullptr, nullptr);
+      &result[0], size_needed, nullptr, nullptr);
   return result;
 }
 
@@ -294,10 +295,11 @@ size_t alekseev::damerau_levenshtein(wstr_cr a, wstr_cr b)
 }
 
 alekseev::Vector< std::wstring > alekseev::damerau_find(wstr_cr bad_word,
-    const Vector< std::wstring > & candidates, size_t distance)
+    const Vector< std::wstring > & candidates, size_t max_number, size_t distance)
 {
   Vector< std::wstring > res;
-  for (size_t i = 0; i < candidates.getSize(); ++i) {
+  size_t m = max_number == 0 ? candidates.getSize() : max_number;
+  for (size_t i = 0; i < candidates.getSize() && res.getSize() < m; ++i) {
     if (candidates[i].size() - bad_word.size() <= distance) {
       if (damerau_levenshtein(candidates[i], bad_word) <= distance) {
         res.pushBack(candidates[i]);

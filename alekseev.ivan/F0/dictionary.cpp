@@ -771,14 +771,15 @@ size_t alekseev::Dictionary::size() const
 }
 
 alekseev::Vector< alekseev::WordForm > alekseev::Dictionary::damerau_find_wfs(wstr_cr bad_word,
-    size_t distance) const
+    size_t max_number, size_t distance) const
 {
   if (forms_.contains(bad_word)) {
     return get_homoforms(bad_word);
   }
   Vector< WordForm > res;
   Vector< std::wstring > wfs = forms_.keys();
-  for (size_t i = 0; i < wfs.getSize(); ++i) {
+  size_t m = max_number == 0 ? wfs.getSize() : max_number;
+  for (size_t i = 0; i < wfs.getSize() && res.getSize() < max_number; ++i) {
     if (wfs[i].size() - bad_word.size() <= distance) {
       if (damerau_levenshtein(wfs[i], bad_word) <= distance) {
         Vector< WordForm > found = get_homoforms(wfs[i]);
@@ -786,34 +787,37 @@ alekseev::Vector< alekseev::WordForm > alekseev::Dictionary::damerau_find_wfs(ws
       }
     }
   }
+  while (res.getSize() > m) {
+    res.popBack();
+  }
   return res;
 }
 
 alekseev::Vector< std::wstring > alekseev::Dictionary::damerau_find_form(wstr_cr bad_form,
-    size_t distance) const
+    size_t max_number, size_t distance) const
 {
   if (forms_.contains(bad_form)) {
     return {1, bad_form};
   }
-  return damerau_find(bad_form, forms_.keys(), distance);
+  return damerau_find(bad_form, forms_.keys(), max_number, distance);
 }
 
 alekseev::Vector< std::wstring > alekseev::Dictionary::damerau_find_lemma(wstr_cr bad_lemma,
-    size_t distance) const
+    size_t max_number, size_t distance) const
 {
   if (lemmas_.contains(bad_lemma)) {
     return {1, bad_lemma};
   }
-  return damerau_find(bad_lemma, lemmas_.keys(), distance);
+  return damerau_find(bad_lemma, lemmas_.keys(), max_number, distance);
 }
 
 alekseev::Vector< std::wstring > alekseev::Dictionary::damerau_find_require(wstr_cr bad_req,
-    size_t distance) const
+    size_t max_number, size_t distance) const
 {
   if (requires_.contains(bad_req)) {
     return {1, bad_req};
   }
-  return damerau_find(bad_req, requires_.keys(), distance);
+  return damerau_find(bad_req, requires_.keys(), max_number, distance);
 }
 
 alekseev::DictionaryManager::DictionaryManager():
@@ -931,8 +935,8 @@ void alekseev::DictionaryManager::update_word(std::wstring word, std::wistream &
     std::wstring q = L"\"" + word + L"\" not found. Do you want to use with fuzzy search?";
     ans = ask_yes_no(q, is, os);
     if (ans == L'y') {
-      Vector< std::wstring > opts = dict.damerau_find_lemma(word, 1) + dict.
-          damerau_find_require(word, 1);
+      Vector< std::wstring > opts = dict.damerau_find_lemma(word, 5, 1);
+      opts += dict.damerau_find_require(word, 5 - opts.getSize(), 1);
       size_t ind = choose(opts, is, os, 5, L"What lemma do you want to update?");
       if (ind == opts.getSize()) {
         return;
@@ -1014,8 +1018,8 @@ void alekseev::DictionaryManager::delete_lemma(wstr_cr lemma, std::wistream & is
     os << L"Lemma \"" << lemma << "\" not found in current dictionary\n";
     wchar_t ans = ask_yes_no(L"Do you want to search using fuzzy search?", is, os);
     if (ans == 'y') {
-      Vector< std::wstring > opts = dict.damerau_find_lemma(lemma, 1) + dict.
-          damerau_find_require(lemma);
+      Vector< std::wstring > opts = dict.damerau_find_lemma(lemma, 5, 1);
+      opts += dict.damerau_find_require(lemma, 5 - opts.getSize(), 1);
       size_t ind = choose(opts, is, os, 5, L"What lemma you want to delete?");
       if (ind == opts.getSize()) {
         return;
@@ -1050,41 +1054,50 @@ bool alekseev::DictionaryManager::is_require(wstr_cr word) const
 }
 
 alekseev::Vector< std::wstring > alekseev::DictionaryManager::damerau_find_form(wstr_cr wordform,
-    size_t distance) const
+    size_t max_number, size_t distance) const
 {
   Vector< std::wstring > names = dicts_.keys();
-  Vector< std::wstring > result{};
-  for (size_t i = 0; i < names.getSize(); ++i) {
-    result += dicts_.at(names[i]).damerau_find_form(wordform, distance);
+  Vector< std::wstring > res;
+  for (size_t i = 0; i < names.getSize() && (res.getSize() < max_number || max_number == 0); ++i) {
+    res += dicts_.at(names[i]).damerau_find_form(wordform, max_number, distance);
   }
-  return result;
+  while (res.getSize() > max_number && max_number != 0) {
+    res.popBack();
+  }
+  return res;
 }
 
 alekseev::Vector< std::wstring > alekseev::DictionaryManager::damerau_find_lemma(wstr_cr wordform,
-    size_t distance) const
+    size_t max_number, size_t distance) const
 {
   Vector< std::wstring > names = dicts_.keys();
-  Vector< std::wstring > result{};
-  for (size_t i = 0; i < names.getSize(); ++i) {
-    result += dicts_.at(names[i]).damerau_find_lemma(wordform, distance);
+  Vector< std::wstring > res;
+  for (size_t i = 0; i < names.getSize() && (res.getSize() < max_number || max_number == 0); ++i) {
+    res += dicts_.at(names[i]).damerau_find_lemma(wordform, max_number, distance);
   }
-  return result;
+  while (res.getSize() > max_number && max_number != 0) {
+    res.popBack();
+  }
+  return res;
 }
 
 alekseev::Vector< std::wstring > alekseev::DictionaryManager::find_by_require(wstr_cr require,
-    wstr_cr wordform, size_t distance) const
+    wstr_cr wordform, size_t max_number, size_t distance) const
 {
   Vector< std::wstring > names = dicts_.keys();
-  Vector< std::wstring > result;
-  for (size_t i = 0; i < names.getSize(); ++i) {
+  Vector< std::wstring > res;
+  for (size_t i = 0; i < names.getSize() && (res.getSize() < max_number || max_number == 0); ++i) {
     Dictionary dict = dicts_.at(names[i]);
-    result += to_words(
+    res += to_words(
         dict.filter_by_require(require,
-            dict.damerau_find_wfs(wordform, distance)
+            dict.damerau_find_wfs(wordform, 0, distance)
             )
         );
   }
-  return result;
+  while (res.getSize() > max_number && max_number != 0) {
+    res.popBack();
+  }
+  return res;
 }
 
 bool alekseev::DictionaryManager::matches_case(wstr_cr wordform, case_ expected_case) const
@@ -1344,7 +1357,7 @@ void alekseev::DictionaryManager::add_req(wstr_cr word, std::wistream & is, std:
 }
 
 std::pair< std::wstring, size_t > alekseev::DictionaryManager::choose_wordform(wstr_cr word,
-    std::wistream & is, std::wostream & os) const
+    std::wistream & is, std::wostream & os, size_t max_opts, size_t distance) const
 {
   const Dictionary & dict = current();
   Vector< WordForm > wfs;
@@ -1357,20 +1370,23 @@ std::pair< std::wstring, size_t > alekseev::DictionaryManager::choose_wordform(w
     os << L"Form " << word << " not found\n";
     wchar_t need_find = ask_yes_no(L"Do you want to search using fuzzy search?", is, os);
     if (need_find == L'y') {
-      wfs = dict.damerau_find_wfs(word, 1);
-      Vector< std::wstring > reqs = dict.damerau_find_require(word, 1);
-      for (size_t i = 0; i < reqs.getSize(); ++i) {
-        wfs += dict.get_lemma(reqs[i]).forms_;
+      wfs = dict.damerau_find_wfs(word, max_opts, distance);
+      size_t m = max_opts == 0 ? 0 : max_opts - wfs.getSize();
+      if (max_opts != wfs.getSize()) {
+        Vector< std::wstring > reqs = dict.damerau_find_require(word, m, distance);
+        for (size_t i = 0; i < reqs.getSize() && (wfs.getSize() < max_opts || max_opts == 0); ++i) {
+          wfs += dict.get_lemma(reqs[i]).forms_;
+        }
       }
       if (wfs.isEmpty()) {
         os << L"No word found\n";
-        return {{}, 0};
+        return std::make_pair< std::wstring, size_t >({}, 0);
       }
     }
   }
 
   if (!wfs.isEmpty()) {
-    size_t ind = choose(wfs, is, os, 0, L"Choose one form:");
+    size_t ind = choose(wfs, is, os, max_opts, L"Choose one form:");
     if (ind < wfs.getSize()) {
       return dict.lemma_pair_by_wordform(wfs[ind]);
     }
