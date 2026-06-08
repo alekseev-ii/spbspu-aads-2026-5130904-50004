@@ -55,7 +55,7 @@ void alekseev::TextManager::load(wstr_cr file_name, wstr_cr text_name)
     std::string line;
     while (std::getline(f, line)) {
       if (line.empty()) {
-        text += L"\n";
+        text += L"\n ";
       }
       if (line.size() > 2) {
         if (static_cast< unsigned char >(line[0]) == 0xEF && static_cast< unsigned char >(line[1])
@@ -66,7 +66,7 @@ void alekseev::TextManager::load(wstr_cr file_name, wstr_cr text_name)
           }
         }
       }
-      text += utf8_to_wstring(line) + L"\n";
+      text += utf8_to_wstring(line) + L"\n ";
     }
   } catch (...) {
     f.close();
@@ -82,7 +82,7 @@ void alekseev::TextManager::load(wstr_cr file_name, wstr_cr text_name)
 alekseev::wstr_cr alekseev::TextManager::parse(wstr_cr name)
 {
   if (name.empty() && last_loaded_.empty()) {
-    throw std::invalid_argument("Bad text name for parse!!");
+    throw std::invalid_argument("Bad text name for parse!");
   }
   text_t & for_correct = !name.empty() ? texts_.at(name) : texts_.at(last_loaded_);
   std::wstring last_req;
@@ -140,7 +140,7 @@ alekseev::wstr_cr alekseev::TextManager::correct(std::wistream & is, std::wostre
     os << L"[!]" << to_wstring(for_correct, i + 1, end, false) << L"\n";
     size_t ans = choose(err.second, is, os, max_variants_, L"Choose correction:",
         L"Your variant...");
-    if (ans == max_variants_) {
+    if (ans == max_variants_ || ans == err.second.getSize()) {
       os << "Enter your variant: ";
       std::wstring word;
       std::getline(is, word);
@@ -151,6 +151,7 @@ alekseev::wstr_cr alekseev::TextManager::correct(std::wistream & is, std::wostre
     for_correct.errors.pop();
     for_correct.saved = false;
   }
+  for_correct.corrected = corrected;
   last_corrected_ = name;
   return last_corrected_;
 }

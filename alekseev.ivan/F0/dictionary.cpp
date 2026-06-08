@@ -783,8 +783,10 @@ alekseev::Vector< alekseev::WordForm > alekseev::Dictionary::damerau_find_wfs(ws
   Vector< WordForm > res;
   Vector< std::wstring > wfs = forms_.keys();
   size_t m = max_number == 0 ? wfs.getSize() : max_number;
+  long long int bad_word_size = bad_word.size();
   for (size_t i = 0; i < wfs.getSize() && res.getSize() < max_number; ++i) {
-    if (wfs[i].size() - bad_word.size() <= distance) {
+    long long int cur_size = wfs[i].size();
+    if (std::abs(bad_word_size - cur_size) <= distance) {
       if (damerau_levenshtein(wfs[i], bad_word) <= distance) {
         Vector< WordForm > found = get_homoforms(wfs[i]);
         res += found;
@@ -893,7 +895,6 @@ void alekseev::DictionaryManager::add_word(wstr_cr word, std::wistream & is, std
     ans = ask_yes_no(L"Is it a verb?", is, os);
   } else if (p == adj) {
     ans = ask_yes_no(L"Is it an adjective?", is, os);
-    std::wcout << ans << L"\n";
   } else if (p == noun) {
     ans = ask_yes_no(L"Is it a noun?", is, os);
   } else if (p == require) {
@@ -1111,7 +1112,7 @@ alekseev::Vector< std::wstring > alekseev::DictionaryManager::find_by_require(ws
   Vector< std::wstring > names = dicts_.keys();
   Vector< std::wstring > res;
   for (size_t i = 0; i < names.getSize() && (res.getSize() < max_number || max_number == 0); ++i) {
-    Dictionary dict = dicts_.at(names[i]);
+    const Dictionary & dict = dicts_.at(names[i]);
     res += to_words(
         dict.filter_by_require(require,
             dict.damerau_find_wfs(wordform, 0, distance)
@@ -1309,7 +1310,6 @@ void alekseev::DictionaryManager::add_adj(wstr_cr word, std::wistream & is, std:
     for (size_t j = 0; j < 6; j++) {
       os << "\t" << cases_names[j] << ":";
       getline(is, form);
-      std::wcout << L"|" << form << L"|" << L"\n";
       if (!form.empty()) {
         dict.add_form(word, form, genders[i], singular, cases[j], nn_tense, nn_person);
         ++c;
