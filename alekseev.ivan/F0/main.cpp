@@ -46,7 +46,24 @@ namespace alekseev {
 }
 
 int main()
-{ }
+{
+  alekseev::ConsoleSetup console_setup;
+  alekseev::Exec exec(std::wcin, std::wcout);
+
+  std::wstring line;
+  while (std::getline(std::wcin, line)) {
+    try {
+      exec(line);
+    } catch (std::invalid_argument & e) {
+      std::wcout << e.what() << L"\n";
+    } catch (std::out_of_range & e) {
+      std::wcout << e.what() << L"\n";
+    } catch (std::exception & e) {
+      std::wcout << e.what() << L"\n";
+      return 1;
+    }
+  }
+}
 
 alekseev::Exec::Exec(std::wistream & is, std::wostream & os):
   functions_(djb2_hash, poly_hash, equal, 32),
@@ -73,7 +90,7 @@ alekseev::Exec::Exec(std::wistream & is, std::wostream & os):
     process(args);
   });
 
-  functions_.insert(L"new_dict", [this](Vector< std::wstring > & args) {
+  functions_.insert(L"new", [this](Vector< std::wstring > & args) {
     new_(args);
   });
   functions_.insert(L"load_dict", [this](Vector< std::wstring > & args) {
