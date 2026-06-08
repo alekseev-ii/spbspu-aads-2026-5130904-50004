@@ -39,6 +39,36 @@ namespace alekseev {
     void clear() noexcept;
     void set_max_load_factor(double max_load_factor) noexcept;
 
+    struct KeyIterator
+    {
+      using iterator_category = std::forward_iterator_tag;
+      using value_type = Key;
+      using difference_type = std::ptrdiff_t;
+      using pointer = const Key *;
+      using reference = const Key &;
+
+      KeyIterator(std::pair< Key, Value > ** curr, std::pair< Key, Value > ** end1,
+          std::pair< Key, Value > ** start2, std::pair< Key, Value > ** end2);
+
+      reference operator*() const noexcept;
+      pointer operator->() const noexcept;
+      bool operator==(const KeyIterator & rhs) const noexcept;
+      bool operator!=(const KeyIterator & rhs) const noexcept;
+
+      KeyIterator & operator++();
+      KeyIterator operator++(int);
+      KeyIterator & operator--();
+      KeyIterator operator--(int);
+
+      private:
+        bool first_table;
+        size_t index;
+        std::pair< Key, Value > ** current_, ** end1_, ** start2_, ** end2_;
+
+        void next();
+        void prev();
+    };
+
     private:
       Vector< std::pair< Key, Value > * > table1_;
       Hash1 hasher1_;
