@@ -1,4 +1,5 @@
 #include <iostream>
+#include <functional>
 
 #include "dictionary.h"
 #include "wstr_functions.h"
@@ -15,26 +16,9 @@ namespace alekseev {
     TextManager & texts_;
   };
 
-  void load_txt(parameters_t & parameters);
-  void save_txt(parameters_t & parameters);
-  void unload_txt(parameters_t & parameters);
-  void parse(parameters_t & parameters);
-  void correct(parameters_t & parameters);
-  void process(parameters_t & parameters);
-
-  void new_(parameters_t & parameters);
-  void load_dict(parameters_t & parameters);
-  void save_dict(parameters_t & parameters);
-  void unload_dict(parameters_t & parameters);
-  void current(parameters_t & parameters);
-  void add_word(parameters_t & parameters);
-  void update_form(parameters_t & parameters);
-  void delete_lemma(parameters_t & parameters);
-  void delete_form(parameters_t & parameters);
-
   struct Exec
   {
-    Exec();
+    Exec(std::wistream & is, std::wostream & os);
     ~Exec() = default;
     Exec(const Exec &) = delete;
     Exec & operator=(const Exec &) = delete;
@@ -44,36 +28,87 @@ namespace alekseev {
     void operator()(wstr_cr line);
 
     private:
-      CuckooHash< std::wstring, void(*)(parameters_t &), size_t(*)(wstr_cr),
+      CuckooHash< std::wstring, std::function< void(Vector< std::wstring > &) >, size_t(*)(wstr_cr),
         size_t(*)(wstr_cr), bool(*)(wstr_cr, wstr_cr) > functions_;
       DictionaryManager dicts_;
       TextManager texts_;
+      std::wistream & is_;
+      std::wostream & os_;
+
+      void load_txt(Vector< std::wstring > & args_);
+      void save_txt(Vector< std::wstring > & args_);
+      void unload_txt(Vector< std::wstring > & args_);
+      void parse(Vector< std::wstring > & args_);
+      void correct(Vector< std::wstring > & args_);
+      void process(Vector< std::wstring > & args_);
+
+      void new_(Vector< std::wstring > & args_);
+      void load_dict(Vector< std::wstring > & args_);
+      void save_dict(Vector< std::wstring > & args_);
+      void unload_dict(Vector< std::wstring > & args_);
+      void current(Vector< std::wstring > & args_);
+      void add_word(Vector< std::wstring > & args_);
+      void update_form(Vector< std::wstring > & args_);
+      void delete_lemma(Vector< std::wstring > & args_);
+      void delete_form(Vector< std::wstring > & args_);
   };
 }
 
 int main()
 { }
 
-alekseev::Exec::Exec():
+alekseev::Exec::Exec(std::wistream & is, std::wostream & os):
   functions_(djb2_hash, poly_hash, equal, 32),
-  texts_(dicts_)
+  texts_(dicts_),
+  is_(is),
+  os_(os)
 {
-  functions_.insert(L"load_txt", std::addressof(load_txt));
-  functions_.insert(L"save_txt", std::addressof(save_txt));
-  functions_.insert(L"unload_txt", std::addressof(unload_txt));
-  functions_.insert(L"parse", std::addressof(parse));
-  functions_.insert(L"correct", std::addressof(correct));
-  functions_.insert(L"process", std::addressof(process));
+  functions_.insert(L"load_txt", [this](Vector< std::wstring > & args) {
+    load_txt(args);
+  });
+  functions_.insert(L"save_txt", [this](Vector< std::wstring > & args) {
+    save_txt(args);
+  });
+  functions_.insert(L"unload_txt", [this](Vector< std::wstring > & args) {
+    unload_txt(args);
+  });
+  functions_.insert(L"parse", [this](Vector< std::wstring > & args) {
+    parse(args);
+  });
+  functions_.insert(L"correct", [this](Vector< std::wstring > & args) {
+    correct(args);
+  });
+  functions_.insert(L"process", [this](Vector< std::wstring > & args) {
+    process(args);
+  });
 
-  functions_.insert(L"new_dict", std::addressof(new_));
-  functions_.insert(L"load_dict", std::addressof(load_dict));
-  functions_.insert(L"save_dict", std::addressof(save_dict));
-  functions_.insert(L"unload_dict", std::addressof(unload_dict));
-  functions_.insert(L"current_dict", std::addressof(current));
-  functions_.insert(L"add", std::addressof(add_word));
-  functions_.insert(L"update", std::addressof(update_form));
-  functions_.insert(L"delete_lemma", std::addressof(delete_lemma));
-  functions_.insert(L"delete_form", std::addressof(delete_form));
+  functions_.insert(L"new_dict", [this](Vector< std::wstring > & args) {
+    new_(args);
+  });
+  functions_.insert(L"load_dict", [this](Vector< std::wstring > & args) {
+    load_dict(args);
+  });
+  functions_.insert(L"save_dict", [this](Vector< std::wstring > & args) {
+    save_dict(args);
+  });
+  functions_.insert(L"unload_dict", [this](Vector< std::wstring > & args) {
+    unload_dict(args);
+  });
+  functions_.insert(L"current_dict", [this](Vector< std::wstring > & args) {
+    current(args);
+  });
+  functions_.insert(L"add", [this](Vector< std::wstring > & args) {
+    add_word(args);
+  });
+  functions_.insert(L"update", [this](Vector< std::wstring > & args) {
+    update_form(args);
+  });
+  functions_.insert(L"delete_lemma", [this](Vector< std::wstring > & args) {
+    delete_lemma(args);
+  });
+  functions_.insert(L"delete_form", [this](Vector< std::wstring > & args) {
+    delete_form(args);
+  });
 }
 
 void alekseev::Exec::operator()(wstr_cr line)
@@ -87,6 +122,5 @@ void alekseev::Exec::operator()(wstr_cr line)
   }
   Vector< std::wstring > args = words;
   args.erase(0);
-  parameters_t params{args, std::wcin, std::wcout, dicts_, texts_};
-  functions_.at(words[0])(params);
+  functions_.at(words[0])(args);
 }
