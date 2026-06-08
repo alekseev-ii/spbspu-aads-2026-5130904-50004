@@ -82,8 +82,13 @@ void alekseev::TextManager::parse(wstr_cr name)
       }
       was_require = false;
     } else {
-      for_correct.errors.push(std::make_pair(i,
-          dict_.damerau_find_form(word, max_variants_, distance_)));
+      Vector< std::wstring > corrections;
+      if (was_require) {
+        corrections = dict_.find_by_require(last_req, word, max_variants_, distance_);
+      } else {
+        corrections = dict_.damerau_find_form(word, max_variants_, distance_);
+      }
+      for_correct.errors.push(std::make_pair(i, corrections));
       was_require = false;
     }
   }

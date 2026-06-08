@@ -132,6 +132,7 @@ namespace alekseev {
     std::pair< std::wstring, size_t > & lemma_pair_by_wordform(const WordForm & wordform);
     const std::pair< std::wstring, size_t > & lemma_pair_by_wordform(
         const WordForm & wordform) const;
+    std::pair< std::wstring, size_t > req_pair_by_wordform(const WordForm & wordform) const;
     Vector< WordForm > get_homoforms(wstr_cr wordform) const;
     const Lemma & get_lemma(wstr_cr lemma) const;
     Vector< std::wstring > get_lemmas() const;

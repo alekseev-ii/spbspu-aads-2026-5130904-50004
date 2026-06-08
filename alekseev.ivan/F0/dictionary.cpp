@@ -592,14 +592,6 @@ std::pair< std::wstring, size_t > & alekseev::Dictionary::lemma_pair_by_wordform
 const std::pair< std::wstring, size_t > & alekseev::Dictionary::lemma_pair_by_wordform(
     const WordForm & wordform) const
 {
-  if (contains_require(wordform.word_)) {
-    const Vector< WordForm > & wfs = requires_.at(wordform.word_).forms_;
-    for (size_t i = 0; i < wfs.getSize(); ++i) {
-      if (wfs[i] == wordform) {
-        return std::make_pair(wordform.word_, i);
-      }
-    }
-  }
   const Vector< std::pair< std::wstring, size_t > > & wfs = find_homoforms(wordform.word_);
   for (size_t i = 0; i < wfs.getSize(); ++i) {
     const Lemma & l = lemmas_.at(wfs[i].first);
@@ -608,6 +600,18 @@ const std::pair< std::wstring, size_t > & alekseev::Dictionary::lemma_pair_by_wo
     }
   }
   throw std::out_of_range("Wordform not found");
+}
+
+std::pair< std::wstring, size_t > alekseev::Dictionary::req_pair_by_wordform(
+    const WordForm & wordform) const
+{
+  const Vector< WordForm > & wfs = requires_.at(wordform.word_).forms_;
+  for (size_t i = 0; i < wfs.getSize(); ++i) {
+    if (wfs[i] == wordform) {
+      return std::make_pair(wordform.word_, i);
+    }
+  }
+  throw std::out_of_range("Require not found");
 }
 
 alekseev::Vector< alekseev::WordForm > alekseev::Dictionary::get_homoforms(wstr_cr wordform) const
@@ -1388,6 +1392,9 @@ std::pair< std::wstring, size_t > alekseev::DictionaryManager::choose_wordform(w
   if (!wfs.isEmpty()) {
     size_t ind = choose(wfs, is, os, max_opts, L"Choose one form:");
     if (ind < wfs.getSize()) {
+      if (dict.contains_require(wfs[ind].word_)) {
+        return dict.req_pair_by_wordform(wfs[ind]);
+      }
       return dict.lemma_pair_by_wordform(wfs[ind]);
     }
   }
