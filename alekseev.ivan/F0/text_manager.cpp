@@ -211,3 +211,13 @@ bool alekseev::TextManager::is_saved(wstr_cr name) const
 {
   return texts_.at(name).saved;
 }
+
+void alekseev::TextManager::set_max_variants(size_t max_variants)
+{
+  max_variants_ = max_variants;
+}
+
+void alekseev::TextManager::set_default_distance(size_t distance)
+{
+  distance_ = distance;
+}

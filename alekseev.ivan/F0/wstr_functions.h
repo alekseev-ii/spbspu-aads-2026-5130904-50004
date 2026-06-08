@@ -106,7 +106,7 @@ namespace alekseev {
     wchar_t * end_ptr = nullptr;
     while (std::getline(is, answer)) {
       size_t ind = wcstoull(answer.c_str(), std::addressof(end_ptr), 10);
-      if (!(*end_ptr == L'\0')) {
+      if (*end_ptr != L'\0') {
         throw std::invalid_argument("Bad input");
       }
       if (0 < ind && ind <= n_opts + 1) {

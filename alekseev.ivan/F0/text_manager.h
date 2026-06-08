@@ -40,6 +40,8 @@ namespace alekseev {
 
     bool contains(wstr_cr text_name) const noexcept;
     bool is_saved(wstr_cr name) const;
+    void set_max_variants(size_t max_variants);
+    void set_default_distance(size_t distance);
 
     private:
       CuckooHash< std::wstring, text_t, size_t (*)(wstr_cr), size_t (*)(wstr_cr), bool(*)(wstr_cr,

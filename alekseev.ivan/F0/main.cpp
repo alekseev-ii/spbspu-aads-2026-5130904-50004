@@ -42,6 +42,11 @@ namespace alekseev {
       void update_form(Vector< std::wstring > & args);
       void delete_lemma(Vector< std::wstring > & args);
       void delete_form(Vector< std::wstring > & args);
+
+      void max_variants_txt(Vector< std::wstring > & args);
+      void distance_of_find_txt(Vector< std::wstring > & args);
+      void max_variants_dict(Vector< std::wstring > & args);
+      void distance_of_find_dict(Vector< std::wstring > & args);
   };
 }
 
@@ -116,6 +121,19 @@ alekseev::Exec::Exec(std::wistream & is, std::wostream & os):
   });
   functions_.insert(L"delete_form", [this](Vector< std::wstring > & args) {
     delete_form(args);
+  });
+
+  functions_.insert(L"max_variants_txt", [this](Vector< std::wstring > & args) {
+    max_variants_txt(args);
+  });
+  functions_.insert(L"distance_of_find_txt", [this](Vector< std::wstring > & args) {
+    distance_of_find_txt(args);
+  });
+  functions_.insert(L"max_variants_dict", [this](Vector< std::wstring > & args) {
+    max_variants_dict(args);
+  });
+  functions_.insert(L"distance_of_find_dict", [this](Vector< std::wstring > & args) {
+    distance_of_find_dict(args);
   });
 }
 
@@ -301,4 +319,56 @@ void alekseev::Exec::delete_form(Vector< std::wstring > & args)
     throw std::invalid_argument("Bad arguments number!");
   }
   dicts_.delete_form(args[0], is_, os_);
+}
+
+void alekseev::Exec::max_variants_txt(Vector< std::wstring > & args)
+{
+  if (args.getSize() != 1) {
+    throw std::invalid_argument("Bad arguments number!");
+  }
+  wchar_t * end_ptr = nullptr;
+  size_t n = wcstoull(args[0].c_str(), std::addressof(end_ptr), 10);
+  if (*end_ptr != L'\0') {
+    throw std::invalid_argument("Bad input");
+  }
+  texts_.set_max_variants(n);
+}
+
+void alekseev::Exec::distance_of_find_txt(Vector< std::wstring > & args)
+{
+  if (args.getSize() != 1) {
+    throw std::invalid_argument("Bad arguments number!");
+  }
+  wchar_t * end_ptr = nullptr;
+  size_t n = wcstoull(args[0].c_str(), std::addressof(end_ptr), 10);
+  if (*end_ptr != L'\0') {
+    throw std::invalid_argument("Bad input");
+  }
+  texts_.set_default_distance(n);
+}
+
+void alekseev::Exec::max_variants_dict(Vector< std::wstring > & args)
+{
+  if (args.getSize() != 1) {
+    throw std::invalid_argument("Bad arguments number!");
+  }
+  wchar_t * end_ptr = nullptr;
+  size_t n = wcstoull(args[0].c_str(), std::addressof(end_ptr), 10);
+  if (*end_ptr != L'\0') {
+    throw std::invalid_argument("Bad input");
+  }
+  dicts_.set_max_variants(n);
+}
+
+void alekseev::Exec::distance_of_find_dict(Vector< std::wstring > & args)
+{
+  if (args.getSize() != 1) {
+    throw std::invalid_argument("Bad arguments number!");
+  }
+  wchar_t * end_ptr = nullptr;
+  size_t n = wcstoull(args[0].c_str(), std::addressof(end_ptr), 10);
+  if (*end_ptr != L'\0') {
+    throw std::invalid_argument("Bad input");
+  }
+  dicts_.set_default_distance(n);
 }

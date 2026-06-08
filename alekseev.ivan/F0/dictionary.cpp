@@ -825,7 +825,9 @@ alekseev::Vector< std::wstring > alekseev::Dictionary::damerau_find_require(wstr
 }
 
 alekseev::DictionaryManager::DictionaryManager():
-  dicts_(djb2_hash, poly_hash, equal, 16)
+  dicts_(djb2_hash, poly_hash, equal, 16),
+  max_variants_(5),
+  distance_(2)
 { }
 
 void alekseev::DictionaryManager::create(wstr_cr name)
@@ -939,8 +941,8 @@ void alekseev::DictionaryManager::update_word(std::wstring word, std::wistream &
     std::wstring q = L"\"" + word + L"\" not found. Do you want to use with fuzzy search?";
     ans = ask_yes_no(q, is, os);
     if (ans == L'y') {
-      Vector< std::wstring > opts = dict.damerau_find_lemma(word, 5, 1);
-      opts += dict.damerau_find_require(word, 5 - opts.getSize(), 1);
+      Vector< std::wstring > opts = dict.damerau_find_lemma(word, max_variants_, distance_);
+      opts += dict.damerau_find_require(word, max_variants_ - opts.getSize(), distance_);
       size_t ind = choose(opts, is, os, 5, L"What lemma do you want to update?");
       if (ind == opts.getSize()) {
         return;
@@ -1022,8 +1024,8 @@ void alekseev::DictionaryManager::delete_lemma(wstr_cr lemma, std::wistream & is
     os << L"Lemma \"" << lemma << "\" not found in current dictionary\n";
     wchar_t ans = ask_yes_no(L"Do you want to search using fuzzy search?", is, os);
     if (ans == 'y') {
-      Vector< std::wstring > opts = dict.damerau_find_lemma(lemma, 5, 1);
-      opts += dict.damerau_find_require(lemma, 5 - opts.getSize(), 1);
+      Vector< std::wstring > opts = dict.damerau_find_lemma(lemma, max_variants_, distance_);
+      opts += dict.damerau_find_require(lemma, max_variants_ - opts.getSize(), distance_);
       size_t ind = choose(opts, is, os, 5, L"What lemma you want to delete?");
       if (ind == opts.getSize()) {
         return;
@@ -1060,6 +1062,12 @@ bool alekseev::DictionaryManager::is_require(wstr_cr word) const
 alekseev::Vector< std::wstring > alekseev::DictionaryManager::damerau_find_form(wstr_cr wordform,
     size_t max_number, size_t distance) const
 {
+  if (distance == 0) {
+    distance = distance_;
+  }
+  if (max_number == 0) {
+    max_number = max_variants_;
+  }
   Vector< std::wstring > names = dicts_.keys();
   Vector< std::wstring > res;
   for (size_t i = 0; i < names.getSize() && (res.getSize() < max_number || max_number == 0); ++i) {
@@ -1074,6 +1082,12 @@ alekseev::Vector< std::wstring > alekseev::DictionaryManager::damerau_find_form(
 alekseev::Vector< std::wstring > alekseev::DictionaryManager::damerau_find_lemma(wstr_cr wordform,
     size_t max_number, size_t distance) const
 {
+  if (distance == 0) {
+    distance = distance_;
+  }
+  if (max_number == 0) {
+    max_number = max_variants_;
+  }
   Vector< std::wstring > names = dicts_.keys();
   Vector< std::wstring > res;
   for (size_t i = 0; i < names.getSize() && (res.getSize() < max_number || max_number == 0); ++i) {
@@ -1088,6 +1102,12 @@ alekseev::Vector< std::wstring > alekseev::DictionaryManager::damerau_find_lemma
 alekseev::Vector< std::wstring > alekseev::DictionaryManager::find_by_require(wstr_cr require,
     wstr_cr wordform, size_t max_number, size_t distance) const
 {
+  if (distance == 0) {
+    distance = distance_;
+  }
+  if (max_number == 0) {
+    max_number = max_variants_;
+  }
   Vector< std::wstring > names = dicts_.keys();
   Vector< std::wstring > res;
   for (size_t i = 0; i < names.getSize() && (res.getSize() < max_number || max_number == 0); ++i) {
@@ -1167,6 +1187,18 @@ const alekseev::Dictionary & alekseev::DictionaryManager::current() const
 bool alekseev::DictionaryManager::contains_dict(wstr_cr dict_name) const
 {
   return dicts_.contains(dict_name);
+}
+
+void alekseev::DictionaryManager::set_max_variants(size_t max_variants)
+{
+  max_variants_ = max_variants;
+}
+
+void alekseev::DictionaryManager::set_default_distance(size_t distance)
+{
+  if (distance != 0) {
+    distance_ = distance;
+  }
 }
 
 void alekseev::DictionaryManager::add_verb(wstr_cr word, std::wistream & is, std::wostream & os)
@@ -1368,6 +1400,12 @@ void alekseev::DictionaryManager::add_req(wstr_cr word, std::wistream & is, std:
 std::pair< std::wstring, size_t > alekseev::DictionaryManager::choose_wordform(wstr_cr word,
     std::wistream & is, std::wostream & os, size_t max_opts, size_t distance) const
 {
+  if (distance == 0) {
+    distance = distance_;
+  }
+  if (max_opts == 0) {
+    max_opts = max_variants_;
+  }
   const Dictionary & dict = current();
   Vector< WordForm > wfs;
 

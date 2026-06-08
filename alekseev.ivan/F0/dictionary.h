@@ -191,11 +191,11 @@ namespace alekseev {
     bool contains_form(wstr_cr wordform) const;
     bool is_require(wstr_cr word) const;
     Vector< std::wstring > damerau_find_form(wstr_cr wordform, size_t max_number = 0,
-        size_t distance = 2) const;
+        size_t distance = 0) const;
     Vector< std::wstring > damerau_find_lemma(wstr_cr wordform, size_t max_number = 0,
-        size_t distance = 2) const;
+        size_t distance = 0) const;
     Vector< std::wstring > find_by_require(wstr_cr require, wstr_cr wordform, size_t max_number = 0,
-        size_t distance = 2) const;
+        size_t distance = 0) const;
 
     bool matches_case(wstr_cr wordform, case_ expected_case) const;
     bool matches_case(wstr_cr require, wstr_cr word) const;
@@ -207,18 +207,22 @@ namespace alekseev {
     const Dictionary & current() const;
 
     bool contains_dict(wstr_cr dict_name) const;
+    void set_max_variants(size_t max_variants);
+    void set_default_distance(size_t distance);
 
     private:
       CuckooHash< std::wstring, Dictionary, size_t (*)(wstr_cr), size_t (*)(wstr_cr), bool(*)(
           wstr_cr, wstr_cr) > dicts_;
       std::wstring current_;
+      size_t max_variants_;
+      size_t distance_;
 
       void add_verb(wstr_cr word, std::wistream & is, std::wostream & os);
       void add_adj(wstr_cr word, std::wistream & is, std::wostream & os);
       void add_noun(wstr_cr word, std::wistream & is, std::wostream & os);
       void add_req(wstr_cr word, std::wistream & is, std::wostream & os);
       std::pair< std::wstring, size_t > choose_wordform(wstr_cr word, std::wistream & is,
-          std::wostream & os, size_t max_opts = 0, size_t distance = 1) const;
+          std::wostream & os, size_t max_opts = 0, size_t distance = 0) const;
   };
 }
 
