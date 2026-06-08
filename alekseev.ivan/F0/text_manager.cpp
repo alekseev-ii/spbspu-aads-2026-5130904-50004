@@ -46,13 +46,32 @@ alekseev::TextManager::TextManager(DictionaryManager & dict):
 
 void alekseev::TextManager::read(wstr_cr file_name, wstr_cr text_name)
 {
-  std::wifstream f(file_name.data());
+  std::wstring text;
+  std::ifstream f(file_name.data(), std::ios::binary);
   if (!f.is_open()) {
     throw std::invalid_argument("Can not open file!");
   }
-  std::wstring text;
-  while (std::getline(f, text)) {
-    text += L"\n";
+  try {
+    std::string line;
+    while (std::getline(f, line)) {
+      if (line.empty()) {
+        text += L"\n";
+      }
+      if (line.size() > 2) {
+        if (static_cast< unsigned char >(line[0]) == 0xEF && static_cast< unsigned char >(line[1])
+          ==
+          0xBB && static_cast< unsigned char >(line[2]) == 0xBF) {
+          line = line.substr(3);
+          if (line.empty()) {
+            continue;
+          }
+        }
+      }
+      text += utf8_to_wstring(line) + L"\n";
+    }
+  } catch (...) {
+    f.close();
+    throw;
   }
   f.close();
   texts_.insert(text_name, from_wstring(text));
@@ -139,10 +158,15 @@ void alekseev::TextManager::save(wstr_cr file_name, wstr_cr text_name)
     throw std::invalid_argument("Do not know what to save!");
   }
   text_t & text = texts_.at(name);
-  std::wofstream f(name.data());
+  std::ofstream f(name.data(), std::ios::binary);
   if (!f.is_open()) {
     throw std::invalid_argument("Can not open file!");
   }
-  f << to_wstring(text, 0, 0, !text.errors.empty());
+  try {
+    f << wstring_to_utf8(to_wstring(text, 0, 0, !text.errors.empty()));
+  } catch (...) {
+    f.close();
+    throw;
+  }
   f.close();
 }
