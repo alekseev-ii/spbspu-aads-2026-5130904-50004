@@ -426,13 +426,11 @@ std::ofstream & alekseev::Dictionary::write(std::ofstream & os)
   if (!os.is_open() || !os.good()) {
     return os;
   }
-  Vector< std::wstring > keys = lemmas_.keys();
-  for (size_t i = 0; i < keys.getSize(); ++i) {
-    os << wstring_to_utf8(to_wstring(lemmas_.at(keys[i]))) << "\n";
+  for (auto keys_it = lemmas_.begin(); keys_it != lemmas_.end(); ++keys_it) {
+    os << wstring_to_utf8(to_wstring(lemmas_.at(*keys_it))) << "\n";
   }
-  keys = requires_.keys();
-  for (size_t i = 0; i < keys.getSize(); ++i) {
-    os << wstring_to_utf8(to_wstring(requires_.at(keys[i]))) << "\n";
+  for (auto keys_it = requires_.begin(); keys_it != requires_.end(); ++keys_it) {
+    os << wstring_to_utf8(to_wstring(requires_.at(*keys_it))) << "\n";
   }
   return os;
 }
@@ -781,14 +779,14 @@ alekseev::Vector< alekseev::WordForm > alekseev::Dictionary::damerau_find_wfs(ws
     return get_homoforms(bad_word);
   }
   Vector< WordForm > res;
-  Vector< std::wstring > wfs = forms_.keys();
-  size_t m = max_number == 0 ? wfs.getSize() : max_number;
+  size_t m = max_number == 0 ? forms_.size() : max_number;
   long long int bad_word_size = bad_word.size();
-  for (size_t i = 0; i < wfs.getSize() && res.getSize() < max_number; ++i) {
-    long long int cur_size = wfs[i].size();
+  for (auto wfs_it = forms_.begin(); wfs_it != forms_.end() && res.getSize() < max_number; ++
+       wfs_it) {
+    long long int cur_size = wfs_it->size();
     if (std::abs(bad_word_size - cur_size) <= distance) {
-      if (damerau_levenshtein(wfs[i], bad_word) <= distance) {
-        Vector< WordForm > found = get_homoforms(wfs[i]);
+      if (damerau_levenshtein(*wfs_it, bad_word) <= distance) {
+        Vector< WordForm > found = get_homoforms(*wfs_it);
         res += found;
       }
     }
@@ -1042,20 +1040,18 @@ void alekseev::DictionaryManager::delete_lemma(wstr_cr lemma, std::wistream & is
 
 bool alekseev::DictionaryManager::contains_form(wstr_cr wordform) const
 {
-  Vector< std::wstring > names = dicts_.keys();
   bool result = false;
-  for (size_t i = 0; i < names.getSize() && !result; ++i) {
-    result = dicts_.at(names[i]).contains_form(wordform);
+  for (auto names_it = dicts_.begin(); names_it != dicts_.end(); ++names_it) {
+    result = dicts_.at(*names_it).contains_form(wordform);
   }
   return result;
 }
 
 bool alekseev::DictionaryManager::is_require(wstr_cr word) const
 {
-  Vector< std::wstring > names = dicts_.keys();
   bool result = false;
-  for (size_t i = 0; i < names.getSize() && !result; ++i) {
-    result = dicts_.at(names[i]).contains_require(word);
+  for (auto names_it = dicts_.begin(); names_it != dicts_.end(); ++names_it) {
+    result = dicts_.at(*names_it).contains_require(word);
   }
   return result;
 }
@@ -1069,10 +1065,12 @@ alekseev::Vector< std::wstring > alekseev::DictionaryManager::damerau_find_form(
   if (max_number == 0) {
     max_number = max_variants_;
   }
-  Vector< std::wstring > names = dicts_.keys();
   Vector< std::wstring > res;
-  for (size_t i = 0; i < names.getSize() && (res.getSize() < max_number || max_number == 0); ++i) {
-    res += dicts_.at(names[i]).damerau_find_form(wordform, max_number, distance);
+  auto check = [&max_number, &res]() {
+    return res.getSize() < max_number || max_number == 0;
+  };
+  for (auto names_it = dicts_.begin(); names_it != dicts_.end() && check(); ++names_it) {
+    res += dicts_.at(*names_it).damerau_find_form(wordform, max_number, distance);
   }
   while (res.getSize() > max_number && max_number != 0) {
     res.popBack();
@@ -1089,10 +1087,12 @@ alekseev::Vector< std::wstring > alekseev::DictionaryManager::damerau_find_lemma
   if (max_number == 0) {
     max_number = max_variants_;
   }
-  Vector< std::wstring > names = dicts_.keys();
   Vector< std::wstring > res;
-  for (size_t i = 0; i < names.getSize() && (res.getSize() < max_number || max_number == 0); ++i) {
-    res += dicts_.at(names[i]).damerau_find_lemma(wordform, max_number, distance);
+  auto check = [&max_number, &res]() {
+    return res.getSize() < max_number || max_number == 0;
+  };
+  for (auto names_it = dicts_.begin(); names_it != dicts_.end() && check(); ++names_it) {
+    res += dicts_.at(*names_it).damerau_find_lemma(wordform, max_number, distance);
   }
   while (res.getSize() > max_number && max_number != 0) {
     res.popBack();
@@ -1109,10 +1109,12 @@ alekseev::Vector< std::wstring > alekseev::DictionaryManager::find_by_require(ws
   if (max_number == 0) {
     max_number = max_variants_;
   }
-  Vector< std::wstring > names = dicts_.keys();
   Vector< std::wstring > res;
-  for (size_t i = 0; i < names.getSize() && (res.getSize() < max_number || max_number == 0); ++i) {
-    const Dictionary & dict = dicts_.at(names[i]);
+  auto check = [&max_number, &res]() {
+    return res.getSize() < max_number || max_number == 0;
+  };
+  for (auto names_it = dicts_.begin(); names_it != dicts_.end() && check(); ++names_it) {
+    const Dictionary & dict = dicts_.at(*names_it);
     res += to_words(
         dict.filter_by_require(require,
             dict.damerau_find_wfs(wordform, 0, distance)
@@ -1127,50 +1129,45 @@ alekseev::Vector< std::wstring > alekseev::DictionaryManager::find_by_require(ws
 
 bool alekseev::DictionaryManager::matches_case(wstr_cr wordform, case_ expected_case) const
 {
-  Vector< std::wstring > names = dicts_.keys();
   bool result = false;
-  for (size_t i = 0; i < names.getSize() && !result; ++i) {
-    result = dicts_.at(names[i]).matches_case(wordform, expected_case);
+  for (auto names_it = dicts_.begin(); names_it != dicts_.end() && !result; ++names_it) {
+    result = dicts_.at(*names_it).matches_case(wordform, expected_case);
   }
   return result;
 }
 
 bool alekseev::DictionaryManager::matches_case(wstr_cr require, wstr_cr word) const
 {
-  Vector< std::wstring > names = dicts_.keys();
   bool result = false;
-  for (size_t i = 0; i < names.getSize() && !result; ++i) {
-    result = dicts_.at(names[i]).matches_case(require, word);
+  for (auto names_it = dicts_.begin(); names_it != dicts_.end() && !result; ++names_it) {
+    result = dicts_.at(*names_it).matches_case(require, word);
   }
   return result;
 }
 
 bool alekseev::DictionaryManager::matches_person(wstr_cr wordform, person expected_person) const
 {
-  Vector< std::wstring > names = dicts_.keys();
   bool result = false;
-  for (size_t i = 0; i < names.getSize() && !result; ++i) {
-    result = dicts_.at(names[i]).matches_person(wordform, expected_person);
+  for (auto names_it = dicts_.begin(); names_it != dicts_.end() && !result; ++names_it) {
+    result = dicts_.at(*names_it).matches_person(wordform, expected_person);
   }
   return result;
 }
 
 bool alekseev::DictionaryManager::matches_person(wstr_cr require, wstr_cr word) const
 {
-  Vector< std::wstring > names = dicts_.keys();
   bool result = false;
-  for (size_t i = 0; i < names.getSize() && !result; ++i) {
-    result = dicts_.at(names[i]).matches_person(require, word);
+  for (auto names_it = dicts_.begin(); names_it != dicts_.end() && !result; ++names_it) {
+    result = dicts_.at(*names_it).matches_person(require, word);
   }
   return result;
 }
 
 bool alekseev::DictionaryManager::matches_require(wstr_cr require, wstr_cr word) const
 {
-  Vector< std::wstring > names = dicts_.keys();
   bool result = false;
-  for (size_t i = 0; i < names.getSize() && !result; ++i) {
-    result = dicts_.at(names[i]).matches_require(require, word);
+  for (auto names_it = dicts_.begin(); names_it != dicts_.end() && !result; ++names_it) {
+    result = dicts_.at(*names_it).matches_require(require, word);
   }
   return result;
 }
