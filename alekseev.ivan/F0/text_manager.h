@@ -27,7 +27,7 @@ namespace alekseev {
     ~TextManager() = default;
     TextManager(const TextManager &) = delete;
     TextManager & operator=(const TextManager &) = delete;
-    TextManager(TextManager &&) noexcept = delete;
+    TextManager(TextManager &&) noexcept = default;
     TextManager & operator=(TextManager &&) noexcept = delete;
 
     void load(wstr_cr file_name, wstr_cr text_name);
@@ -35,7 +35,6 @@ namespace alekseev {
     void correct(std::wistream & is, std::wostream & os, wstr_cr name = L"");
     void save(wstr_cr file_name, wstr_cr text_name = L"");
     void unload(wstr_cr name = L"");
-    void process(wstr_cr file_name, std::wistream & is, std::wostream & os);
 
     private:
       CuckooHash< std::wstring, text_t, size_t (*)(wstr_cr), size_t (*)(wstr_cr), bool(*)(wstr_cr,
