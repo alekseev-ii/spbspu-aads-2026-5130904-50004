@@ -207,3 +207,81 @@ void alekseev::Exec::process(Vector< std::wstring > & args)
     texts_.unload(temp_name);
   }
 }
+
+void alekseev::Exec::new_(Vector< std::wstring > & args)
+{
+  if (args.getSize() != 1) {
+    throw std::invalid_argument("Bad arguments number!");
+  }
+  dicts_.create(args[0]);
+  os_ << L"An empty dictionary \"" << args[0] << "\" has been created";
+}
+
+void alekseev::Exec::load_dict(Vector< std::wstring > & args)
+{
+  if (args.getSize() != 2) {
+    throw std::invalid_argument("Bad arguments number!");
+  }
+  os_ << "Loading...\n";
+  dicts_.load(args[0], args[1]);
+  os_ << L"Successfully loaded dictionary \"" << args[0] << "\" from \"" << args[1] << "\"\n";
+}
+
+void alekseev::Exec::save_dict(Vector< std::wstring > & args)
+{
+  if (args.getSize() != 2) {
+    throw std::invalid_argument("Bad arguments number!");
+  }
+  os_ << "Saving...\n";
+  dicts_.save(args[0], args[1]);
+  os_ << L"Saved dictionary \"" << args[0] << "\" to \"" << args[1] << "\"\n";
+}
+
+void alekseev::Exec::unload_dict(Vector< std::wstring > & args)
+{
+  if (args.getSize() != 1) {
+    throw std::invalid_argument("Bad arguments number!");
+  }
+  dicts_.unload(args[0]);
+  os_ << L"Unloaded dictionary \"" << args[0] << "\"\n";
+}
+
+void alekseev::Exec::current(Vector< std::wstring > & args)
+{
+  if (args.getSize() != 1) {
+    throw std::invalid_argument("Bad arguments number!");
+  }
+  dicts_.set_current(args[0]);
+}
+
+void alekseev::Exec::add_word(Vector< std::wstring > & args)
+{
+  if (args.getSize() != 1) {
+    throw std::invalid_argument("Bad arguments number!");
+  }
+  dicts_.add_word(args[0], is_, os_);
+}
+
+void alekseev::Exec::update_form(Vector< std::wstring > & args)
+{
+  if (args.getSize() != 1) {
+    throw std::invalid_argument("Bad arguments number!");
+  }
+  dicts_.update_word(args[0], is_, os_);
+}
+
+void alekseev::Exec::delete_lemma(Vector< std::wstring > & args)
+{
+  if (args.getSize() != 1) {
+    throw std::invalid_argument("Bad arguments number!");
+  }
+  dicts_.delete_lemma(args[0], is_, os_);
+}
+
+void alekseev::Exec::delete_form(Vector< std::wstring > & args)
+{
+  if (args.getSize() != 1) {
+    throw std::invalid_argument("Bad arguments number!");
+  }
+  dicts_.delete_form(args[0], is_, os_);
+}

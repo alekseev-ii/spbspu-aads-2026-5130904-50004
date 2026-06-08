@@ -206,6 +206,8 @@ namespace alekseev {
     Dictionary & current();
     const Dictionary & current() const;
 
+    bool contains_dict(wstr_cr dict_name) const;
+
     private:
       CuckooHash< std::wstring, Dictionary, size_t (*)(wstr_cr), size_t (*)(wstr_cr), bool(*)(
           wstr_cr, wstr_cr) > dicts_;

@@ -1164,6 +1164,11 @@ const alekseev::Dictionary & alekseev::DictionaryManager::current() const
   return dicts_.at(current_);
 }
 
+bool alekseev::DictionaryManager::contains_dict(wstr_cr dict_name) const
+{
+  return dicts_.contains(dict_name);
+}
+
 void alekseev::DictionaryManager::add_verb(wstr_cr word, std::wistream & is, std::wostream & os)
 {
   Dictionary & dict = current();
