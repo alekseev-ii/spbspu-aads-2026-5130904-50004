@@ -44,7 +44,7 @@ alekseev::TextManager::TextManager(DictionaryManager & dict):
   distance_(2)
 { }
 
-void alekseev::TextManager::read(wstr_cr file_name, wstr_cr text_name)
+void alekseev::TextManager::load(wstr_cr file_name, wstr_cr text_name)
 {
   std::wstring text;
   std::ifstream f(file_name.data(), std::ios::binary);
@@ -158,7 +158,7 @@ void alekseev::TextManager::save(wstr_cr file_name, wstr_cr text_name)
     throw std::invalid_argument("Do not know what to save!");
   }
   text_t & text = texts_.at(name);
-  std::ofstream f(name.data(), std::ios::binary);
+  std::ofstream f(file_name.data(), std::ios::binary);
   if (!f.is_open()) {
     throw std::invalid_argument("Can not open file!");
   }
@@ -169,4 +169,25 @@ void alekseev::TextManager::save(wstr_cr file_name, wstr_cr text_name)
     throw;
   }
   f.close();
+}
+
+void alekseev::TextManager::unload(wstr_cr name)
+{
+  if (name.empty() && last_saved_.empty()) {
+    throw std::invalid_argument("Dont know what to unload!");
+  }
+  std::wstring to_unload = name.empty() ? last_loaded_ : name;
+  texts_.remove(name);
+  if (last_loaded_ == to_unload) {
+    last_loaded_.clear();
+  }
+  if (last_parsed_ == to_unload) {
+    last_parsed_.clear();
+  }
+  if (last_corrected_ == to_unload) {
+    last_corrected_.clear();
+  }
+  if (last_saved_ == to_unload) {
+    last_saved_.clear();
+  }
 }

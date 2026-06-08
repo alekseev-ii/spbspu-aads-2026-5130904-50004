@@ -30,10 +30,12 @@ namespace alekseev {
     TextManager(TextManager &&) noexcept = delete;
     TextManager & operator=(TextManager &&) noexcept = delete;
 
-    void read(wstr_cr file_name, wstr_cr text_name);
+    void load(wstr_cr file_name, wstr_cr text_name);
     void parse(wstr_cr name = L"");
     void correct(std::wistream & is, std::wostream & os, wstr_cr name = L"");
     void save(wstr_cr file_name, wstr_cr text_name = L"");
+    void unload(wstr_cr name = L"");
+    void process(wstr_cr file_name, std::wistream & is, std::wostream & os);
 
     private:
       CuckooHash< std::wstring, text_t, size_t (*)(wstr_cr), size_t (*)(wstr_cr), bool(*)(wstr_cr,
@@ -41,6 +43,7 @@ namespace alekseev {
       std::wstring last_loaded_;
       std::wstring last_parsed_;
       std::wstring last_corrected_;
+      std::wstring last_saved_;
       DictionaryManager & dict_;
       size_t max_variants_;
       size_t distance_;
