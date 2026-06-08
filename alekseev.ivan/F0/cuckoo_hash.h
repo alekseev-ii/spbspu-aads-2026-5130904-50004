@@ -47,8 +47,8 @@ namespace alekseev {
       using pointer = const Key *;
       using reference = const Key &;
 
-      KeyIterator(std::pair< Key, Value > ** curr, std::pair< Key, Value > ** end1,
-          std::pair< Key, Value > ** start2, std::pair< Key, Value > ** end2);
+      KeyIterator(bool first_table, size_t index, const Vector< std::pair< Key, Value > * > & t1,
+          const Vector< std::pair< Key, Value > * > & t2);
 
       reference operator*() const noexcept;
       pointer operator->() const noexcept;
@@ -57,17 +57,15 @@ namespace alekseev {
 
       KeyIterator & operator++();
       KeyIterator operator++(int);
-      KeyIterator & operator--();
-      KeyIterator operator--(int);
 
       private:
-        bool first_table;
-        size_t index;
-        std::pair< Key, Value > ** current_, ** end1_, ** start2_, ** end2_;
-
-        void next();
-        void prev();
+        bool first_table_;
+        size_t index_;
+        const Vector< std::pair< Key, Value > * > & t1_, & t2_;
     };
+
+    KeyIterator begin() const;
+    KeyIterator end() const;
 
     private:
       Vector< std::pair< Key, Value > * > table1_;
@@ -388,6 +386,109 @@ namespace alekseev {
     if (load_factor() > max_load_factor_) {
       rehash();
     }
+  }
+
+  template< class Key, class Value, class Hash1, class Hash2, class Equal >
+  CuckooHash< Key, Value, Hash1, Hash2, Equal >::KeyIterator::KeyIterator(bool first_table,
+      size_t index, const Vector< std::pair< Key, Value > * > & t1,
+      const Vector< std::pair< Key, Value > * > & t2):
+    first_table_(first_table),
+    index_(index),
+    t1_(t1),
+    t2_(t2)
+  { }
+
+  template< class Key, class Value, class Hash1, class Hash2, class Equal >
+  typename CuckooHash< Key, Value, Hash1, Hash2, Equal >::KeyIterator::reference
+  CuckooHash< Key, Value, Hash1, Hash2, Equal >::KeyIterator::operator*() const noexcept
+  {
+    if (first_table_) {
+      return t1_[index_]->first;
+    }
+    return t2_[index_]->first;
+  }
+
+  template< class Key, class Value, class Hash1, class Hash2, class Equal >
+  typename CuckooHash< Key, Value, Hash1, Hash2, Equal >::KeyIterator::pointer
+  CuckooHash< Key, Value, Hash1, Hash2, Equal >::KeyIterator::operator->() const noexcept
+  {
+    if (first_table_) {
+      return std::addressof(t1_[index_]->first);
+    }
+    return std::addressof(t2_[index_]->first);
+  }
+
+  template< class Key, class Value, class Hash1, class Hash2, class Equal >
+  bool CuckooHash< Key, Value, Hash1, Hash2, Equal >::KeyIterator::operator==(
+      const KeyIterator & rhs) const noexcept
+  {
+    return first_table_ == rhs.first_table_ && index_ == rhs.index_;
+  }
+
+  template< class Key, class Value, class Hash1, class Hash2, class Equal >
+  bool CuckooHash< Key, Value, Hash1, Hash2, Equal >::KeyIterator::operator!=(
+      const KeyIterator & rhs) const noexcept
+  {
+    return !(*this == rhs);
+  }
+
+  template< class Key, class Value, class Hash1, class Hash2, class Equal >
+  typename CuckooHash< Key, Value, Hash1, Hash2, Equal >::KeyIterator &
+  CuckooHash< Key, Value, Hash1, Hash2, Equal >::KeyIterator::operator++()
+  {
+    ++index_;
+    while (first_table_ && index_ < t1_.getSize()) {
+      if (t1_[index_] == nullptr) {
+        ++index_;
+      } else {
+        return *this;
+      }
+    }
+    if (first_table_) {
+      first_table_ = false;
+      index_ = 0;
+    }
+    while (index_ < t2_.getSize()) {
+      if (t2_[index_] == nullptr) {
+        ++index_;
+      } else {
+        return *this;
+      }
+    }
+    return *this;
+  }
+
+  template< class Key, class Value, class Hash1, class Hash2, class Equal >
+  typename CuckooHash< Key, Value, Hash1, Hash2, Equal >::KeyIterator
+  CuckooHash< Key, Value, Hash1, Hash2, Equal >::KeyIterator::operator++(int)
+  {
+    KeyIterator tmp = *this;
+    ++(*this);
+    return tmp;
+  }
+
+  template< class Key, class Value, class Hash1, class Hash2, class Equal >
+  typename CuckooHash<Key, Value, Hash1, Hash2, Equal>::KeyIterator
+  CuckooHash<Key, Value, Hash1, Hash2, Equal>::begin() const
+  {
+    for (size_t i = 0; i < capacity_; ++i) {
+      if (table1_[i] != nullptr) {
+        return KeyIterator(true, i, table1_, table2_);
+      }
+    }
+    for (size_t i = 0; i < capacity_; ++i) {
+      if (table2_[i] != nullptr) {
+        return KeyIterator(false, i, table1_, table2_);
+      }
+    }
+    return end();
+  }
+
+  template< class Key, class Value, class Hash1, class Hash2, class Equal >
+  typename CuckooHash<Key, Value, Hash1, Hash2, Equal>::KeyIterator CuckooHash<Key, Value, Hash1,
+  Hash2, Equal>::end() const
+  {
+    return KeyIterator(false, capacity_, table1_, table2_);
   }
 }
 
