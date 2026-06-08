@@ -933,9 +933,7 @@ void alekseev::DictionaryManager::update_word(std::wstring word, std::wistream &
     if (ans == L'y') {
       Vector< std::wstring > opts = dict.damerau_find_lemma(word, 1) + dict.
           damerau_find_require(word, 1);
-      std::wstring m1 = L"Only one lemma found:";
-      std::wstring m2 = L"What lemma do you want to update?";
-      size_t ind = choose(opts, is, os, 5, m1, m2);
+      size_t ind = choose(opts, is, os, 5, L"What lemma do you want to update?");
       if (ind == opts.getSize()) {
         return;
       }
@@ -950,13 +948,12 @@ void alekseev::DictionaryManager::update_word(std::wstring word, std::wistream &
   os << "Found:\n";
   os << l;
   Vector< std::wstring > opts{L"New form", L"Update an existing form"};
-  size_t a = choose(opts, is, os, 0, L"", L"What do you want to do?",
+  size_t a = choose(opts, is, os, 0, L"What do you want to do?",
       L"It is not a correct word, cancel updating");
   if (a == 2) {
     return;
   } else if (a == 1) {
-    size_t ind = choose(l.forms_, is, os, 0, L"Only one form can be updated:",
-        L"What form do you want to update?");
+    size_t ind = choose(l.forms_, is, os, 0, L"What form do you want to update?");
     if (ind == l.forms_.getSize()) {
       return;
     }
@@ -1019,7 +1016,7 @@ void alekseev::DictionaryManager::delete_lemma(wstr_cr lemma, std::wistream & is
     if (ans == 'y') {
       Vector< std::wstring > opts = dict.damerau_find_lemma(lemma, 1) + dict.
           damerau_find_require(lemma);
-      size_t ind = choose(opts, is, os, 5, L"One lemma found:", L"What lemma you want to delete?");
+      size_t ind = choose(opts, is, os, 5, L"What lemma you want to delete?");
       if (ind == opts.getSize()) {
         return;
       }
@@ -1373,7 +1370,7 @@ std::pair< std::wstring, size_t > alekseev::DictionaryManager::choose_wordform(w
   }
 
   if (!wfs.isEmpty()) {
-    size_t ind = choose(wfs, is, os, 0, L"Found form:", L"Choose one form:");
+    size_t ind = choose(wfs, is, os, 0, L"Choose one form:");
     if (ind < wfs.getSize()) {
       return dict.lemma_pair_by_wordform(wfs[ind]);
     }

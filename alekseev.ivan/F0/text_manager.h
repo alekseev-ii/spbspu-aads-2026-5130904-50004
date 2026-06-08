@@ -19,7 +19,7 @@ namespace alekseev {
 
   using wstr_cr = const std::wstring &;
   text_t from_wstring(wstr_cr orig_text);
-  std::wstring to_wstring(const text_t & orig_text, bool corrected = true);
+  std::wstring to_wstring(const text_t & orig_text, size_t start = 0, size_t end = 0, bool corrected = true);
 
   struct TextManager
   {
@@ -42,6 +42,7 @@ namespace alekseev {
       std::wstring last_parsed_;
       std::wstring last_corrected_;
       DictionaryManager & dict_;
+      size_t max_variants_;
   };
 }
 

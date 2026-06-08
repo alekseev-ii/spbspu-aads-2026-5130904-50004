@@ -38,9 +38,8 @@ namespace alekseev {
       bool need_cycle = true, bool add_variants = true);
   template< class T >
   size_t choose(const Vector< T > & opts, std::wistream & is, std::wostream & os,
-      size_t max_opts = 5, wstr_cr only_one_opt = L"Only one opt:",
-      wstr_cr what_is_your_choice = L"What is your choice?", wstr_cr no_one = L"No one of it",
-      bool need_cycle = true);
+      size_t max_opts = 5, wstr_cr what_is_your_choice = L"What is your choice?",
+      wstr_cr no_one = L"No one of it", bool need_cycle = true);
 
   bool endswith(wstr_cr str, wstr_cr substr);
   bool endswith(wstr_cr str, std::initializer_list< std::wstring > substr);
@@ -90,14 +89,10 @@ namespace alekseev {
 
   template< class T >
   size_t choose(const Vector< T > & opts, std::wistream & is, std::wostream & os, size_t max_opts,
-      wstr_cr only_one_opt, wstr_cr what_is_your_choice,wstr_cr no_one, bool need_cycle)
+      wstr_cr what_is_your_choice, wstr_cr no_one, bool need_cycle)
   {
     if (opts.isEmpty()) {
       throw std::invalid_argument("Empty candidates");
-    }
-    if (opts.getSize() == 1) {
-      os << only_one_opt << L" " << opts[0] << L"\n";
-      return 0;
     }
     size_t s = opts.getSize();
     size_t n_opts = (max_opts == 0) ? s : std::min(max_opts, s);
@@ -106,7 +101,7 @@ namespace alekseev {
       os << "\t" << i + 1 << ". " << opts[i] << L"\n";
     }
     os << "\t" << n_opts + 1 << ". " << no_one << L"\n";
-    os << L"(1-" << n_opts + 2 << L"): ";
+    os << L"(1-" << n_opts + 1 << L"): ";
     std::wstring answer;
     wchar_t * end_ptr = nullptr;
     while (std::getline(is, answer)) {

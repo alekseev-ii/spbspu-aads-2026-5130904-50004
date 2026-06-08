@@ -20,11 +20,18 @@ alekseev::text_t alekseev::from_wstring(wstr_cr orig_text)
   return res;
 }
 
-std::wstring alekseev::to_wstring(const text_t & orig_text, bool corrected)
+std::wstring alekseev::to_wstring(const text_t & orig_text, size_t start, size_t end,
+    bool corrected)
 {
   const Vector< std::wstring > & to_join = corrected ? orig_text.corrected : orig_text.original;
+  if (start == 0 && end == 0) {
+    end = to_join.getSize();
+  }
+  if (end > to_join.getSize() || end <= start) {
+    throw std::out_of_range("End greater than size of text or end <= start");
+  }
   std::wstring res;
-  for (size_t i = 0; i < to_join.getSize(); ++i) {
+  for (size_t i = start; i < end; ++i) {
     res += to_join[i] + orig_text.punctuations[i] + L" ";
   }
   return res;
@@ -32,7 +39,8 @@ std::wstring alekseev::to_wstring(const text_t & orig_text, bool corrected)
 
 alekseev::TextManager::TextManager(DictionaryManager & dict):
   texts_(djb2_hash, poly_hash, equal, 32),
-  dict_(dict)
+  dict_(dict),
+  max_variants_(4)
 { }
 
 void alekseev::TextManager::read(wstr_cr file_name, wstr_cr text_name)
@@ -79,6 +87,36 @@ void alekseev::TextManager::parse(wstr_cr name)
   last_parsed_ = !name.empty() ? name : last_loaded_;
 }
 
+void alekseev::TextManager::correct(std::wistream & is, std::wostream & os, wstr_cr name)
+{
+  text_t & for_correct = !name.empty() ? texts_.at(name) : texts_.at(last_parsed_);
+  if (for_correct.errors.empty()) {
+    throw std::invalid_argument("Text not parsed!");
+  }
+  size_t s = for_correct.original.getSize();
+  Vector< std::wstring > corrected(for_correct.original);
+
+  while (!for_correct.errors.empty()) {
+    std::pair< size_t, Vector< std::wstring > > & err = for_correct.errors.front();
+    size_t i = err.first;
+    size_t start = i > 5 ? i - 5 : 0;
+    size_t end = s - i > 5 ? i + 5 : s;
+    os << to_wstring(for_correct, start, i, false) << L"[!]" << for_correct.original[i];
+    os << L"[!]" << to_wstring(for_correct, i + 1, end, false) << L"\n";
+    size_t ans = choose(err.second, is, os, max_variants_, L"Choose correction:", L"Your variant...");
+    if (ans == max_variants_ + 1) {
+      os << "Enter your variant: ";
+      std::wstring word;
+      std::getline(is, word);
+      corrected[i] = word;
+    } else {
+      corrected[i] = err.second[ans];
+    }
+    for_correct.errors.pop();
+  }
+  last_corrected_ = name;
+}
+
 void alekseev::TextManager::save(wstr_cr file_name, wstr_cr text_name)
 {
   std::wstring name;
@@ -92,11 +130,10 @@ void alekseev::TextManager::save(wstr_cr file_name, wstr_cr text_name)
     throw std::invalid_argument("Do not know what to save!");
   }
   text_t & text = texts_.at(name);
-  bool corrected = !text.errors.empty();
   std::wofstream f(name.data());
   if (!f.is_open()) {
     throw std::invalid_argument("Can not open file!");
   }
-  f << to_wstring(text, corrected);
+  f << to_wstring(text, 0, 0, !text.errors.empty());
   f.close();
 }
