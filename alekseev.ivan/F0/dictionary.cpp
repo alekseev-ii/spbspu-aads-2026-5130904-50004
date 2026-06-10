@@ -803,7 +803,7 @@ alekseev::Vector< std::wstring > alekseev::Dictionary::damerau_find_form(wstr_cr
   if (forms_.contains(bad_form)) {
     return {1, bad_form};
   }
-  return damerau_find(bad_form, forms_.keys(), max_number, distance);
+  return damerau_find(bad_form, forms_.begin(), forms_.end(), max_number, distance);
 }
 
 alekseev::Vector< std::wstring > alekseev::Dictionary::damerau_find_lemma(wstr_cr bad_lemma,
@@ -812,7 +812,7 @@ alekseev::Vector< std::wstring > alekseev::Dictionary::damerau_find_lemma(wstr_c
   if (lemmas_.contains(bad_lemma)) {
     return {1, bad_lemma};
   }
-  return damerau_find(bad_lemma, lemmas_.keys(), max_number, distance);
+  return damerau_find(bad_lemma, lemmas_.begin(), lemmas_.end(), max_number, distance);
 }
 
 alekseev::Vector< std::wstring > alekseev::Dictionary::damerau_find_require(wstr_cr bad_req,
@@ -821,7 +821,7 @@ alekseev::Vector< std::wstring > alekseev::Dictionary::damerau_find_require(wstr
   if (requires_.contains(bad_req)) {
     return {1, bad_req};
   }
-  return damerau_find(bad_req, requires_.keys(), max_number, distance);
+  return damerau_find(bad_req, requires_.begin(), requires_.end(), max_number, distance);
 }
 
 alekseev::DictionaryManager::DictionaryManager():
