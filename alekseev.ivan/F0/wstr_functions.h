@@ -50,6 +50,9 @@ namespace alekseev {
   size_t damerau_levenshtein(wstr_cr a, wstr_cr b);
   Vector< std::wstring > damerau_find(wstr_cr bad_word, const Vector< std::wstring > & candidates,
       size_t max_number = 0, size_t distance = 2);
+  template< class FwdIter >
+  Vector< std::wstring > damerau_find(wstr_cr bad_word, FwdIter begin, FwdIter end,
+      size_t max_number = 0, size_t distance = 2);
 
   template< class Cond >
   std::wstring trim(wstr_cr str, Cond condition)
@@ -117,6 +120,23 @@ namespace alekseev {
       }
     }
     throw std::invalid_argument("Bad input");
+  }
+
+  template< class FwdIter >
+  Vector< std::wstring > damerau_find(wstr_cr bad_word, FwdIter begin, FwdIter end,
+      size_t max_number, size_t distance)
+  {
+    Vector< std::wstring > res;
+    long long int bad_word_size = bad_word.size();
+    for (auto it = begin; it < end && (res.getSize() < max_number || max_number == 0); ++it) {
+      long long int cur_size = (*it).size();
+      if (std::abs(cur_size - bad_word_size) <= distance) {
+        if (damerau_levenshtein(*it, bad_word) <= distance) {
+          res.pushBack(*it);
+        }
+      }
+    }
+    return res;
   }
 }
 #endif
