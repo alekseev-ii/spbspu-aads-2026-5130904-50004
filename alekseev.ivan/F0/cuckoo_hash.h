@@ -39,7 +39,8 @@ namespace alekseev {
     void clear() noexcept;
     void set_max_load_factor(double max_load_factor) noexcept;
 
-    struct KeyIterator
+    struct KeyIterator: std::iterator< std::forward_iterator_tag, Key, std::ptrdiff_t, const Key *,
+          const Key & >
     {
       using iterator_category = std::forward_iterator_tag;
       using value_type = Key;
@@ -54,6 +55,10 @@ namespace alekseev {
       pointer operator->() const noexcept;
       bool operator==(const KeyIterator & rhs) const noexcept;
       bool operator!=(const KeyIterator & rhs) const noexcept;
+      bool operator<(const KeyIterator & rhs) const noexcept;
+      bool operator<=(const KeyIterator & rhs) const noexcept;
+      bool operator>(const KeyIterator & rhs) const noexcept;
+      bool operator>=(const KeyIterator & rhs) const noexcept;
 
       KeyIterator & operator++();
       KeyIterator operator++(int);
@@ -430,6 +435,37 @@ namespace alekseev {
       const KeyIterator & rhs) const noexcept
   {
     return !(*this == rhs);
+  }
+
+  template< class Key, class Value, class Hash1, class Hash2, class Equal >
+  bool CuckooHash< Key, Value, Hash1, Hash2, Equal >::KeyIterator::operator<(
+      const KeyIterator & rhs) const noexcept
+  {
+    if (first_table_ == rhs.first_table_) {
+      return index_ < rhs.index_;
+    }
+    return first_table_ > rhs.first_table_;
+  }
+
+  template< class Key, class Value, class Hash1, class Hash2, class Equal >
+  bool CuckooHash< Key, Value, Hash1, Hash2, Equal >::KeyIterator::operator<=(
+      const KeyIterator & rhs) const noexcept
+  {
+    return *this < rhs || *this == rhs;
+  }
+
+  template< class Key, class Value, class Hash1, class Hash2, class Equal >
+  bool CuckooHash< Key, Value, Hash1, Hash2, Equal >::KeyIterator::operator>(
+      const KeyIterator & rhs) const noexcept
+  {
+    return !(*this <= rhs);
+  }
+
+  template< class Key, class Value, class Hash1, class Hash2, class Equal >
+  bool CuckooHash< Key, Value, Hash1, Hash2, Equal >::KeyIterator::operator>=(
+      const KeyIterator & rhs) const noexcept
+  {
+    return !(*this < rhs);
   }
 
   template< class Key, class Value, class Hash1, class Hash2, class Equal >
