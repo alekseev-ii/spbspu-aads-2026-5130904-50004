@@ -112,11 +112,10 @@ namespace alekseev {
 
     void add_lemma(wstr_cr lemma, pos pos, gender noun_gender = nn_gender,
         aspect verb_aspect = nn_aspect);
-    void add_form(wstr_cr lemma, wstr_cr wordform, gender g, number n,
-        case_ c, tense t, person p);
+    void add_form(wstr_cr lemma, wstr_cr wordform, gender g, number n, case_ c, tense t, person p);
     void add_require(wstr_cr require);
-    void add_req_form(wstr_cr require, wstr_cr reqform, gender g, number n,
-        case_ c, tense t, person p);
+    void add_req_form(wstr_cr require, wstr_cr reqform, gender g, number n, case_ c, tense t,
+        person p);
     void remove_lemma(wstr_cr lemma);
     void remove_form(const WordForm & wordform);
     void remove_require(wstr_cr require);

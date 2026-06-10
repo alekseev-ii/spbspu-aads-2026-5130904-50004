@@ -468,8 +468,8 @@ namespace alekseev {
   }
 
   template< class Key, class Value, class Hash1, class Hash2, class Equal >
-  typename CuckooHash<Key, Value, Hash1, Hash2, Equal>::KeyIterator
-  CuckooHash<Key, Value, Hash1, Hash2, Equal>::begin() const
+  typename CuckooHash< Key, Value, Hash1, Hash2, Equal >::KeyIterator
+  CuckooHash< Key, Value, Hash1, Hash2, Equal >::begin() const
   {
     for (size_t i = 0; i < capacity_; ++i) {
       if (table1_[i] != nullptr) {
@@ -485,8 +485,8 @@ namespace alekseev {
   }
 
   template< class Key, class Value, class Hash1, class Hash2, class Equal >
-  typename CuckooHash<Key, Value, Hash1, Hash2, Equal>::KeyIterator CuckooHash<Key, Value, Hash1,
-  Hash2, Equal>::end() const
+  typename CuckooHash< Key, Value, Hash1, Hash2, Equal >::KeyIterator CuckooHash< Key, Value, Hash1,
+    Hash2, Equal >::end() const
   {
     return KeyIterator(false, capacity_, table1_, table2_);
   }

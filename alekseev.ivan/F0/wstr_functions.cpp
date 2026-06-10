@@ -75,11 +75,10 @@ std::string alekseev::wstring_to_utf8(wstr_cr wstr)
     return {};
   }
   size_t size_needed = WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(),
-      static_cast< int >(wstr.size()),
-      nullptr, 0, nullptr, nullptr);
+      static_cast< int >(wstr.size()), nullptr, 0, nullptr, nullptr);
   std::string result(size_needed, 0);
-  WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), static_cast< int >(wstr.size()),
-      &result[0], size_needed, nullptr, nullptr);
+  WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), static_cast< int >(wstr.size()), &result[0],
+      size_needed, nullptr, nullptr);
   return result;
 }
 

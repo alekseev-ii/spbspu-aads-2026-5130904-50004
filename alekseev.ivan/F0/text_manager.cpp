@@ -8,7 +8,8 @@ alekseev::text_t alekseev::from_wstring(wstr_cr orig_text)
   res.original = split(orig_text, L' ');
   res.punctuations = Vector< std::wstring >(res.original.getSize(), {});
   for (size_t i = 0; i < res.original.getSize(); ++i) {
-    std::wstring word = rtrim(res.original[i], [](wchar_t ch) {
+    std::wstring word = rtrim(res.original[i], [](wchar_t ch)
+    {
       return is_punctuation(ch) || is_whitespace(ch);
     });
     size_t a = res.original[i].size(), b = word.size();

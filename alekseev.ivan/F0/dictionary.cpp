@@ -1066,7 +1066,8 @@ alekseev::Vector< std::wstring > alekseev::DictionaryManager::damerau_find_form(
     max_number = max_variants_;
   }
   Vector< std::wstring > res;
-  auto check = [&max_number, &res]() {
+  auto check = [&max_number, &res]()
+  {
     return res.getSize() < max_number || max_number == 0;
   };
   for (auto names_it = dicts_.begin(); names_it != dicts_.end() && check(); ++names_it) {
@@ -1088,7 +1089,8 @@ alekseev::Vector< std::wstring > alekseev::DictionaryManager::damerau_find_lemma
     max_number = max_variants_;
   }
   Vector< std::wstring > res;
-  auto check = [&max_number, &res]() {
+  auto check = [&max_number, &res]()
+  {
     return res.getSize() < max_number || max_number == 0;
   };
   for (auto names_it = dicts_.begin(); names_it != dicts_.end() && check(); ++names_it) {
@@ -1110,16 +1112,13 @@ alekseev::Vector< std::wstring > alekseev::DictionaryManager::find_by_require(ws
     max_number = max_variants_;
   }
   Vector< std::wstring > res;
-  auto check = [&max_number, &res]() {
+  auto check = [&max_number, &res]()
+  {
     return res.getSize() < max_number || max_number == 0;
   };
   for (auto names_it = dicts_.begin(); names_it != dicts_.end() && check(); ++names_it) {
     const Dictionary & dict = dicts_.at(*names_it);
-    res += to_words(
-        dict.filter_by_require(require,
-            dict.damerau_find_wfs(wordform, 0, distance)
-            )
-        );
+    res += to_words(dict.filter_by_require(require, dict.damerau_find_wfs(wordform, 0, distance)));
   }
   while (res.getSize() > max_number && max_number != 0) {
     res.popBack();
