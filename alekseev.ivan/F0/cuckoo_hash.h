@@ -215,14 +215,14 @@ namespace alekseev {
       }
     }
     CuckooHash temp(*this);
-    if ((temp.size() + 1.0) / static_cast< double >(temp.capacity_) > temp.max_load_factor_) {
+    if ((temp.size() + 1.0) / static_cast< double >(temp.capacity_ * 2) > temp.max_load_factor_) {
       temp.rehash(temp.capacity() * 2);
     }
     auto * new_element = new std::pair< Key, Value >(std::forward< Forward_Key >(k),
         std::forward< Forward_Value >(v));
     size_t tries = 0;
     while (tries < 3) {
-      pos1 = hasher1_(new_element->first) % capacity();
+      pos1 = temp.hasher1_(new_element->first) % temp.capacity();
       if (temp.table1_[pos1] == nullptr) {
         temp.table1_[pos1] = new_element;
         ++temp.size_;
@@ -232,7 +232,7 @@ namespace alekseev {
       std::pair< Key, Value > * victim = temp.table1_[pos1];
       temp.table1_[pos1] = new_element;
       for (size_t i = 0; i < 16; ++i) {
-        pos2 = temp.hasher2_(victim->first) % capacity();
+        pos2 = temp.hasher2_(victim->first) % temp.capacity();
         if (temp.table2_[pos2] == nullptr) {
           temp.table2_[pos2] = victim;
           ++temp.size_;
@@ -241,7 +241,7 @@ namespace alekseev {
         }
         std::swap(temp.table2_[pos2], victim);
 
-        pos1 = temp.hasher1_(victim->first) % capacity();
+        pos1 = temp.hasher1_(victim->first) % temp.capacity();
         if (temp.table1_[pos1] == nullptr) {
           temp.table1_[pos1] = victim;
           ++temp.size_;
@@ -358,7 +358,7 @@ namespace alekseev {
   template< class Key, class Value, class Hash1, class Hash2, class Equal >
   double CuckooHash< Key, Value, Hash1, Hash2, Equal >::load_factor() const noexcept
   {
-    return static_cast< double >(size_) / static_cast< double >(capacity_);
+    return static_cast< double >(size_) / static_cast< double >(capacity_ * 2);
   }
 
   template< class Key, class Value, class Hash1, class Hash2, class Equal >

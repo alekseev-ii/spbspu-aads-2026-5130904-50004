@@ -46,7 +46,8 @@ bool alekseev::WordForm::operator==(const WordForm & rhs) const
 bool alekseev::matches(const WordForm & lhs, const WordForm & rhs)
 {
   bool res = lhs.word_.empty() || rhs.word_.empty() || lhs.word_ == rhs.word_;
-  res = res && (lhs.gender_ == nn_gender || rhs.gender_ == nn_gender || lhs.gender_ == rhs.gender_);
+  res = res && (lhs.gender_ == nn_gender || rhs.gender_ == nn_gender || lhs.gender_ == common || rhs
+    .gender_ == common || lhs.gender_ == rhs.gender_);
   res = res && (lhs.number_ == nn_number || rhs.number_ == nn_number || lhs.number_ == rhs.number_);
   res = res && (lhs.case_ == nn_case || rhs.case_ == nn_case || lhs.case_ == rhs.case_);
   res = res && (lhs.tense_ == nn_tense || rhs.tense_ == nn_tense || lhs.tense_ == rhs.tense_);
@@ -64,11 +65,13 @@ alekseev::Vector< std::wstring > alekseev::to_tags(const WordForm & wf)
     res.pushBack(L"masc");
   } else if (wf.gender_ == neuter) {
     res.pushBack(L"neut");
+  } else if (wf.gender_ == common) {
+    res.pushBack(L"common");
   }
   if (wf.number_ == singular) {
     res.pushBack(L"sing");
   } else if (wf.number_ == plural) {
-    res.pushBack(L"pl");
+    res.pushBack(L"plur");
   }
   if (wf.case_ == nominative) {
     res.pushBack(L"nom");
@@ -139,7 +142,7 @@ alekseev::WordForm alekseev::from_tags(const Vector< std::wstring > & tags, pos 
     }
     if (tags[i] == L"sing") {
       wf.number_ = singular;
-    } else if (tags[i] == L"pl") {
+    } else if (tags[i] == L"plur") {
       wf.number_ = plural;
     }
     if (tags[i] == L"masc") {
@@ -148,6 +151,8 @@ alekseev::WordForm alekseev::from_tags(const Vector< std::wstring > & tags, pos 
       wf.gender_ = feminine;
     } else if (tags[i] == L"neut") {
       wf.gender_ = neuter;
+    } else if (tags[i] == L"common") {
+      wf.gender_ = common;
     }
     if (pre == wf) {
       throw std::invalid_argument("Bad tag: " + std::string(tags[i].begin(), tags[i].end()));
@@ -203,6 +208,8 @@ std::wstring alekseev::to_wstring(const Lemma & lemma)
       res += L"fem";
     } else if (lemma.noun_gender_ == neuter) {
       res += L"neut";
+    } else if (lemma.noun_gender_ == common) {
+      res += L"com";
     }
     res += L"\n";
   } else if (lemma.pos_ == verb) {
@@ -341,7 +348,10 @@ std::ifstream & alekseev::Dictionary::read(std::ifstream & is)
       lemma.lemma_ = words[0];
       if (words[1] == L"noun") {
         if (words.getSize() != 3) {
-          throw std::invalid_argument("Bad number of tags for noun");
+          std::wcout << lemma.lemma_ << L"\n";
+          throw std::invalid_argument(
+              "Bad number of tags for noun " +
+              std::string(lemma.lemma_.begin(), lemma.lemma_.end()));
         }
         lemma.pos_ = noun;
         lemma.verb_aspect_ = nn_aspect;
@@ -351,12 +361,17 @@ std::ifstream & alekseev::Dictionary::read(std::ifstream & is)
           lemma.noun_gender_ = feminine;
         } else if (words[2] == L"neut") {
           lemma.noun_gender_ = neuter;
+        } else if (words[2] == L"com") {
+          lemma.noun_gender_ = common;
         } else {
-          throw std::invalid_argument("Invalid noun gender");
+          throw std::invalid_argument(
+              "Invalid noun gender: " + std::string(words[2].begin(), words[2].end()));
         }
       } else if (words[1] == L"verb") {
         if (words.getSize() != 3) {
-          throw std::invalid_argument("Bad number of tags for verb");
+          throw std::invalid_argument(
+              "Bad number of tags for verb " +
+              std::string(lemma.lemma_.begin(), lemma.lemma_.end()));
         }
         lemma.pos_ = verb;
         lemma.noun_gender_ = nn_gender;
@@ -365,18 +380,23 @@ std::ifstream & alekseev::Dictionary::read(std::ifstream & is)
         } else if (words[2] == L"imperf") {
           lemma.verb_aspect_ = imperf;
         } else {
-          throw std::invalid_argument("Invalid verb aspect");
+          throw std::invalid_argument(
+              "Invalid verb aspect " + std::string(words[2].begin(), words[2].end()));
         }
       } else if (words[1] == L"adj") {
         if (words.getSize() != 2) {
-          throw std::invalid_argument("Bad number of tags for adjective");
+          throw std::invalid_argument(
+              "Bad number of tags for adjective " + std::string(lemma.lemma_.begin(),
+                  lemma.lemma_.end()));
         }
         lemma.pos_ = adj;
         lemma.noun_gender_ = nn_gender;
         lemma.verb_aspect_ = nn_aspect;
       } else if (words[1] == L"req") {
         if (words.getSize() != 2) {
-          throw std::invalid_argument("Bad number of tags for require");
+          throw std::invalid_argument(
+              "Bad number of tags for require " + std::string(lemma.lemma_.begin(),
+                  lemma.lemma_.end()));
         }
         lemma.pos_ = require;
         lemma.noun_gender_ = nn_gender;
@@ -391,6 +411,10 @@ std::ifstream & alekseev::Dictionary::read(std::ifstream & is)
       if (lemma.pos_ != require) {
         if (!forms_.contains(wf.word_)) {
           forms_.insert(wf.word_, Vector< std::pair< std::wstring, size_t > >());
+        }
+        if (!forms_.contains(wf.word_)) {
+          std::wcout << forms_.size() << L" " << forms_.capacity() << L" ";
+          std::wcout << wf << L" " << lemma.lemma_ << L"\n";
         }
         forms_.at(wf.word_).pushBack(std::make_pair(lemma.lemma_, lemma.forms_.getSize() - 1));
       }
@@ -1328,7 +1352,7 @@ void alekseev::DictionaryManager::add_adj(wstr_cr word, std::wistream & is, std:
 void alekseev::DictionaryManager::add_noun(wstr_cr word, std::wistream & is, std::wostream & os)
 {
   Dictionary & dict = current();
-  os << L"Enter noun gender (masc/fem/neut): ";
+  os << L"Enter noun gender (masc/fem/neut/com): ";
   std::wstring gender_ans;
   gender g = nn_gender;
   while (getline(is, gender_ans) && g == nn_gender) {
@@ -1338,9 +1362,11 @@ void alekseev::DictionaryManager::add_noun(wstr_cr word, std::wistream & is, std
       g = feminine;
     } else if (gender_ans == L"neut") {
       g = neuter;
+    } else if (gender_ans == L"com") {
+      g = common;
     } else {
       os << L"Bad noun gender: " << gender_ans << L"\n";
-      os << L"Enter noun gender (masc/fem/neut): ";
+      os << L"Enter noun gender (masc/fem/neut/com): ";
     }
   }
   dict.add_lemma(word, noun, g, nn_aspect);

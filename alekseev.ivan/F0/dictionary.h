@@ -15,7 +15,7 @@ namespace alekseev {
 
   enum gender
   {
-    nn_gender, feminine, masculine, neuter
+    nn_gender, feminine, masculine, neuter, common
   };
 
   enum number
