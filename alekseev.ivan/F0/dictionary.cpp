@@ -257,26 +257,6 @@ alekseev::pos alekseev::guess_pos(std::wstring word)
   return noun;
 }
 
-alekseev::ConsoleSetup::ConsoleSetup():
-  old_cin_mode_(_setmode(_fileno(stdin), _O_U16TEXT)),
-  old_cout_mode_(_setmode(_fileno(stdout), _O_U16TEXT)),
-  old_cerr_mode_(_setmode(_fileno(stderr), _O_U16TEXT)),
-  old_output_cp_(GetConsoleOutputCP()),
-  old_input_cp_(GetConsoleCP())
-{
-  SetConsoleOutputCP(CP_UTF8);
-  SetConsoleCP(CP_UTF8);
-}
-
-alekseev::ConsoleSetup::~ConsoleSetup()
-{
-  _setmode(_fileno(stdout), old_cout_mode_);
-  _setmode(_fileno(stdin), old_cin_mode_);
-  _setmode(_fileno(stderr), old_cerr_mode_);
-  SetConsoleOutputCP(old_output_cp_);
-  SetConsoleCP(old_input_cp_);
-}
-
 alekseev::Dictionary::Dictionary():
   lemmas_(djb2_hash, poly_hash, equal, 4096),
   forms_(djb2_hash, poly_hash, equal, 16384),

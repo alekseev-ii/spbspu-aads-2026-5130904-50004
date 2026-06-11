@@ -3,6 +3,7 @@
 #include <string>
 #include "../common/vector.h"
 #include <initializer_list>
+#include <windows.h>
 
 namespace alekseev {
   using wstr_cr = const std::wstring &;
@@ -46,6 +47,16 @@ namespace alekseev {
   bool is_punctuation(wchar_t ch);
   bool is_punctuation_str(wstr_cr str);
   bool is_whitespace(wchar_t ch);
+
+  struct ConsoleSetup
+  {
+    ConsoleSetup();
+    ~ConsoleSetup();
+
+    private:
+      int old_cin_mode_, old_cout_mode_, old_cerr_mode_;
+      UINT old_output_cp_, old_input_cp_;
+  };
 
   size_t damerau_levenshtein(wstr_cr a, wstr_cr b);
   Vector< std::wstring > damerau_find(wstr_cr bad_word, const Vector< std::wstring > & candidates,

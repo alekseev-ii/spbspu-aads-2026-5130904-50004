@@ -5,7 +5,6 @@
 #include "../common/vector.h"
 #include "cuckoo_hash.h"
 #include <fstream>
-#include <windows.h>
 
 namespace alekseev {
   enum pos
@@ -83,16 +82,6 @@ namespace alekseev {
   std::wostream & operator<<(std::wostream & os, const Lemma & lemma);
 
   pos guess_pos(std::wstring word);
-
-  struct ConsoleSetup
-  {
-    ConsoleSetup();
-    ~ConsoleSetup();
-
-    private:
-      int old_cin_mode_, old_cout_mode_, old_cerr_mode_;
-      UINT old_output_cp_, old_input_cp_;
-  };
 
   struct Dictionary
   {

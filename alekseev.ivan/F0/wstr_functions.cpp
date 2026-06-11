@@ -74,8 +74,8 @@ std::string alekseev::wstring_to_utf8(wstr_cr wstr)
   if (wstr.empty()) {
     return {};
   }
-  int size_needed = WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(),
-      static_cast< int >(wstr.size()), nullptr, 0, nullptr, nullptr);
+  int size_needed = WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), static_cast< int >(wstr.size()),
+      nullptr, 0, nullptr, nullptr);
   std::string result(size_needed, 0);
   WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), static_cast< int >(wstr.size()), &result[0],
       size_needed, nullptr, nullptr);
@@ -182,6 +182,7 @@ std::wstring alekseev::case_from_mask(wstr_cr str, const Vector< bool > & mask)
 wchar_t alekseev::yes_no(std::wstring answer)
 {
   answer = lower_case(answer);
+  std::wcout << "LC: " << answer << L"\n";
   if (answer == L"yes" || answer == L"y" || answer == L"да" || answer == L"д") {
     return L'y';
   } else if (answer == L"no" || answer == L"n" || answer == L"нет" || answer == L"н") {
@@ -261,6 +262,26 @@ bool alekseev::is_whitespace(wchar_t ch)
     }
   }
   return false;
+}
+
+alekseev::ConsoleSetup::ConsoleSetup():
+  old_cin_mode_(_setmode(_fileno(stdin), _O_U16TEXT)),
+  old_cout_mode_(_setmode(_fileno(stdout), _O_U16TEXT)),
+  old_cerr_mode_(_setmode(_fileno(stderr), _O_U16TEXT)),
+  old_output_cp_(GetConsoleOutputCP()),
+  old_input_cp_(GetConsoleCP())
+{
+  SetConsoleOutputCP(CP_UTF8);
+  SetConsoleCP(CP_UTF8);
+}
+
+alekseev::ConsoleSetup::~ConsoleSetup()
+{
+  _setmode(_fileno(stdout), old_cout_mode_);
+  _setmode(_fileno(stdin), old_cin_mode_);
+  _setmode(_fileno(stderr), old_cerr_mode_);
+  SetConsoleOutputCP(old_output_cp_);
+  SetConsoleCP(old_input_cp_);
 }
 
 size_t alekseev::damerau_levenshtein(wstr_cr a, wstr_cr b)
