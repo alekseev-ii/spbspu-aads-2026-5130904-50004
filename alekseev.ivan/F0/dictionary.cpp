@@ -258,9 +258,9 @@ alekseev::pos alekseev::guess_pos(std::wstring word)
 }
 
 alekseev::Dictionary::Dictionary():
-  lemmas_(djb2_hash, poly_hash, equal, 4096),
-  forms_(djb2_hash, poly_hash, equal, 16384),
-  requires_(djb2_hash, poly_hash, equal, 4096)
+  lemmas_(djb2_hash, poly_hash, equal, 2048),
+  forms_(djb2_hash, poly_hash, equal, 32726),
+  requires_(djb2_hash, poly_hash, equal, 512)
 { }
 
 alekseev::Dictionary::Dictionary(wstr_cr file_name):
@@ -293,6 +293,7 @@ std::ifstream & alekseev::Dictionary::read(std::ifstream & is)
   }
 
   std::string line;
+  size_t loaded_forms = 0;
   Lemma lemma;
   while (std::getline(is, line)) {
     if (line.empty()) {
@@ -324,11 +325,14 @@ std::ifstream & alekseev::Dictionary::read(std::ifstream & is)
           lemmas_.insert(lemma.lemma_, lemma);
         }
         lemma = Lemma();
+        if (size() > loaded_forms + 1000) {
+          std::wcout << loaded_forms << L"\n";
+          loaded_forms = size();
+        }
       }
       lemma.lemma_ = words[0];
       if (words[1] == L"noun") {
         if (words.getSize() != 3) {
-          std::wcout << lemma.lemma_ << L"\n";
           throw std::invalid_argument(
               "Bad number of tags for noun " +
               std::string(lemma.lemma_.begin(), lemma.lemma_.end()));
@@ -391,10 +395,6 @@ std::ifstream & alekseev::Dictionary::read(std::ifstream & is)
       if (lemma.pos_ != require) {
         if (!forms_.contains(wf.word_)) {
           forms_.insert(wf.word_, Vector< std::pair< std::wstring, size_t > >());
-        }
-        if (!forms_.contains(wf.word_)) {
-          std::wcout << forms_.size() << L" " << forms_.capacity() << L" ";
-          std::wcout << wf << L" " << lemma.lemma_ << L"\n";
         }
         forms_.at(wf.word_).pushBack(std::make_pair(lemma.lemma_, lemma.forms_.getSize() - 1));
       }
@@ -782,23 +782,30 @@ alekseev::Vector< alekseev::WordForm > alekseev::Dictionary::damerau_find_wfs(ws
   if (forms_.contains(bad_word)) {
     return get_homoforms(bad_word);
   }
-  Vector< WordForm > res;
+  Vector< Vector< WordForm > > res(distance, {});
+  size_t count = 0;
   size_t m = max_number == 0 ? forms_.size() : max_number;
   long long int bad_word_size = bad_word.size();
-  for (auto wfs_it = forms_.begin(); wfs_it != forms_.end() && res.getSize() < max_number; ++
-       wfs_it) {
+  for (auto wfs_it = forms_.begin(); wfs_it != forms_.end() && count < m; ++wfs_it) {
     long long int cur_size = wfs_it->size();
     if (std::abs(bad_word_size - cur_size) <= distance) {
-      if (damerau_levenshtein(*wfs_it, bad_word) <= distance) {
+      size_t cur_dist = damerau_levenshtein(*wfs_it, bad_word);
+      if (cur_dist <= distance) {
         Vector< WordForm > found = get_homoforms(*wfs_it);
-        res += found;
+        res[cur_dist - 1] += found;
+        count += found.getSize();
       }
     }
   }
-  while (res.getSize() > m) {
-    res.popBack();
+  Vector< WordForm > final;
+  final.resize(count);
+  for (size_t i = 0; i < distance; ++i) {
+    final += res[i];
   }
-  return res;
+  while (final.getSize() > m) {
+    final.popBack();
+  }
+  return final;
 }
 
 alekseev::Vector< std::wstring > alekseev::Dictionary::damerau_find_form(wstr_cr bad_form,
@@ -849,7 +856,7 @@ void alekseev::DictionaryManager::load(wstr_cr name, wstr_cr file_name)
     throw std::invalid_argument("Dictionary already exists");
   }
   Dictionary d(file_name);
-  dicts_.insert(name, Dictionary(d));
+  dicts_.insert(name, std::move(d));
   current_ = name;
 }
 
@@ -906,9 +913,9 @@ void alekseev::DictionaryManager::add_word(wstr_cr word, std::wistream & is, std
   }
   if (ans != L'y') {
     std::wstring answer;
-    os << "Input word class (verb/adj/noun/req): ";
+    os << "Input word class (verb/adj/noun/req) >";
     p = unknown;
-    while (p == unknown && std::getline(is, answer)) {
+    while (p == unknown && wgetline(is, answer)) {
       if (answer == L"verb") {
         p = verb;
       } else if (answer == L"adj") {
@@ -919,8 +926,8 @@ void alekseev::DictionaryManager::add_word(wstr_cr word, std::wistream & is, std
         p = require;
       } else {
         os << L"Unknown word class: " << answer << L"\n";
-        os << L"Input some of \"verb\", \"adj\", \"noun\", \"req\"";
-        os << "Input word class (verb/adj/noun): ";
+        os << L"Input some of \"verb\", \"adj\", \"noun\", \"req\"\n";
+        os << "Input word class (verb/adj/noun) >";
       }
     }
   }
@@ -979,7 +986,7 @@ void alekseev::DictionaryManager::update_word(std::wstring word, std::wistream &
   os << "Enter new form with tags:\n";
   std::wstring form;
   WordForm wf;
-  while (std::getline(is, form)) {
+  while (wgetline(is, form)) {
     try {
       wf = WordForm(split(form), l.pos_);
     } catch (std::invalid_argument & e) {
@@ -1216,29 +1223,29 @@ void alekseev::DictionaryManager::add_verb(wstr_cr word, std::wistream & is, std
   std::wstring past_masc, past_fem, past_neut, past_pl;
   os << L"Enter forms, leave the non-existing ones empty\n";
   os << "Past tense:\n";
-  os << L"\tSingular masculine (he): ";
-  std::getline(is, past_masc);
-  os << L"\tSingular feminine (she): ";
-  std::getline(is, past_fem);
-  os << L"\tSingular neut (it): ";
-  std::getline(is, past_neut);
-  os << L"\tPlural (they): ";
-  std::getline(is, past_pl);
+  os << L"\tSingular masculine (he) >";
+  wgetline(is, past_masc);
+  os << L"\tSingular feminine (she) >";
+  wgetline(is, past_fem);
+  os << L"\tSingular neut (it) >";
+  wgetline(is, past_neut);
+  os << L"\tPlural (they) >";
+  wgetline(is, past_pl);
 
   os << L"Present/Future tense:\n";
   std::wstring pres_1s, pres_2s, pres_3s, pres_1p, pres_2p, pres_3p;
-  os << L"\t1st singular (I): ";
-  std::getline(is, pres_1s);
-  os << L"\t2nd singular (you): ";
-  std::getline(is, pres_2s);
-  os << L"\t3rd singular (he/she): ";
-  std::getline(is, pres_3s);
-  os << L"\t1st plural (we): ";
-  std::getline(is, pres_1p);
-  os << L"\t2nd plural (you): ";
-  std::getline(is, pres_2p);
-  os << L"\t3rd plural (they): ";
-  std::getline(is, pres_3p);
+  os << L"\t1st singular (I) >";
+  wgetline(is, pres_1s);
+  os << L"\t2nd singular (you) >";
+  wgetline(is, pres_2s);
+  os << L"\t3rd singular (he/she) >";
+  wgetline(is, pres_3s);
+  os << L"\t1st plural (we) >";
+  wgetline(is, pres_1p);
+  os << L"\t2nd plural (you) >";
+  wgetline(is, pres_2p);
+  os << L"\t3rd plural (they) >";
+  wgetline(is, pres_3p);
 
   size_t c = 0;
   if (!past_masc.empty()) {
@@ -1308,7 +1315,7 @@ void alekseev::DictionaryManager::add_adj(wstr_cr word, std::wistream & is, std:
   for (size_t i = 0; i < 3; i++) {
     os << "Singular " << genders_names[i] << ":\n";
     for (size_t j = 0; j < 6; j++) {
-      os << "\t" << cases_names[j] << ":";
+      os << "\t" << cases_names[j] << " >";
       getline(is, form);
       if (!form.empty()) {
         dict.add_form(word, form, genders[i], singular, cases[j], nn_tense, nn_person);
@@ -1319,7 +1326,7 @@ void alekseev::DictionaryManager::add_adj(wstr_cr word, std::wistream & is, std:
 
   os << L"Plural:\n";
   for (size_t i = 0; i < 6; i++) {
-    os << "\t" << cases_names[i] << ": ";
+    os << "\t" << cases_names[i] << " >";
     getline(is, form);
     if (!form.empty()) {
       dict.add_form(word, form, nn_gender, plural, cases[i], nn_tense, nn_person);
@@ -1332,7 +1339,7 @@ void alekseev::DictionaryManager::add_adj(wstr_cr word, std::wistream & is, std:
 void alekseev::DictionaryManager::add_noun(wstr_cr word, std::wistream & is, std::wostream & os)
 {
   Dictionary & dict = current();
-  os << L"Enter noun gender (masc/fem/neut/com): ";
+  os << L"Enter noun gender (masc/fem/neut/com) >";
   std::wstring gender_ans;
   gender g = nn_gender;
   while (getline(is, gender_ans) && g == nn_gender) {
@@ -1346,7 +1353,7 @@ void alekseev::DictionaryManager::add_noun(wstr_cr word, std::wistream & is, std
       g = common;
     } else {
       os << L"Bad noun gender: " << gender_ans << L"\n";
-      os << L"Enter noun gender (masc/fem/neut/com): ";
+      os << L"Enter noun gender (masc/fem/neut/com) >";
     }
   }
   dict.add_lemma(word, noun, g, nn_aspect);
@@ -1368,7 +1375,7 @@ void alekseev::DictionaryManager::add_noun(wstr_cr word, std::wistream & is, std
   for (size_t i = 0; i < 2; i++) {
     os << numbers_names[i] << ":\n";
     for (size_t j = 0; j < 6; j++) {
-      os << "\t" << cases_names[j] << ": ";
+      os << "\t" << cases_names[j] << " >";
       getline(is, form);
       if (!form.empty()) {
         dict.add_form(word, form, g, numbers[i], cases[j], nn_tense, nn_person);
@@ -1394,7 +1401,7 @@ void alekseev::DictionaryManager::add_req(wstr_cr word, std::wistream & is, std:
     ++c;
     WordForm wf(split(line), require);
     dict.add_req_form(word, wf.word_, wf.gender_, wf.number_, wf.case_, wf.tense_, wf.person_);
-    std::getline(is, line);
+    wgetline(is, line);
   }
   os << L"Successfully added " << c << " forms!\n";
 }

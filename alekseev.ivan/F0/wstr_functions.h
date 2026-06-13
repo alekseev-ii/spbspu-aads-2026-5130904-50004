@@ -14,6 +14,7 @@ namespace alekseev {
   Vector< std::wstring > split(wstr_cr s, wchar_t delim = L' ', bool need_trim = false);
   std::wstring utf8_to_wstring(const std::string & str);
   std::string wstring_to_utf8(wstr_cr wstr);
+  std::wistream & wgetline(std::wistream & is, std::wstring & wstr);
 
   std::wstring trim(wstr_cr str);
   std::wstring ltrim(wstr_cr str);
@@ -115,10 +116,10 @@ namespace alekseev {
       os << "\t" << i + 1 << ". " << opts[i] << L"\n";
     }
     os << "\t" << n_opts + 1 << ". " << no_one << L"\n";
-    os << L"(1-" << n_opts + 1 << L"): ";
+    os << L"(1-" << n_opts + 1 << L") >";
     std::wstring answer;
     wchar_t * end_ptr = nullptr;
-    while (std::getline(is, answer)) {
+    while (wgetline(is, answer)) {
       size_t ind = wcstoull(answer.c_str(), std::addressof(end_ptr), 10);
       if (*end_ptr != L'\0') {
         throw std::invalid_argument("Bad input");
@@ -129,6 +130,7 @@ namespace alekseev {
       if (!need_cycle) {
         throw std::invalid_argument("Bad input");
       }
+      os << L"(1-" << n_opts + 1 << L") >";
     }
     throw std::invalid_argument("Bad input");
   }
@@ -137,17 +139,25 @@ namespace alekseev {
   Vector< std::wstring > damerau_find(wstr_cr bad_word, FwdIter begin, FwdIter end,
       size_t max_number, size_t distance)
   {
-    Vector< std::wstring > res;
+    Vector< Vector< std::wstring > > res(distance, {});
+    size_t count = 0;
     long long int bad_word_size = bad_word.size();
-    for (auto it = begin; it < end && (res.getSize() < max_number || max_number == 0); ++it) {
+    for (auto it = begin; it < end && (count < max_number || max_number == 0); ++it) {
       long long int cur_size = (*it).size();
       if (std::abs(cur_size - bad_word_size) <= distance) {
-        if (damerau_levenshtein(*it, bad_word) <= distance) {
-          res.pushBack(*it);
+        size_t cur_dist = damerau_levenshtein(*it, bad_word);
+        if (cur_dist <= distance) {
+          res[cur_dist - 1].pushBack(*it);
+          ++count;
         }
       }
     }
-    return res;
+    Vector< std::wstring > final;
+    final.resize(count);
+    for (size_t i = 0; i < distance; ++i) {
+      final += res[i];
+    }
+    return final;
   }
 }
 #endif

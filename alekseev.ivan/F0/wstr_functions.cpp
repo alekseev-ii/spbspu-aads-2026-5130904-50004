@@ -82,6 +82,13 @@ std::string alekseev::wstring_to_utf8(wstr_cr wstr)
   return result;
 }
 
+std::wistream & alekseev::wgetline(std::wistream & is, std::wstring & wstr)
+{
+  std::getline(is, wstr);
+  is.ignore();
+  return is;
+}
+
 std::wstring alekseev::trim(const std::wstring & str)
 {
   return trim(str, is_whitespace);
@@ -108,7 +115,7 @@ wchar_t alekseev::to_lower(wchar_t ch)
     return ch + (L'a' - L'A');
   }
   if (ch >= L'А' && ch <= L'Я') {
-    return ch + (L'А' - L'а');
+    return ch + (L'а' - L'А');
   }
   if (ch == L'Ё') {
     return L'ё';
@@ -182,7 +189,6 @@ std::wstring alekseev::case_from_mask(wstr_cr str, const Vector< bool > & mask)
 wchar_t alekseev::yes_no(std::wstring answer)
 {
   answer = lower_case(answer);
-  std::wcout << "LC: " << answer << L"\n";
   if (answer == L"yes" || answer == L"y" || answer == L"да" || answer == L"д") {
     return L'y';
   } else if (answer == L"no" || answer == L"n" || answer == L"нет" || answer == L"н") {
@@ -197,10 +203,11 @@ wchar_t alekseev::ask_yes_no(wstr_cr question, std::wistream & is, std::wostream
 {
   os << question;
   if (add_variants) {
-    os << L" (yes/no) ";
+    os << L" (yes/no)";
   }
+  os << L" >";
   std::wstring answer;
-  while (std::getline(is, answer)) {
+  while (wgetline(is, answer)) {
     wchar_t ans = yes_no(answer);
     if (ans == L'y' || ans == L'n' || !need_cycle) {
       return ans;
@@ -208,8 +215,9 @@ wchar_t alekseev::ask_yes_no(wstr_cr question, std::wistream & is, std::wostream
       os << L"Unknown answer: " << answer << L"\n";
       os << question;
       if (add_variants) {
-        os << L" (yes/no) ";
+        os << L" (yes/no)";
       }
+      os << L" >";
     }
   }
   return L'u';
