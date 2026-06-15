@@ -146,11 +146,6 @@ namespace alekseev {
     Vector< std::wstring > damerau_find_require(wstr_cr bad_req, size_t max_number = 0,
         size_t distance = 2) const;
 
-    CuckooHash< std::wstring, Vector< std::pair< std::wstring, size_t > >, size_t (*)(wstr_cr),
-      size_t (*)(wstr_cr), bool(*)(wstr_cr, wstr_cr) >::KeyIterator b();
-    CuckooHash< std::wstring, Vector< std::pair< std::wstring, size_t > >, size_t (*)(wstr_cr),
-      size_t (*)(wstr_cr), bool(*)(wstr_cr, wstr_cr) >::KeyIterator e();
-
     private:
       CuckooHash< std::wstring, Lemma, size_t (*)(wstr_cr), size_t (*)(wstr_cr), bool(*)(wstr_cr,
           wstr_cr) > lemmas_;
