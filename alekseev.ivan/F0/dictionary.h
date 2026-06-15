@@ -123,7 +123,6 @@ namespace alekseev {
     std::pair< std::wstring, size_t > req_pair_by_wordform(const WordForm & wordform) const;
     Vector< WordForm > get_homoforms(wstr_cr wordform) const;
     const Lemma & get_lemma(wstr_cr lemma) const;
-    Vector< std::wstring > get_lemmas() const;
     Vector< WordForm > & forms_by_lemma(wstr_cr lemma);
     pos pos_of_lemma(wstr_cr lemma) const;
     Vector< pos > pos_of_form(wstr_cr wordform) const;
@@ -146,6 +145,11 @@ namespace alekseev {
         size_t distance = 2) const;
     Vector< std::wstring > damerau_find_require(wstr_cr bad_req, size_t max_number = 0,
         size_t distance = 2) const;
+
+    CuckooHash< std::wstring, Vector< std::pair< std::wstring, size_t > >, size_t (*)(wstr_cr),
+      size_t (*)(wstr_cr), bool(*)(wstr_cr, wstr_cr) >::KeyIterator b();
+    CuckooHash< std::wstring, Vector< std::pair< std::wstring, size_t > >, size_t (*)(wstr_cr),
+      size_t (*)(wstr_cr), bool(*)(wstr_cr, wstr_cr) >::KeyIterator e();
 
     private:
       CuckooHash< std::wstring, Lemma, size_t (*)(wstr_cr), size_t (*)(wstr_cr), bool(*)(wstr_cr,

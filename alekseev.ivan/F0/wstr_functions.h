@@ -139,22 +139,22 @@ namespace alekseev {
   Vector< std::wstring > damerau_find(wstr_cr bad_word, FwdIter begin, FwdIter end,
       size_t max_number, size_t distance)
   {
-    Vector< Vector< std::wstring > > res(distance, {});
+    Vector< Vector< std::wstring > > res(distance + 1, {});
     size_t count = 0;
     long long int bad_word_size = bad_word.size();
     for (auto it = begin; it < end && (count < max_number || max_number == 0); ++it) {
-      long long int cur_size = (*it).size();
+      long long int cur_size = it->size();
       if (std::abs(cur_size - bad_word_size) <= distance) {
         size_t cur_dist = damerau_levenshtein(*it, bad_word);
         if (cur_dist <= distance) {
-          res[cur_dist - 1].pushBack(*it);
+          res[cur_dist].pushBack(*it);
           ++count;
         }
       }
     }
     Vector< std::wstring > final;
     final.resize(count);
-    for (size_t i = 0; i < distance; ++i) {
+    for (size_t i = 0; i < distance + 1; ++i) {
       final += res[i];
     }
     return final;
