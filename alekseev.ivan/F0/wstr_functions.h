@@ -1,9 +1,14 @@
 #ifndef WSTR_FUNCTIONS_H
 #define WSTR_FUNCTIONS_H
+
 #include <string>
-#include "../common/vector.h"
 #include <initializer_list>
+#include "../common/vector.h"
+
+#ifdef _WIN32
+#include <fcntl.h>
 #include <windows.h>
+#endif
 
 namespace alekseev {
   using wstr_cr = const std::wstring &;
@@ -12,9 +17,7 @@ namespace alekseev {
   bool equal(wstr_cr s1, wstr_cr s2);
 
   Vector< std::wstring > split(wstr_cr s, wchar_t delim = L' ', bool need_trim = false);
-  std::wstring utf8_to_wstring(const std::string & str);
-  std::string wstring_to_utf8(wstr_cr wstr);
-  std::wistream & wgetline(std::wistream & is, std::wstring & wstr);
+  std::wistream & wgetline(std::wistream & is, std::wstring & str);
 
   std::wstring trim(wstr_cr str);
   std::wstring ltrim(wstr_cr str);
@@ -53,10 +56,17 @@ namespace alekseev {
   {
     ConsoleSetup();
     ~ConsoleSetup();
+    ConsoleSetup(const ConsoleSetup &) = delete;
+    ConsoleSetup & operator=(const ConsoleSetup &) = delete;
+    ConsoleSetup(ConsoleSetup &&) = delete;
+    ConsoleSetup & operator=(ConsoleSetup &&) = delete;
 
     private:
-      int old_cin_mode_, old_cout_mode_, old_cerr_mode_;
-      UINT old_output_cp_, old_input_cp_;
+#ifdef _WIN32
+      int _oldStdoutMode, _oldStdinMode, _oldStderrMode; UINT _oldOutputCP, _oldInputCP;
+#else
+      const char * _oldLocale = nullptr;
+#endif
   };
 
   size_t damerau_levenshtein(wstr_cr a, wstr_cr b);

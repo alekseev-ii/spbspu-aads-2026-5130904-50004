@@ -1,7 +1,7 @@
 #include "wstr_functions.h"
 
-#include <windows.h>
-#include <fcntl.h>
+#include <locale>
+#include <string.h>
 
 size_t alekseev::djb2_hash(wstr_cr line)
 {
@@ -55,37 +55,12 @@ alekseev::Vector< std::wstring > alekseev::split(const std::wstring & s, wchar_t
   return res;
 }
 
-std::wstring alekseev::utf8_to_wstring(const std::string & str)
-{
-  if (str.empty()) {
-    return {};
-  }
-
-  int size_needed = MultiByteToWideChar(CP_UTF8, 0, str.c_str(), static_cast< int >(str.size()),
-      nullptr, 0);
-  std::wstring wstr(size_needed, 0);
-  MultiByteToWideChar(CP_UTF8, 0, str.c_str(), static_cast< int >(str.size()), &wstr[0],
-      size_needed);
-  return wstr;
-}
-
-std::string alekseev::wstring_to_utf8(wstr_cr wstr)
-{
-  if (wstr.empty()) {
-    return {};
-  }
-  int size_needed = WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), static_cast< int >(wstr.size()),
-      nullptr, 0, nullptr, nullptr);
-  std::string result(size_needed, 0);
-  WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), static_cast< int >(wstr.size()), &result[0],
-      size_needed, nullptr, nullptr);
-  return result;
-}
-
 std::wistream & alekseev::wgetline(std::wistream & is, std::wstring & wstr)
 {
   std::getline(is, wstr);
+#ifdef _WIN32
   is.ignore();
+#endif
   return is;
 }
 
@@ -272,24 +247,40 @@ bool alekseev::is_whitespace(wchar_t ch)
   return false;
 }
 
-alekseev::ConsoleSetup::ConsoleSetup():
-  old_cin_mode_(_setmode(_fileno(stdin), _O_U16TEXT)),
-  old_cout_mode_(_setmode(_fileno(stdout), _O_U16TEXT)),
-  old_cerr_mode_(_setmode(_fileno(stderr), _O_U16TEXT)),
-  old_output_cp_(GetConsoleOutputCP()),
-  old_input_cp_(GetConsoleCP())
+alekseev::ConsoleSetup::ConsoleSetup()
 {
-  SetConsoleOutputCP(CP_UTF8);
+#ifdef _WIN32
+  _oldStdoutMode = _setmode(_fileno(stdout), _O_U16TEXT); _oldStdinMode =
+      _setmode(_fileno(stdin), _O_U16TEXT); _oldStderrMode = _setmode(_fileno(stderr), _O_U16TEXT);
+  _oldOutputCP = GetConsoleOutputCP(); _oldInputCP = GetConsoleCP(); SetConsoleOutputCP(CP_UTF8);
   SetConsoleCP(CP_UTF8);
+#else
+  char * old = std::setlocale(LC_ALL, nullptr);
+  if (old) {
+    _oldLocale = strdup(old);
+  }
+  const char * locales[] = {"", "C.UTF-8", "en_US.UTF-8", "ru_RU.UTF-8"};
+  for (const char * loc: locales) {
+    if (std::setlocale(LC_ALL, loc)) {
+      break;
+    }
+  }
+#endif
 }
 
 alekseev::ConsoleSetup::~ConsoleSetup()
 {
-  _setmode(_fileno(stdout), old_cout_mode_);
-  _setmode(_fileno(stdin), old_cin_mode_);
-  _setmode(_fileno(stderr), old_cerr_mode_);
-  SetConsoleOutputCP(old_output_cp_);
-  SetConsoleCP(old_input_cp_);
+#ifdef _WIN32
+  _setmode(_fileno(stdout), _oldStdoutMode); _setmode(_fileno(stdin), _oldStdinMode);
+  _setmode(_fileno(stderr), _oldStderrMode); SetConsoleOutputCP(_oldOutputCP);
+  SetConsoleCP(_oldInputCP);
+#else
+  if (_oldLocale) {
+    std::setlocale(LC_ALL, _oldLocale);
+    free(const_cast< char * >(_oldLocale));
+    _oldLocale = nullptr;
+  }
+#endif
 }
 
 size_t alekseev::damerau_levenshtein(wstr_cr a, wstr_cr b)
