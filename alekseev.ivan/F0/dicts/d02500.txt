@@ -45,18 +45,6 @@
 	этих gen plur
 	этими ins plur
 	этою ins sing fem
-	етот nom sing masc
-	етого gen sing masc
-	етому dat sing masc
-	етим ins sing masc
-	етом pre sing masc
-	ета nom sing fem
-	етой gen sing fem
-	ету acc sing fem
-	ето nom sing neut
-	ети nom plur
-	етих gen plur
-	етими ins plur
 
 который adj
 	который nom sing masc
@@ -158,8 +146,6 @@
 	людях pre plur
 	человеках pre plur
 	человече sing
-	человеки nom plur
-	человеков gen plur
 
 такой adj
 	такой nom sing masc

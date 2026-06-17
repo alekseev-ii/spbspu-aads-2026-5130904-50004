@@ -1,8 +1,9 @@
 #include "dictionary.h"
 
-#include <fcntl.h>
+#include <locale>
+#include <codecvt>
+
 #include "wstr_functions.h"
-#include <sstream>
 
 alekseev::WordForm::WordForm():
   gender_(nn_gender),
@@ -12,7 +13,7 @@ alekseev::WordForm::WordForm():
   person_(nn_person)
 { }
 
-alekseev::WordForm::WordForm(std::wstring wordform, gender g, number n, alekseev::case_ c, tense t,
+alekseev::WordForm::WordForm(std::wstring wordform, gender g, number n, case_e c, tense t,
     person p):
   word_(std::move(wordform)),
   gender_(g),
@@ -273,7 +274,8 @@ alekseev::Dictionary::Dictionary(wstr_cr file_name):
 
 void alekseev::Dictionary::read(wstr_cr file_name)
 {
-  std::ifstream is(file_name.data(), std::ios::binary);
+  std::wstring_convert< std::codecvt_utf8< wchar_t > > converter;
+  std::ifstream is(converter.to_bytes(file_name));
   if (!is.is_open()) {
     throw std::invalid_argument("Failed to open file");
   }
@@ -295,29 +297,21 @@ std::ifstream & alekseev::Dictionary::read(std::ifstream & is)
   std::string line;
   size_t loaded_forms = 0;
   Lemma lemma;
+  std::wstring_convert< std::codecvt_utf8< wchar_t > > converter;
   while (std::getline(is, line)) {
     if (line.empty()) {
       continue;
     }
-    if (line.size() > 2) {
-      if (static_cast< unsigned char >(line[0]) == 0xEF && static_cast< unsigned char >(line[1]) ==
-        0xBB && static_cast< unsigned char >(line[2]) == 0xBF) {
-        line = line.substr(3);
-        if (line.empty()) {
-          continue;
-        }
-      }
-    }
-    if (line[0] == L'#') {
+    std::wstring wline = converter.from_bytes(line);
+    if (wline[0] == L'#') {
       continue;
     }
 
-    std::wstring wline = utf8_to_wstring(line);
     Vector< std::wstring > words = split(wline, L' ', true);
     if (words.isEmpty()) {
       continue;
     }
-    if (wline[0] != L' ') {
+    if (wline[0] != L' ' && wline[0] != L'\t') {
       if (!lemma.lemma_.empty()) {
         if (lemma.pos_ == require) {
           requires_.insert(lemma.lemma_, lemma);
@@ -418,7 +412,8 @@ std::ifstream & alekseev::Dictionary::read(std::ifstream & is)
 
 void alekseev::Dictionary::write(wstr_cr file_name)
 {
-  std::ofstream os(file_name.data(), std::ios::binary);
+  std::wstring_convert< std::codecvt_utf8< wchar_t > > converter;
+  std::ofstream os(converter.to_bytes(file_name));
   if (!os.is_open()) {
     throw std::invalid_argument("Failed to open file");
   }
@@ -436,11 +431,12 @@ std::ofstream & alekseev::Dictionary::write(std::ofstream & os)
   if (!os.is_open() || !os.good()) {
     return os;
   }
+  std::wstring_convert< std::codecvt_utf8< wchar_t > > converter;
   for (auto keys_it = lemmas_.begin(); keys_it != lemmas_.end(); ++keys_it) {
-    os << wstring_to_utf8(to_wstring(lemmas_.at(*keys_it))) << "\n";
+    os << converter.to_bytes(to_wstring(lemmas_.at(*keys_it))) << "\n";
   }
   for (auto keys_it = requires_.begin(); keys_it != requires_.end(); ++keys_it) {
-    os << wstring_to_utf8(to_wstring(requires_.at(*keys_it))) << "\n";
+    os << converter.to_bytes(to_wstring(requires_.at(*keys_it))) << "\n";
   }
   return os;
 }
@@ -457,7 +453,7 @@ void alekseev::Dictionary::add_lemma(const std::wstring & lemma, pos pos, gender
 }
 
 void alekseev::Dictionary::add_form(const std::wstring & lemma, const std::wstring & wordform,
-    gender g, number n, case_ c, tense t, person p)
+    gender g, number n, case_e c, tense t, person p)
 {
   WordForm wf(wordform, g, n, c, t, p);
   Lemma & l = lemmas_.at(lemma);
@@ -479,7 +475,7 @@ void alekseev::Dictionary::add_require(wstr_cr require)
 }
 
 void alekseev::Dictionary::add_req_form(wstr_cr require, wstr_cr reqform, gender g, number n,
-    case_ c, tense t, person p)
+    case_e c, tense t, person p)
 {
   WordForm wf(reqform, g, n, c, t, p);
   Lemma & l = requires_.at(require);
@@ -689,7 +685,7 @@ alekseev::Vector< alekseev::WordForm > alekseev::Dictionary::filter_by_require(w
   return res;
 }
 
-bool alekseev::Dictionary::matches_case(wstr_cr wordform, case_ expected_case) const
+bool alekseev::Dictionary::matches_case(wstr_cr wordform, case_e expected_case) const
 {
   if (!forms_.contains(wordform)) {
     return false;
@@ -1075,7 +1071,8 @@ alekseev::Vector< std::wstring > alekseev::DictionaryManager::damerau_find_form(
     max_number = max_variants_;
   }
   Vector< std::wstring > res;
-  auto check = [&max_number, &res]() {
+  auto check = [&max_number, &res]()
+  {
     return res.getSize() < max_number || max_number == 0;
   };
   for (auto names_it = dicts_.begin(); names_it != dicts_.end() && check(); ++names_it) {
@@ -1097,7 +1094,8 @@ alekseev::Vector< std::wstring > alekseev::DictionaryManager::damerau_find_lemma
     max_number = max_variants_;
   }
   Vector< std::wstring > res;
-  auto check = [&max_number, &res]() {
+  auto check = [&max_number, &res]()
+  {
     return res.getSize() < max_number || max_number == 0;
   };
   for (auto names_it = dicts_.begin(); names_it != dicts_.end() && check(); ++names_it) {
@@ -1119,7 +1117,8 @@ alekseev::Vector< std::wstring > alekseev::DictionaryManager::find_by_require(ws
     max_number = max_variants_;
   }
   Vector< std::wstring > res;
-  auto check = [&max_number, &res]() {
+  auto check = [&max_number, &res]()
+  {
     return res.getSize() < max_number || max_number == 0;
   };
   for (auto names_it = dicts_.begin(); names_it != dicts_.end() && check(); ++names_it) {
@@ -1132,7 +1131,7 @@ alekseev::Vector< std::wstring > alekseev::DictionaryManager::find_by_require(ws
   return res;
 }
 
-bool alekseev::DictionaryManager::matches_case(wstr_cr wordform, case_ expected_case) const
+bool alekseev::DictionaryManager::matches_case(wstr_cr wordform, case_e expected_case) const
 {
   bool result = false;
   for (auto names_it = dicts_.begin(); names_it != dicts_.end() && !result; ++names_it) {
@@ -1302,7 +1301,7 @@ void alekseev::DictionaryManager::add_adj(wstr_cr word, std::wistream & is, std:
 {
   Dictionary & dict = current();
   dict.add_lemma(word, adj, nn_gender, nn_aspect);
-  case_ cases[6]{nominative, genitive, dative, accusative, instrumental, prepositional};
+  case_e cases[6]{nominative, genitive, dative, accusative, instrumental, prepositional};
   const wchar_t * cases_names[6]{
     L"Nominative",
     L"Genitive",
@@ -1362,7 +1361,7 @@ void alekseev::DictionaryManager::add_noun(wstr_cr word, std::wistream & is, std
     }
   }
   dict.add_lemma(word, noun, g, nn_aspect);
-  case_ cases[6]{nominative, genitive, dative, accusative, instrumental, prepositional};
+  case_e cases[6]{nominative, genitive, dative, accusative, instrumental, prepositional};
   const wchar_t * cases_names[6]{
     L"Nominative",
     L"Genitive",

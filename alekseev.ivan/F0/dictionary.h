@@ -22,7 +22,7 @@ namespace alekseev {
     nn_number, singular, plural
   };
 
-  enum case_
+  enum case_e
   {
     nn_case, nominative, genitive, dative, accusative, instrumental, prepositional
   };
@@ -48,13 +48,13 @@ namespace alekseev {
   {
     WordForm();
     explicit WordForm(std::wstring wordform, gender g = nn_gender, number n = nn_number,
-        case_ c = nn_case, tense t = nn_tense, person p = nn_person);
+        case_e c = nn_case, tense t = nn_tense, person p = nn_person);
     WordForm(const Vector< std::wstring > & tags, pos p);
     WordForm(wstr_cr wordform, pos p, const Vector< std::wstring > & tags);
     std::wstring word_;
     gender gender_;
     number number_;
-    case_ case_;
+    case_e case_;
     tense tense_;
     person person_;
 
@@ -101,9 +101,9 @@ namespace alekseev {
 
     void add_lemma(wstr_cr lemma, pos pos, gender noun_gender = nn_gender,
         aspect verb_aspect = nn_aspect);
-    void add_form(wstr_cr lemma, wstr_cr wordform, gender g, number n, case_ c, tense t, person p);
+    void add_form(wstr_cr lemma, wstr_cr wordform, gender g, number n, case_e c, tense t, person p);
     void add_require(wstr_cr require);
-    void add_req_form(wstr_cr require, wstr_cr reqform, gender g, number n, case_ c, tense t,
+    void add_req_form(wstr_cr require, wstr_cr reqform, gender g, number n, case_e c, tense t,
         person p);
     void remove_lemma(wstr_cr lemma);
     void remove_form(const WordForm & wordform);
@@ -128,7 +128,7 @@ namespace alekseev {
     Vector< pos > pos_of_form(wstr_cr wordform) const;
     Vector< WordForm > filter_by_require(wstr_cr require, const Vector< WordForm > & forms) const;
 
-    bool matches_case(wstr_cr wordform, case_ expected_case) const;
+    bool matches_case(wstr_cr wordform, case_e expected_case) const;
     bool matches_case(wstr_cr require, wstr_cr word) const;
     bool matches_person(wstr_cr wordform, person expected_person) const;
     bool matches_person(wstr_cr require, wstr_cr word) const;
@@ -184,7 +184,7 @@ namespace alekseev {
     Vector< std::wstring > find_by_require(wstr_cr require, wstr_cr wordform, size_t max_number = 0,
         size_t distance = 0) const;
 
-    bool matches_case(wstr_cr wordform, case_ expected_case) const;
+    bool matches_case(wstr_cr wordform, case_e expected_case) const;
     bool matches_case(wstr_cr require, wstr_cr word) const;
     bool matches_person(wstr_cr wordform, person expected_person) const;
     bool matches_person(wstr_cr require, wstr_cr word) const;
