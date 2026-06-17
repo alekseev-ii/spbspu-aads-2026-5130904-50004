@@ -2,6 +2,7 @@
 
 #include <locale>
 #include <codecvt>
+#include <iomanip>
 
 #include "wstr_functions.h"
 
@@ -295,7 +296,6 @@ std::ifstream & alekseev::Dictionary::read(std::ifstream & is)
   }
 
   std::string line;
-  size_t loaded_forms = 0;
   Lemma lemma;
   std::wstring_convert< std::codecvt_utf8< wchar_t > > converter;
   while (std::getline(is, line)) {
@@ -319,10 +319,6 @@ std::ifstream & alekseev::Dictionary::read(std::ifstream & is)
           lemmas_.insert(lemma.lemma_, lemma);
         }
         lemma = Lemma();
-        if (size() > loaded_forms + 1000) {
-          std::wcout << loaded_forms << L"\n";
-          loaded_forms = size();
-        }
       }
       lemma.lemma_ = words[0];
       while (lemmas_.contains(lemma.lemma_)) {
@@ -490,6 +486,9 @@ void alekseev::Dictionary::remove_lemma(const std::wstring & lemma)
   Lemma l = lemmas_.at(lemma);
   lemmas_.remove(lemma);
   for (size_t i = 0; i < l.forms_.getSize(); ++i) {
+    if (!forms_.contains(l.forms_[i].word_)) {
+      continue;
+    }
     Vector< std::pair< std::wstring, size_t > > & wfs = find_homoforms(l.forms_[i].word_);
     for (size_t j = 0; j < wfs.getSize(); ++j) {
       if (wfs[j].first == lemma) {
@@ -906,23 +905,16 @@ void alekseev::DictionaryManager::add_word(wstr_cr word, std::wistream & is, std
     ans = L'u';
   }
   if (ans != L'y') {
-    std::wstring answer;
-    os << "Input word class (verb/adj/noun/req) >";
-    p = unknown;
-    while (p == unknown && wgetline(is, answer)) {
-      if (answer == L"verb") {
-        p = verb;
-      } else if (answer == L"adj") {
-        p = adj;
-      } else if (answer == L"noun") {
-        p = noun;
-      } else if (answer == L"req") {
-        p = require;
-      } else {
-        os << L"Unknown word class: " << answer << L"\n";
-        os << L"Input some of \"verb\", \"adj\", \"noun\", \"req\"\n";
-        os << "Input word class (verb/adj/noun) >";
-      }
+    Vector< std::wstring > poses{L"verb", L"adjective", L"noun"};
+    size_t pos_number = choose(poses, std::wcin, std::wcout, 0, L"Choose word class:", L"require");
+    if (pos_number == 0) {
+      p = verb;
+    } else if (pos_number == 1) {
+      p = adj;
+    } else if (pos_number == 2) {
+      p = noun;
+    } else if (pos_number == 3) {
+      p = require;
     }
   }
   if (p == verb) {
@@ -947,7 +939,7 @@ void alekseev::DictionaryManager::update_word(std::wstring word, std::wistream &
     if (ans == L'y') {
       Vector< std::wstring > opts = dict.damerau_find_lemma(word, max_variants_, distance_);
       opts += dict.damerau_find_require(word, max_variants_ - opts.getSize(), distance_);
-      size_t ind = choose(opts, is, os, 5, L"What lemma do you want to update?");
+      size_t ind = choose(opts, is, os, max_variants_, L"What lemma do you want to update?");
       if (ind == opts.getSize()) {
         return;
       }
@@ -961,7 +953,7 @@ void alekseev::DictionaryManager::update_word(std::wstring word, std::wistream &
   const Lemma & l = dict.get_lemma(word);
   os << "Found:\n";
   os << l;
-  Vector< std::wstring > opts{L"New form", L"Update an existing form"};
+  Vector< std::wstring > opts{L"Add new form", L"Update an existing form"};
   size_t a = choose(opts, is, os, 0, L"What do you want to do?",
       L"It is not a correct word, cancel updating");
   if (a == 2) {
@@ -1227,9 +1219,9 @@ void alekseev::DictionaryManager::add_verb(wstr_cr word, std::wistream & is, std
   wgetline(is, past_masc);
   os << L"    Singular feminine (she) >";
   wgetline(is, past_fem);
-  os << L"    Singular neut (it) >";
+  os << L"    Singular neut (it)      >";
   wgetline(is, past_neut);
-  os << L"    Plural (they) >";
+  os << L"    Plural (they)           >";
   wgetline(is, past_pl);
 
   if (verb_aspect == perf) {
@@ -1238,17 +1230,17 @@ void alekseev::DictionaryManager::add_verb(wstr_cr word, std::wistream & is, std
     os << L"Present tense:\n";
   }
   std::wstring pres_1s, pres_2s, pres_3s, pres_1p, pres_2p, pres_3p;
-  os << L"    1st singular (I) >";
+  os << L"    1st singular (I)      >";
   wgetline(is, pres_1s);
-  os << L"    2nd singular (you) >";
+  os << L"    2nd singular (you)    >";
   wgetline(is, pres_2s);
   os << L"    3rd singular (he/she) >";
   wgetline(is, pres_3s);
-  os << L"    1st plural (we) >";
+  os << L"    1st plural (we)       >";
   wgetline(is, pres_1p);
-  os << L"    2nd plural (you) >";
+  os << L"    2nd plural (you)      >";
   wgetline(is, pres_2p);
-  os << L"    3rd plural (they) >";
+  os << L"    3rd plural (they)     >";
   wgetline(is, pres_3p);
 
   size_t c = 0;
@@ -1269,7 +1261,7 @@ void alekseev::DictionaryManager::add_verb(wstr_cr word, std::wistream & is, std
     ++c;
   }
 
-  tense t = verb_aspect == perf ? future : present;
+  tense t = (verb_aspect == perf) ? future : present;
   if (!pres_1s.empty()) {
     dict.add_form(word, pres_1s, nn_gender, singular, nn_case, t, first);
     ++c;
@@ -1300,6 +1292,7 @@ void alekseev::DictionaryManager::add_verb(wstr_cr word, std::wistream & is, std
 void alekseev::DictionaryManager::add_adj(wstr_cr word, std::wistream & is, std::wostream & os)
 {
   Dictionary & dict = current();
+  IOGuard ig(is), og(os);
   dict.add_lemma(word, adj, nn_gender, nn_aspect);
   case_e cases[6]{nominative, genitive, dative, accusative, instrumental, prepositional};
   const wchar_t * cases_names[6]{
@@ -1319,7 +1312,7 @@ void alekseev::DictionaryManager::add_adj(wstr_cr word, std::wistream & is, std:
   for (size_t i = 0; i < 3; i++) {
     os << L"Singular " << genders_names[i] << L":\n";
     for (size_t j = 0; j < 6; j++) {
-      os << L"    " << cases_names[j] << L" >";
+      os << L"    " << std::left << std::setw(14) << cases_names[j] << L">";
       wgetline(is, form);
       if (!form.empty()) {
         dict.add_form(word, form, genders[i], singular, cases[j], nn_tense, nn_person);
@@ -1330,7 +1323,7 @@ void alekseev::DictionaryManager::add_adj(wstr_cr word, std::wistream & is, std:
 
   os << L"Plural:\n";
   for (size_t i = 0; i < 6; i++) {
-    os << "    " << cases_names[i] << " >";
+    os << "    " << std::left << std::setw(14) << cases_names[i] << " >";
     wgetline(is, form);
     if (!form.empty()) {
       dict.add_form(word, form, nn_gender, plural, cases[i], nn_tense, nn_person);
@@ -1343,6 +1336,7 @@ void alekseev::DictionaryManager::add_adj(wstr_cr word, std::wistream & is, std:
 void alekseev::DictionaryManager::add_noun(wstr_cr word, std::wistream & is, std::wostream & os)
 {
   Dictionary & dict = current();
+  IOGuard ig(is), og(os);
   os << L"Enter noun gender (masc/fem/neut/com) >";
   std::wstring gender_ans;
   gender g = nn_gender;
@@ -1379,7 +1373,7 @@ void alekseev::DictionaryManager::add_noun(wstr_cr word, std::wistream & is, std
   for (size_t i = 0; i < 2; i++) {
     os << numbers_names[i] << L":\n";
     for (size_t j = 0; j < 6; j++) {
-      os << L"    " << cases_names[j] << L" >";
+      os << L"    " << std::left << std::setw(14) << cases_names[j] << L">";
       wgetline(is, form);
       if (!form.empty()) {
         dict.add_form(word, form, g, numbers[i], cases[j], nn_tense, nn_person);
@@ -1392,7 +1386,7 @@ void alekseev::DictionaryManager::add_noun(wstr_cr word, std::wistream & is, std
 
 void alekseev::DictionaryManager::add_req(wstr_cr word, std::wistream & is, std::wostream & os)
 {
-  Dictionary dict = current();
+  Dictionary & dict = current();
   dict.add_require(word);
 
   os << L"Enter the forms of the require, each on a separate line.\n";
