@@ -1,9 +1,7 @@
 #ifndef CONSOLE_SETUP_H
 #define CONSOLE_SETUP_H
 
-
 #include <string>
-#include <iostream>
 
 #ifdef _WIN32
 #include <fcntl.h>
@@ -20,20 +18,15 @@ namespace alekseev {
     Console(Console &&) = delete;
     Console & operator=(Console &&) = delete;
 
-    std::wstring operator()() const;
-    void operator()(const std::wstring & wstr);
+    std::wstring input() const;
 
     private:
 #ifdef _WIN32
-      int _oldStdoutMode;
-      int _oldStdinMode;
-      int _oldStderrMode;
-      UINT _oldOutputCP;
-      UINT _oldInputCP;
+      int _oldStdoutMode, _oldStdinMode, _oldStderrMode;
+      UINT _oldOutputCP, _oldInputCP;
 #else
       const char * _oldLocale = nullptr;
 #endif
   };
-
 }
 #endif

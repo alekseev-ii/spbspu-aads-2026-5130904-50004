@@ -1,8 +1,8 @@
 #include "unified_io.h"
 
-#include <clocale>
 #include <string.h>
-#include <cstdio>
+#include <iostream>
+#include <locale>
 
 alekseev::Console::Console()
 {
@@ -12,7 +12,6 @@ alekseev::Console::Console()
   _oldStderrMode = _setmode(_fileno(stderr), _O_U16TEXT);
   _oldOutputCP = GetConsoleOutputCP();
   _oldInputCP = GetConsoleCP();
-
   SetConsoleOutputCP(CP_UTF8);
   SetConsoleCP(CP_UTF8);
 #else
@@ -44,7 +43,7 @@ alekseev::Console::~Console()
 #endif
 }
 
-std::wstring alekseev::Console::operator()() const
+std::wstring alekseev::Console::input() const
 {
   std::wstring result;
   std::getline(std::wcin, result);
@@ -52,9 +51,4 @@ std::wstring alekseev::Console::operator()() const
   std::wcin.ignore();
 #endif
   return result;
-}
-
-void alekseev::Console::operator()(const std::wstring & wstr)
-{
-  std::wcout << wstr;
 }
