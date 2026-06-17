@@ -250,17 +250,18 @@ bool alekseev::is_whitespace(wchar_t ch)
 alekseev::ConsoleSetup::ConsoleSetup()
 {
 #ifdef _WIN32
-  _oldStdoutMode = _setmode(_fileno(stdout), _O_U16TEXT); _oldStdinMode =
-      _setmode(_fileno(stdin), _O_U16TEXT); _oldStderrMode = _setmode(_fileno(stderr), _O_U16TEXT);
-  _oldOutputCP = GetConsoleOutputCP(); _oldInputCP = GetConsoleCP(); SetConsoleOutputCP(CP_UTF8);
+  _oldStdoutMode = _setmode(_fileno(stdout), _O_U16TEXT);
+  _oldStdinMode = _setmode(_fileno(stdin), _O_U16TEXT);
+  _oldStderrMode = _setmode(_fileno(stderr), _O_U16TEXT);
+  _oldOutputCP = GetConsoleOutputCP();
+  _oldInputCP = GetConsoleCP();
+  SetConsoleOutputCP(CP_UTF8);
   SetConsoleCP(CP_UTF8);
 #else
-  char * old = std::setlocale(LC_ALL, nullptr);
-  if (old) {
+  char * old = std::setlocale(LC_ALL, nullptr); if (old) {
     _oldLocale = strdup(old);
-  }
-  const char * locales[] = {"", "C.UTF-8", "en_US.UTF-8", "ru_RU.UTF-8"};
-  for (const char * loc: locales) {
+  } const char * locales[] = {"", "C.UTF-8", "en_US.UTF-8", "ru_RU.UTF-8"}; for (
+    const char * loc: locales) {
     if (std::setlocale(LC_ALL, loc)) {
       break;
     }
@@ -271,8 +272,10 @@ alekseev::ConsoleSetup::ConsoleSetup()
 alekseev::ConsoleSetup::~ConsoleSetup()
 {
 #ifdef _WIN32
-  _setmode(_fileno(stdout), _oldStdoutMode); _setmode(_fileno(stdin), _oldStdinMode);
-  _setmode(_fileno(stderr), _oldStderrMode); SetConsoleOutputCP(_oldOutputCP);
+  _setmode(_fileno(stdout), _oldStdoutMode);
+  _setmode(_fileno(stdin), _oldStdinMode);
+  _setmode(_fileno(stderr), _oldStderrMode);
+  SetConsoleOutputCP(_oldOutputCP);
   SetConsoleCP(_oldInputCP);
 #else
   if (_oldLocale) {
@@ -281,6 +284,22 @@ alekseev::ConsoleSetup::~ConsoleSetup()
     _oldLocale = nullptr;
   }
 #endif
+}
+
+alekseev::IOGuard::IOGuard(std::basic_ios< wchar_t > & stream):
+  stream_(stream),
+  precision_(stream.precision()),
+  width_(stream.width()),
+  flags_(stream.flags()),
+  fill_(stream.fill())
+{ }
+
+alekseev::IOGuard::~IOGuard()
+{
+  stream_.precision(precision_);
+  stream_.width(width_);
+  stream_.flags(flags_);
+  stream_.fill(fill_);
 }
 
 size_t alekseev::damerau_levenshtein(wstr_cr a, wstr_cr b)

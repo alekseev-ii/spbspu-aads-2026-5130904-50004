@@ -69,6 +69,23 @@ namespace alekseev {
 #endif
   };
 
+  struct IOGuard
+  {
+    explicit IOGuard(std::basic_ios< wchar_t > & stream);
+    ~IOGuard();
+    IOGuard(const IOGuard &) = delete;
+    IOGuard & operator=(const IOGuard &) = delete;
+    IOGuard(IOGuard &&) = delete;
+    IOGuard & operator=(IOGuard &&) = delete;
+
+    private:
+      std::basic_ios< wchar_t > & stream_;
+      std::streamsize precision_;
+      std::streamsize width_;
+      std::basic_ios< wchar_t >::fmtflags flags_;
+      wchar_t fill_;
+  };
+
   size_t damerau_levenshtein(wstr_cr a, wstr_cr b);
   Vector< std::wstring > damerau_find(wstr_cr bad_word, const Vector< std::wstring > & candidates,
       size_t max_number = 0, size_t distance = 2);
