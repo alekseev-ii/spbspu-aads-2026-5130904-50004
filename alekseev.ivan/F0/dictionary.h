@@ -47,11 +47,12 @@ namespace alekseev {
   struct WordForm
   {
     WordForm();
-    explicit WordForm(std::wstring wordform, gender g = nn_gender, number n = nn_number,
-        case_e c = nn_case, tense t = nn_tense, person p = nn_person);
+    explicit WordForm(std::wstring wordform, pos p, gender g = nn_gender, number n = nn_number,
+        case_e c = nn_case, tense t = nn_tense, person pe = nn_person);
     WordForm(const Vector< std::wstring > & tags, pos p);
     WordForm(wstr_cr wordform, pos p, const Vector< std::wstring > & tags);
     std::wstring word_;
+    pos pos_;
     gender gender_;
     number number_;
     case_e case_;
@@ -61,7 +62,7 @@ namespace alekseev {
     bool operator==(const WordForm & rhs) const;
   };
 
-  bool matches(const WordForm & lhs, const WordForm & rhs);
+  bool matches(const WordForm & req, const WordForm & word);
   Vector< std::wstring > to_tags(const WordForm & wf);
   WordForm from_tags(const Vector< std::wstring > & tags, pos p);
   Vector< std::wstring > to_words(const Vector< WordForm > & wfs);
@@ -129,9 +130,7 @@ namespace alekseev {
     Vector< WordForm > filter_by_require(wstr_cr require, const Vector< WordForm > & forms) const;
 
     bool matches_case(wstr_cr wordform, case_e expected_case) const;
-    bool matches_case(wstr_cr require, wstr_cr word) const;
     bool matches_person(wstr_cr wordform, person expected_person) const;
-    bool matches_person(wstr_cr require, wstr_cr word) const;
     bool matches_require(wstr_cr require, wstr_cr word) const;
     bool matches_require(wstr_cr require, const WordForm & word) const;
 
@@ -177,6 +176,7 @@ namespace alekseev {
 
     bool contains_form(wstr_cr wordform) const;
     bool is_require(wstr_cr word) const;
+    Vector< WordForm > filter_by_require(wstr_cr require, const Vector< WordForm > & wfs) const;
     Vector< std::wstring > damerau_find_form(wstr_cr wordform, size_t max_number = 0,
         size_t distance = 0) const;
     Vector< std::wstring > damerau_find_lemma(wstr_cr wordform, size_t max_number = 0,
@@ -185,10 +185,9 @@ namespace alekseev {
         size_t distance = 0) const;
 
     bool matches_case(wstr_cr wordform, case_e expected_case) const;
-    bool matches_case(wstr_cr require, wstr_cr word) const;
     bool matches_person(wstr_cr wordform, person expected_person) const;
-    bool matches_person(wstr_cr require, wstr_cr word) const;
     bool matches_require(wstr_cr require, wstr_cr word) const;
+    bool matches_require(wstr_cr require, const WordForm & word) const;
 
     Dictionary & current();
     const Dictionary & current() const;
