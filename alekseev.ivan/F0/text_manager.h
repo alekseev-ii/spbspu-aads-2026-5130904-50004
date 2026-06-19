@@ -22,6 +22,8 @@ namespace alekseev {
   text_t from_wstring(wstr_cr orig_text);
   std::wstring to_wstring(const text_t & orig_text, size_t start = 0, size_t end = 0,
       bool corrected = true);
+  std::wstring to_wstring(const Vector< std::wstring > & text,
+      const Vector< std::wstring > & punctuation, size_t start = 0, size_t end = 0);
 
   struct TextManager
   {

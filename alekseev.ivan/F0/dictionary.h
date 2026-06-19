@@ -9,7 +9,7 @@
 namespace alekseev {
   enum pos
   {
-    unknown, noun, verb, adj, require
+    unknown, noun, verb, adj, require, functional
   };
 
   enum gender
@@ -192,6 +192,7 @@ namespace alekseev {
     Dictionary & current();
     const Dictionary & current() const;
 
+    size_t size() const;
     bool contains_dict(wstr_cr dict_name) const;
     void set_max_variants(size_t max_variants);
     void set_default_distance(size_t distance);

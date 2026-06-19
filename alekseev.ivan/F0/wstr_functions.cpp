@@ -55,6 +55,20 @@ alekseev::Vector< std::wstring > alekseev::split(const std::wstring & s, wchar_t
   return res;
 }
 
+std::wstring alekseev::replace(wstr_cr orig_str, wstr_cr old, wstr_cr replacement)
+{
+  std::wstring res;
+  for (size_t i = 0; i < orig_str.size(); ++i) {
+    if (orig_str.substr(i, old.size()) == old) {
+      res += replacement;
+      i += old.size() - 1;
+    } else {
+      res += orig_str[i];
+    }
+  }
+  return res;
+}
+
 std::wistream & alekseev::wgetline(std::wistream & is, std::wstring & wstr)
 {
   std::getline(is, wstr);

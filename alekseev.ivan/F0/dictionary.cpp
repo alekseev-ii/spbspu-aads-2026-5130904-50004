@@ -115,6 +115,9 @@ alekseev::Vector< std::wstring > alekseev::to_tags(const WordForm & wf)
 alekseev::WordForm alekseev::from_tags(const Vector< std::wstring > & tags, pos p)
 {
   WordForm wf(tags[0], p);
+  if (p == functional) {
+    return wf;
+  }
   for (size_t i = 1; i < tags.getSize(); ++i) {
     WordForm pre = wf;
     if (p == noun || p == adj || p == require) {
@@ -268,15 +271,13 @@ alekseev::pos alekseev::guess_pos(std::wstring word)
 }
 
 alekseev::Dictionary::Dictionary():
-  lemmas_(djb2_hash, poly_hash, equal, 2048),
-  forms_(djb2_hash, poly_hash, equal, 32726),
-  requires_(djb2_hash, poly_hash, equal, 512)
+  lemmas_(djb2_hash, poly_hash, equal, 512),
+  forms_(djb2_hash, poly_hash, equal, 16388),
+  requires_(djb2_hash, poly_hash, equal, 128)
 { }
 
 alekseev::Dictionary::Dictionary(wstr_cr file_name):
-  lemmas_(djb2_hash, poly_hash, equal, 2048),
-  forms_(djb2_hash, poly_hash, equal, 32726),
-  requires_(djb2_hash, poly_hash, equal, 512)
+  Dictionary()
 {
   read(file_name);
 }
@@ -334,9 +335,7 @@ std::ifstream & alekseev::Dictionary::read(std::ifstream & is)
       }
       if (words[1] == L"noun") {
         if (words.getSize() != 3) {
-          throw std::invalid_argument(
-              "Bad number of tags for noun " +
-              std::string(lemma.lemma_.begin(), lemma.lemma_.end()));
+          throw std::invalid_argument("Bad number of tags for noun");
         }
         lemma.pos_ = noun;
         lemma.verb_aspect_ = nn_aspect;
@@ -349,14 +348,11 @@ std::ifstream & alekseev::Dictionary::read(std::ifstream & is)
         } else if (words[2] == L"com") {
           lemma.noun_gender_ = common;
         } else {
-          throw std::invalid_argument(
-              "Invalid noun gender: " + std::string(words[2].begin(), words[2].end()));
+          throw std::invalid_argument("Invalid noun gender");
         }
       } else if (words[1] == L"verb") {
         if (words.getSize() != 3) {
-          throw std::invalid_argument(
-              "Bad number of tags for verb " +
-              std::string(lemma.lemma_.begin(), lemma.lemma_.end()));
+          throw std::invalid_argument("Bad number of tags for verb");
         }
         lemma.pos_ = verb;
         lemma.noun_gender_ = nn_gender;
@@ -365,25 +361,27 @@ std::ifstream & alekseev::Dictionary::read(std::ifstream & is)
         } else if (words[2] == L"imperf") {
           lemma.verb_aspect_ = imperf;
         } else {
-          throw std::invalid_argument(
-              "Invalid verb aspect " + std::string(words[2].begin(), words[2].end()));
+          throw std::invalid_argument("Invalid verb aspect");
         }
       } else if (words[1] == L"adj") {
         if (words.getSize() != 2) {
-          throw std::invalid_argument(
-              "Bad number of tags for adjective " + std::string(lemma.lemma_.begin(),
-                  lemma.lemma_.end()));
+          throw std::invalid_argument("Bad number of tags for adjective");
         }
         lemma.pos_ = adj;
         lemma.noun_gender_ = nn_gender;
         lemma.verb_aspect_ = nn_aspect;
       } else if (words[1] == L"req") {
         if (words.getSize() != 2) {
-          throw std::invalid_argument(
-              "Bad number of tags for require " + std::string(lemma.lemma_.begin(),
-                  lemma.lemma_.end()));
+          throw std::invalid_argument("Bad number of tags for require");
         }
         lemma.pos_ = require;
+        lemma.noun_gender_ = nn_gender;
+        lemma.verb_aspect_ = nn_aspect;
+      } else if (words[1] == L"fun") {
+        if (words.getSize() != 2) {
+          throw std::invalid_argument("Bad number of tags for functional");
+        }
+        lemma.pos_ = functional;
         lemma.noun_gender_ = nn_gender;
         lemma.verb_aspect_ = nn_aspect;
       }
@@ -405,9 +403,6 @@ std::ifstream & alekseev::Dictionary::read(std::ifstream & is)
     if (lemma.pos_ == require) {
       requires_.insert(lemma.lemma_, lemma);
     } else {
-      if (contains_lemma(lemma.lemma_)) {
-        std::wcout << lemma.lemma_ << L"\n";
-      }
       lemmas_.insert(lemma.lemma_, lemma);
     }
   }
@@ -732,7 +727,7 @@ bool alekseev::Dictionary::matches_require(wstr_cr require, wstr_cr word) const
 
 bool alekseev::Dictionary::matches_require(wstr_cr require, const WordForm & word) const
 {
-  if (!requires_.contains(require)) {
+  if (!contains_require(require)) {
     return false;
   }
   const Vector< WordForm > & reqs = requires_.at(require).forms_;
@@ -799,7 +794,7 @@ alekseev::Vector< std::wstring > alekseev::Dictionary::damerau_find_require(wstr
 alekseev::DictionaryManager::DictionaryManager():
   dicts_(djb2_hash, poly_hash, equal, 16),
   max_variants_(5),
-  distance_(2)
+  distance_(1)
 { }
 
 void alekseev::DictionaryManager::create(wstr_cr name)
@@ -877,7 +872,7 @@ void alekseev::DictionaryManager::add_word(wstr_cr word, std::wistream & is, std
   }
   if (ans != L'y') {
     Vector< std::wstring > poses{L"verb", L"adjective", L"noun"};
-    size_t pos_number = choose(poses, std::wcin, std::wcout, 0, L"Choose word class:", L"require");
+    size_t pos_number = choose(poses, is, os, 0, L"Choose word class:", L"require");
     if (pos_number == 0) {
       p = verb;
     } else if (pos_number == 1) {
@@ -1141,12 +1136,15 @@ bool alekseev::DictionaryManager::matches_require(wstr_cr require, wstr_cr word)
   bool res = false;
   for (auto forms_it = dicts_.begin(); forms_it != dicts_.end() && !res; ++forms_it) {
     const Dictionary & cur_dict = dicts_.at(*forms_it);
+    if (!cur_dict.contains_form(word)) {
+      continue;
+    }
     Vector< WordForm > hfs = cur_dict.get_homoforms(word);
     for (size_t i = 0; i < hfs.getSize() && !res; ++i) {
-      res = cur_dict.matches_require(require, hfs[i]);
+      res = matches_require(require, hfs[i]);
     }
   }
-  return false;
+  return res;
 }
 
 bool alekseev::DictionaryManager::matches_require(wstr_cr require, const WordForm & word) const
@@ -1172,6 +1170,15 @@ const alekseev::Dictionary & alekseev::DictionaryManager::current() const
     throw std::logic_error("Current dictionary is not defined");
   }
   return dicts_.at(current_);
+}
+
+size_t alekseev::DictionaryManager::size() const
+{
+  size_t s = 0;
+  for (auto it = dicts_.begin(); it != dicts_.end(); ++it) {
+    s += dicts_.at(*it).size();
+  }
+  return s;
 }
 
 bool alekseev::DictionaryManager::contains_dict(wstr_cr dict_name) const

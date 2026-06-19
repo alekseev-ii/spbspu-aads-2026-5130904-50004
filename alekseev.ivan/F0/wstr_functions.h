@@ -17,6 +17,7 @@ namespace alekseev {
   bool equal(wstr_cr s1, wstr_cr s2);
 
   Vector< std::wstring > split(wstr_cr s, wchar_t delim = L' ', bool need_trim = false);
+  std::wstring replace(wstr_cr orig_str, wstr_cr old, wstr_cr replacement);
   std::wistream & wgetline(std::wistream & is, std::wstring & str);
 
   std::wstring trim(wstr_cr str);
@@ -63,7 +64,8 @@ namespace alekseev {
 
     private:
 #ifdef _WIN32
-      int _oldStdoutMode, _oldStdinMode, _oldStderrMode; UINT _oldOutputCP, _oldInputCP;
+      int _oldStdoutMode, _oldStdinMode, _oldStderrMode;
+      UINT _oldOutputCP, _oldInputCP;
 #else
       const char * _oldLocale = nullptr;
 #endif
@@ -148,11 +150,13 @@ namespace alekseev {
     wchar_t * end_ptr = nullptr;
     while (wgetline(is, answer)) {
       size_t ind = wcstoull(answer.c_str(), std::addressof(end_ptr), 10);
-      if (*end_ptr != L'\0') {
+      if (*end_ptr != L'\0' && !need_cycle) {
         throw std::invalid_argument("Bad input");
       }
-      if (0 < ind && ind <= n_opts + 1) {
-        return ind - 1;
+      if (*end_ptr == L'\0') {
+        if (0 < ind && ind <= n_opts + 1) {
+          return ind - 1;
+        }
       }
       if (!need_cycle) {
         throw std::invalid_argument("Bad input");
@@ -169,7 +173,7 @@ namespace alekseev {
     Vector< Vector< std::wstring > > res(distance + 1, {});
     size_t count = 0;
     long long int bad_word_size = bad_word.size();
-    for (auto it = begin; it < end && (count < max_number || max_number == 0); ++it) {
+    for (auto it = begin; it != end && (count < max_number || max_number == 0); ++it) {
       long long int cur_size = it->size();
       if (std::abs(cur_size - bad_word_size) <= distance) {
         size_t cur_dist = damerau_levenshtein(*it, bad_word);

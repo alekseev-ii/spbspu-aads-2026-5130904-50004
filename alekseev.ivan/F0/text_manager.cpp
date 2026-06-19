@@ -1,11 +1,13 @@
 #include "text_manager.h"
 
+#include <locale>
+#include <codecvt>
 #include "dictionary.h"
 
 alekseev::text_t alekseev::from_wstring(wstr_cr orig_text)
 {
   text_t res{{}, {}, {}, {}, false};
-  res.original = split(orig_text, L' ');
+  res.original = split(replace(orig_text, L"\n", L"\n "));
   res.punctuations = Vector< std::wstring >(res.original.getSize(), {});
   for (size_t i = 0; i < res.original.getSize(); ++i) {
     std::wstring word = rtrim(res.original[i], [](wchar_t ch)
@@ -25,15 +27,27 @@ std::wstring alekseev::to_wstring(const text_t & orig_text, size_t start, size_t
     bool corrected)
 {
   const Vector< std::wstring > & to_join = corrected ? orig_text.corrected : orig_text.original;
-  if (start == 0 && end == 0) {
-    end = to_join.getSize();
+  return to_wstring(to_join, orig_text.punctuations, start, end);
+}
+
+std::wstring alekseev::to_wstring(const Vector< std::wstring > & text,
+    const Vector< std::wstring > & punctuation, size_t start, size_t end)
+{
+  if (end == 0) {
+    end = text.getSize();
   }
-  if (end > to_join.getSize() || end <= start) {
+  if (end > text.getSize() || end <= start) {
     throw std::out_of_range("End greater than size of text or end <= start");
+  }
+  if (text.getSize() != punctuation.getSize()) {
+    throw std::out_of_range("text and punctuations do not match");
   }
   std::wstring res;
   for (size_t i = start; i < end; ++i) {
-    res += to_join[i] + orig_text.punctuations[i] + L" ";
+    res += text[i] + punctuation[i];
+    if (!endswith(punctuation[i], L"\n")) {
+      res += L" ";
+    }
   }
   return res;
 }
@@ -42,13 +56,14 @@ alekseev::TextManager::TextManager(DictionaryManager & dict):
   texts_(djb2_hash, poly_hash, equal, 32),
   dict_(dict),
   max_variants_(4),
-  distance_(2)
+  distance_(1)
 { }
 
 void alekseev::TextManager::load(wstr_cr file_name, wstr_cr text_name)
 {
   std::wstring text;
-  std::ifstream f(file_name.data(), std::ios::binary);
+  std::wstring_convert< std::codecvt_utf8< wchar_t > > converter;
+  std::ifstream f(converter.to_bytes(file_name));
   if (!f.is_open()) {
     throw std::invalid_argument("Can not open file!");
   }
@@ -56,18 +71,9 @@ void alekseev::TextManager::load(wstr_cr file_name, wstr_cr text_name)
     std::string line;
     while (std::getline(f, line)) {
       if (line.empty()) {
-        text += L"\n ";
+        text += L"\n";
       }
-      if (line.size() > 2) {
-        if (static_cast< unsigned char >(line[0]) == 0xEF && static_cast< unsigned char >(line[1])
-          == 0xBB && static_cast< unsigned char >(line[2]) == 0xBF) {
-          line = line.substr(3);
-          if (line.empty()) {
-            continue;
-          }
-        }
-      }
-      text += utf8_to_wstring(line) + L"\n ";
+      text += converter.from_bytes(line) + L"\n";
     }
   } catch (...) {
     f.close();
@@ -90,25 +96,28 @@ alekseev::wstr_cr alekseev::TextManager::parse(wstr_cr name)
   bool was_require = false;
   for (size_t i = 0; i < for_correct.original.getSize(); ++i) {
     std::wstring word = lower_case(for_correct.original[i]);
+    if (word.empty()) {
+      continue;
+    }
     if (dict_.is_require(word)) {
       last_req = word;
       was_require = true;
     } else if (dict_.contains_form(word)) {
       if (was_require) {
         if (!dict_.matches_require(last_req, word)) {
-          Vector< std::wstring > corrections = dict_.find_by_require(last_req, word, max_variants_,
-              distance_);
+          Vector< std::wstring > corrections(1, L"No need correction");
+          corrections += dict_.find_by_require(last_req, word, max_variants_, distance_);
           for_correct.errors.push(std::make_pair(i, corrections));
           for_correct.saved = false;
         }
       }
       was_require = false;
     } else {
-      Vector< std::wstring > corrections;
+      Vector< std::wstring > corrections(1, L"No need correction");
       if (was_require) {
-        corrections = dict_.find_by_require(last_req, word, max_variants_, distance_);
+        corrections += dict_.find_by_require(last_req, word, max_variants_, distance_);
       } else {
-        corrections = dict_.damerau_find_form(word, max_variants_, distance_);
+        corrections += dict_.damerau_find_form(word, max_variants_, distance_);
       }
       for_correct.errors.push(std::make_pair(i, corrections));
       for_correct.saved = false;
@@ -137,17 +146,25 @@ alekseev::wstr_cr alekseev::TextManager::correct(std::wistream & is, std::wostre
     size_t i = err.first;
     size_t start = i > 5 ? i - 5 : 0;
     size_t end = s - i > 5 ? i + 5 : s;
-    os << to_wstring(for_correct, start, i, false) << L"[!]" << for_correct.original[i];
-    os << L"[!]" << to_wstring(for_correct, i + 1, end, false) << L"\n";
-    size_t ans = choose(err.second, is, os, max_variants_, L"Choose correction:",
-        L"Your variant...");
-    if (ans == max_variants_ || ans == err.second.getSize()) {
-      os << "Enter your variant: ";
+    if (start != i) {
+      os << to_wstring(corrected, for_correct.punctuations, start, i);
+    }
+    os << L" [!] " << for_correct.original[i] << L" [!] ";
+    if (i < s - 1) {
+      os << to_wstring(for_correct, i + 1, end, false);
+    }
+    os << L"\n";
+    size_t n_opts = max_variants_ == 0 ?
+                      err.second.getSize() :
+                      std::min(max_variants_ + 1, err.second.getSize());
+    size_t ans = choose(err.second, is, os, n_opts, L"Choose correction:", L"Your variant...");
+    if (ans == n_opts) {
+      os << "Enter your variant >";
       std::wstring word;
-      std::getline(is, word);
+      wgetline(is, word);
       corrected[i] = word;
-    } else {
-      corrected[i] = err.second[ans];
+    } else if (ans > 0) {
+      corrected[i] = case_from_mask(err.second[ans], mask_from_case(for_correct.original[i]));
     }
     for_correct.errors.pop();
     for_correct.saved = false;
@@ -163,12 +180,13 @@ alekseev::wstr_cr alekseev::TextManager::save(wstr_cr file_name, wstr_cr text_na
     throw std::invalid_argument("Bad text name for save!");
   }
   text_t & for_save = text_name.empty() ? texts_.at(last_corrected_) : texts_.at(text_name);
-  std::ofstream f(file_name.data(), std::ios::binary);
+  std::wstring_convert< std::codecvt_utf8< wchar_t > > converter;
+  std::ofstream f(converter.to_bytes(file_name));
   if (!f.is_open()) {
     throw std::invalid_argument("Can not open file!");
   }
   try {
-    f << wstring_to_utf8(to_wstring(for_save, 0, 0, !for_save.errors.empty()));
+    f << converter.to_bytes(to_wstring(for_save, 0, 0, !for_save.corrected.isEmpty()));
     if (f.good()) {
       for_save.saved = true;
     }

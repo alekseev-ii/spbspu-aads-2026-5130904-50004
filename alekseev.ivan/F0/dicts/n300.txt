@@ -1,0 +1,4684 @@
+год noun masc
+	год nom sing
+	года gen sing
+	году dat sing
+	год acc sing
+	годом ins sing
+	годе pre sing
+	году sing
+	года nom plur
+	годы nom plur
+	лета nom plur
+	годов gen plur
+	лет gen plur
+	годам dat plur
+	года acc plur
+	годы acc plur
+	годами ins plur
+	годах pre plur
+	году sing
+	гг nom plur
+	гг gen plur
+	гг dat plur
+	гг acc plur
+	гг ins plur
+	гг pre plur
+	летам dat plur
+	лета acc plur
+	летами ins plur
+	летах pre plur
+
+мочь noun fem
+	мочь nom sing
+	мочи gen sing
+	мочи dat sing
+	мочь acc sing
+	мочью ins sing
+	мочи pre sing
+	мочи nom plur
+	мочей gen plur
+	мочам dat plur
+	мочи acc plur
+	мочами ins plur
+	мочах pre plur
+
+человек noun masc
+	человек nom sing
+	человека gen sing
+	человеку dat sing
+	человека acc sing
+	человеком ins sing
+	человеке pre sing
+	люди nom plur
+	людей gen plur
+	человек gen plur
+	людям dat plur
+	человекам dat plur
+	людей acc plur
+	людьми ins plur
+	человеками ins plur
+	людях pre plur
+	человеках pre plur
+	человече sing
+	человеки nom plur
+	человеков gen plur
+
+время noun neut
+	время nom sing
+	времени gen sing
+	времени dat sing
+	время acc sing
+	временем ins sing
+	времени pre sing
+	времена nom plur
+	времён gen plur
+	временам dat plur
+	времена acc plur
+	временами ins plur
+	временах pre plur
+
+дело noun neut
+	дело nom sing
+	дела gen sing
+	делу dat sing
+	дело acc sing
+	делом ins sing
+	деле pre sing
+	дела nom plur
+	дел gen plur
+	делам dat plur
+	дела acc plur
+	делами ins plur
+	делах pre plur
+	делов gen plur
+
+жизнь noun fem
+	жизнь nom sing
+	жизни gen sing
+	жизни dat sing
+	жизнь acc sing
+	жизнью ins sing
+	жизни pre sing
+	жизни nom plur
+	жизней gen plur
+	жизням dat plur
+	жизни acc plur
+	жизнями ins plur
+	жизнях pre plur
+
+два noun masc
+	два nom
+	двух gen
+	двум dat
+	два acc
+	двух acc
+	двумя ins
+	двух pre
+	две nom
+	две acc
+	два nom
+	два acc
+
+день noun masc
+	день nom sing
+	дня gen sing
+	дню dat sing
+	день acc sing
+	днём ins sing
+	дне pre sing
+	дни nom plur
+	дней gen plur
+	дням dat plur
+	дни acc plur
+	днями ins plur
+	днях pre plur
+	дню sing
+
+рука noun fem
+	рука nom sing
+	руки gen sing
+	руке dat sing
+	руку acc sing
+	рукой ins sing
+	рукою ins sing
+	руке pre sing
+	руки nom plur
+	рук gen plur
+	рукам dat plur
+	руки acc plur
+	руками ins plur
+	руках pre plur
+
+раз noun masc
+	раз nom sing
+	раза gen sing
+	разу dat sing
+	раз acc sing
+	разом ins sing
+	разе pre sing
+	разы nom plur
+	раз gen plur
+	разам dat plur
+	разы acc plur
+	разами ins plur
+	разах pre plur
+	разу sing
+
+работа noun fem
+	работа nom sing
+	работы gen sing
+	работе dat sing
+	работу acc sing
+	работой ins sing
+	работою ins sing
+	работе pre sing
+	работы nom plur
+	работ gen plur
+	работам dat plur
+	работы acc plur
+	работами ins plur
+	работах pre plur
+
+слово noun neut
+	слово nom sing
+	слова gen sing
+	слову dat sing
+	слово acc sing
+	словом ins sing
+	слове pre sing
+	слова nom plur
+	слов gen plur
+	словам dat plur
+	слова acc plur
+	словами ins plur
+	словах pre plur
+
+место noun neut
+	место nom sing
+	места gen sing
+	месту dat sing
+	место acc sing
+	местом ins sing
+	месте pre sing
+	места nom plur
+	мест gen plur
+	местам dat plur
+	места acc plur
+	местами ins plur
+	местах pre plur
+
+лицо noun neut
+	лицо nom sing
+	лица gen sing
+	лицу dat sing
+	лицо acc sing
+	лицом ins sing
+	лице pre sing
+	лица nom plur
+	лиц gen plur
+	лицам dat plur
+	лица acc plur
+	лицами ins plur
+	лицах pre plur
+
+друг noun masc
+	друг nom sing
+	друга gen sing
+	другу dat sing
+	друга acc sing
+	другом ins sing
+	друге pre sing
+	друзья nom plur
+	друзей gen plur
+	друзьям dat plur
+	друзей acc plur
+	друзьями ins plur
+	друзьях pre plur
+
+глаз noun masc
+	глаз nom sing
+	глаза gen sing
+	глазу dat sing
+	глаз acc sing
+	глазом ins sing
+	глазе pre sing
+	глазу sing
+	глаза nom plur
+	глаз gen plur
+	глазам dat plur
+	глаза acc plur
+	глазами ins plur
+	глазах pre plur
+	глазу sing
+
+вопрос noun masc
+	вопрос nom sing
+	вопроса gen sing
+	вопросу dat sing
+	вопрос acc sing
+	вопросом ins sing
+	вопросе pre sing
+	вопросы nom plur
+	вопросов gen plur
+	вопросам dat plur
+	вопросы acc plur
+	вопросами ins plur
+	вопросах pre plur
+
+дом noun masc
+	дом nom sing
+	дома gen sing
+	дому sing
+	дому dat sing
+	дом acc sing
+	домом ins sing
+	доме pre sing
+	дому sing
+	дома nom plur
+	домов gen plur
+	домам dat plur
+	дома acc plur
+	домами ins plur
+	домах pre plur
+
+сторона noun fem
+	сторона nom sing
+	стороны gen sing
+	стороне dat sing
+	сторону acc sing
+	стороной ins sing
+	стороною ins sing
+	стороне pre sing
+	стороны nom plur
+	сторон gen plur
+	сторонам dat plur
+	стороны acc plur
+	сторонами ins plur
+	сторонах pre plur
+
+страна noun fem
+	страна nom sing
+	страны gen sing
+	стране dat sing
+	страну acc sing
+	страной ins sing
+	страною ins sing
+	стране pre sing
+	страны nom plur
+	стран gen plur
+	странам dat plur
+	страны acc plur
+	странами ins plur
+	странах pre plur
+
+мир noun masc
+	мир nom sing
+	мира gen sing
+	миру dat sing
+	мир acc sing
+	миром ins sing
+	мире pre sing
+	миры nom plur
+	миров gen plur
+	мирам dat plur
+	миры acc plur
+	мирами ins plur
+	мирах pre plur
+	миру sing
+	миру sing
+
+случай noun masc
+	случай nom sing
+	случая gen sing
+	случаю dat sing
+	случай acc sing
+	случаем ins sing
+	случае pre sing
+	случаи nom plur
+	случаев gen plur
+	случаям dat plur
+	случаи acc plur
+	случаями ins plur
+	случаях pre plur
+
+голова noun fem
+	голова nom sing
+	головы gen sing
+	голове dat sing
+	голову acc sing
+	головой ins sing
+	головою ins sing
+	голове pre sing
+	головы nom plur
+	голов gen plur
+	головам dat plur
+	головы acc plur
+	головами ins plur
+	головах pre plur
+
+ребенок noun masc
+	ребёнок nom sing
+	ребёнка gen sing
+	ребёнку dat sing
+	ребёнка acc sing
+	ребёнком ins sing
+	ребёнке pre sing
+	дети nom plur
+	детей gen plur
+	детям dat plur
+	детей acc plur
+	детьми ins plur
+	детях pre plur
+
+сила noun fem
+	сила nom sing
+	силы gen sing
+	силе dat sing
+	силу acc sing
+	силой ins sing
+	силою ins sing
+	силе pre sing
+	силы nom plur
+	сил gen plur
+	силам dat plur
+	силы acc plur
+	силами ins plur
+	силах pre plur
+
+конец noun masc
+	конец nom sing
+	конца gen sing
+	концу dat sing
+	конец acc sing
+	концом ins sing
+	конце pre sing
+	концы nom plur
+	концов gen plur
+	концам dat plur
+	концы acc plur
+	концами ins plur
+	концах pre plur
+
+вид noun masc
+	вид nom sing
+	вида gen sing
+	виду sing
+	виду dat sing
+	вид acc sing
+	видом ins sing
+	виде pre sing
+	виду sing
+	виды nom plur
+	видов gen plur
+	видам dat plur
+	виды acc plur
+	видами ins plur
+	видах pre plur
+
+система noun fem
+	система nom sing
+	системы gen sing
+	системе dat sing
+	систему acc sing
+	системой ins sing
+	системою ins sing
+	системе pre sing
+	системы nom plur
+	систем gen plur
+	системам dat plur
+	системы acc plur
+	системами ins plur
+	системах pre plur
+
+три noun com
+	три nom
+	трёх gen
+	трём dat
+	трёх acc
+	три acc
+	тремя ins
+	трёх pre
+
+часть noun fem
+	часть nom sing
+	части gen sing
+	части dat sing
+	часть acc sing
+	частью ins sing
+	части pre sing
+	части nom plur
+	частей gen plur
+	частям dat plur
+	части acc plur
+	частями ins plur
+	частях pre plur
+	частию ins sing
+
+город noun masc
+	город nom sing
+	города gen sing
+	городу dat sing
+	город acc sing
+	городом ins sing
+	городе pre sing
+	города nom plur
+	городов gen plur
+	городам dat plur
+	города acc plur
+	городами ins plur
+	городах pre plur
+
+отношение noun neut
+	отношение nom sing
+	отношенье nom sing
+	отношения gen sing
+	отношенья gen sing
+	отношению dat sing
+	отношенью dat sing
+	отношение acc sing
+	отношенье acc sing
+	отношением ins sing
+	отношеньем ins sing
+	отношении pre sing
+	отношенье pre sing
+	отношеньи pre sing
+	отношения nom plur
+	отношенья nom plur
+	отношений gen plur
+	отношениям dat plur
+	отношеньям dat plur
+	отношения acc plur
+	отношенья acc plur
+	отношениями ins plur
+	отношеньями ins plur
+	отношениях pre plur
+	отношеньях pre plur
+
+женщина noun fem
+	женщина nom sing
+	женщины gen sing
+	женщине dat sing
+	женщину acc sing
+	женщиной ins sing
+	женщиною ins sing
+	женщине pre sing
+	женщины nom plur
+	женщин gen plur
+	женщинам dat plur
+	женщин acc plur
+	женщинами ins plur
+	женщинах pre plur
+
+деньги noun fem
+	деньга nom sing
+	деньги gen sing
+	деньге dat sing
+	деньгу acc sing
+	деньгой ins sing
+	деньгою ins sing
+	деньге pre sing
+	деньги nom plur
+	денег gen plur
+	деньгам dat plur
+	деньги acc plur
+	деньгами ins plur
+	деньгах pre plur
+
+земля noun fem
+	земля nom sing
+	земли gen sing
+	земле dat sing
+	землю acc sing
+	землёй ins sing
+	землёю ins sing
+	земле pre sing
+	земли nom plur
+	земель gen plur
+	землям dat plur
+	земли acc plur
+	землями ins plur
+	землях pre plur
+
+машина noun fem
+	машина nom sing
+	машины gen sing
+	машине dat sing
+	машину acc sing
+	машиной ins sing
+	машиною ins sing
+	машине pre sing
+	машины nom plur
+	машин gen plur
+	машинам dat plur
+	машины acc plur
+	машинами ins plur
+	машинах pre plur
+
+вода noun fem
+	вода nom sing
+	воды gen sing
+	воде dat sing
+	воду acc sing
+	водой ins sing
+	водою ins sing
+	воде pre sing
+	воды nom plur
+	вод gen plur
+	водам dat plur
+	воды acc plur
+	водами ins plur
+	водах pre plur
+
+отец noun masc
+	отец nom sing
+	отца gen sing
+	отцу dat sing
+	отца acc sing
+	отцом ins sing
+	отце pre sing
+	отче sing
+	отцы nom plur
+	отцов gen plur
+	отцам dat plur
+	отцов acc plur
+	отцами ins plur
+	отцах pre plur
+
+проблема noun fem
+	проблема nom sing
+	проблемы gen sing
+	проблеме dat sing
+	проблему acc sing
+	проблемой ins sing
+	проблемою ins sing
+	проблеме pre sing
+	проблемы nom plur
+	проблем gen plur
+	проблемам dat plur
+	проблемы acc plur
+	проблемами ins plur
+	проблемах pre plur
+
+час noun masc
+	час nom sing
+	часа gen sing
+	часу sing
+	часу dat sing
+	час acc sing
+	часом ins sing
+	часе pre sing
+	часу sing
+	часы nom plur
+	часов gen plur
+	часам dat plur
+	часы acc plur
+	часами ins plur
+	часах pre plur
+
+право noun neut
+	право nom sing
+	права gen sing
+	праву dat sing
+	право acc sing
+	правом ins sing
+	праве pre sing
+	права nom plur
+	прав gen plur
+	правам dat plur
+	права acc plur
+	правами ins plur
+	правах pre plur
+
+нога noun fem
+	нога nom sing
+	ноги gen sing
+	ноге dat sing
+	ногу acc sing
+	ногой ins sing
+	ногою ins sing
+	ноге pre sing
+	ноги nom plur
+	ног gen plur
+	ногам dat plur
+	ноги acc plur
+	ногами ins plur
+	ногах pre plur
+
+решение noun neut
+	решение nom sing
+	решенье nom sing
+	решения gen sing
+	решенья gen sing
+	решению dat sing
+	решенью dat sing
+	решение acc sing
+	решенье acc sing
+	решением ins sing
+	решеньем ins sing
+	решении pre sing
+	решенье pre sing
+	решеньи pre sing
+	решения nom plur
+	решенья nom plur
+	решений gen plur
+	решениям dat plur
+	решеньям dat plur
+	решения acc plur
+	решенья acc plur
+	решениями ins plur
+	решеньями ins plur
+	решениях pre plur
+	решеньях pre plur
+
+дверь noun fem
+	дверь nom sing
+	двери gen sing
+	двери dat sing
+	дверь acc sing
+	дверью ins sing
+	двери pre sing
+	двери sing
+	двери nom plur
+	дверей gen plur
+	дверям dat plur
+	двери acc plur
+	дверьми ins plur
+	дверями ins plur
+	дверях pre plur
+
+образ noun masc
+	образ nom sing
+	образа gen sing
+	образу dat sing
+	образ acc sing
+	образом ins sing
+	образе pre sing
+	образа nom plur
+	образы nom plur
+	образов gen plur
+	образам dat plur
+	образа acc plur
+	образы acc plur
+	образами ins plur
+	образах pre plur
+
+история noun fem
+	история nom sing
+	истории gen sing
+	истории dat sing
+	историю acc sing
+	историей ins sing
+	историею ins sing
+	истории pre sing
+	истории nom plur
+	историй gen plur
+	историям dat plur
+	истории acc plur
+	историями ins plur
+	историях pre plur
+
+власть noun fem
+	власть nom sing
+	власти gen sing
+	власти dat sing
+	власть acc sing
+	властью ins sing
+	власти pre sing
+	власти nom plur
+	властей gen plur
+	властям dat plur
+	власти acc plur
+	властями ins plur
+	властях pre plur
+
+закон noun masc
+	закон nom sing
+	закона gen sing
+	закону dat sing
+	закон acc sing
+	законом ins sing
+	законе pre sing
+	законы nom plur
+	законов gen plur
+	законам dat plur
+	законы acc plur
+	законами ins plur
+	законах pre plur
+
+война noun fem
+	война nom sing
+	войны gen sing
+	войне dat sing
+	войну acc sing
+	войной ins sing
+	войною ins sing
+	войне pre sing
+	войны nom plur
+	войн gen plur
+	войнам dat plur
+	войны acc plur
+	войнами ins plur
+	войнах pre plur
+
+бог noun masc
+	бог nom sing
+	бога gen sing
+	богу dat sing
+	бога acc sing
+	богом ins sing
+	боге pre sing
+	боже sing
+	боги nom plur
+	богов gen plur
+	богам dat plur
+	богов acc plur
+	богами ins plur
+	богах pre plur
+
+голос noun masc
+	голос nom sing
+	голоса gen sing
+	голосу sing
+	голосу dat sing
+	голос acc sing
+	голосом ins sing
+	голосе pre sing
+	голоса nom plur
+	голосов gen plur
+	голосам dat plur
+	голоса acc plur
+	голосами ins plur
+	голосах pre plur
+
+тысяча noun fem
+	тысяча nom sing
+	тысячи gen sing
+	тысяче dat sing
+	тысячу acc sing
+	тысячей ins sing
+	тысячею ins sing
+	тысяче pre sing
+	тысячи nom plur
+	тысяч gen plur
+	тысячам dat plur
+	тысячи acc plur
+	тысячами ins plur
+	тысячах pre plur
+	тысячью ins sing
+	тыща nom sing
+	тыщи gen sing
+	тыще dat sing
+	тыщу acc sing
+	тыщей ins sing
+	тыщею ins sing
+	тыще pre sing
+	тыщи nom plur
+	тыщ gen plur
+	тыщам dat plur
+	тыщи acc plur
+	тыщами ins plur
+	тыщах pre plur
+
+книга noun fem
+	книга nom sing
+	книги gen sing
+	книге dat sing
+	книгу acc sing
+	книгой ins sing
+	книгою ins sing
+	книге pre sing
+	книги nom plur
+	книг gen plur
+	книгам dat plur
+	книги acc plur
+	книгами ins plur
+	книгах pre plur
+
+возможность noun fem
+	возможность nom sing
+	возможности gen sing
+	возможности dat sing
+	возможность acc sing
+	возможностью ins sing
+	возможности pre sing
+	возможности nom plur
+	возможностей gen plur
+	возможностям dat plur
+	возможности acc plur
+	возможностями ins plur
+	возможностях pre plur
+
+результат noun masc
+	результат nom sing
+	результата gen sing
+	результату dat sing
+	результат acc sing
+	результатом ins sing
+	результате pre sing
+	результаты nom plur
+	результатов gen plur
+	результатам dat plur
+	результаты acc plur
+	результатами ins plur
+	результатах pre plur
+
+ночь noun fem
+	ночь nom sing
+	ночи gen sing
+	ночи dat sing
+	ночь acc sing
+	ночью ins sing
+	ночи pre sing
+	ночи sing
+	ночи nom plur
+	ночей gen plur
+	ночам dat plur
+	ночи acc plur
+	ночами ins plur
+	ночах pre plur
+
+стол noun masc
+	стол nom sing
+	стола gen sing
+	столу dat sing
+	стол acc sing
+	столом ins sing
+	столе pre sing
+	столы nom plur
+	столов gen plur
+	столам dat plur
+	столы acc plur
+	столами ins plur
+	столах pre plur
+	столу sing
+
+имя noun neut
+	имя nom sing
+	имени gen sing
+	имени dat sing
+	имя acc sing
+	именем ins sing
+	имени pre sing
+	имена nom plur
+	имён gen plur
+	именам dat plur
+	имена acc plur
+	именами ins plur
+	именах pre plur
+	им gen sing
+
+область noun fem
+	область nom sing
+	области gen sing
+	области dat sing
+	область acc sing
+	областью ins sing
+	области pre sing
+	области nom plur
+	областей gen plur
+	областям dat plur
+	области acc plur
+	областями ins plur
+	областях pre plur
+
+статья noun fem
+	статья nom sing
+	статьи gen sing
+	статье dat sing
+	статью acc sing
+	статьёй ins sing
+	статьёю ins sing
+	статье pre sing
+	статьи nom plur
+	статей gen plur
+	статьям dat plur
+	статьи acc plur
+	статьями ins plur
+	статьях pre plur
+
+число noun neut
+	число nom sing
+	числа gen sing
+	числу dat sing
+	число acc sing
+	числом ins sing
+	числе pre sing
+	числа nom plur
+	чисел gen plur
+	числам dat plur
+	числа acc plur
+	числами ins plur
+	числах pre plur
+
+компания noun fem
+	компания nom sing
+	компании gen sing
+	компании dat sing
+	компанию acc sing
+	компанией ins sing
+	компаниею ins sing
+	компании pre sing
+	компании nom plur
+	компаний gen plur
+	компаниям dat plur
+	компании acc plur
+	компаниями ins plur
+	компаниях pre plur
+
+народ noun masc
+	народ nom sing
+	народа gen sing
+	народу sing
+	народу dat sing
+	народ acc sing
+	народом ins sing
+	народе pre sing
+	народы nom plur
+	народов gen plur
+	народам dat plur
+	народы acc plur
+	народами ins plur
+	народах pre plur
+
+жена noun fem
+	жена nom sing
+	жены gen sing
+	жене dat sing
+	жену acc sing
+	женой ins sing
+	женою ins sing
+	жене pre sing
+	жёны nom plur
+	жён gen plur
+	жёнам dat plur
+	жён acc plur
+	жёнами ins plur
+	жёнах pre plur
+
+группа noun fem
+	группа nom sing
+	группы gen sing
+	группе dat sing
+	группу acc sing
+	группой ins sing
+	группою ins sing
+	группе pre sing
+	группы nom plur
+	групп gen plur
+	группам dat plur
+	группы acc plur
+	группами ins plur
+	группах pre plur
+
+развитие noun neut
+	развитие nom sing
+	развитье nom sing
+	развития gen sing
+	развитья gen sing
+	развитию dat sing
+	развитью dat sing
+	развитие acc sing
+	развитье acc sing
+	развитием ins sing
+	развитьем ins sing
+	развитии pre sing
+	развитье pre sing
+	развитьи pre sing
+	развития nom plur
+	развитья nom plur
+	развитий gen plur
+	развитиям dat plur
+	развитьям dat plur
+	развития acc plur
+	развитья acc plur
+	развитиями ins plur
+	развитьями ins plur
+	развитиях pre plur
+	развитьях pre plur
+
+процесс noun masc
+	процесс nom sing
+	процесса gen sing
+	процессу dat sing
+	процесс acc sing
+	процессом ins sing
+	процессе pre sing
+	процессы nom plur
+	процессов gen plur
+	процессам dat plur
+	процессы acc plur
+	процессами ins plur
+	процессах pre plur
+
+суд noun masc
+	суд nom sing
+	суда gen sing
+	суду dat sing
+	суд acc sing
+	судом ins sing
+	суде pre sing
+	суды nom plur
+	судов gen plur
+	судам dat plur
+	суды acc plur
+	судами ins plur
+	судах pre plur
+
+условие noun neut
+	условие nom sing
+	условье nom sing
+	условия gen sing
+	условья gen sing
+	условию dat sing
+	условью dat sing
+	условие acc sing
+	условье acc sing
+	условием ins sing
+	условьем ins sing
+	условии pre sing
+	условье pre sing
+	условьи pre sing
+	условия nom plur
+	условья nom plur
+	условий gen plur
+	условиям dat plur
+	условьям dat plur
+	условия acc plur
+	условья acc plur
+	условиями ins plur
+	условьями ins plur
+	условиях pre plur
+	условьях pre plur
+
+средство noun neut
+	средство nom sing
+	средства gen sing
+	средству dat sing
+	средство acc sing
+	средством ins sing
+	средстве pre sing
+	средства nom plur
+	средств gen plur
+	средствам dat plur
+	средства acc plur
+	средствами ins plur
+	средствах pre plur
+
+начало noun neut
+	начало nom sing
+	начала gen sing
+	началу dat sing
+	начало acc sing
+	началом ins sing
+	начале pre sing
+	начала nom plur
+	начал gen plur
+	началам dat plur
+	начала acc plur
+	началами ins plur
+	началах pre plur
+
+свет noun masc
+	свет nom sing
+	света gen sing
+	свету sing
+	свету dat sing
+	свет acc sing
+	светом ins sing
+	свете pre sing
+	свету sing
+
+пора noun fem
+	пора nom sing
+	поры gen sing
+	поре dat sing
+	пору acc sing
+	порой ins sing
+	порою ins sing
+	поре pre sing
+	поры nom plur
+	пор gen plur
+	порам dat plur
+	поры acc plur
+	порами ins plur
+	порах pre plur
+
+путь noun masc
+	путь nom sing
+	пути gen sing
+	пути dat sing
+	путь acc sing
+	путём ins sing
+	пути pre sing
+	пути nom plur
+	путей gen plur
+	путям dat plur
+	пути acc plur
+	путями ins plur
+	путях pre plur
+
+душа noun fem
+	душа nom sing
+	души gen sing
+	душе dat sing
+	душу acc sing
+	душой ins sing
+	душою ins sing
+	душе pre sing
+	души nom plur
+	душ gen plur
+	душам dat plur
+	души acc plur
+	душами ins plur
+	душах pre plur
+
+уровень noun masc
+	уровень nom sing
+	уровня gen sing
+	уровню dat sing
+	уровень acc sing
+	уровнем ins sing
+	уровне pre sing
+	уровни nom plur
+	уровней gen plur
+	уровням dat plur
+	уровни acc plur
+	уровнями ins plur
+	уровнях pre plur
+
+форма noun fem
+	форма nom sing
+	формы gen sing
+	форме dat sing
+	форму acc sing
+	формой ins sing
+	формою ins sing
+	форме pre sing
+	формы nom plur
+	форм gen plur
+	формам dat plur
+	формы acc plur
+	формами ins plur
+	формах pre plur
+
+связь noun fem
+	связь nom sing
+	связи gen sing
+	связи dat sing
+	связь acc sing
+	связью ins sing
+	связи pre sing
+	связи sing
+	связи nom plur
+	связей gen plur
+	связям dat plur
+	связи acc plur
+	связями ins plur
+	связях pre plur
+
+минута noun fem
+	минута nom sing
+	минуты gen sing
+	минуте dat sing
+	минуту acc sing
+	минутой ins sing
+	минутою ins sing
+	минуте pre sing
+	минуты nom plur
+	минут gen plur
+	минутам dat plur
+	минуты acc plur
+	минутами ins plur
+	минутах pre plur
+
+улица noun fem
+	улица nom sing
+	улицы gen sing
+	улице dat sing
+	улицу acc sing
+	улицей ins sing
+	улицею ins sing
+	улице pre sing
+	улицы nom plur
+	улиц gen plur
+	улицам dat plur
+	улицы acc plur
+	улицами ins plur
+	улицах pre plur
+
+вечер noun masc
+	вечер nom sing
+	вечера gen sing
+	вечеру dat sing
+	вечер acc sing
+	вечером ins sing
+	вечере pre sing
+	вечера nom plur
+	вечеров gen plur
+	вечерам dat plur
+	вечера acc plur
+	вечерами ins plur
+	вечерах pre plur
+
+качество noun neut
+	качество nom sing
+	качества gen sing
+	качеству dat sing
+	качество acc sing
+	качеством ins sing
+	качестве pre sing
+	качества nom plur
+	качеств gen plur
+	качествам dat plur
+	качества acc plur
+	качествами ins plur
+	качествах pre plur
+
+мысль noun fem
+	мысль nom sing
+	мысли gen sing
+	мысли dat sing
+	мысль acc sing
+	мыслью ins sing
+	мысли pre sing
+	мысли nom plur
+	мыслей gen plur
+	мыслям dat plur
+	мысли acc plur
+	мыслями ins plur
+	мыслях pre plur
+
+дорога noun fem
+	дорога nom sing
+	дороги gen sing
+	дороге dat sing
+	дорогу acc sing
+	дорогой ins sing
+	дорогою ins sing
+	дороге pre sing
+	дороги nom plur
+	дорог gen plur
+	дорогам dat plur
+	дороги acc plur
+	дорогами ins plur
+	дорогах pre plur
+
+мать noun fem
+	мать nom sing
+	матери gen sing
+	матери dat sing
+	мать acc sing
+	матерью ins sing
+	матери pre sing
+	матери nom plur
+	матерей gen plur
+	матерям dat plur
+	матерей acc plur
+	матерями ins plur
+	матерях pre plur
+	матерь nom sing
+	матерь acc sing
+
+действие noun neut
+	действие nom sing
+	действия gen sing
+	действию dat sing
+	действие acc sing
+	действием ins sing
+	действии pre sing
+	действия nom plur
+	действий gen plur
+	действиям dat plur
+	действия acc plur
+	действиями ins plur
+	действиях pre plur
+
+месяц noun masc
+	месяц nom sing
+	месяца gen sing
+	месяцу dat sing
+	месяц acc sing
+	месяцем ins sing
+	месяце pre sing
+	месяцы nom plur
+	месяцев gen plur
+	месяцам dat plur
+	месяцы acc plur
+	месяцами ins plur
+	месяцах pre plur
+
+государство noun neut
+	государство nom sing
+	государства gen sing
+	государству dat sing
+	государство acc sing
+	государством ins sing
+	государстве pre sing
+	государства nom plur
+	государств gen plur
+	государствам dat plur
+	государства acc plur
+	государствами ins plur
+	государствах pre plur
+
+язык noun masc
+	язык nom sing
+	языка gen sing
+	языку dat sing
+	язык acc sing
+	языком ins sing
+	языке pre sing
+	языки nom plur
+	языков gen plur
+	языкам dat plur
+	языки acc plur
+	языками ins plur
+	языках pre plur
+	языцех pre plur
+	языку sing
+
+любовь noun fem
+	любовь nom sing
+	любви gen sing
+	любви dat sing
+	любовь acc sing
+	любовью ins sing
+	любви pre sing
+	любви nom plur
+	любвей gen plur
+	любвям dat plur
+	любви acc plur
+	любвями ins plur
+	любвях pre plur
+	любови gen sing
+	любови dat sing
+	любови pre sing
+	любови nom plur
+	любовей gen plur
+	любовям dat plur
+	любови acc plur
+	любовями ins plur
+	любовях pre plur
+
+взгляд noun masc
+	взгляд nom sing
+	взгляда gen sing
+	взгляду dat sing
+	взгляд acc sing
+	взглядом ins sing
+	взгляде pre sing
+	взгляды nom plur
+	взглядов gen plur
+	взглядам dat plur
+	взгляды acc plur
+	взглядами ins plur
+	взглядах pre plur
+
+мама noun fem
+	мама nom sing
+	мамы gen sing
+	маме dat sing
+	маму acc sing
+	мамой ins sing
+	мамою ins sing
+	маме pre sing
+	мам sing
+	мамы nom plur
+	мам gen plur
+	мамам dat plur
+	мам acc plur
+	мамами ins plur
+	мамах pre plur
+
+век noun masc
+	век nom sing
+	века gen sing
+	веку dat sing
+	век acc sing
+	веком ins sing
+	веке pre sing
+	веку sing
+	века nom plur
+	веков gen plur
+	векам dat plur
+	века acc plur
+	веками ins plur
+	веках pre plur
+	веку sing
+	вв nom plur
+	вв gen plur
+	вв dat plur
+	вв acc plur
+	вв ins plur
+	вв pre plur
+	веки acc plur
+
+школа noun fem
+	школа nom sing
+	школы gen sing
+	школе dat sing
+	школу acc sing
+	школой ins sing
+	школою ins sing
+	школе pre sing
+	школы nom plur
+	школ gen plur
+	школам dat plur
+	школы acc plur
+	школами ins plur
+	школах pre plur
+
+цель noun fem
+	цель nom sing
+	цели gen sing
+	цели dat sing
+	цель acc sing
+	целью ins sing
+	цели pre sing
+	цели nom plur
+	целей gen plur
+	целям dat plur
+	цели acc plur
+	целями ins plur
+	целях pre plur
+
+общество noun neut
+	общество nom sing
+	общества gen sing
+	обществу dat sing
+	общество acc sing
+	обществом ins sing
+	обществе pre sing
+	общества nom plur
+	обществ gen plur
+	обществам dat plur
+	общества acc plur
+	обществами ins plur
+	обществах pre plur
+
+деятельность noun fem
+	деятельность nom sing
+	деятельности gen sing
+	деятельности dat sing
+	деятельность acc sing
+	деятельностью ins sing
+	деятельности pre sing
+	деятельности nom plur
+	деятельностей gen plur
+	деятельностям dat plur
+	деятельности acc plur
+	деятельностями ins plur
+	деятельностях pre plur
+
+организация noun fem
+	организация nom sing
+	организации gen sing
+	организации dat sing
+	организацию acc sing
+	организацией ins sing
+	организациею ins sing
+	организации pre sing
+	организации nom plur
+	организаций gen plur
+	организациям dat plur
+	организации acc plur
+	организациями ins plur
+	организациях pre plur
+
+президент noun masc
+	президент nom sing
+	президента gen sing
+	президенту dat sing
+	президента acc sing
+	президентом ins sing
+	президенте pre sing
+	президенты nom plur
+	президентов gen plur
+	президентам dat plur
+	президентов acc plur
+	президентами ins plur
+	президентах pre plur
+
+комната noun fem
+	комната nom sing
+	комнаты gen sing
+	комнате dat sing
+	комнату acc sing
+	комнатой ins sing
+	комнатою ins sing
+	комнате pre sing
+	комнаты nom plur
+	комнат gen plur
+	комнатам dat plur
+	комнаты acc plur
+	комнатами ins plur
+	комнатах pre plur
+
+порядок noun masc
+	порядок nom sing
+	порядка gen sing
+	порядку sing
+	порядку dat sing
+	порядок acc sing
+	порядком ins sing
+	порядке pre sing
+	порядки nom plur
+	порядков gen plur
+	порядкам dat plur
+	порядки acc plur
+	порядками ins plur
+	порядках pre plur
+
+момент noun masc
+	момент nom sing
+	момента gen sing
+	моменту dat sing
+	момент acc sing
+	моментом ins sing
+	моменте pre sing
+	моменты nom plur
+	моментов gen plur
+	моментам dat plur
+	моменты acc plur
+	моментами ins plur
+	моментах pre plur
+
+театр noun masc
+	театр nom sing
+	театра gen sing
+	театру dat sing
+	театр acc sing
+	театром ins sing
+	театре pre sing
+	театры nom plur
+	театров gen plur
+	театрам dat plur
+	театры acc plur
+	театрами ins plur
+	театрах pre plur
+
+письмо noun neut
+	письмо nom sing
+	письма gen sing
+	письму dat sing
+	письмо acc sing
+	письмом ins sing
+	письме pre sing
+	письма nom plur
+	писем gen plur
+	письмам dat plur
+	письма acc plur
+	письмами ins plur
+	письмах pre plur
+
+утро noun neut
+	утро nom sing
+	утра gen sing
+	утру dat sing
+	утро acc sing
+	утром ins sing
+	утре pre sing
+	утра nom plur
+	утр gen plur
+	утрам dat plur
+	утра acc plur
+	утрами ins plur
+	утрах pre plur
+
+помощь noun fem
+	помощь nom sing
+	помощи gen sing
+	помощи dat sing
+	помощь acc sing
+	помощью ins sing
+	помощи pre sing
+	помощи nom plur
+	помощей gen plur
+	помощам dat plur
+	помощи acc plur
+	помощами ins plur
+	помощах pre plur
+
+ситуация noun fem
+	ситуация nom sing
+	ситуации gen sing
+	ситуации dat sing
+	ситуацию acc sing
+	ситуацией ins sing
+	ситуациею ins sing
+	ситуации pre sing
+	ситуации nom plur
+	ситуаций gen plur
+	ситуациям dat plur
+	ситуации acc plur
+	ситуациями ins plur
+	ситуациях pre plur
+
+роль noun fem
+	роль nom sing
+	роли gen sing
+	роли dat sing
+	роль acc sing
+	ролью ins sing
+	роли pre sing
+	роли nom plur
+	ролей gen plur
+	ролям dat plur
+	роли acc plur
+	ролями ins plur
+	ролях pre plur
+
+рубль noun masc
+	рубль nom sing
+	рубля gen sing
+	рублю dat sing
+	рубль acc sing
+	рублём ins sing
+	рубле pre sing
+	рубли nom plur
+	рублей gen plur
+	рублям dat plur
+	рубли acc plur
+	рублями ins plur
+	рублях pre plur
+
+смысл noun masc
+	смысл nom sing
+	смысла gen sing
+	смыслу dat sing
+	смысл acc sing
+	смыслом ins sing
+	смысле pre sing
+	смыслы nom plur
+	смыслов gen plur
+	смыслам dat plur
+	смыслы acc plur
+	смыслами ins plur
+	смыслах pre plur
+
+состояние noun neut
+	состояние nom sing
+	состоянье nom sing
+	состояния gen sing
+	состоянья gen sing
+	состоянию dat sing
+	состоянью dat sing
+	состояние acc sing
+	состоянье acc sing
+	состоянием ins sing
+	состояньем ins sing
+	состоянии pre sing
+	состоянье pre sing
+	состояньи pre sing
+	состояния nom plur
+	состоянья nom plur
+	состояний gen plur
+	состояниям dat plur
+	состояньям dat plur
+	состояния acc plur
+	состоянья acc plur
+	состояниями ins plur
+	состояньями ins plur
+	состояниях pre plur
+	состояньях pre plur
+
+квартира noun fem
+	квартира nom sing
+	квартиры gen sing
+	квартире dat sing
+	квартиру acc sing
+	квартирой ins sing
+	квартирою ins sing
+	квартире pre sing
+	квартиры nom plur
+	квартир gen plur
+	квартирам dat plur
+	квартиры acc plur
+	квартирами ins plur
+	квартирах pre plur
+
+орган noun masc
+	орган nom sing
+	органа gen sing
+	органу dat sing
+	орган acc sing
+	органом ins sing
+	органе pre sing
+	органы nom plur
+	органов gen plur
+	органам dat plur
+	органы acc plur
+	органами ins plur
+	органах pre plur
+
+внимание noun neut
+	внимание nom sing
+	вниманье nom sing
+	внимания gen sing
+	вниманья gen sing
+	вниманию dat sing
+	вниманью dat sing
+	внимание acc sing
+	вниманье acc sing
+	вниманием ins sing
+	вниманьем ins sing
+	внимании pre sing
+	вниманье pre sing
+	вниманьи pre sing
+	внимания nom plur
+	вниманья nom plur
+	вниманий gen plur
+	вниманиям dat plur
+	вниманьям dat plur
+	внимания acc plur
+	вниманья acc plur
+	вниманиями ins plur
+	вниманьями ins plur
+	вниманиях pre plur
+	вниманьях pre plur
+
+тело noun neut
+	тело nom sing
+	тела gen sing
+	телу dat sing
+	тело acc sing
+	телом ins sing
+	теле pre sing
+	тела nom plur
+	тел gen plur
+	телам dat plur
+	тела acc plur
+	телами ins plur
+	телах pre plur
+
+труд noun masc
+	труд nom sing
+	труда gen sing
+	труду dat sing
+	труд acc sing
+	трудом ins sing
+	труде pre sing
+	труды nom plur
+	трудов gen plur
+	трудам dat plur
+	труды acc plur
+	трудами ins plur
+	трудах pre plur
+
+сын noun masc
+	сын nom sing
+	сына gen sing
+	сыну dat sing
+	сына acc sing
+	сыном ins sing
+	сыне pre sing
+	сыновья nom plur
+	сыны nom plur
+	сынов gen plur
+	сыновей gen plur
+	сынам dat plur
+	сыновьям dat plur
+	сынов acc plur
+	сыновей acc plur
+	сынами ins plur
+	сыновьями ins plur
+	сынах pre plur
+	сыновьях pre plur
+
+мера noun fem
+	мера nom sing
+	меры gen sing
+	мере dat sing
+	меру acc sing
+	мерой ins sing
+	мерою ins sing
+	мере pre sing
+	меры nom plur
+	мер gen plur
+	мерам dat plur
+	меры acc plur
+	мерами ins plur
+	мерах pre plur
+
+пять noun com
+	пять nom
+	пяти gen
+	пяти dat
+	пять acc
+	пятью ins
+	пяти pre
+
+смерть noun fem
+	смерть nom sing
+	смерти gen sing
+	смерти dat sing
+	смерть acc sing
+	смертью ins sing
+	смерти pre sing
+	смерти nom plur
+	смертей gen plur
+	смертям dat plur
+	смерти acc plur
+	смертями ins plur
+	смертях pre plur
+
+рынок noun masc
+	рынок nom sing
+	рынка gen sing
+	рынку dat sing
+	рынок acc sing
+	рынком ins sing
+	рынке pre sing
+	рынки nom plur
+	рынков gen plur
+	рынкам dat plur
+	рынки acc plur
+	рынками ins plur
+	рынках pre plur
+
+программа noun fem
+	программа nom sing
+	программы gen sing
+	программе dat sing
+	программу acc sing
+	программой ins sing
+	программою ins sing
+	программе pre sing
+	программы nom plur
+	программ gen plur
+	программам dat plur
+	программы acc plur
+	программами ins plur
+	программах pre plur
+
+задача noun fem
+	задача nom sing
+	задачи gen sing
+	задаче dat sing
+	задачу acc sing
+	задачей ins sing
+	задачею ins sing
+	задаче pre sing
+	задачи nom plur
+	задач gen plur
+	задачам dat plur
+	задачи acc plur
+	задачами ins plur
+	задачах pre plur
+
+предприятие noun neut
+	предприятие nom sing
+	предприятье nom sing
+	предприятия gen sing
+	предприятья gen sing
+	предприятию dat sing
+	предприятью dat sing
+	предприятие acc sing
+	предприятье acc sing
+	предприятием ins sing
+	предприятьем ins sing
+	предприятии pre sing
+	предприятье pre sing
+	предприятьи pre sing
+	предприятия nom plur
+	предприятья nom plur
+	предприятий gen plur
+	предприятиям dat plur
+	предприятьям dat plur
+	предприятия acc plur
+	предприятья acc plur
+	предприятиями ins plur
+	предприятьями ins plur
+	предприятиях pre plur
+	предприятьях pre plur
+
+окно noun neut
+	окно nom sing
+	окна gen sing
+	окну dat sing
+	окно acc sing
+	окном ins sing
+	окне pre sing
+	окна nom plur
+	окон gen plur
+	окнам dat plur
+	окна acc plur
+	окнами ins plur
+	окнах pre plur
+
+разговор noun masc
+	разговор nom sing
+	разговора gen sing
+	разговору dat sing
+	разговор acc sing
+	разговором ins sing
+	разговоре pre sing
+	разговоры nom plur
+	разговоров gen plur
+	разговорам dat plur
+	разговоры acc plur
+	разговорами ins plur
+	разговорах pre plur
+
+правительство noun neut
+	правительство nom sing
+	правительства gen sing
+	правительству dat sing
+	правительство acc sing
+	правительством ins sing
+	правительстве pre sing
+	правительства nom plur
+	правительств gen plur
+	правительствам dat plur
+	правительства acc plur
+	правительствами ins plur
+	правительствах pre plur
+
+семья noun fem
+	семья nom sing
+	семьи gen sing
+	семье dat sing
+	семью acc sing
+	семьёй ins sing
+	семьёю ins sing
+	семье pre sing
+	семьи nom plur
+	семей gen plur
+	семьям dat plur
+	семьи acc plur
+	семьями ins plur
+	семьях pre plur
+
+производство noun neut
+	производство nom sing
+	производства gen sing
+	производству dat sing
+	производство acc sing
+	производством ins sing
+	производстве pre sing
+	производства nom plur
+	производств gen plur
+	производствам dat plur
+	производства acc plur
+	производствами ins plur
+	производствах pre plur
+
+информация noun fem
+	информация nom sing
+	информации gen sing
+	информации dat sing
+	информацию acc sing
+	информацией ins sing
+	информациею ins sing
+	информации pre sing
+	информации nom plur
+	информаций gen plur
+	информациям dat plur
+	информации acc plur
+	информациями ins plur
+	информациях pre plur
+
+положение noun neut
+	положение nom sing
+	положенье nom sing
+	положения gen sing
+	положенья gen sing
+	положению dat sing
+	положенью dat sing
+	положение acc sing
+	положенье acc sing
+	положением ins sing
+	положеньем ins sing
+	положении pre sing
+	положенье pre sing
+	положеньи pre sing
+	положения nom plur
+	положенья nom plur
+	положений gen plur
+	положениям dat plur
+	положеньям dat plur
+	положения acc plur
+	положенья acc plur
+	положениями ins plur
+	положеньями ins plur
+	положениях pre plur
+	положеньях pre plur
+
+центр noun masc
+	центр nom sing
+	центра gen sing
+	центру dat sing
+	центр acc sing
+	центром ins sing
+	центре pre sing
+	центры nom plur
+	центров gen plur
+	центрам dat plur
+	центры acc plur
+	центрами ins plur
+	центрах pre plur
+
+ответ noun masc
+	ответ nom sing
+	ответа gen sing
+	ответу dat sing
+	ответ acc sing
+	ответом ins sing
+	ответе pre sing
+	ответы nom plur
+	ответов gen plur
+	ответам dat plur
+	ответы acc plur
+	ответами ins plur
+	ответах pre plur
+
+муж noun masc
+	муж nom sing
+	мужа gen sing
+	мужу dat sing
+	мужа acc sing
+	мужем ins sing
+	муже pre sing
+	мужья nom plur
+	мужей gen plur
+	мужьям dat plur
+	мужей acc plur
+	мужьями ins plur
+	мужьях pre plur
+	мужи nom plur
+	мужам dat plur
+	мужами ins plur
+	мужах pre plur
+
+автор noun masc
+	автор nom sing
+	автора gen sing
+	автору dat sing
+	автора acc sing
+	автором ins sing
+	авторе pre sing
+	авторы nom plur
+	авторов gen plur
+	авторам dat plur
+	авторов acc plur
+	авторами ins plur
+	авторах pre plur
+
+стена noun fem
+	стена nom sing
+	стены gen sing
+	стене dat sing
+	стену acc sing
+	стеной ins sing
+	стеною ins sing
+	стене pre sing
+	стены nom plur
+	стен gen plur
+	стенам dat plur
+	стены acc plur
+	стенами ins plur
+	стенах pre plur
+
+интерес noun masc
+	интерес nom sing
+	интереса gen sing
+	интересу dat sing
+	интерес acc sing
+	интересом ins sing
+	интересе pre sing
+	интересы nom plur
+	интересов gen plur
+	интересам dat plur
+	интересы acc plur
+	интересами ins plur
+	интересах pre plur
+
+федерация noun fem
+	федерация nom sing
+	федерации gen sing
+	федерации dat sing
+	федерацию acc sing
+	федерацией ins sing
+	федерациею ins sing
+	федерации pre sing
+	федерации nom plur
+	федераций gen plur
+	федерациям dat plur
+	федерации acc plur
+	федерациями ins plur
+	федерациях pre plur
+
+правило noun neut
+	правило nom sing
+	правила gen sing
+	правилу dat sing
+	правило acc sing
+	правилом ins sing
+	правиле pre sing
+	правила nom plur
+	правил gen plur
+	правилам dat plur
+	правила acc plur
+	правилами ins plur
+	правилах pre plur
+
+оба noun masc
+	оба nom
+	обоих gen
+	обоим dat
+	оба acc
+	обоих acc
+	обоими ins
+	обоих pre
+	обе nom
+	обеих gen
+	обеим dat
+	обе acc
+	обеих acc
+	обеими ins
+	обеих pre
+	оба nom
+	обоих gen
+	обоим dat
+	оба acc
+	обоими ins
+	обоих pre
+	обоего gen
+
+управление noun neut
+	управление nom sing
+	управленье nom sing
+	управления gen sing
+	управленья gen sing
+	управлению dat sing
+	управленью dat sing
+	управление acc sing
+	управленье acc sing
+	управлением ins sing
+	управленьем ins sing
+	управлении pre sing
+	управленье pre sing
+	управленьи pre sing
+	управления nom plur
+	управленья nom plur
+	управлений gen plur
+	управлениям dat plur
+	управленьям dat plur
+	управления acc plur
+	управленья acc plur
+	управлениями ins plur
+	управленьями ins plur
+	управлениях pre plur
+	управленьях pre plur
+
+мужчина noun masc
+	мужчина nom sing
+	мужчины gen sing
+	мужчине dat sing
+	мужчину acc sing
+	мужчиной ins sing
+	мужчиною ins sing
+	мужчине pre sing
+	мужчины nom plur
+	мужчин gen plur
+	мужчинам dat plur
+	мужчин acc plur
+	мужчинами ins plur
+	мужчинах pre plur
+
+идея noun fem
+	идея nom sing
+	идеи gen sing
+	идее dat sing
+	идею acc sing
+	идеей ins sing
+	идеею ins sing
+	идее pre sing
+	идеи nom plur
+	идей gen plur
+	идеям dat plur
+	идеи acc plur
+	идеями ins plur
+	идеях pre plur
+
+партия noun fem
+	партия nom sing
+	партии gen sing
+	партии dat sing
+	партию acc sing
+	партией ins sing
+	партиею ins sing
+	партии pre sing
+	партии nom plur
+	партий gen plur
+	партиям dat plur
+	партии acc plur
+	партиями ins plur
+	партиях pre plur
+
+совет noun masc
+	совет nom sing
+	совета gen sing
+	совету dat sing
+	совет acc sing
+	советом ins sing
+	совете pre sing
+	советы nom plur
+	советов gen plur
+	советам dat plur
+	советы acc plur
+	советами ins plur
+	советах pre plur
+
+счет noun masc
+	счёт nom sing
+	счёта gen sing
+	счёту dat sing
+	счёт acc sing
+	счётом ins sing
+	счёте pre sing
+	счета nom plur
+	счётов gen plur
+	счетов gen plur
+	счётам dat plur
+	счетам dat plur
+	счета acc plur
+	счётами ins plur
+	счетами ins plur
+	счётах pre plur
+	счетах pre plur
+	счету sing
+
+сердце noun neut
+	сердце nom sing
+	сердца gen sing
+	сердцу dat sing
+	сердце acc sing
+	сердцем ins sing
+	сердце pre sing
+	сердца nom plur
+	сердец gen plur
+	сердцев gen plur
+	сердцам dat plur
+	сердца acc plur
+	сердцами ins plur
+	сердцах pre plur
+
+движение noun neut
+	движение nom sing
+	движенье nom sing
+	движения gen sing
+	движенья gen sing
+	движению dat sing
+	движенью dat sing
+	движение acc sing
+	движенье acc sing
+	движением ins sing
+	движеньем ins sing
+	движении pre sing
+	движенье pre sing
+	движеньи pre sing
+	движения nom plur
+	движенья nom plur
+	движений gen plur
+	движениям dat plur
+	движеньям dat plur
+	движения acc plur
+	движенья acc plur
+	движениями ins plur
+	движеньями ins plur
+	движениях pre plur
+	движеньях pre plur
+
+вещь noun fem
+	вещь nom sing
+	вещи gen sing
+	вещи dat sing
+	вещь acc sing
+	вещью ins sing
+	вещи pre sing
+	вещи nom plur
+	вещей gen plur
+	вещам dat plur
+	вещи acc plur
+	вещами ins plur
+	вещах pre plur
+
+материал noun masc
+	материал nom sing
+	материала gen sing
+	материалу sing
+	материалу dat sing
+	материал acc sing
+	материалом ins sing
+	материале pre sing
+	материалы nom plur
+	материалов gen plur
+	материалам dat plur
+	материалы acc plur
+	материалами ins plur
+	материалах pre plur
+
+неделя noun fem
+	неделя nom sing
+	недели gen sing
+	неделе dat sing
+	неделю acc sing
+	неделей ins sing
+	неделею ins sing
+	неделе pre sing
+	недели nom plur
+	недель gen plur
+	неделям dat plur
+	недели acc plur
+	неделями ins plur
+	неделях pre plur
+
+чувство noun neut
+	чувство nom sing
+	чувства gen sing
+	чувству dat sing
+	чувство acc sing
+	чувством ins sing
+	чувстве pre sing
+	чувства nom plur
+	чувств gen plur
+	чувствам dat plur
+	чувства acc plur
+	чувствами ins plur
+	чувствах pre plur
+
+глава noun com
+	глава nom sing
+	главы gen sing
+	главе dat sing
+	главу acc sing
+	главой ins sing
+	главою ins sing
+	главе pre sing
+	главы nom plur
+	глав gen plur
+	главам dat plur
+	глав acc plur
+	главами ins plur
+	главах pre plur
+
+наука noun fem
+	наука nom sing
+	науки gen sing
+	науке dat sing
+	науку acc sing
+	наукой ins sing
+	наукою ins sing
+	науке pre sing
+	науки nom plur
+	наук gen plur
+	наукам dat plur
+	науки acc plur
+	науками ins plur
+	науках pre plur
+
+ряд noun masc
+	ряд nom sing
+	ряда gen sing
+	ряду dat sing
+	ряд acc sing
+	рядом ins sing
+	ряде pre sing
+	ряду sing
+	ряды nom plur
+	рядов gen plur
+	рядам dat plur
+	ряды acc plur
+	рядами ins plur
+	рядах pre plur
+
+газета noun fem
+	газета nom sing
+	газеты gen sing
+	газете dat sing
+	газету acc sing
+	газетой ins sing
+	газетою ins sing
+	газете pre sing
+	газеты nom plur
+	газет gen plur
+	газетам dat plur
+	газеты acc plur
+	газетами ins plur
+	газетах pre plur
+
+причина noun fem
+	причина nom sing
+	причины gen sing
+	причине dat sing
+	причину acc sing
+	причиной ins sing
+	причиною ins sing
+	причине pre sing
+	причины nom plur
+	причин gen plur
+	причинам dat plur
+	причины acc plur
+	причинами ins plur
+	причинах pre plur
+
+плечо noun neut
+	плечо nom sing
+	плеча gen sing
+	плечу dat sing
+	плечо acc sing
+	плечом ins sing
+	плече pre sing
+	плечи nom plur
+	плеч gen plur
+	плечам dat plur
+	плечи acc plur
+	плечами ins plur
+	плечах pre plur
+	плечей gen plur
+	плечьми ins plur
+
+цена noun fem
+	цена nom sing
+	цены gen sing
+	цене dat sing
+	цену acc sing
+	ценой ins sing
+	ценою ins sing
+	цене pre sing
+	цены nom plur
+	цен gen plur
+	ценам dat plur
+	цены acc plur
+	ценами ins plur
+	ценах pre plur
+
+план noun masc
+	план nom sing
+	плана gen sing
+	плану dat sing
+	план acc sing
+	планом ins sing
+	плане pre sing
+	планы nom plur
+	планов gen plur
+	планам dat plur
+	планы acc plur
+	планами ins plur
+	планах pre plur
+
+речь noun fem
+	речь nom sing
+	речи gen sing
+	речи dat sing
+	речь acc sing
+	речью ins sing
+	речи pre sing
+	речи nom plur
+	речей gen plur
+	речам dat plur
+	речи acc plur
+	речами ins plur
+	речах pre plur
+
+четыре noun com
+	четыре nom
+	четырёх gen
+	четырём dat
+	четыре acc
+	четырёх acc
+	четырьмя ins
+	четырёх pre
+
+точка noun fem
+	точка nom sing
+	точки gen sing
+	точке dat sing
+	точку acc sing
+	точкой ins sing
+	точкою ins sing
+	точке pre sing
+	точки nom plur
+	точек gen plur
+	точкам dat plur
+	точки acc plur
+	точками ins plur
+	точках pre plur
+
+основа noun fem
+	основа nom sing
+	основы gen sing
+	основе dat sing
+	основу acc sing
+	основой ins sing
+	основою ins sing
+	основе pre sing
+	основы nom plur
+	основ gen plur
+	основам dat plur
+	основы acc plur
+	основами ins plur
+	основах pre plur
+
+товарищ noun masc
+	товарищ nom sing
+	товарища gen sing
+	товарищу dat sing
+	товарища acc sing
+	товарищем ins sing
+	товарище pre sing
+	товарищи nom plur
+	товарищей gen plur
+	товарищам dat plur
+	товарищей acc plur
+	товарищами ins plur
+	товарищах pre plur
+
+культура noun fem
+	культура nom sing
+	культуры gen sing
+	культуре dat sing
+	культуру acc sing
+	культурой ins sing
+	культурою ins sing
+	культуре pre sing
+	культуры nom plur
+	культур gen plur
+	культурам dat plur
+	культуры acc plur
+	культурами ins plur
+	культурах pre plur
+
+мнение noun neut
+	мнение nom sing
+	мненье nom sing
+	мнения gen sing
+	мненья gen sing
+	мнению dat sing
+	мненью dat sing
+	мнение acc sing
+	мненье acc sing
+	мнением ins sing
+	мненьем ins sing
+	мнении pre sing
+	мненье pre sing
+	мненьи pre sing
+	мнения nom plur
+	мненья nom plur
+	мнений gen plur
+	мнениям dat plur
+	мненьям dat plur
+	мнения acc plur
+	мненья acc plur
+	мнениями ins plur
+	мненьями ins plur
+	мнениях pre plur
+	мненьях pre plur
+
+документ noun masc
+	документ nom sing
+	документа gen sing
+	документу dat sing
+	документ acc sing
+	документом ins sing
+	документе pre sing
+	документы nom plur
+	документов gen plur
+	документам dat plur
+	документы acc plur
+	документами ins plur
+	документах pre plur
+
+институт noun masc
+	институт nom sing
+	института gen sing
+	институту dat sing
+	институт acc sing
+	институтом ins sing
+	институте pre sing
+	институты nom plur
+	институтов gen plur
+	институтам dat plur
+	институты acc plur
+	институтами ins plur
+	институтах pre plur
+
+ход noun masc
+	ход nom sing
+	хода gen sing
+	ходу sing
+	ходу dat sing
+	ход acc sing
+	ходом ins sing
+	ходе pre sing
+	ходу sing
+	хода nom plur
+	ходы nom plur
+	ходов gen plur
+	ходам dat plur
+	хода acc plur
+	ходы acc plur
+	ходами ins plur
+	ходах pre plur
+
+проект noun masc
+	проект nom sing
+	проекта gen sing
+	проекту dat sing
+	проект acc sing
+	проектом ins sing
+	проекте pre sing
+	проекты nom plur
+	проектов gen plur
+	проектам dat plur
+	проекты acc plur
+	проектами ins plur
+	проектах pre plur
+
+встреча noun fem
+	встреча nom sing
+	встречи gen sing
+	встрече dat sing
+	встречу acc sing
+	встречей ins sing
+	встречею ins sing
+	встрече pre sing
+	встречи nom plur
+	встреч gen plur
+	встречам dat plur
+	встречи acc plur
+	встречами ins plur
+	встречах pre plur
+
+директор noun masc
+	директор nom sing
+	директора gen sing
+	директору dat sing
+	директора acc sing
+	директором ins sing
+	директоре pre sing
+	директора nom plur
+	директоров gen plur
+	директорам dat plur
+	директоров acc plur
+	директорами ins plur
+	директорах pre plur
+
+срок noun masc
+	срок nom sing
+	срока gen sing
+	сроку sing
+	сроку dat sing
+	срок acc sing
+	сроком ins sing
+	сроке pre sing
+	сроки nom plur
+	сроков gen plur
+	срокам dat plur
+	сроки acc plur
+	сроками ins plur
+	сроках pre plur
+
+палец noun masc
+	палец nom sing
+	пальца gen sing
+	пальцу dat sing
+	палец acc sing
+	пальцем ins sing
+	пальце pre sing
+	пальцы nom plur
+	пальцев gen plur
+	пальцам dat plur
+	пальцы acc plur
+	пальцами ins plur
+	пальцах pre plur
+
+опыт noun masc
+	опыт nom sing
+	опыта gen sing
+	опыту dat sing
+	опыт acc sing
+	опытом ins sing
+	опыте pre sing
+	опыты nom plur
+	опытов gen plur
+	опытам dat plur
+	опыты acc plur
+	опытами ins plur
+	опытах pre plur
+
+служба noun fem
+	служба nom sing
+	службы gen sing
+	службе dat sing
+	службу acc sing
+	службой ins sing
+	службою ins sing
+	службе pre sing
+	службы nom plur
+	служб gen plur
+	службам dat plur
+	службы acc plur
+	службами ins plur
+	службах pre plur
+
+судьба noun fem
+	судьба nom sing
+	судьбы gen sing
+	судьбе dat sing
+	судьбу acc sing
+	судьбой ins sing
+	судьбою ins sing
+	судьбе pre sing
+	судьбы nom plur
+	судеб gen plur
+	судьбам dat plur
+	судьбы acc plur
+	судьбами ins plur
+	судьбах pre plur
+
+девушка noun fem
+	девушка nom sing
+	девушки gen sing
+	девушке dat sing
+	девушку acc sing
+	девушкой ins sing
+	девушкою ins sing
+	девушке pre sing
+	девушки nom plur
+	девушек gen plur
+	девушкам dat plur
+	девушек acc plur
+	девушками ins plur
+	девушках pre plur
+
+очередь noun fem
+	очередь nom sing
+	очереди gen sing
+	очереди dat sing
+	очередь acc sing
+	очередью ins sing
+	очереди pre sing
+	очереди nom plur
+	очередей gen plur
+	очередям dat plur
+	очереди acc plur
+	очередями ins plur
+	очередях pre plur
+
+лес noun masc
+	лес nom sing
+	леса gen sing
+	лесу sing
+	лесу dat sing
+	лес acc sing
+	лесом ins sing
+	лесе pre sing
+	лесу sing
+	леса nom plur
+	лесов gen plur
+	лесам dat plur
+	леса acc plur
+	лесами ins plur
+	лесах pre plur
+
+состав noun masc
+	состав nom sing
+	состава gen sing
+	составу dat sing
+	состав acc sing
+	составом ins sing
+	составе pre sing
+	составы nom plur
+	составов gen plur
+	составам dat plur
+	составы acc plur
+	составами ins plur
+	составах pre plur
+
+член noun masc
+	член nom sing
+	члена gen sing
+	члену dat sing
+	члена acc sing
+	членом ins sing
+	члене pre sing
+	члены nom plur
+	членов gen plur
+	членам dat plur
+	членов acc plur
+	членами ins plur
+	членах pre plur
+
+количество noun neut
+	количество nom sing
+	количества gen sing
+	количеству dat sing
+	количество acc sing
+	количеством ins sing
+	количестве pre sing
+	количества nom plur
+	количеств gen plur
+	количествам dat plur
+	количества acc plur
+	количествами ins plur
+	количествах pre plur
+
+событие noun neut
+	событие nom sing
+	событье nom sing
+	события gen sing
+	событья gen sing
+	событию dat sing
+	событью dat sing
+	событие acc sing
+	событье acc sing
+	событием ins sing
+	событьем ins sing
+	событии pre sing
+	событье pre sing
+	событьи pre sing
+	события nom plur
+	событья nom plur
+	событий gen plur
+	событиям dat plur
+	событьям dat plur
+	события acc plur
+	событья acc plur
+	событиями ins plur
+	событьями ins plur
+	событиях pre plur
+	событьях pre plur
+
+объект noun masc
+	объект nom sing
+	объекта gen sing
+	объекту dat sing
+	объект acc sing
+	объектом ins sing
+	объекте pre sing
+	объекты nom plur
+	объектов gen plur
+	объектам dat plur
+	объекты acc plur
+	объектами ins plur
+	объектах pre plur
+
+зал noun masc
+	зал nom sing
+	зала gen sing
+	залу dat sing
+	зал acc sing
+	залом ins sing
+	зале pre sing
+	залы nom plur
+	залов gen plur
+	залам dat plur
+	залы acc plur
+	залами ins plur
+	залах pre plur
+
+создание noun neut
+	создание nom sing
+	созданье nom sing
+	создания gen sing
+	созданья gen sing
+	созданию dat sing
+	созданью dat sing
+	создание acc sing
+	созданье acc sing
+	созданием ins sing
+	созданьем ins sing
+	создании pre sing
+	созданье pre sing
+	создания nom plur
+	созданья nom plur
+	созданий gen plur
+	созданиям dat plur
+	созданьям dat plur
+	создания acc plur
+	созданья acc plur
+	созданиями ins plur
+	созданьями ins plur
+	созданиях pre plur
+	созданьях pre plur
+	созданий acc plur
+
+значение noun neut
+	значение nom sing
+	значенье nom sing
+	значения gen sing
+	значенья gen sing
+	значению dat sing
+	значенью dat sing
+	значение acc sing
+	значенье acc sing
+	значением ins sing
+	значеньем ins sing
+	значении pre sing
+	значенье pre sing
+	значеньи pre sing
+	значения nom plur
+	значенья nom plur
+	значений gen plur
+	значениям dat plur
+	значеньям dat plur
+	значения acc plur
+	значенья acc plur
+	значениями ins plur
+	значеньями ins plur
+	значениях pre plur
+	значеньях pre plur
+
+период noun masc
+	период nom sing
+	периода gen sing
+	периоду dat sing
+	период acc sing
+	периодом ins sing
+	периоде pre sing
+	периоды nom plur
+	периодов gen plur
+	периодам dat plur
+	периоды acc plur
+	периодами ins plur
+	периодах pre plur
+
+шаг noun masc
+	шаг nom sing
+	шага gen sing
+	шагу dat sing
+	шаг acc sing
+	шагом ins sing
+	шаге pre sing
+	шаги nom plur
+	шагов gen plur
+	шагам dat plur
+	шаги acc plur
+	шагами ins plur
+	шагах pre plur
+	шагу sing
+	шагу sing
+
+брат noun masc
+	брат nom sing
+	брата gen sing
+	брату dat sing
+	брата acc sing
+	братом ins sing
+	брате pre sing
+	братья nom plur
+	братий gen plur
+	братьев gen plur
+	братьям dat plur
+	братий acc plur
+	братьев acc plur
+	братьями ins plur
+	братьях pre plur
+
+искусство noun neut
+	искусство nom sing
+	искусства gen sing
+	искусству dat sing
+	искусство acc sing
+	искусством ins sing
+	искусстве pre sing
+	искусства nom plur
+	искусств gen plur
+	искусствам dat plur
+	искусства acc plur
+	искусствами ins plur
+	искусствах pre plur
+
+структура noun fem
+	структура nom sing
+	структуры gen sing
+	структуре dat sing
+	структуру acc sing
+	структурой ins sing
+	структурою ins sing
+	структуре pre sing
+	структуры nom plur
+	структур gen plur
+	структурам dat plur
+	структуры acc plur
+	структурами ins plur
+	структурах pre plur
+
+номер noun masc
+	номер nom sing
+	номера gen sing
+	номеру dat sing
+	номер acc sing
+	номером ins sing
+	номере pre sing
+	номера nom plur
+	номеров gen plur
+	номерам dat plur
+	номера acc plur
+	номерами ins plur
+	номерах pre plur
+
+пример noun masc
+	пример nom sing
+	примера gen sing
+	примеру dat sing
+	пример acc sing
+	примером ins sing
+	примере pre sing
+	примеры nom plur
+	примеров gen plur
+	примерам dat plur
+	примеры acc plur
+	примерами ins plur
+	примерах pre plur
+
+исследование noun neut
+	исследование nom sing
+	исследованье nom sing
+	исследования gen sing
+	исследованья gen sing
+	исследованию dat sing
+	исследованью dat sing
+	исследование acc sing
+	исследованье acc sing
+	исследованием ins sing
+	исследованьем ins sing
+	исследовании pre sing
+	исследованье pre sing
+	исследованьи pre sing
+	исследования nom plur
+	исследованья nom plur
+	исследований gen plur
+	исследованиям dat plur
+	исследованьям dat plur
+	исследования acc plur
+	исследованья acc plur
+	исследованиями ins plur
+	исследованьями ins plur
+	исследованиях pre plur
+	исследованьях pre plur
+
+гражданин noun masc
+	гражданин nom sing
+	гражданина gen sing
+	гражданину dat sing
+	гражданина acc sing
+	гражданином ins sing
+	гражданине pre sing
+	граждане nom plur
+	граждан gen plur
+	гражданам dat plur
+	граждан acc plur
+	гражданами ins plur
+	гражданах pre plur
+
+игра noun fem
+	игра nom sing
+	игры gen sing
+	игре dat sing
+	игру acc sing
+	игрой ins sing
+	игрою ins sing
+	игре pre sing
+	игры nom plur
+	игр gen plur
+	играм dat plur
+	игры acc plur
+	играми ins plur
+	играх pre plur
+
+начальник noun masc
+	начальник nom sing
+	начальника gen sing
+	начальнику dat sing
+	начальника acc sing
+	начальником ins sing
+	начальнике pre sing
+	начальники nom plur
+	начальников gen plur
+	начальникам dat plur
+	начальников acc plur
+	начальниками ins plur
+	начальниках pre plur
+
+рост noun masc
+	рост nom sing
+	роста gen sing
+	росту sing
+	росту dat sing
+	рост acc sing
+	ростом ins sing
+	росте pre sing
+	роста nom plur
+	ростов gen plur
+	ростам dat plur
+	роста acc plur
+	ростами ins plur
+	ростах pre plur
+
+тема noun fem
+	тема nom sing
+	темы gen sing
+	теме dat sing
+	тему acc sing
+	темой ins sing
+	темою ins sing
+	теме pre sing
+	темы nom plur
+	тем gen plur
+	темам dat plur
+	темы acc plur
+	темами ins plur
+	темах pre plur
+
+принцип noun masc
+	принцип nom sing
+	принципа gen sing
+	принципу dat sing
+	принцип acc sing
+	принципом ins sing
+	принципе pre sing
+	принципы nom plur
+	принципов gen plur
+	принципам dat plur
+	принципы acc plur
+	принципами ins plur
+	принципах pre plur
+
+дорогой noun fem
+	дорога nom sing
+	дороги gen sing
+	дороге dat sing
+	дорогу acc sing
+	дорогой ins sing
+	дорогою ins sing
+	дороге pre sing
+	дороги nom plur
+	дорог gen plur
+	дорогам dat plur
+	дороги acc plur
+	дорогами ins plur
+	дорогах pre plur
+
+десять noun com
+	десять nom
+	десяти gen
+	десяти dat
+	десять acc
+	десятью ins
+	десяти pre
+
+метод noun masc
+	метод nom sing
+	метода gen sing
+	методу dat sing
+	метод acc sing
+	методом ins sing
+	методе pre sing
+	методы nom plur
+	методов gen plur
+	методам dat plur
+	методы acc plur
+	методами ins plur
+	методах pre plur
+
+тип noun masc
+	тип nom sing
+	типа gen sing
+	типу dat sing
+	тип acc sing
+	типом ins sing
+	типе pre sing
+	типы nom plur
+	типов gen plur
+	типам dat plur
+	типы acc plur
+	типами ins plur
+	типах pre plur
+
+фильм noun masc
+	фильм nom sing
+	фильма gen sing
+	фильму dat sing
+	фильм acc sing
+	фильмом ins sing
+	фильме pre sing
+	фильмы nom plur
+	фильмов gen plur
+	фильмам dat plur
+	фильмы acc plur
+	фильмами ins plur
+	фильмах pre plur
+
+край noun masc
+	край nom sing
+	края gen sing
+	краю dat sing
+	край acc sing
+	краем ins sing
+	крае pre sing
+	краю sing
+	края nom plur
+	краёв gen plur
+	краям dat plur
+	края acc plur
+	краями ins plur
+	краях pre plur
+	краю sing
+
+гость noun masc
+	гость nom sing
+	гостя gen sing
+	гостю dat sing
+	гостя acc sing
+	гостем ins sing
+	госте pre sing
+	гости nom plur
+	гостей gen plur
+	гостям dat plur
+	гостей acc plur
+	гостями ins plur
+	гостях pre plur
+
+воздух noun masc
+	воздух nom sing
+	воздуха gen sing
+	воздуху sing
+	воздуху dat sing
+	воздух acc sing
+	воздухом ins sing
+	воздухе pre sing
+	воздухи nom plur
+	воздухов gen plur
+	воздухам dat plur
+	воздухи acc plur
+	воздухами ins plur
+	воздухах pre plur
+
+характер noun masc
+	характер nom sing
+	характера gen sing
+	характеру dat sing
+	характер acc sing
+	характером ins sing
+	характере pre sing
+	характеры nom plur
+	характеров gen plur
+	характерам dat plur
+	характеры acc plur
+	характерами ins plur
+	характерах pre plur
+	характеру sing
+
+борьба noun fem
+	борьба nom sing
+	борьбы gen sing
+	борьбе dat sing
+	борьбу acc sing
+	борьбой ins sing
+	борьбою ins sing
+	борьбе pre sing
+
+использование noun neut
+	использование nom sing
+	использованье nom sing
+	использования gen sing
+	использованья gen sing
+	использованию dat sing
+	использованью dat sing
+	использование acc sing
+	использованье acc sing
+	использованием ins sing
+	использованьем ins sing
+	использовании pre sing
+	использованье pre sing
+	использованьи pre sing
+	использования nom plur
+	использованья nom plur
+	использований gen plur
+	использованиям dat plur
+	использованьям dat plur
+	использования acc plur
+	использованья acc plur
+	использованиями ins plur
+	использованьями ins plur
+	использованиях pre plur
+	использованьях pre plur
+
+размер noun masc
+	размер nom sing
+	размера gen sing
+	размеру dat sing
+	размер acc sing
+	размером ins sing
+	размере pre sing
+	размеры nom plur
+	размеров gen plur
+	размерам dat plur
+	размеры acc plur
+	размерами ins plur
+	размерах pre plur
+
+образование noun neut
+	образование nom sing
+	образованье nom sing
+	образования gen sing
+	образованья gen sing
+	образованию dat sing
+	образованью dat sing
+	образование acc sing
+	образованье acc sing
+	образованием ins sing
+	образованьем ins sing
+	образовании pre sing
+	образованье pre sing
+	образованьи pre sing
+	образования nom plur
+	образованья nom plur
+	образований gen plur
+	образованиям dat plur
+	образованьям dat plur
+	образования acc plur
+	образованья acc plur
+	образованиями ins plur
+	образованьями ins plur
+	образованиях pre plur
+	образованьях pre plur
+
+мальчик noun masc
+	мальчик nom sing
+	мальчика gen sing
+	мальчику dat sing
+	мальчика acc sing
+	мальчиком ins sing
+	мальчике pre sing
+	мальчики nom plur
+	мальчиков gen plur
+	мальчикам dat plur
+	мальчиков acc plur
+	мальчиками ins plur
+	мальчиках pre plur
+
+кровь noun fem
+	кровь nom sing
+	крови gen sing
+	крови dat sing
+	кровь acc sing
+	кровью ins sing
+	крови pre sing
+	крови sing
+	крови nom plur
+	кровей gen plur
+	кровям dat plur
+	крови acc plur
+	кровями ins plur
+	кровях pre plur
+
+район noun masc
+	район nom sing
+	района gen sing
+	району dat sing
+	район acc sing
+	районом ins sing
+	районе pre sing
+	районы nom plur
+	районов gen plur
+	районам dat plur
+	районы acc plur
+	районами ins plur
+	районах pre plur
+
+небо noun neut
+	небо nom sing
+	неба gen sing
+	небу dat sing
+	небо acc sing
+	небом ins sing
+	небе pre sing
+	небеса nom plur
+	небес gen plur
+	небесам dat plur
+	небеса acc plur
+	небесами ins plur
+	небесах pre plur
+
+армия noun fem
+	армия nom sing
+	армии gen sing
+	армии dat sing
+	армию acc sing
+	армией ins sing
+	армиею ins sing
+	армии pre sing
+	армии nom plur
+	армий gen plur
+	армиям dat plur
+	армии acc plur
+	армиями ins plur
+	армиях pre plur
+
+класс noun masc
+	класс nom sing
+	класса gen sing
+	классу dat sing
+	класс acc sing
+	классом ins sing
+	классе pre sing
+	классы nom plur
+	классов gen plur
+	классам dat plur
+	классы acc plur
+	классами ins plur
+	классах pre plur
+
+представитель noun masc
+	представитель nom sing
+	представителя gen sing
+	представителю dat sing
+	представителя acc sing
+	представителем ins sing
+	представителе pre sing
+	представители nom plur
+	представителей gen plur
+	представителям dat plur
+	представителей acc plur
+	представителями ins plur
+	представителях pre plur
+
+участие noun neut
+	участие nom sing
+	участье nom sing
+	участия gen sing
+	участья gen sing
+	участию dat sing
+	участью dat sing
+	участие acc sing
+	участье acc sing
+	участием ins sing
+	участьем ins sing
+	участии pre sing
+	участье pre sing
+	участьи pre sing
+	участия nom plur
+	участья nom plur
+	участий gen plur
+	участиям dat plur
+	участьям dat plur
+	участия acc plur
+	участья acc plur
+	участиями ins plur
+	участьями ins plur
+	участиях pre plur
+	участьях pre plur
+
+девочка noun fem
+	девочка nom sing
+	девочки gen sing
+	девочке dat sing
+	девочку acc sing
+	девочкой ins sing
+	девочкою ins sing
+	девочке pre sing
+	девочки nom plur
+	девочек gen plur
+	девочкам dat plur
+	девочек acc plur
+	девочками ins plur
+	девочках pre plur
+
+политика noun fem
+	политика nom sing
+	политики gen sing
+	политике dat sing
+	политику acc sing
+	политикой ins sing
+	политикою ins sing
+	политике pre sing
+	политики nom plur
+	политик gen plur
+	политикам dat plur
+	политики acc plur
+	политиками ins plur
+	политиках pre plur
+
+герой noun masc
+	герой nom sing
+	героя gen sing
+	герою dat sing
+	героя acc sing
+	героем ins sing
+	герое pre sing
+	герои nom plur
+	героев gen plur
+	героям dat plur
+	героев acc plur
+	героями ins plur
+	героях pre plur
+
+картина noun fem
+	картина nom sing
+	картины gen sing
+	картине dat sing
+	картину acc sing
+	картиной ins sing
+	картиною ins sing
+	картине pre sing
+	картины nom plur
+	картин gen plur
+	картинам dat plur
+	картины acc plur
+	картинами ins plur
+	картинах pre plur
+
+доллар noun masc
+	доллар nom sing
+	доллара gen sing
+	доллару dat sing
+	доллар acc sing
+	долларом ins sing
+	долларе pre sing
+	доллары nom plur
+	долларов gen plur
+	долларам dat plur
+	доллары acc plur
+	долларами ins plur
+	долларах pre plur
+
+спина noun fem
+	спина nom sing
+	спины gen sing
+	спине dat sing
+	спину acc sing
+	спиной ins sing
+	спиною ins sing
+	спине pre sing
+	спины nom plur
+	спин gen plur
+	спинам dat plur
+	спины acc plur
+	спинами ins plur
+	спинах pre plur
+
+территория noun fem
+	территория nom sing
+	территории gen sing
+	территории dat sing
+	территорию acc sing
+	территорией ins sing
+	территориею ins sing
+	территории pre sing
+	территории nom plur
+	территорий gen plur
+	территориям dat plur
+	территории acc plur
+	территориями ins plur
+	территориях pre plur
+
+пол noun masc
+	пол nom sing
+	пола gen sing
+	полу dat sing
+	пола acc sing
+	полом ins sing
+	поле pre sing
+	полы nom plur
+	полов gen plur
+	полам dat plur
+	полов acc plur
+	полами ins plur
+	полах pre plur
+
+поле noun neut
+	поле nom sing
+	поля gen sing
+	полю dat sing
+	поле acc sing
+	полем ins sing
+	поле pre sing
+	поля nom plur
+	полей gen plur
+	полям dat plur
+	поля acc plur
+	полями ins plur
+	полях pre plur
+
+изменение noun neut
+	изменение nom sing
+	измененье nom sing
+	изменения gen sing
+	измененья gen sing
+	изменению dat sing
+	измененью dat sing
+	изменение acc sing
+	измененье acc sing
+	изменением ins sing
+	измененьем ins sing
+	изменении pre sing
+	измененье pre sing
+	измененьи pre sing
+	изменения nom plur
+	измененья nom plur
+	изменений gen plur
+	изменениям dat plur
+	измененьям dat plur
+	изменения acc plur
+	измененья acc plur
+	изменениями ins plur
+	измененьями ins plur
+	изменениях pre plur
+	измененьях pre plur
+
+направление noun neut
+	направление nom sing
+	направленье nom sing
+	направления gen sing
+	направленья gen sing
+	направлению dat sing
+	направленью dat sing
+	направление acc sing
+	направленье acc sing
+	направлением ins sing
+	направленьем ins sing
+	направлении pre sing
+	направленье pre sing
+	направленьи pre sing
+	направления nom plur
+	направленья nom plur
+	направлений gen plur
+	направлениям dat plur
+	направленьям dat plur
+	направления acc plur
+	направленья acc plur
+	направлениями ins plur
+	направленьями ins plur
+	направлениях pre plur
+	направленьях pre plur
+
+рисунок noun masc
+	рисунок nom sing
+	рисунка gen sing
+	рисунку dat sing
+	рисунок acc sing
+	рисунком ins sing
+	рисунке pre sing
+	рисунки nom plur
+	рисунков gen plur
+	рисункам dat plur
+	рисунки acc plur
+	рисунками ins plur
+	рисунках pre plur
+
+течение noun neut
+	течение nom sing
+	теченье nom sing
+	течения gen sing
+	теченья gen sing
+	течению dat sing
+	теченью dat sing
+	течение acc sing
+	теченье acc sing
+	течением ins sing
+	теченьем ins sing
+	течении pre sing
+	теченье pre sing
+	теченьи pre sing
+	течения nom plur
+	теченья nom plur
+	течений gen plur
+	течениям dat plur
+	теченьям dat plur
+	течения acc plur
+	теченья acc plur
+	течениями ins plur
+	теченьями ins plur
+	течениях pre plur
+	теченьях pre plur
+
+церковь noun fem
+	церковь nom sing
+	церкви gen sing
+	церкви dat sing
+	церковь acc sing
+	церковью ins sing
+	церкви pre sing
+	церкви nom plur
+	церквей gen plur
+	церквям dat plur
+	церкви acc plur
+	церквями ins plur
+	церквях pre plur
+
+банк noun masc
+	банк nom sing
+	банка gen sing
+	банку dat sing
+	банк acc sing
+	банком ins sing
+	банке pre sing
+	банки nom plur
+	банков gen plur
+	банкам dat plur
+	банки acc plur
+	банками ins plur
+	банках pre plur
+
+сцена noun fem
+	сцена nom sing
+	сцены gen sing
+	сцене dat sing
+	сцену acc sing
+	сценой ins sing
+	сценою ins sing
+	сцене pre sing
+	сцены nom plur
+	сцен gen plur
+	сценам dat plur
+	сцены acc plur
+	сценами ins plur
+	сценах pre plur
+
+население noun neut
+	население nom sing
+	населенье nom sing
+	населения gen sing
+	населенья gen sing
+	населению dat sing
+	населенью dat sing
+	население acc sing
+	населенье acc sing
+	населением ins sing
+	населеньем ins sing
+	населении pre sing
+	населенье pre sing
+	населеньи pre sing
+	населения nom plur
+	населенья nom plur
+	населений gen plur
+	населениям dat plur
+	населеньям dat plur
+	населения acc plur
+	населенья acc plur
+	населениями ins plur
+	населеньями ins plur
+	населениях pre plur
+	населеньях pre plur
+
+большинство noun neut
+	большинство nom sing
+	большинства gen sing
+	большинству dat sing
+	большинство acc sing
+	большинством ins sing
+	большинстве pre sing
+
+двадцать noun com
+	двадцать nom
+	двадцати gen
+	двадцати dat
+	двадцать acc
+	двадцатью ins
+	двадцати pre
+
+музыка noun fem
+	музыка nom sing
+	музыки gen sing
+	музыке dat sing
+	музыку acc sing
+	музыкой ins sing
+	музыкою ins sing
+	музыке pre sing
+	музыки nom plur
+	музык gen plur
+	музыкам dat plur
+	музыки acc plur
+	музыками ins plur
+	музыках pre plur
+
+свобода noun fem
+	свобода nom sing
+	свободы gen sing
+	свободе dat sing
+	свободу acc sing
+	свободой ins sing
+	свободою ins sing
+	свободе pre sing
+	свободы nom plur
+	свобод gen plur
+	свободам dat plur
+	свободы acc plur
+	свободами ins plur
+	свободах pre plur
+
+память noun fem
+	память nom sing
+	памяти gen sing
+	памяти dat sing
+	память acc sing
+	памятью ins sing
+	памяти pre sing
+	памяти nom plur
+	памятей gen plur
+	памятям dat plur
+	памяти acc plur
+	памятями ins plur
+	памятях pre plur
+
+команда noun fem
+	команда nom sing
+	команды gen sing
+	команде dat sing
+	команду acc sing
+	командой ins sing
+	командою ins sing
+	команде pre sing
+	команды nom plur
+	команд gen plur
+	командам dat plur
+	команды acc plur
+	командами ins plur
+	командах pre plur
+
+союз noun masc
+	союз nom sing
+	союза gen sing
+	союзу dat sing
+	союз acc sing
+	союзом ins sing
+	союзе pre sing
+	союзы nom plur
+	союзов gen plur
+	союзам dat plur
+	союзы acc plur
+	союзами ins plur
+	союзах pre plur
+
+врач noun masc
+	врач nom sing
+	врача gen sing
+	врачу dat sing
+	врача acc sing
+	врачом ins sing
+	враче pre sing
+	врачи nom plur
+	врачей gen plur
+	врачам dat plur
+	врачей acc plur
+	врачами ins plur
+	врачах pre plur
+
+договор noun masc
+	договор nom sing
+	договора gen sing
+	договору dat sing
+	договор acc sing
+	договором ins sing
+	договоре pre sing
+	договора nom plur
+	договоры nom plur
+	договоров gen plur
+	договорам dat plur
+	договора acc plur
+	договоры acc plur
+	договорами ins plur
+	договорах pre plur
+
+дерево noun neut
+	дерево nom sing
+	дерева gen sing
+	дереву dat sing
+	дерево acc sing
+	деревом ins sing
+	дереве pre sing
+	дерева nom plur
+	деревья nom plur
+	дерев gen plur
+	деревьев gen plur
+	деревам dat plur
+	деревьям dat plur
+	дерева acc plur
+	деревья acc plur
+	деревами ins plur
+	деревьями ins plur
+	деревах pre plur
+	деревьях pre plur
+
+факт noun masc
+	факт nom sing
+	факта gen sing
+	факту dat sing
+	факт acc sing
+	фактом ins sing
+	факте pre sing
+	факты nom plur
+	фактов gen plur
+	фактам dat plur
+	факты acc plur
+	фактами ins plur
+	фактах pre plur
+
+хозяин noun masc
+	хозяин nom sing
+	хозяина gen sing
+	хозяину dat sing
+	хозяина acc sing
+	хозяином ins sing
+	хозяине pre sing
+	хозяева nom plur
+	хозяев gen plur
+	хозяевам dat plur
+	хозяев acc plur
+	хозяевами ins plur
+	хозяевах pre plur
+	хозява nom plur
+	хозяв gen plur
+	хозявам dat plur
+	хозяв acc plur
+	хозявами ins plur
+	хозявах pre plur
+
+природа noun fem
+	природа nom sing
+	природы gen sing
+	природе dat sing
+	природу acc sing
+	природой ins sing
+	природою ins sing
+	природе pre sing
+	природы nom plur
+	природ gen plur
+	природам dat plur
+	природы acc plur
+	природами ins plur
+	природах pre plur
+
+угол noun masc
+	угол nom sing
+	угла gen sing
+	углу dat sing
+	угол acc sing
+	углом ins sing
+	угле pre sing
+	углу sing
+	углы nom plur
+	углов gen plur
+	углам dat plur
+	углы acc plur
+	углами ins plur
+	углах pre plur
+
+телефон noun masc
+	телефон nom sing
+	телефона gen sing
+	телефону dat sing
+	телефон acc sing
+	телефоном ins sing
+	телефоне pre sing
+	телефоны nom plur
+	телефонов gen plur
+	телефонам dat plur
+	телефоны acc plur
+	телефонами ins plur
+	телефонах pre plur
+
+позиция noun fem
+	позиция nom sing
+	позиции gen sing
+	позиции dat sing
+	позицию acc sing
+	позицией ins sing
+	позициею ins sing
+	позиции pre sing
+	позиции nom plur
+	позиций gen plur
+	позициям dat plur
+	позиции acc plur
+	позициями ins plur
+	позициях pre plur
+
+двор noun masc
+	двор nom sing
+	двора gen sing
+	двору dat sing
+	двор acc sing
+	двором ins sing
+	дворе pre sing
+	дворы nom plur
+	дворов gen plur
+	дворам dat plur
+	дворы acc plur
+	дворами ins plur
+	дворах pre plur
+
+писатель noun masc
+	писатель nom sing
+	писателя gen sing
+	писателю dat sing
+	писателя acc sing
+	писателем ins sing
+	писателе pre sing
+	писатели nom plur
+	писателей gen plur
+	писателям dat plur
+	писателей acc plur
+	писателями ins plur
+	писателях pre plur
+
+самолет noun masc
+	самолёт nom sing
+	самолёта gen sing
+	самолёту dat sing
+	самолёт acc sing
+	самолётом ins sing
+	самолёте pre sing
+	самолёты nom plur
+	самолётов gen plur
+	самолётам dat plur
+	самолёты acc plur
+	самолётами ins plur
+	самолётах pre plur
+
+объем noun masc
+	объём nom sing
+	объёма gen sing
+	объёму dat sing
+	объём acc sing
+	объёмом ins sing
+	объёме pre sing
+	объёмы nom plur
+	объёмов gen plur
+	объёмам dat plur
+	объёмы acc plur
+	объёмами ins plur
+	объёмах pre plur
+
+солнце noun neut
+	солнце nom sing
+	солнца gen sing
+	солнцу dat sing
+	солнце acc sing
+	солнцем ins sing
+	солнце pre sing
+	солнца nom plur
+	солнц gen plur
+	солнцам dat plur
+	солнца acc plur
+	солнцами ins plur
+	солнцах pre plur
+
+вера noun fem
+	вера nom sing
+	веры gen sing
+	вере dat sing
+	веру acc sing
+	верой ins sing
+	верою ins sing
+	вере pre sing
+	веры nom plur
+	вер gen plur
+	верам dat plur
+	веры acc plur
+	верами ins plur
+	верах pre plur
+
+берег noun masc
+	берег nom sing
+	берега gen sing
+	берегу dat sing
+	берег acc sing
+	берегом ins sing
+	береге pre sing
+	берегу sing
+	берега nom plur
+	берегов gen plur
+	берегам dat plur
+	берега acc plur
+	берегами ins plur
+	берегах pre plur
+
+спектакль noun masc
+	спектакль nom sing
+	спектакля gen sing
+	спектаклю dat sing
+	спектакль acc sing
+	спектаклем ins sing
+	спектакле pre sing
+	спектакли nom plur
+	спектаклей gen plur
+	спектаклям dat plur
+	спектакли acc plur
+	спектаклями ins plur
+	спектаклях pre plur
+
+фирма noun fem
+	фирма nom sing
+	фирмы gen sing
+	фирме dat sing
+	фирму acc sing
+	фирмой ins sing
+	фирмою ins sing
+	фирме pre sing
+	фирмы nom plur
+	фирм gen plur
+	фирмам dat plur
+	фирмы acc plur
+	фирмами ins plur
+	фирмах pre plur
+
+способ noun masc
+	способ nom sing
+	способа gen sing
+	способу dat sing
+	способ acc sing
+	способом ins sing
+	способе pre sing
+	способы nom plur
+	способов gen plur
+	способам dat plur
+	способы acc plur
+	способами ins plur
+	способах pre plur
+
+завод noun masc
+	завод nom sing
+	завода gen sing
+	заводу dat sing
+	завод acc sing
+	заводом ins sing
+	заводе pre sing
+	заводы nom plur
+	заводов gen plur
+	заводам dat plur
+	заводы acc plur
+	заводами ins plur
+	заводах pre plur
+
+цвет noun masc
+	цвет nom sing
+	цвета gen sing
+	цвету dat sing
+	цвет acc sing
+	цветом ins sing
+	цвете pre sing
+	цвета nom plur
+	цветов gen plur
+	цветам dat plur
+	цвета acc plur
+	цветами ins plur
+	цветах pre plur
+	цвету sing
+
+журнал noun masc
+	журнал nom sing
+	журнала gen sing
+	журналу dat sing
+	журнал acc sing
+	журналом ins sing
+	журнале pre sing
+	журналы nom plur
+	журналов gen plur
+	журналам dat plur
+	журналы acc plur
+	журналами ins plur
+	журналах pre plur
+
+руководитель noun masc
+	руководитель nom sing
+	руководителя gen sing
+	руководителю dat sing
+	руководителя acc sing
+	руководителем ins sing
+	руководителе pre sing
+	руководители nom plur
+	руководителей gen plur
+	руководителям dat plur
+	руководителей acc plur
+	руководителями ins plur
+	руководителях pre plur
+
+специалист noun masc
+	специалист nom sing
+	специалиста gen sing
+	специалисту dat sing
+	специалиста acc sing
+	специалистом ins sing
+	специалисте pre sing
+	специалисты nom plur
+	специалистов gen plur
+	специалистам dat plur
+	специалистов acc plur
+	специалистами ins plur
+	специалистах pre plur
+
+оценка noun fem
+	оценка nom sing
+	оценки gen sing
+	оценке dat sing
+	оценку acc sing
+	оценкой ins sing
+	оценкою ins sing
+	оценке pre sing
+	оценки nom plur
+	оценок gen plur
+	оценкам dat plur
+	оценки acc plur
+	оценками ins plur
+	оценках pre plur
+
+регион noun masc
+	регион nom sing
+	региона gen sing
+	региону dat sing
+	регион acc sing
+	регионом ins sing
+	регионе pre sing
+	регионы nom plur
+	регионов gen plur
+	регионам dat plur
+	регионы acc plur
+	регионами ins plur
+	регионах pre plur
+
+песня noun fem
+	песня nom sing
+	песни gen sing
+	песне dat sing
+	песню acc sing
+	песней ins sing
+	песнею ins sing
+	песне pre sing
+	песни nom plur
+	песен gen plur
+	песням dat plur
+	песни acc plur
+	песнями ins plur
+	песнях pre plur
+	песнь nom sing
+	песнь acc sing
+	песнью ins sing
+	песней gen plur
+
+процент noun masc
+	процент nom sing
+	процента gen sing
+	проценту dat sing
+	процент acc sing
+	процентом ins sing
+	проценте pre sing
+	проценты nom plur
+	процентов gen plur
+	процентам dat plur
+	проценты acc plur
+	процентами ins plur
+	процентах pre plur
+
+родитель noun masc
+	родитель nom sing
+	родителя gen sing
+	родителю dat sing
+	родителя acc sing
+	родителем ins sing
+	родителе pre sing
+	родители nom plur
+	родителей gen plur
+	родителям dat plur
+	родителей acc plur
+	родителями ins plur
+	родителях pre plur
+
+море noun neut
+	море nom sing
+	моря gen sing
+	морю dat sing
+	море acc sing
+	морем ins sing
+	море pre sing
+	моря nom plur
+	морей gen plur
+	морям dat plur
+	моря acc plur
+	морями ins plur
+	морях pre plur
+
+требование noun neut
+	требование nom sing
+	требованье nom sing
+	требования gen sing
+	требованья gen sing
+	требованию dat sing
+	требованью dat sing
+	требование acc sing
+	требованье acc sing
+	требованием ins sing
+	требованьем ins sing
+	требовании pre sing
+	требованье pre sing
+	требованьи pre sing
+	требования nom plur
+	требованья nom plur
+	требований gen plur
+	требованиям dat plur
+	требованьям dat plur
+	требования acc plur
+	требованья acc plur
+	требованиями ins plur
+	требованьями ins plur
+	требованиях pre plur
+	требованьях pre plur
+
+основание noun neut
+	основание nom sing
+	основанье nom sing
+	основания gen sing
+	основанья gen sing
+	основанию dat sing
+	основанью dat sing
+	основание acc sing
+	основанье acc sing
+	основанием ins sing
+	основаньем ins sing
+	основании pre sing
+	основанье pre sing
+	основаньи pre sing
+	основания nom plur
+	основанья nom plur
+	оснований gen plur
+	основаниям dat plur
+	основаньям dat plur
+	основания acc plur
+	основанья acc plur
+	основаниями ins plur
+	основаньями ins plur
+	основаниях pre plur
+	основаньях pre plur
+
+половина noun fem
+	половина nom sing
+	половины gen sing
+	половине dat sing
+	половину acc sing
+	половиной ins sing
+	половиною ins sing
+	половине pre sing
+	половины nom plur
+	половин gen plur
+	половинам dat plur
+	половины acc plur
+	половинами ins plur
+	половинах pre plur
+
+роман noun masc
+	роман nom sing
+	романа gen sing
+	роману dat sing
+	роман acc sing
+	романом ins sing
+	романе pre sing
+	романы nom plur
+	романов gen plur
+	романам dat plur
+	романы acc plur
+	романами ins plur
+	романах pre plur
+
+круг noun masc
+	круг nom sing
+	круга gen sing
+	кругу dat sing
+	круг acc sing
+	кругом ins sing
+	круге pre sing
+	кругу sing
+	круги nom plur
+	кругов gen plur
+	кругам dat plur
+	круги acc plur
+	кругами ins plur
+	кругах pre plur
+
+анализ noun masc
+	анализ nom sing
+	анализа gen sing
+	анализу dat sing
+	анализ acc sing
+	анализом ins sing
+	анализе pre sing
+	анализы nom plur
+	анализов gen plur
+	анализам dat plur
+	анализы acc plur
+	анализами ins plur
+	анализах pre plur
+
+стихи noun masc
+	стих nom sing
+	стиха gen sing
+	стиху dat sing
+	стих acc sing
+	стихом ins sing
+	стихе pre sing
+	стихи nom plur
+	стихов gen plur
+	стихам dat plur
+	стихи acc plur
+	стихами ins plur
+	стихах pre plur
+
+автомобиль noun masc
+	автомобиль nom sing
+	автомобиля gen sing
+	автомобилю dat sing
+	автомобиль acc sing
+	автомобилем ins sing
+	автомобиле pre sing
+	автомобили nom plur
+	автомобилей gen plur
+	автомобилям dat plur
+	автомобили acc plur
+	автомобилями ins plur
+	автомобилях pre plur
+
+экономика noun fem
+	экономика nom sing
+	экономики gen sing
+	экономике dat sing
+	экономику acc sing
+	экономикой ins sing
+	экономикою ins sing
+	экономике pre sing
+	экономики nom plur
+	экономик gen plur
+	экономикам dat plur
+	экономики acc plur
+	экономиками ins plur
+	экономиках pre plur
+
+литература noun fem
+	литература nom sing
+	литературы gen sing
+	литературе dat sing
+	литературу acc sing
+	литературой ins sing
+	литературою ins sing
+	литературе pre sing
+	литературы nom plur
+	литератур gen plur
+	литературам dat plur
+	литературы acc plur
+	литературами ins plur
+	литературах pre plur
+
+бумага noun fem
+	бумага nom sing
+	бумаги gen sing
+	бумаге dat sing
+	бумагу acc sing
+	бумагой ins sing
+	бумагою ins sing
+	бумаге pre sing
+	бумаги nom plur
+	бумаг gen plur
+	бумагам dat plur
+	бумаги acc plur
+	бумагами ins plur
+	бумагах pre plur
+
+поэт noun masc
+	поэт nom sing
+	поэта gen sing
+	поэту dat sing
+	поэта acc sing
+	поэтом ins sing
+	поэте pre sing
+	поэты nom plur
+	поэтов gen plur
+	поэтам dat plur
+	поэтов acc plur
+	поэтами ins plur
+	поэтах pre plur
+
+степень noun fem
+	степень nom sing
+	степени gen sing
+	степени dat sing
+	степень acc sing
+	степенью ins sing
+	степени pre sing
+	степени nom plur
+	степеней gen plur
+	степеням dat plur
+	степени acc plur
+	степенями ins plur
+	степенях pre plur
+
+господин noun masc
+	господин nom sing
+	господина gen sing
+	господину dat sing
+	господина acc sing
+	господином ins sing
+	господине pre sing
+	господа nom plur
+	господ gen plur
+	господам dat plur
+	господ acc plur
+	господами ins plur
+	господах pre plur
+
+надежда noun fem
+	надежда nom sing
+	надежды gen sing
+	надежде dat sing
+	надежду acc sing
+	надеждой ins sing
+	надеждою ins sing
+	надежде pre sing
+	надежды nom plur
+	надежд gen plur
+	надеждам dat plur
+	надежды acc plur
+	надеждами ins plur
+	надеждах pre plur
+
+предмет noun masc
+	предмет nom sing
+	предмета gen sing
+	предмету dat sing
+	предмет acc sing
+	предметом ins sing
+	предмете pre sing
+	предметы nom plur
+	предметов gen plur
+	предметам dat plur
+	предметы acc plur
+	предметами ins plur
+	предметах pre plur
+
+вариант noun masc
+	вариант nom sing
+	варианта gen sing
+	варианту dat sing
+	вариант acc sing
+	вариантом ins sing
+	варианте pre sing
+	варианты nom plur
+	вариантов gen plur
+	вариантам dat plur
+	варианты acc plur
+	вариантами ins plur
+	вариантах pre plur
+
+министр noun masc
+	министр nom sing
+	министра gen sing
+	министру dat sing
+	министра acc sing
+	министром ins sing
+	министре pre sing
+	министры nom plur
+	министров gen plur
+	министрам dat plur
+	министров acc plur
+	министрами ins plur
+	министрах pre plur
+
+граница noun fem
+	граница nom sing
+	границы gen sing
+	границе dat sing
+	границу acc sing
+	границей ins sing
+	границею ins sing
+	границе pre sing
+	границы nom plur
+	границ gen plur
+	границам dat plur
+	границы acc plur
+	границами ins plur
+	границах pre plur
+
+дух noun masc
+	дух nom sing
+	духа gen sing
+	духу dat sing
+	дух acc sing
+	духом ins sing
+	духе pre sing
+	духи nom plur
+	духов gen plur
+	духам dat plur
+	духи acc plur
+	духами ins plur
+	духах pre plur
+	духу sing
+	духу sing
+
+модель noun fem
+	модель nom sing
+	модели gen sing
+	модели dat sing
+	модель acc sing
+	моделью ins sing
+	модели pre sing
+	модели nom plur
+	моделей gen plur
+	моделям dat plur
+	модели acc plur
+	моделями ins plur
+	моделях pre plur
+
+операция noun fem
+	операция nom sing
+	операции gen sing
+	операции dat sing
+	операцию acc sing
+	операцией ins sing
+	операциею ins sing
+	операции pre sing
+	операции nom plur
+	операций gen plur
+	операциям dat plur
+	операции acc plur
+	операциями ins plur
+	операциях pre plur
