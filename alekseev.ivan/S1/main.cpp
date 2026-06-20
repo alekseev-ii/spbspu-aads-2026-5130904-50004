@@ -1,9 +1,12 @@
 #include <iostream>
+#include <limits>
 #include "../common/List.h"
 
 namespace alekseev {
   template< class T >
   bool is_empty(const List< List< T > > & l);
+  const size_t MAX_SIZE_T = std::numeric_limits< size_t >::max();
+  size_t safety_sum(size_t a, size_t b);
 }
 
 int main()
@@ -14,7 +17,8 @@ int main()
   auto cur_seq = seqs.before_begin();
 
   std::string name;
-  while (std::cin >> name) {
+  size_t K = 0;
+  while (++K <= 4 && std::cin >> name) {
     names.insert_after(cur_name, name);
     ++cur_name;
     seqs.insert_after(cur_seq, alekseev::List< size_t >());
@@ -33,6 +37,7 @@ int main()
 
   if (names.empty()) {
     std::cout << "0\n";
+    return 0;
   }
   alekseev::List< std::string >::LCIter cname = names.begin();
   std::cout << *(cname++);
@@ -43,16 +48,28 @@ int main()
 
   alekseev::List< size_t > sums;
   auto cur_sum = sums.before_begin();
-  while (!alekseev::is_empty(seqs)) {
-    sums.insert_after(cur_sum, 0ull);
-    ++cur_sum;
+  while (true) {
+    alekseev::List< size_t > buffer;
+    auto last = buffer.before_begin();
     for (auto seq = seqs.begin(); seq != seqs.end(); ++seq) {
       if (!seq->empty()) {
         size_t n = seq->front();
+        buffer.insert_after(last, n);
+        ++last;
         seq->pop_front();
-        std::cout << n << " ";
-        *cur_sum += n;
       }
+    }
+    if (buffer.empty()) {
+      break;
+    }
+    sums.insert_after(cur_sum, 0ull);
+    ++cur_sum;
+    last = buffer.begin();
+    *cur_sum = alekseev::safety_sum(*cur_sum, *last);
+    std::cout << *last++;
+    for (; last != buffer.end(); ++last) {
+      std::cout << " " << *last;
+      *cur_sum = alekseev::safety_sum(*cur_sum, *last);
     }
     std::cout << "\n";
   }
@@ -73,4 +90,12 @@ bool alekseev::is_empty(const List< List< T > > & l)
     }
   }
   return true;
+}
+
+size_t alekseev::safety_sum(size_t a, size_t b)
+{
+  if (MAX_SIZE_T - a < b) {
+    throw std::overflow_error("Overflow!");
+  }
+  return a + b;
 }
