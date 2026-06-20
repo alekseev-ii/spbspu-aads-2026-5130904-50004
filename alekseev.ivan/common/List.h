@@ -5,15 +5,13 @@
 
 namespace alekseev {
   template< class T >
-  struct Node
-  {
+  struct Node {
     T data_;
     Node * next_;
   };
 
   template< class T >
-  struct List
-  {
+  struct List {
     List();
     ~List();
     List(const List & rhs);
@@ -33,8 +31,7 @@ namespace alekseev {
     bool empty() const;
     size_t size() const;
 
-    struct LIter: std::iterator< std::forward_iterator_tag, T >
-    {
+    struct LIter: std::iterator< std::forward_iterator_tag, T > {
       friend class List;
       LIter(Node< T > * current, Node< T > * fake_node);
 
@@ -51,8 +48,7 @@ namespace alekseev {
     };
 
     struct LCIter: std::iterator< std::forward_iterator_tag, T, std::ptrdiff_t, const T *, const T
-          & >
-    {
+          & > {
       friend class List;
       LCIter(Node< T > * current, Node< T > * fake_node);
 
@@ -96,7 +92,9 @@ namespace alekseev {
   List< T >::~List()
   {
     clear();
-    ::operator delete(fake_node_);
+    if (fake_node_ != nullptr) {
+      ::operator delete(fake_node_);
+    }
   }
 
   template< class T >
@@ -123,11 +121,9 @@ namespace alekseev {
 
   template< class T >
   List< T >::List(List && rhs) noexcept:
-    fake_node_(rhs.fake_node_),
-    size_(rhs.size_)
+    List()
   {
-    rhs.fake_node_ = nullptr;
-    rhs.size_ = 0;
+    swap(rhs);
   }
 
   template< class T >
@@ -190,7 +186,7 @@ namespace alekseev {
   template< class T >
   bool List< T >::empty() const
   {
-    return fake_node_->next_ == fake_node_;
+    return size_ == 0;
   }
 
   template< class T >
@@ -203,7 +199,8 @@ namespace alekseev {
   List< T >::LIter::LIter(Node< T > * current, Node< T > * fake_node):
     current_(current),
     fake_node_(fake_node)
-  { }
+  {
+  }
 
   template< class T >
   typename List< T >::LIter & List< T >::LIter::operator++()
@@ -248,7 +245,8 @@ namespace alekseev {
   List< T >::LCIter::LCIter(Node< T > * current, Node< T > * fake_node):
     current_(current),
     fake_node_(fake_node)
-  { }
+  {
+  }
 
   template< class T >
   typename List< T >::LCIter & List< T >::LCIter::operator++()

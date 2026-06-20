@@ -1,6 +1,6 @@
 #define BOOST_TEST_MODULE ListTest
-#include <boost/test/unit_test.hpp>
-#include "../common/List.h"
+#include <boost/test/included/unit_test.hpp>
+#include "List.h"
 
 using namespace alekseev;
 
