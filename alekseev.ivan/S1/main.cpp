@@ -66,7 +66,12 @@ int main()
   auto cur_sum = sums.before_begin();
   for (auto it = bufs.begin(); it != bufs.end(); ++it) {
     if (!it->empty()) {
-      sums.insert_after(cur_sum, sum(*it));
+      try {
+        sums.insert_after(cur_sum, sum(*it));
+      } catch (std::overflow_error & e) {
+        std::cerr << e.what();
+        return 1;
+      }
       ++cur_sum;
     }
   }
