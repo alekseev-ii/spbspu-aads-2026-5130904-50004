@@ -1,9 +1,9 @@
 #include "expressions_processing.h"
 
-#include "../common/stack.h"
-#include "safety_math.h"
 #include <stdexcept>
 #include <cctype>
+#include "stack.h"
+#include "safety_math.h"
 
 long long alekseev::count_from_string(const std::string & str_expr)
 {

@@ -1,8 +1,8 @@
 #ifndef EXPRESSIONS_PROCESSING_H
 #define EXPRESSIONS_PROCESSING_H
 
-#include "../common/queue.h"
 #include <string>
+#include "queue.h"
 
 namespace alekseev {
   using QLCh = Queue< List< char > * >;
