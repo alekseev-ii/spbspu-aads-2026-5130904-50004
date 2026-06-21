@@ -1,6 +1,6 @@
 #include <iostream>
 #include <limits>
-#include "../common/List.h"
+#include "List.h"
 
 namespace alekseev {
   template< class T >
@@ -17,8 +17,7 @@ int main()
   auto cur_seq = seqs.before_begin();
 
   std::string name;
-  size_t K = 0;
-  while (++K <= 4 && std::cin >> name) {
+  while (std::cin >> name) {
     names.insert_after(cur_name, name);
     ++cur_name;
     seqs.insert_after(cur_seq, alekseev::List< size_t >());
@@ -65,15 +64,24 @@ int main()
     sums.insert_after(cur_sum, 0ull);
     ++cur_sum;
     last = buffer.begin();
-    *cur_sum = alekseev::safety_sum(*cur_sum, *last);
-    std::cout << *last++;
-    for (; last != buffer.end(); ++last) {
-      std::cout << " " << *last;
+    try {
       *cur_sum = alekseev::safety_sum(*cur_sum, *last);
+      std::cout << *last++;
+      for (; last != buffer.end(); ++last) {
+        std::cout << " " << *last;
+        *cur_sum = alekseev::safety_sum(*cur_sum, *last);
+      }
+      std::cout << "\n";
+    } catch (std::overflow_error) {
+      std::cout << "overflow error\n";
+      return 1;
     }
-    std::cout << "\n";
   }
 
+  if (sums.empty()) {
+    std::cout << "0\n";
+    return 0;
+  }
   auto s = sums.begin();
   std::cout << *(s++);
   for (; s != sums.end(); ++s) {
