@@ -33,12 +33,6 @@ int main()
     }
   }
 
-  if (names.empty()) {
-    std::cout << "0\n";
-    return 0;
-  }
-  alekseev::print(std::cout, names.begin(), names.end());
-
   alekseev::List< size_t > sums;
   auto cur_sum = sums.before_begin();
   alekseev::List< alekseev::List< size_t > > bufs;
@@ -70,6 +64,11 @@ int main()
     }
   }
 
+  if (names.empty()) {
+    std::cout << "0\n";
+    return 0;
+  }
+  alekseev::print(std::cout, names.begin(), names.end());
   for (auto buf = bufs.begin(); buf != bufs.end(); ++buf) {
     alekseev::print(std::cout, buf->begin(), buf->end());
   }
