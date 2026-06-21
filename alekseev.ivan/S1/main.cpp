@@ -6,6 +6,8 @@ namespace alekseev {
   template< class T >
   bool is_empty(const List< List< T > > & l);
   const size_t MAX_SIZE_T = std::numeric_limits< size_t >::max();
+  template< class FwdIter >
+  std::ostream & print(std::ostream & os, FwdIter beg, FwdIter end);
 }
 
 int main()
@@ -48,7 +50,7 @@ int main()
     std::cout << "0\n";
     return 0;
   }
-  std::cout << names << "\n";
+  alekseev::print(std::cout, names.begin(), names.end());
 
   while (true) {
     alekseev::List< size_t > buffer;
@@ -64,13 +66,13 @@ int main()
     if (buffer.empty()) {
       break;
     }
-    std::cout << buffer << "\n";
+    alekseev::print(std::cout, buffer.begin(), buffer.end());
   }
 
   if (sums.empty()) {
     std::cout << "0\n";
   } else {
-    std::cout << sums << "\n";
+    alekseev::print(std::cout, sums.begin(), sums.end());
   }
 }
 
@@ -83,4 +85,17 @@ bool alekseev::is_empty(const List< List< T > > & l)
     }
   }
   return true;
+}
+
+template< class FwdIter >
+std::ostream & alekseev::print(std::ostream & os, FwdIter beg, FwdIter end)
+{
+  if (beg == end) {
+    return os;
+  }
+  os << *beg++;
+  for (; beg != end; ++beg) {
+    os << " " << *beg;
+  }
+  return os << "\n";
 }

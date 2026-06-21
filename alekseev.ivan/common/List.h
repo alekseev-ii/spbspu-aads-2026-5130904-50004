@@ -2,6 +2,7 @@
 #define LIST_H
 
 #include <iterator>
+#include <iostream>
 
 namespace alekseev {
   template< class T >
@@ -351,19 +352,6 @@ namespace alekseev {
     delete current->next_;
     current->next_ = next;
     --size_;
-  }
-  template< class T >
-  std::ostream & operator<<(std::ostream & os, const List< T > & l)
-  {
-    if (l.empty()) {
-      return os;
-    }
-    auto it = l.begin();
-    os << *it++;
-    for (; it != l.end(); ++it) {
-      os << " " << *it;
-    }
-    return os;
   }
 }
 
