@@ -6,7 +6,6 @@ namespace alekseev {
   template< class T >
   bool is_empty(const List< List< T > > & l);
   const size_t MAX_SIZE_T = std::numeric_limits< size_t >::max();
-  size_t safety_sum(size_t a, size_t b);
 }
 
 int main()
@@ -15,21 +14,33 @@ int main()
   auto cur_name = names.before_begin();
   alekseev::List< alekseev::List< size_t > > seqs;
   auto cur_seq = seqs.before_begin();
+  alekseev::List< size_t > sums;
 
   std::string name;
-  while (std::cin >> name) {
+  size_t K = 0;
+  while (++K <= 1 && std::cin >> name) {
     names.insert_after(cur_name, name);
     ++cur_name;
     seqs.insert_after(cur_seq, alekseev::List< size_t >());
     ++cur_seq;
     auto current = cur_seq->before_begin();
+    auto cur_sum = sums.before_begin();
 
     int next_char = std::cin.get();
     while (std::cin && next_char != '\n' && next_char != EOF) {
       size_t n = 0;
       std::cin >> n;
+      if (sums.size() == cur_seq->size()) {
+        sums.insert_after(cur_sum, 0ull);
+      }
+      ++cur_sum;
       cur_seq->insert_after(current, n);
       ++current;
+      if (alekseev::MAX_SIZE_T - n < *cur_sum) {
+        std::cerr << "Overflow!\n";
+        return 1;
+      }
+      *cur_sum += n;
       next_char = std::cin.get();
     }
   }
@@ -38,15 +49,8 @@ int main()
     std::cout << "0\n";
     return 0;
   }
-  alekseev::List< std::string >::LCIter cname = names.begin();
-  std::cout << *(cname++);
-  for (; cname != names.end(); ++cname) {
-    std::cout << " " << *cname;
-  }
-  std::cout << "\n";
+  std::cout << names << "\n";
 
-  alekseev::List< size_t > sums;
-  auto cur_sum = sums.before_begin();
   while (true) {
     alekseev::List< size_t > buffer;
     auto last = buffer.before_begin();
@@ -61,31 +65,13 @@ int main()
     if (buffer.empty()) {
       break;
     }
-    sums.insert_after(cur_sum, 0ull);
-    ++cur_sum;
-    last = buffer.begin();
-    try {
-      *cur_sum = alekseev::safety_sum(*cur_sum, *last);
-      std::cout << *last++;
-      for (; last != buffer.end(); ++last) {
-        std::cout << " " << *last;
-        *cur_sum = alekseev::safety_sum(*cur_sum, *last);
-      }
-      std::cout << "\n";
-    } catch (std::overflow_error & e) {
-      std::cout << "overflow error\n";
-      return 1;
-    }
+    std::cout << buffer << "\n";
   }
 
   if (sums.empty()) {
     std::cout << "0\n";
-    return 0;
-  }
-  auto s = sums.begin();
-  std::cout << *(s++);
-  for (; s != sums.end(); ++s) {
-    std::cout << " " << *s;
+  } else {
+    std::cout << sums << "\n";
   }
 }
 
@@ -98,12 +84,4 @@ bool alekseev::is_empty(const List< List< T > > & l)
     }
   }
   return true;
-}
-
-size_t alekseev::safety_sum(size_t a, size_t b)
-{
-  if (MAX_SIZE_T - a < b) {
-    throw std::overflow_error("Overflow!");
-  }
-  return a + b;
 }

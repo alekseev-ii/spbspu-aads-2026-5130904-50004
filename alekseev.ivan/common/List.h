@@ -86,6 +86,9 @@ namespace alekseev {
   };
 
   template< class T >
+  std::ostream & operator<<(std::ostream & os, const List< T > & l);
+
+  template< class T >
   List< T >::List():
     fake_node_(static_cast< Node< T > * >(::operator new(sizeof(Node< T >)))),
     size_(0)
@@ -348,6 +351,19 @@ namespace alekseev {
     delete current->next_;
     current->next_ = next;
     --size_;
+  }
+  template< class T >
+  std::ostream & operator<<(std::ostream & os, const List< T > & l)
+  {
+    if (l.empty()) {
+      return os;
+    }
+    auto it = l.begin();
+    os << *it++;
+    for (; it != l.end(); ++it) {
+      os << ' ' << *it;
+    }
+    return os;
   }
 }
 
