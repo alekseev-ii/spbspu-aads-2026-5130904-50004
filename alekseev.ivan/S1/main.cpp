@@ -72,7 +72,7 @@ int main()
         *cur_sum = alekseev::safety_sum(*cur_sum, *last);
       }
       std::cout << "\n";
-    } catch (std::overflow_error) {
+    } catch (std::overflow_error & e) {
       std::cout << "overflow error\n";
       return 1;
     }
