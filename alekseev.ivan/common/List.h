@@ -361,7 +361,7 @@ namespace alekseev {
     auto it = l.begin();
     os << *it++;
     for (; it != l.end(); ++it) {
-      os << ' ' << *it;
+      os << " " << *it;
     }
     return os;
   }

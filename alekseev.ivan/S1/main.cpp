@@ -17,8 +17,7 @@ int main()
   alekseev::List< size_t > sums;
 
   std::string name;
-  size_t K = 0;
-  while (++K <= 1 && std::cin >> name) {
+  while (std::cin >> name) {
     names.insert_after(cur_name, name);
     ++cur_name;
     seqs.insert_after(cur_seq, alekseev::List< size_t >());
