@@ -6,6 +6,7 @@ namespace alekseev {
   const size_t MAX_SIZE_T = std::numeric_limits< size_t >::max();
   template< class FwdIter >
   std::ostream & print(std::ostream & os, FwdIter beg, FwdIter end);
+  size_t sum(const List< size_t > & l);
 }
 
 int main()
@@ -33,8 +34,6 @@ int main()
     }
   }
 
-  alekseev::List< size_t > sums;
-  auto cur_sum = sums.before_begin();
   alekseev::List< alekseev::List< size_t > > bufs;
   auto last_buf = bufs.before_begin();
   while (true) {
@@ -44,16 +43,7 @@ int main()
 
     for (auto seq = seqs.begin(); seq != seqs.end(); ++seq) {
       if (!seq->empty()) {
-        if (last_buf->empty()) {
-          sums.insert_after(cur_sum, 0ull);
-          ++cur_sum;
-        }
         size_t n = seq->front();
-        if (alekseev::MAX_SIZE_T - n < *cur_sum) {
-          std::cerr << "Overflow!\n";
-          return 1;
-        }
-        *cur_sum += n;
         last_buf->insert_after(last, n);
         ++last;
         seq->pop_front();
@@ -71,6 +61,14 @@ int main()
   alekseev::print(std::cout, names.begin(), names.end());
   for (auto buf = bufs.begin(); buf != bufs.end(); ++buf) {
     alekseev::print(std::cout, buf->begin(), buf->end());
+  }
+  alekseev::List< size_t > sums;
+  auto cur_sum = sums.before_begin();
+  for (auto it = bufs.begin(); it != bufs.end(); ++it) {
+    if (!it->empty()) {
+      sums.insert_after(cur_sum, sum(*it));
+      ++cur_sum;
+    }
   }
   if (sums.empty()) {
     std::cout << "0\n";
@@ -90,4 +88,16 @@ std::ostream & alekseev::print(std::ostream & os, FwdIter beg, FwdIter end)
     os << " " << *beg;
   }
   return os << "\n";
+}
+
+size_t alekseev::sum(const List< size_t > & l)
+{
+  size_t res = 0;
+  for (auto it = l.begin(); it != l.end(); ++it) {
+    if (MAX_SIZE_T - *it < res) {
+      throw std::overflow_error("Overflow!");
+    }
+    res += *it;
+  }
+  return res;
 }
