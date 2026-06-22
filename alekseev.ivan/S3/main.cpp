@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include "../common/hash_table.h"
+#include "hash_table.h"
 #include "graph.h"
 
 namespace alekseev {
@@ -25,7 +25,8 @@ namespace alekseev {
   void merge(Ht_Graphs & graphs, Vector< str > args);
   void extract(Ht_Graphs & graphs, Vector< str > args);
 
-  struct Exec {
+  struct Exec
+  {
     Exec();
     HashTable< str, command_type, size_t (*)(const str &), bool (*)(str, str) > cmds;
 
