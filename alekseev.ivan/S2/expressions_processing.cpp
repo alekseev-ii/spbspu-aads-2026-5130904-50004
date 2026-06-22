@@ -7,23 +7,8 @@
 
 long long alekseev::count_from_string(const std::string & str_expr)
 {
-  Queue< List< char > * > infix = str_to_infix(str_expr);
-  Queue< List< char > * > postfix;
-  try {
-    postfix = infix_to_postfix(infix);
-  } catch (...) {
-    clear_QLCh(infix);
-    throw;
-  }
-  clear_QLCh(infix);
-  long long res = 0;
-  try {
-    res = count_postfix(postfix);
-  } catch (...) {
-    clear_QLCh(postfix);
-    throw;
-  }
-  clear_QLCh(postfix);
+  QLCh postfix = infix_to_postfix(str_to_infix(str_expr));
+  long long res = count_postfix(postfix);
   return res;
 }
 
@@ -142,10 +127,10 @@ long long alekseev::count_postfix(QLCh postfix)
 {
   Stack< long long > stack;
   while (!postfix.empty()) {
-    List< char > * current = postfix.front();
-    postfix.pop();
-    if (is_operator(current->next->data)) {
-      char op = current->next->data;
+    const List< char > current = postfix.front();
+
+    if (is_operator(current.front())) {
+      char op = current.front();
       if (op == '#') {
         if (stack.empty()) {
           throw std::invalid_argument("Invalid expression");
@@ -166,6 +151,7 @@ long long alekseev::count_postfix(QLCh postfix)
     } else {
       stack.push(ltoll(current));
     }
+    postfix.pop();
   }
   if (stack.size() != 1) {
     throw std::invalid_argument("Invalid expression");
@@ -190,25 +176,21 @@ bool alekseev::is_operator(char op)
   return op == '#' || op == '*' || op == '/' || op == '%' || op == '+' || op == '-';
 }
 
-bool alekseev::is_number(List< char > * li)
+bool alekseev::is_number(const List< char > & li)
 {
-  List< char > * current = li->next;
-  while (current != li) {
-    if (!isdigit(current->data)) {
+  for (auto cur_ch = li.begin(); cur_ch != li.end(); ++cur_ch) {
+    if (!isdigit(*cur_ch)) {
       return false;
     }
-    current = current->next;
   }
   return true;
 }
 
-long long alekseev::ltoll(List< char > * li)
+long long alekseev::ltoll(const List< char > & li)
 {
-  List< char > * current = li->next;
   std::string res;
-  while (current != li) {
-    res += current->data;
-    current = current->next;
+  for (auto cur_ch = li.begin(); cur_ch != li.end(); ++cur_ch) {
+    res += *cur_ch;
   }
   return stoll(res);
 }
@@ -227,14 +209,4 @@ long long alekseev::count(long long a, long long b, char op)
     return sub(a, b);
   }
   throw std::invalid_argument("Invalid operation");
-}
-
-void alekseev::clear_QLCh(QLCh & q)
-{
-  while (!q.empty()) {
-    List< char > * tmp = q.front();
-    q.pop();
-    clear(tmp->next, tmp);
-    rmfake(tmp);
-  }
 }
