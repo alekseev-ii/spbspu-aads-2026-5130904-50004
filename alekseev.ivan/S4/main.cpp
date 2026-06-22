@@ -1,7 +1,7 @@
-#include "BSTree.h"
-#include "../common/vector.h"
 #include <iostream>
 #include <fstream>
+#include "BSTree.h"
+#include "vector.h"
 
 namespace alekseev {
   using big_tree_t = BSTree< std::string, BSTree< int, std::string, std::less< > >, std::less< > >;
@@ -12,7 +12,8 @@ namespace alekseev {
   void intersect(big_tree_t & bigTree, const Vector< std::string > & args);
   void union_(big_tree_t & bigTree, const Vector< std::string > & args);
 
-  struct Exec {
+  struct Exec
+  {
     big_tree_t bigTree;
     BSTree< std::string, void(*)(big_tree_t &, const Vector< std::string > &), std::less< > > cmds;
     Exec();

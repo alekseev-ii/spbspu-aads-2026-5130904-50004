@@ -1,8 +1,8 @@
 #ifndef GRAPH_H
 #define GRAPH_H
 
-#include "../common/hash_table.h"
-#include "../common/vector.h"
+#include "hash_table.h"
+#include "vector.h"
 
 namespace alekseev {
   using str = std::string;
@@ -12,12 +12,14 @@ namespace alekseev {
   bool is_equal(const std::pair< str, str > & lhs, const std::pair< str, str > & rhs);
   using is_equal_ptr = bool(*)(const std::pair< str, str > &, const std::pair< str, str > &);
 
-  struct Graph {
-    ~Graph();
-    Graph(const Graph & rhs);
-    Graph & operator=(const Graph & rhs);
-    Graph(Graph && rhs) noexcept;
-    Graph & operator=(Graph && rhs) noexcept;
+  struct Graph
+  {
+    ~Graph() = default;
+    Graph(const Graph & rhs) = default;
+    Graph & operator=(const Graph & rhs) = default;
+    Graph(Graph && rhs) noexcept = default;
+    Graph & operator=(Graph && rhs) noexcept = default;
+
     Graph();
 
     void swap(Graph & rhs) noexcept;
@@ -34,15 +36,15 @@ namespace alekseev {
     void remove_edge(const str & vertex1, const str & vertex2, size_t weight);
     Vector< std::pair< str, Vector< size_t > > > outbounds(const str & vertex) const;
     Vector< std::pair< str, Vector< size_t > > > inbounds(const str & vertex) const;
-    List< str > * vertexes() const;
+    const List< str > & vertexes() const;
 
     private:
-      List< str > * vertexes_;
+      List< str > vertexes_;
       HashTable< std::pair< str, str >, Vector< size_t >, hasher_ptr, is_equal_ptr > edges_;
   };
 
   Graph merge_graphs(const Graph & graph1, const Graph & graph2);
-  Graph extract_graph(const Graph & source, const List< str > * vertexes);
+  Graph extract_graph(const Graph & source, const List< str > & vertexes);
 }
 
 #endif

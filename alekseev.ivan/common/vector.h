@@ -41,6 +41,8 @@ namespace alekseev {
     Vector operator+(const Vector & rhs) const;
     Vector & operator+=(const Vector & rhs);
 
+    template< class Less >
+    void bubbleSort(Less less);
     void bubbleSort(bool (* less)(T, T));
     void resize(size_t new_capacity);
 
@@ -323,13 +325,14 @@ alekseev::Vector< T > & alekseev::Vector< T >::operator+=(const Vector & rhs)
 }
 
 template< class T >
-void alekseev::Vector< T >::bubbleSort(bool (* less)(T, T))
+template< class Less >
+void alekseev::Vector< T >::bubbleSort(Less less)
 {
   if (size_ <= 1) {
     return;
   }
   bool swapped = true;
-  Vector< T > temp = *this;
+  Vector temp = *this;
   while (swapped) {
     swapped = false;
     for (size_t i = 0; i < getSize() - 1; ++i) {

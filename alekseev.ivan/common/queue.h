@@ -3,16 +3,13 @@
 
 #include "List.h"
 #include <cstddef>
-#include <cassert>
 
 namespace alekseev {
   template< class T >
-  struct Queue {
-    List< T > * fake_node_, * tail_;
-    size_t size_;
-
+  struct Queue
+  {
     Queue();
-    ~Queue();
+    ~Queue() = default;
     Queue(const Queue & rhs);
     Queue & operator=(const Queue & rhs);
     Queue(Queue && rhs) noexcept;
@@ -23,89 +20,63 @@ namespace alekseev {
 
     void pop();
     T & front();
+    const T & front() const;
     T & back();
+    const T & back() const;
     bool empty() const;
     size_t size() const;
+
+    void swap(Queue & rhs) noexcept;
+
+    private:
+      List< T > queue_;
+      typename List< T >::LIter tail_;
   };
 
   template< class T >
   Queue< T >::Queue():
-    fake_node_(fake< T >()),
-    size_(0)
+    queue_()
   {
-    tail_ = fake_node_;
-  }
-
-  template< class T >
-  Queue< T >::~Queue()
-  {
-    clear(fake_node_->next, fake_node_);
-    rmfake(fake_node_);
+    tail_ = queue_.before_begin();
   }
 
   template< class T >
   Queue< T >::Queue(const Queue & rhs):
-    fake_node_(fake< T >()),
-    size_(0)
+    queue_(rhs.queue_)
   {
-    tail_ = fake_node_;
-    List< T > * rhs_current = rhs.fake_node_;
-    for (size_t i = 0; i < rhs.size(); ++i) {
-      rhs_current = rhs_current->next;
-      tail_ = insert_after(tail_, rhs_current->data);
-      ++size_;
+    auto it = queue_.begin();
+    tail_ = queue_.before_begin();
+    for (; it != queue_.end(); ++it) {
+      ++tail_;
     }
   }
 
   template< class T >
   Queue< T > & Queue< T >::operator=(const Queue & rhs)
   {
-    if (this == &rhs) {
+    if (this == std::addressof(rhs)) {
       return *this;
     }
-    List< T > * lhs_fake_node = fake< T >();
-    List< T > * lhs_tail = lhs_fake_node;
-    List< T > * rhs_current = rhs.fake_node_;
-    for (size_t i = 0; i < rhs.size(); ++i) {
-      try {
-        rhs_current = rhs_current->next;
-        lhs_tail = insert_after(lhs_tail, rhs_current->data);
-      } catch (...) {
-        clear(lhs_fake_node->next, lhs_fake_node);
-        rmfake(lhs_fake_node);
-        throw;
-      }
-    }
-    clear(fake_node_->next, fake_node_);
-    rmfake(fake_node_);
-    fake_node_ = lhs_fake_node;
-    tail_ = lhs_tail;
-    size_ = rhs.size();
+    Queue temp(rhs);
+    swap(temp);
     return *this;
   }
 
   template< class T >
   Queue< T >::Queue(Queue && rhs) noexcept:
-    fake_node_(rhs.fake_node_),
-    tail_(rhs.tail_),
-    size_(rhs.size())
+    Queue()
   {
-    rhs.fake_node_ = fake< T >();
-    rhs.tail_ = rhs.fake_node_;
-    rhs.size_ = 0;
+    swap(rhs);
   }
 
   template< class T >
   Queue< T > & Queue< T >::operator=(Queue && rhs) noexcept
   {
-    clear(fake_node_->next, fake_node_);
-    rmfake(fake_node_);
-    fake_node_ = rhs.fake_node_;
-    rhs.fake_node_ = fake< T >();
-    tail_ = rhs.tail_;
-    rhs.tail_ = rhs.fake_node_;
-    size_ = rhs.size();
-    rhs.size_ = 0;
+    if (this == std::addressof(rhs)) {
+      return *this;
+    }
+    Queue temp(rhs);
+    swap(temp);
     return *this;
   }
 
@@ -113,43 +84,57 @@ namespace alekseev {
   template< class U >
   void Queue< T >::push(U && value)
   {
-    insert_after(tail_, std::forward< U >(value));
-    tail_ = tail_->next;
-    ++size_;
+    queue_.insert_after(tail_, value);
+    ++tail_;
   }
 
   template< class T >
   void Queue< T >::pop()
   {
-    assert(!empty());
-    erase_after(fake_node_);
-    --size_;
+    queue_.pop_front();
   }
 
   template< class T >
   T & Queue< T >::front()
   {
-    assert(!empty());
-    return fake_node_->next->data;
+    return queue_.front();
+  }
+
+  template< class T >
+  const T & Queue< T >::front() const
+  {
+    return queue_.front();
   }
 
   template< class T >
   T & Queue< T >::back()
   {
-    assert(!empty());
-    return tail_->data;
+    return *tail_;
+  }
+
+  template< class T >
+  const T & Queue< T >::back() const
+  {
+    return *tail_;
   }
 
   template< class T >
   bool Queue< T >::empty() const
   {
-    return size() == 0;
+    return queue_.empty();
   }
 
   template< class T >
   size_t Queue< T >::size() const
   {
-    return size_;
+    return queue_.size();
+  }
+
+  template< class T >
+  void Queue< T >::swap(Queue & rhs) noexcept
+  {
+    queue_.swap(rhs.queue_);
+    std::swap(tail_, rhs.tail_);
   }
 }
 
