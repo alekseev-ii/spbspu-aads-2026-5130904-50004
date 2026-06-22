@@ -1,14 +1,15 @@
 #ifndef WSTR_FUNCTIONS_H
 #define WSTR_FUNCTIONS_H
 
-#include <string>
-#include <initializer_list>
-#include "../common/vector.h"
-
 #ifdef _WIN32
 #include <fcntl.h>
 #include <windows.h>
 #endif
+#include <string>
+#include <initializer_list>
+#include "vector.h"
+
+
 
 namespace alekseev {
   using wstr_cr = const std::wstring &;

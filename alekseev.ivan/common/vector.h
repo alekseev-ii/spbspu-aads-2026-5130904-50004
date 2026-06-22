@@ -43,7 +43,6 @@ namespace alekseev {
 
     template< class Less >
     void bubbleSort(Less less);
-    void bubbleSort(bool (* less)(T, T));
     void resize(size_t new_capacity);
 
     private:

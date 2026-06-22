@@ -47,6 +47,8 @@ namespace alekseev {
       void distance_of_find_txt(Vector< std::wstring > & args);
       void max_variants_dict(Vector< std::wstring > & args);
       void distance_of_find_dict(Vector< std::wstring > & args);
+
+      void help(Vector< std::wstring > &);
   };
 }
 
@@ -56,8 +58,11 @@ int main()
   alekseev::Exec exec(std::wcin, std::wcout);
 
   std::wstring line;
-  while (std::getline(std::wcin, line)) {
+  while (alekseev::wgetline(std::wcin, line)) {
     try {
+      if (line == L"exit") {
+        return 0;
+      }
       exec(line);
     } catch (std::invalid_argument & e) {
       std::wcout << e.what() << L"\n";
@@ -76,65 +81,108 @@ alekseev::Exec::Exec(std::wistream & is, std::wostream & os):
   is_(is),
   os_(os)
 {
-  functions_.insert(L"load_txt", [this](Vector< std::wstring > & args) {
+  functions_.insert(L"load_txt", [this](Vector< std::wstring > & args)
+  {
     load_txt(args);
   });
-  functions_.insert(L"save_txt", [this](Vector< std::wstring > & args) {
+  functions_.insert(L"save_txt", [this](Vector< std::wstring > & args)
+  {
     save_txt(args);
   });
-  functions_.insert(L"unload_txt", [this](Vector< std::wstring > & args) {
+  functions_.insert(L"unload_txt", [this](Vector< std::wstring > & args)
+  {
     unload_txt(args);
   });
-  functions_.insert(L"parse", [this](Vector< std::wstring > & args) {
+  functions_.insert(L"parse", [this](Vector< std::wstring > & args)
+  {
     parse(args);
   });
-  functions_.insert(L"correct", [this](Vector< std::wstring > & args) {
+  functions_.insert(L"correct", [this](Vector< std::wstring > & args)
+  {
     correct(args);
   });
-  functions_.insert(L"process", [this](Vector< std::wstring > & args) {
+  functions_.insert(L"process", [this](Vector< std::wstring > & args)
+  {
     process(args);
   });
 
-  functions_.insert(L"new", [this](Vector< std::wstring > & args) {
+  functions_.insert(L"new", [this](Vector< std::wstring > & args)
+  {
     new_(args);
   });
-  functions_.insert(L"load_dict", [this](Vector< std::wstring > & args) {
+  functions_.insert(L"load_dict", [this](Vector< std::wstring > & args)
+  {
     load_dict(args);
   });
-  functions_.insert(L"save_dict", [this](Vector< std::wstring > & args) {
+  functions_.insert(L"save_dict", [this](Vector< std::wstring > & args)
+  {
     save_dict(args);
   });
-  functions_.insert(L"unload_dict", [this](Vector< std::wstring > & args) {
+  functions_.insert(L"unload_dict", [this](Vector< std::wstring > & args)
+  {
     unload_dict(args);
   });
-  functions_.insert(L"current_dict", [this](Vector< std::wstring > & args) {
+  functions_.insert(L"current", [this](Vector< std::wstring > & args)
+  {
     current(args);
   });
-  functions_.insert(L"add", [this](Vector< std::wstring > & args) {
+  functions_.insert(L"add", [this](Vector< std::wstring > & args)
+  {
     add_word(args);
   });
-  functions_.insert(L"update", [this](Vector< std::wstring > & args) {
+  functions_.insert(L"update", [this](Vector< std::wstring > & args)
+  {
     update_form(args);
   });
-  functions_.insert(L"delete_lemma", [this](Vector< std::wstring > & args) {
+  functions_.insert(L"delete_lemma", [this](Vector< std::wstring > & args)
+  {
     delete_lemma(args);
   });
-  functions_.insert(L"delete_form", [this](Vector< std::wstring > & args) {
+  functions_.insert(L"delete_form", [this](Vector< std::wstring > & args)
+  {
     delete_form(args);
   });
 
-  functions_.insert(L"max_variants_txt", [this](Vector< std::wstring > & args) {
+  functions_.insert(L"max_variants_txt", [this](Vector< std::wstring > & args)
+  {
     max_variants_txt(args);
   });
-  functions_.insert(L"distance_of_find_txt", [this](Vector< std::wstring > & args) {
+  functions_.insert(L"distance_of_find_txt", [this](Vector< std::wstring > & args)
+  {
     distance_of_find_txt(args);
   });
-  functions_.insert(L"max_variants_dict", [this](Vector< std::wstring > & args) {
+  functions_.insert(L"max_variants_dict", [this](Vector< std::wstring > & args)
+  {
     max_variants_dict(args);
   });
-  functions_.insert(L"distance_of_find_dict", [this](Vector< std::wstring > & args) {
+  functions_.insert(L"distance_of_find_dict", [this](Vector< std::wstring > & args)
+  {
     distance_of_find_dict(args);
   });
+  functions_.insert(L"help", [this](Vector< std::wstring > & args)
+  {
+    help(args);
+  });
+
+  Vector< std::wstring > opts{L"Load ~1200 lemmas (~ ms)", L"Load ~1700 lemmas (~ ms)"};
+  size_t opt = choose(opts, is, os, 0, L"Do you want to load default dictionary?",
+      L"Do not load default dictionary");
+  if (opt == 2) {
+    return;
+  }
+  dicts_.load(L"default_dictionary_requiers", L"./dicts/default_dictionary_requiers");
+  dicts_.load(L"default_dictionary_functional", L"./dicts/default_dictionary_functional.txt");
+  if (opt == 0) {
+    dicts_.load(L"default_dictionary_300_adjectives",
+        L"./dicts/default_dictionary_300_adjectives.txt");
+    dicts_.load(L"default_dictionary_300_verbs", L"./dicts/default_dictionary_300_verbs.txt");
+    dicts_.load(L"default_dictionary_300_nouns", L"./dicts/default_dictionary_300_nouns.txt");
+  } else if (opt == 1) {
+    dicts_.load(L"default_dictionary_500_adjectives",
+        L"./dicts/default_dictionary_500_adjectives.txt");
+    dicts_.load(L"default_dictionary_500_verbs", L"./dicts/default_dictionary_500_verbs.txt");
+    dicts_.load(L"default_dictionary_500_nouns", L"./dicts/default_dictionary_500_nouns.txt");
+  }
 }
 
 void alekseev::Exec::operator()(wstr_cr line)
@@ -371,4 +419,68 @@ void alekseev::Exec::distance_of_find_dict(Vector< std::wstring > & args)
     throw std::invalid_argument("Bad input");
   }
   dicts_.set_default_distance(n);
+}
+
+void alekseev::Exec::help(Vector< std::wstring > &)
+{
+  os_ << L"A program for finding typos in the text, correcting them, "
+      "and managing dictionaries for these tasks\n"
+      "\nFunctions for texts:\n"
+      "    1. load_txt <text_name> <path_to_file>\n"
+      "        Reads text from a file, assigns it a name in the program\n"
+      "    2. parse [text_name]\n"
+      "        Searches for typos in the text, prepares for correction "
+      "(may work slowly on large texts) (if the text name is not specified, "
+      "it works with the last loaded \"load_txt\" command)\n"
+      "    3. correct [text_name]\n"
+      "        Interactive typo correction mode in the text (if the text name is not specified, "
+      "it works with the last parsed \"parse\" command)\n"
+      "    4. save_txt [text_name] <path_to_file>\n"
+      "        Writes text to a file (if the text name is not specified, "
+      "it works with the last corrected \"correct\" command )\n"
+      "    5. unload_txt <text_name>\n"
+      "        Removes text from the program\n"
+      "    6. process <path_to_file>\n"
+      "        consistently causes:\n"
+      "            load_txt default_text_name path_to_file\n"
+      "            parse default_text_name\n"
+      "            correct default_text_name\n"
+      "            save_txt default_text_name path_to_file\n"
+      "            unload_txt default_text_name\n"
+
+      "\nFunctions for dictionaries:\n"
+      "    1. load_dict <dict_name> <path_to_file>\n"
+      "        Reads dictionary from a file, assigns it a name in the program\n"
+      "    2. new <dict_name>\n"
+      "        Creates an empty dictionary with the appropriate name\n"
+      "    3. save_dict <dict_name> <path_to_file>\n"
+      "        Saves dictionary to file\n"
+      "    4. unload_dict <dict_name>\n"
+      "        Removes dictionary from the program\n"
+      "    5. current <name_of_loaded_dict>\n"
+      "        Set dictionary as current\n"
+      "    6. add <lemma>\n"
+      "        Interactive addition of a new lemma to the current dictionary\n"
+      "    7. update <lemma>\n"
+      "        Changing or adding a new word form to a lemma from the current dictionary\n"
+      "    8. delete_lemma <lemma>\n"
+      "        Delete lemma from current dictionary\n"
+      "    9. delete_form <word_form>\n"
+      "        Choose and delete word form from current dictionary\n"
+
+      "\nAdditional:\n"
+      "    1. max_variants_txt <number>\n"
+      "        Sets the maximum number of options when working with texts (default 7)\n"
+      "    2. max_variants_dict <number>\n"
+      "        Sets the maximum number of options when working with dictionaries (default 7)\n"
+      "    3. distance_of_find_txt <number>\n"
+      "        Sets the maximum Damerau-Levenshtein distance for fuzzy search "
+      "when working with texts (default 1)\n"
+      "    4. distance_of_find_dict <number>\n"
+      "        Sets the maximum Damerau-Levenshtein distance for fuzzy search "
+      "when working with dictionaries (default 1)\n"
+      "    5. help\n"
+      "        Shows this help\n"
+      "    6. exit\n"
+      "        Terminate program\n";
 }

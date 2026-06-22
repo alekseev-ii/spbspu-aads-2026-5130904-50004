@@ -3,9 +3,9 @@
 
 #include <string>
 #include "wstr_functions.h"
-#include "../common/vector.h"
+#include "vector.h"
 #include "cuckoo_hash.h"
-#include "../common/queue.h"
+#include "queue.h"
 #include "dictionary.h"
 
 namespace alekseev {

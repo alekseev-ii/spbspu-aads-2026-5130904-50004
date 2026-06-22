@@ -2,8 +2,8 @@
 #define CUCKOO_HASH_H
 
 #include <utility>
-#include "../common/vector.h"
 #include <cmath>
+#include "vector.h"
 
 namespace alekseev {
   template< class Key, class Value, class Hash1, class Hash2, class Equal >

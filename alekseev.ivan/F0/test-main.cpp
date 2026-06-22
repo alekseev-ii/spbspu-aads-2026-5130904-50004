@@ -1,7 +1,7 @@
 #define BOOST_TEST_MODULE CuckooHashTest
 #include <boost/test/included/unit_test.hpp>
-#include "cuckoo_hash.h"
 #include <string>
+#include "cuckoo_hash.h"
 
 struct SimpleHash
 {

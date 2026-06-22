@@ -2,7 +2,7 @@
 #define DICTIONARY_H
 
 #include <string>
-#include "../common/vector.h"
+#include "vector.h"
 #include "cuckoo_hash.h"
 #include <fstream>
 
