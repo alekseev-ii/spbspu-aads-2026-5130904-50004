@@ -14,7 +14,8 @@ namespace alekseev {
   struct BSTConstIterator;
 
   template< class Key, class Value >
-  struct BSTree_node {
+  struct BSTree_node
+  {
     Key key;
     Value value;
     BSTree_node * left, * right, * parent;
@@ -54,7 +55,8 @@ namespace alekseev {
   size_t height(BSTree_node< Key, Value > * root, BSTree_node< Key, Value > * fake_leaf);
 
   template< class Key, class Value >
-  struct BSTIterator {
+  struct BSTIterator
+  {
     explicit BSTIterator(BSTree_node< Key, Value > * current,
         BSTree_node< Key, Value > * fake_leaf);
     ~BSTIterator() = default;
@@ -81,7 +83,8 @@ namespace alekseev {
   };
 
   template< class Key, class Value >
-  struct BSTConstIterator {
+  struct BSTConstIterator
+  {
     explicit BSTConstIterator(BSTree_node< Key, Value > * current,
         BSTree_node< Key, Value > * fake_leaf);
     ~BSTConstIterator() = default;
@@ -119,7 +122,8 @@ namespace alekseev {
   IterType end(const BSTree< Key, Value, Compare > & tree);
 
   template< class Key, class Value, class Compare >
-  struct BSTree {
+  struct BSTree
+  {
     explicit BSTree(Compare comp);
     ~BSTree();
     BSTree(const BSTree & rhs);
@@ -334,15 +338,13 @@ namespace alekseev {
       BSTree_node< Key, Value > * fake_leaf):
     current_(current),
     fake_leaf_(fake_leaf)
-  {
-  }
+  { }
 
   template< class Key, class Value >
   BSTIterator< Key, Value >::BSTIterator(BSTIterator && rhs) noexcept:
     current_(rhs.current_),
     fake_leaf_(rhs.fake_leaf_)
-  {
-  }
+  { }
 
   template< class Key, class Value >
   BSTIterator< Key, Value > & BSTIterator< Key, Value >::operator=(BSTIterator && rhs) noexcept
@@ -413,15 +415,13 @@ namespace alekseev {
       BSTree_node< Key, Value > * fake_leaf):
     current_(current),
     fake_leaf_(fake_leaf)
-  {
-  }
+  { }
 
   template< class Key, class Value >
   BSTConstIterator< Key, Value >::BSTConstIterator(BSTConstIterator && rhs) noexcept:
     current_(rhs.current_),
     fake_leaf_(rhs.fake_leaf_)
-  {
-  }
+  { }
 
   template< class Key, class Value >
   BSTConstIterator< Key, Value > & BSTConstIterator< Key, Value >::operator=(

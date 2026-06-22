@@ -1,8 +1,8 @@
 #define BOOST_TEST_MODULE BSTree_tests
 #include <boost/test/included/unit_test.hpp>
-#include "BSTree.h"
 #include <functional>
 #include <stdexcept>
+#include "BSTree.h"
 
 BOOST_AUTO_TEST_SUITE(BSTreeTests)
 
