@@ -12,113 +12,82 @@ long long alekseev::count_from_string(const std::string & str_expr)
   return res;
 }
 
-alekseev::Queue< alekseev::List< char > * > alekseev::str_to_infix(const std::string & str_expr)
+alekseev::QLCh alekseev::str_to_infix(const std::string & str_expr)
 {
   QLCh res;
   size_t i = 0;
   while (i < str_expr.size()) {
     char current_char = str_expr[i++];
-    List< char > * cur_fake = nullptr;
-    try {
-      cur_fake = fake< char >();
-      List< char > * cur_tail = cur_fake;
-      while (current_char != ' ' && i < str_expr.size()) {
-        cur_tail = insert_after(cur_tail, current_char);
-        current_char = str_expr[i++];
-      }
-      if (current_char != ' ') {
-        insert_after(cur_tail, current_char);
-      }
-      if (cur_fake->next == cur_fake) {
-        rmfake(cur_fake);
-        continue;
-      }
-
-      char cfnd = cur_fake->next->data;
-      if (!is_operator(cfnd) && cfnd != '(' && cfnd != ')' && !is_number(cur_fake)) {
-        throw std::invalid_argument("Bad input: not a number or operator");
-      }
-
-      res.push(cur_fake);
-    } catch (...) {
-      clear(cur_fake->next, cur_fake);
-      rmfake(cur_fake);
-      clear_QLCh(res);
-      throw;
+    List< char > cur;
+    auto cur_tail = cur.before_begin();
+    while (current_char != ' ' && i < str_expr.size()) {
+      cur.insert_after(cur_tail, current_char);
+      ++cur_tail;
+      current_char = str_expr[i++];
     }
+    if (current_char != ' ') {
+      cur.insert_after(cur_tail, current_char);
+      ++cur_tail;
+    }
+    if (cur.empty()) {
+      continue;
+    }
+
+    char cfnd = cur.front();
+    if (!is_operator(cfnd) && cfnd != '(' && cfnd != ')' && !is_number(cur)) {
+      throw std::invalid_argument("Bad input: not a number or operator");
+    }
+
+    res.push(cur);
   }
   return res;
 }
 
 alekseev::QLCh alekseev::infix_to_postfix(QLCh infix)
 {
-  Stack< List< char > * > stack;
+  Stack< List< char > > stack;
   QLCh postfix;
-  List< char > * current = nullptr;
-  try {
-    while (!infix.empty()) {
-      current = deep_copy(infix.front());
-      infix.pop();
-      char first_char = current->next->data;
-      if (first_char == '(') {
-        stack.push(current);
-        current = nullptr;
-      } else if (first_char == ')') {
-        if (!stack.empty()) {
-          while (stack.top()->next->data != '(') {
-            postfix.push(stack.top());
-            stack.pop();
-            if (stack.empty()) {
-              throw std::invalid_argument("Invalid expression");
-            }
-          }
-          List< char > * tmp = stack.top();
+
+  while (!infix.empty()) {
+    List< char > current = infix.front();
+    infix.pop();
+    char first_char = current.front();
+    if (first_char == '(') {
+      stack.push(current);
+    } else if (first_char == ')') {
+      if (!stack.empty()) {
+        while (stack.top().front() != '(') {
+          postfix.push(stack.top());
           stack.pop();
-          clear(tmp->next, tmp);
-          rmfake(tmp);
-        } else {
-          throw std::invalid_argument("Invalid expression");
-        }
-        clear(current->next, current);
-        rmfake(current);
-        current = nullptr;
-      } else if (is_operator(first_char)) {
-        if (!stack.empty()) {
-          while (priority_of(stack.top()->next->data) >= priority_of(first_char)) {
-            postfix.push(stack.top());
-            stack.pop();
-            if (stack.empty()) {
-              break;
-            }
+          if (stack.empty()) {
+            throw std::invalid_argument("Invalid expression");
           }
         }
-        stack.push(current);
-        current = nullptr;
+        stack.pop();
       } else {
-        postfix.push(current);
-        current = nullptr;
-      }
-    }
-    while (!stack.empty()) {
-      if (stack.top()->next->data == '(') {
         throw std::invalid_argument("Invalid expression");
       }
-      postfix.push(stack.top());
-      stack.pop();
+    } else if (is_operator(first_char)) {
+      if (!stack.empty()) {
+        while (priority_of(stack.top().front()) >= priority_of(first_char)) {
+          postfix.push(stack.top());
+          stack.pop();
+          if (stack.empty()) {
+            break;
+          }
+        }
+      }
+      stack.push(current);
+    } else {
+      postfix.push(current);
     }
-  } catch (...) {
-    while (!stack.empty()) {
-      List< char > * tmp = stack.top();
-      stack.pop();
-      clear(tmp->next, tmp);
-      rmfake(tmp);
+  }
+  while (!stack.empty()) {
+    if (stack.top().front() == '(') {
+      throw std::invalid_argument("Invalid expression");
     }
-    clear_QLCh(postfix);
-    if (current) {
-      clear(current->next, current);
-      rmfake(current);
-    }
-    throw;
+    postfix.push(stack.top());
+    stack.pop();
   }
   return postfix;
 }
@@ -127,7 +96,7 @@ long long alekseev::count_postfix(QLCh postfix)
 {
   Stack< long long > stack;
   while (!postfix.empty()) {
-    const List< char > current = postfix.front();
+    List< char > current = postfix.front();
 
     if (is_operator(current.front())) {
       char op = current.front();

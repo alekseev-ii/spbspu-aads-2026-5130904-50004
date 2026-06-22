@@ -20,7 +20,9 @@ namespace alekseev {
 
     void pop();
     T & front();
+    const T & front() const;
     T & back();
+    const T & back() const;
     bool empty() const;
     size_t size() const;
 
@@ -99,7 +101,19 @@ namespace alekseev {
   }
 
   template< class T >
+  const T & Queue< T >::front() const
+  {
+    return queue_.front();
+  }
+
+  template< class T >
   T & Queue< T >::back()
+  {
+    return *tail_;
+  }
+
+  template< class T >
+  const T & Queue< T >::back() const
   {
     return *tail_;
   }
