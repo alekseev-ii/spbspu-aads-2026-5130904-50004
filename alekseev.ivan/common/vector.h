@@ -38,7 +38,8 @@ namespace alekseev {
     void erase(size_t id);
     void erase(size_t begin, size_t end);
 
-    void bubbleSort(bool (* less)(T, T));
+    template< class Less >
+    void bubbleSort(Less less);
 
     private:
       explicit Vector(size_t size);
@@ -299,13 +300,14 @@ void alekseev::Vector< T >::erase(size_t begin, size_t end)
 }
 
 template< class T >
-void alekseev::Vector< T >::bubbleSort(bool (* less)(T, T))
+template< class Less >
+void alekseev::Vector< T >::bubbleSort(Less less)
 {
   if (size_ <= 1) {
     return;
   }
   bool swapped = true;
-  Vector< T > temp = *this;
+  Vector temp = *this;
   while (swapped) {
     swapped = false;
     for (size_t i = 0; i < getSize() - 1; ++i) {
