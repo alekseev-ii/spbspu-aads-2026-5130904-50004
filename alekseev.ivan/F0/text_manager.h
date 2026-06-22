@@ -45,13 +45,20 @@ namespace alekseev {
     void set_max_variants(size_t max_variants);
     void set_default_distance(size_t distance);
 
+    CuckooHash< std::wstring, text_t, size_t (*)(wstr_cr), size_t (*)(wstr_cr), bool(*)(wstr_cr,
+        wstr_cr) >::KeyIterator texts_begin() const;
+    CuckooHash< std::wstring, text_t, size_t (*)(wstr_cr), size_t (*)(wstr_cr), bool(*)(wstr_cr,
+        wstr_cr) >::KeyIterator texts_end() const;
+    std::wstring last_loaded() const;
+    std::wstring last_parsed() const;
+    std::wstring last_corrected() const;
+
     private:
       CuckooHash< std::wstring, text_t, size_t (*)(wstr_cr), size_t (*)(wstr_cr), bool(*)(wstr_cr,
           wstr_cr) > texts_;
       std::wstring last_loaded_;
       std::wstring last_parsed_;
       std::wstring last_corrected_;
-      std::wstring last_saved_;
       DictionaryManager & dict_;
       size_t max_variants_;
       size_t distance_;

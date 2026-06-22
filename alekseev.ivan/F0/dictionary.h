@@ -196,6 +196,11 @@ namespace alekseev {
     bool contains_dict(wstr_cr dict_name) const;
     void set_max_variants(size_t max_variants);
     void set_default_distance(size_t distance);
+    CuckooHash< std::wstring, Dictionary, size_t (*)(wstr_cr), size_t (*)(wstr_cr), bool(*)(
+        wstr_cr, wstr_cr) >::KeyIterator dicts_begin() const;
+    CuckooHash< std::wstring, Dictionary, size_t (*)(wstr_cr), size_t (*)(wstr_cr), bool(*)(
+        wstr_cr, wstr_cr) >::KeyIterator dicts_end() const;
+    std::wstring current_dict_name() const;
 
     private:
       CuckooHash< std::wstring, Dictionary, size_t (*)(wstr_cr), size_t (*)(wstr_cr), bool(*)(

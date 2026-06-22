@@ -61,6 +61,9 @@ alekseev::TextManager::TextManager(DictionaryManager & dict):
 
 void alekseev::TextManager::load(wstr_cr file_name, wstr_cr text_name)
 {
+  if (texts_.contains(text_name)) {
+    throw std::invalid_argument("Text already exists");
+  }
   std::wstring text;
   std::wstring_convert< std::codecvt_utf8< wchar_t > > converter;
   std::ifstream f(converter.to_bytes(file_name));
@@ -195,8 +198,7 @@ alekseev::wstr_cr alekseev::TextManager::save(wstr_cr file_name, wstr_cr text_na
     throw;
   }
   f.close();
-  last_saved_ = text_name.empty() ? last_corrected_ : text_name;
-  return last_saved_;
+  return text_name.empty() ? last_corrected_ : text_name;
 }
 
 void alekseev::TextManager::unload(wstr_cr name) noexcept
@@ -216,9 +218,6 @@ void alekseev::TextManager::unload(wstr_cr name) noexcept
   }
   if (last_corrected_ == name) {
     last_corrected_.clear();
-  }
-  if (last_saved_ == name) {
-    last_saved_.clear();
   }
 }
 
@@ -240,4 +239,33 @@ void alekseev::TextManager::set_max_variants(size_t max_variants)
 void alekseev::TextManager::set_default_distance(size_t distance)
 {
   distance_ = distance;
+}
+
+alekseev::CuckooHash< std::wstring, alekseev::text_t, unsigned long long(*)(const std::wstring &),
+  unsigned long long(*)(const std::wstring &), bool(*)(const std::wstring &, const std::wstring &) >
+::KeyIterator alekseev::TextManager::texts_begin() const
+{
+  return texts_.begin();
+}
+
+alekseev::CuckooHash< std::wstring, alekseev::text_t, unsigned long long(*)(const std::wstring &),
+  unsigned long long(*)(const std::wstring &), bool(*)(const std::wstring &, const std::wstring &) >
+::KeyIterator alekseev::TextManager::texts_end() const
+{
+  return texts_.end();
+}
+
+std::wstring alekseev::TextManager::last_loaded() const
+{
+  return last_loaded_;
+}
+
+std::wstring alekseev::TextManager::last_parsed() const
+{
+  return last_parsed_;
+}
+
+std::wstring alekseev::TextManager::last_corrected() const
+{
+  return last_corrected_;
 }

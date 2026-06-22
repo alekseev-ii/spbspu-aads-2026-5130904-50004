@@ -1,5 +1,6 @@
 #include <iostream>
 #include <functional>
+#include <iomanip>
 
 #include "dictionary.h"
 #include "wstr_functions.h"
@@ -32,6 +33,7 @@ namespace alekseev {
       void parse(Vector< std::wstring > & args);
       void correct(Vector< std::wstring > & args);
       void process(Vector< std::wstring > & args);
+      void texts(Vector< std::wstring > &);
 
       void new_(Vector< std::wstring > & args);
       void load_dict(Vector< std::wstring > & args);
@@ -42,6 +44,7 @@ namespace alekseev {
       void update_form(Vector< std::wstring > & args);
       void delete_lemma(Vector< std::wstring > & args);
       void delete_form(Vector< std::wstring > & args);
+      void dicts(Vector< std::wstring > &);
 
       void max_variants_txt(Vector< std::wstring > & args);
       void distance_of_find_txt(Vector< std::wstring > & args);
@@ -105,6 +108,10 @@ alekseev::Exec::Exec(std::wistream & is, std::wostream & os):
   {
     process(args);
   });
+  functions_.insert(L"texts", [this](Vector< std::wstring > & args)
+  {
+    texts(args);
+  });
 
   functions_.insert(L"new", [this](Vector< std::wstring > & args)
   {
@@ -141,6 +148,10 @@ alekseev::Exec::Exec(std::wistream & is, std::wostream & os):
   functions_.insert(L"delete_form", [this](Vector< std::wstring > & args)
   {
     delete_form(args);
+  });
+  functions_.insert(L"dicts", [this](Vector< std::wstring > & args)
+  {
+    dicts(args);
   });
 
   functions_.insert(L"max_variants_txt", [this](Vector< std::wstring > & args)
@@ -206,7 +217,7 @@ void alekseev::Exec::load_txt(Vector< std::wstring > & args)
   }
   os_ << L"Loading text \"" << args[0] << "\" from " << args[1] << L"\n";
   texts_.load(args[1], args[0]);
-  os_ << args[0] << L" successfully loaded\n";
+  os_ << L"\"" << args[0] << L"\" successfully loaded\n";
 }
 
 void alekseev::Exec::save_txt(Vector< std::wstring > & args)
@@ -292,6 +303,22 @@ void alekseev::Exec::process(Vector< std::wstring > & args)
   }
 }
 
+void alekseev::Exec::texts(Vector< std::wstring > &)
+{
+  os_ << L"Loaded texts:\n";
+  std::wstring last_corrected = texts_.last_corrected();
+  std::wstring last_loaded = texts_.last_loaded();
+  std::wstring last_parsed = texts_.last_parsed();
+  for (auto name = texts_.texts_begin(); name != texts_.texts_end(); ++name) {
+    std::wstring tags;
+    tags += *name == last_corrected ? L"c" : L"";
+    tags += *name == last_loaded ? L"l" : L"";
+    tags += *name == last_parsed ? L"p" : L"";
+    os_ << std::left << std::setw(4) << tags << *name << L"\n";
+  }
+  os_ << L"(c - last corrected text; l - last loaded; p - last parsed)\n";
+}
+
 void alekseev::Exec::new_(Vector< std::wstring > & args)
 {
   if (args.getSize() != 1) {
@@ -369,6 +396,21 @@ void alekseev::Exec::delete_form(Vector< std::wstring > & args)
     throw std::invalid_argument("Bad arguments number!");
   }
   dicts_.delete_form(args[0], is_, os_);
+}
+
+void alekseev::Exec::dicts(Vector< std::wstring > &)
+{
+  std::wcout << L"Loaded dicts:\n";
+  for (auto name = dicts_.dicts_begin(); name != dicts_.dicts_end(); ++name) {
+    os_ << "  ";
+    if (*name == dicts_.current_dict_name()) {
+      os_ << L"* ";
+    } else {
+      os_ << L"  ";
+    }
+    os_ << *name << L"\n";
+  }
+  os_ << L"(* - current dictionary)\n";
 }
 
 void alekseev::Exec::max_variants_txt(Vector< std::wstring > & args)
@@ -449,6 +491,8 @@ void alekseev::Exec::help(Vector< std::wstring > &)
       "            correct default_text_name\n"
       "            save_txt default_text_name path_to_file\n"
       "            unload_txt default_text_name\n"
+      "    7. texts\n"
+      "        Shows names of loaded texts\n"
 
       "\nFunctions for dictionaries:\n"
       "    1. load_dict <dict_name> <path_to_file>\n"
@@ -469,6 +513,8 @@ void alekseev::Exec::help(Vector< std::wstring > &)
       "        Delete lemma from current dictionary\n"
       "    9. delete_form <word_form>\n"
       "        Choose and delete word form from current dictionary\n"
+      "    10. dicts\n"
+      "        Shows names of loaded dicts\n"
 
       "\nAdditional:\n"
       "    1. max_variants_txt <number>\n"

@@ -1198,6 +1198,25 @@ void alekseev::DictionaryManager::set_default_distance(size_t distance)
   }
 }
 
+alekseev::CuckooHash<std::wstring, alekseev::Dictionary, unsigned long long(*)(const std::wstring &)
+, unsigned long long(*)(const std::wstring &), bool(*)(const std::wstring &, const std::wstring &)>
+::KeyIterator alekseev::DictionaryManager::dicts_begin() const
+{
+  return dicts_.begin();
+}
+
+alekseev::CuckooHash<std::wstring, alekseev::Dictionary, unsigned long long(*)(const std::wstring &)
+, unsigned long long(*)(const std::wstring &), bool(*)(const std::wstring &, const std::wstring &)>
+::KeyIterator alekseev::DictionaryManager::dicts_end() const
+{
+  return dicts_.end();
+}
+
+std::wstring alekseev::DictionaryManager::current_dict_name() const
+{
+  return current_;
+}
+
 void alekseev::DictionaryManager::add_verb(wstr_cr word, std::wistream & is, std::wostream & os)
 {
   Dictionary & dict = current();
