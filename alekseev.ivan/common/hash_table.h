@@ -8,7 +8,8 @@
 
 namespace alekseev {
   template< class Key, class Value, class Hash, class Equal >
-  struct HashTable {
+  struct HashTable
+  {
     using Pair = std::pair< Key, Value >;
     ~HashTable();
     HashTable(const HashTable & rhs);
@@ -33,12 +34,12 @@ namespace alekseev {
 
     private:
       size_t capacity_, size_;
-      List< Pair > ** slots_;
+      List< Pair > * slots_;
       Hash hasher_;
       Equal is_equal_;
 
-      List< Pair > * find_previous_node(const Key & key);
-      const List< Pair > * find_previous_node(const Key & key) const;
+      std::pair< size_t, typename List< Pair >::LIter > find_previous_node(const Key & key);
+      std::pair< size_t, typename List< Pair >::LCIter > find_previous_node(const Key & key) const;
   };
 
   template< class Key, class Value, class Hash, class Equal >
@@ -54,12 +55,11 @@ namespace alekseev {
     size_(rhs.size_),
     hasher_(rhs.hasher_),
     is_equal_(rhs.is_equal_)
-
   {
-    slots_ = new List< Pair > *[capacity_]{nullptr};
+    slots_ = new List< Pair >[capacity_]{List< Pair >()};
     for (size_t i = 0; i < rhs.capacity_; ++i) {
-      if (rhs.slots_[i]) {
-        slots_[i] = deep_copy(rhs.slots_[i]);
+      if (!rhs.slots_[i].empty()) {
+        slots_[i] = rhs.slots_[i];
       }
     }
   }
@@ -68,8 +68,10 @@ namespace alekseev {
   HashTable< Key, Value, Hash, Equal > & HashTable< Key, Value, Hash, Equal >::operator=(
       const HashTable & rhs)
   {
-    HashTable< Key, Value, Hash, Equal > temp(rhs);
-    swap(temp);
+    if (this != std::addressof(rhs)) {
+      HashTable temp(rhs);
+      swap(temp);
+    }
     return *this;
   }
 
@@ -90,7 +92,9 @@ namespace alekseev {
   HashTable< Key, Value, Hash, Equal > & HashTable< Key, Value, Hash, Equal >::operator=(
       HashTable && rhs) noexcept
   {
-    swap(rhs);
+    if (this != std::addressof(rhs)) {
+      swap(rhs);
+    }
     return *this;
   }
 
@@ -98,11 +102,10 @@ namespace alekseev {
   HashTable< Key, Value, Hash, Equal >::HashTable(Hash hasher, Equal is_equal, size_t capacity):
     capacity_(capacity),
     size_(0),
-    slots_(new List< Pair > *[capacity]{nullptr}),
+    slots_(new List< Pair >[capacity]{List< Pair >()}),
     hasher_(hasher),
     is_equal_(is_equal)
-  {
-  }
+  { }
 
   template< class Key, class Value, class Hash, class Equal >
   void HashTable< Key, Value, Hash, Equal >::swap(HashTable & rhs) noexcept
@@ -117,12 +120,11 @@ namespace alekseev {
   template< class Key, class Value, class Hash, class Equal >
   void HashTable< Key, Value, Hash, Equal >::clear()
   {
+    if (slots_ == nullptr) {
+      return;
+    }
     for (size_t i = 0; i < capacity_; ++i) {
-      if (slots_[i]) {
-        alekseev::clear(slots_[i]->next, slots_[i]);
-        rmfake(slots_[i]);
-        slots_[i] = nullptr;
-      }
+      slots_[i].clear();
     }
     size_ = 0;
   }
@@ -131,48 +133,33 @@ namespace alekseev {
   void HashTable< Key, Value, Hash, Equal >::insert(const Key & key, const Value & value)
   {
     size_t index = hasher_(key) % capacity_;
-    List< Pair > * tail = nullptr;
-    if (slots_[index]) {
-      List< Pair > * fake = slots_[index];
-      List< Pair > * current = fake;
-      while (current->next != fake) {
-        current = current->next;
-        if (is_equal_(current->data.first, key)) {
-          current->data.second = value;
+    typename List< Pair >::LIter tail;
+    if (!slots_[index].empty()) {
+      List< Pair > & basket = slots_[index];
+      auto current = basket.begin();
+      for (; current != basket.end(); ++current) {
+        if (is_equal_(current->first, key)) {
+          current->second = value;
           return;
         }
       }
       tail = current;
     } else {
-      slots_[index] = fake< Pair >();
-      tail = slots_[index];
+      tail = slots_[index].before_begin();
     }
-    try {
-      insert_after(tail, std::pair< Key, Value >(key, value));
-      ++size_;
-    } catch (...) {
-      if (tail->next == tail) {
-        rmfake(tail);
-        slots_[index] = nullptr;
-      }
-      throw;
-    }
+    slots_[index].insert_after(tail, std::pair< Key, Value >(key, value));
+    ++size_;
   }
 
   template< class Key, class Value, class Hash, class Equal >
   void HashTable< Key, Value, Hash, Equal >::remove(const Key & key)
   {
-    List< Pair > * pre_node = find_previous_node(key);
-    if (!pre_node) {
+    auto pre_node = find_previous_node(key);
+    if (pre_node.first == capacity() + 1) {
       return;
     }
-    erase_after(pre_node);
+    slots_[pre_node.first].erase_after(pre_node.second);
     --size_;
-    if (pre_node->next == pre_node) {
-      rmfake(pre_node);
-      size_t index = hasher_(key) % capacity_;
-      slots_[index] = nullptr;
-    }
   }
 
   template< class Key, class Value, class Hash, class Equal >
@@ -184,29 +171,27 @@ namespace alekseev {
   template< class Key, class Value, class Hash, class Equal >
   const Value & HashTable< Key, Value, Hash, Equal >::at(const Key & key) const
   {
-    const List< Pair > * found = find_previous_node(key);
-    if (found) {
-      return found->next->data.second;
+    auto found = find_previous_node(key);
+    if (found.first == capacity() + 1) {
+      throw std::out_of_range("Key not found");
     }
-    throw std::out_of_range("Key not found");
+    return (++found.second)->second;
   }
 
   template< class Key, class Value, class Hash, class Equal >
   bool HashTable< Key, Value, Hash, Equal >::contains(const Key & key) const
   {
-    return (*static_cast< const HashTable * >(this)).find_previous_node(key) != nullptr;
+    return (*static_cast< const HashTable * >(this)).find_previous_node(key).first < capacity() + 1;
   }
 
   template< class Key, class Value, class Hash, class Equal >
-  Vector<Key> HashTable<Key, Value, Hash, Equal>::keys() const
+  Vector< Key > HashTable< Key, Value, Hash, Equal >::keys() const
   {
     Vector< Key > res;
     for (size_t i = 0; i < capacity_; ++i) {
-      if (slots_[i]) {
-        List< Pair > * current = slots_[i]->next;
-        while (current != slots_[i]) {
-          res.pushBack(current->data.first);
-          current = current->next;
+      if (!slots_[i].empty()) {
+        for (auto it = slots_[i].begin(); it != slots_[i].end(); ++it) {
+          res.push_back((*it).first);
         }
       }
     }
@@ -228,12 +213,9 @@ namespace alekseev {
   {
     HashTable temp(hasher_, is_equal_, new_capacity);
     for (size_t i = 0; i < capacity_; ++i) {
-      if (slots_[i]) {
-        List< Pair > * fake = slots_[i];
-        List< Pair > * current = fake->next;
-        while (current != fake) {
-          temp.insert(current->data.first, current->data.second);
-          current = current->next;
+      if (!slots_[i].empty()) {
+        for (auto it = slots_[i].begin(); it != slots_[i].end(); ++it) {
+          temp.insert((*it).first, (*it).second);
         }
       }
     }
@@ -253,30 +235,35 @@ namespace alekseev {
   }
 
   template< class Key, class Value, class Hash, class Equal >
-  List< std::pair< Key, Value > > * HashTable< Key, Value, Hash, Equal >::find_previous_node(
-      const Key & key)
+  std::pair< size_t, typename List< std::pair< Key, Value > >::LIter >
+  HashTable< Key, Value, Hash, Equal >::find_previous_node(const Key & key)
   {
-    return const_cast< List< Pair > * >(static_cast< const HashTable * >(this)->
-      find_previous_node(key));
+    size_t index = hasher_(key) % capacity_;
+    List< Pair > & basket = slots_[index];
+    auto pre = basket.before_begin();
+    for (auto it = basket.begin(); it != basket.end(); ++it) {
+      if (it->first == key) {
+        return std::make_pair(index, pre);
+      }
+      ++pre;
+    }
+    return std::make_pair(capacity_ + 1, basket.end());
   }
 
   template< class Key, class Value, class Hash, class Equal >
-  const List< std::pair< Key, Value > > * HashTable< Key, Value, Hash, Equal >::find_previous_node(
-      const Key & key) const
+  std::pair< size_t, typename List< std::pair< Key, Value > >::LCIter >
+  HashTable< Key, Value, Hash, Equal >::find_previous_node(const Key & key) const
   {
     size_t index = hasher_(key) % capacity_;
-    if (!slots_[index]) {
-      return nullptr;
-    }
-    List< Pair > * fake = slots_[index];
-    List< Pair > * current = fake;
-    while (current->next != fake) {
-      if (is_equal_(current->next->data.first, key)) {
-        return current;
+    const List< Pair > & basket = slots_[index];
+    auto pre = basket.before_begin();
+    for (auto it = basket.begin(); it != basket.end(); ++it) {
+      if (it->first == key) {
+        return std::make_pair(index, pre);
       }
-      current = current->next;
+      ++pre;
     }
-    return nullptr;
+    return std::make_pair(capacity_ + 1, basket.end());
   }
 }
 #endif

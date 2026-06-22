@@ -1,8 +1,8 @@
 #ifndef GRAPH_H
 #define GRAPH_H
 
-#include "../common/hash_table.h"
-#include "../common/vector.h"
+#include "hash_table.h"
+#include "vector.h"
 
 namespace alekseev {
   using str = std::string;
