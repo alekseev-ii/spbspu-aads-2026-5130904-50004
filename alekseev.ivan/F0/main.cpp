@@ -212,9 +212,9 @@ void alekseev::Exec::load_txt(Vector< std::wstring > & args)
 void alekseev::Exec::save_txt(Vector< std::wstring > & args)
 {
   if (args.getSize() == 1) {
-    os_ << texts_.save(args[0]) << L" successfully saved\n";
+    os_ << L"\"" << texts_.save(args[0]) << L"\" successfully saved\n";
   } else if (args.getSize() == 2) {
-    os_ << texts_.save(args[1], args[0]) << L" successfully saved\n";
+    os_ << L"\"" << texts_.save(args[1], args[0]) << L"\" successfully saved\n";
   } else {
     throw std::invalid_argument("Bad arguments number!");
   }
@@ -226,16 +226,16 @@ void alekseev::Exec::unload_txt(Vector< std::wstring > & args)
     if (!texts_.is_saved(args[0])) {
       wchar_t need_save = ask_yes_no(L"Do you want to save text before unloading?", is_, os_);
       if (need_save == 'y') {
-        os_ << "Enter file name for saving: ";
+        os_ << "Enter file name for saving >";
         std::wstring file_name;
         std::getline(is_, file_name);
         os_ << L"Saving " << args[0] << L" to " << file_name << L"\n";
         texts_.save(file_name, args[0]);
-        os_ << args[0] << L" successfully saved\n";
+        os_ << L"\"" << args[0] << L"\" successfully saved\n";
       }
     }
     texts_.unload(args[0]);
-    os_ << args[0] << L" unloaded\n";
+    os_ << L"\"" << args[0] << L"\" unloaded\n";
   } else {
     throw std::invalid_argument("Bad arguments number!");
   }
@@ -245,10 +245,10 @@ void alekseev::Exec::parse(Vector< std::wstring > & args)
 {
   if (args.isEmpty()) {
     os_ << L"Parsing...\n";
-    os_ << texts_.parse() << L" successfully parsed";
+    os_ << L"\"" << texts_.parse() << L"\" successfully parsed\n";
   } else if (args.getSize() == 1) {
     os_ << L"Parsing...\n";
-    os_ << texts_.parse(args[0]) << L" successfully parsed";
+    os_ << L"\"" << texts_.parse(args[0]) << L"\" successfully parsed\n";
   } else {
     throw std::invalid_argument("Bad arguments number!");
   }
@@ -275,7 +275,8 @@ void alekseev::Exec::process(Vector< std::wstring > & args)
     temp_name += L"_";
   }
   texts_.load(args[0], temp_name);
-  os_ << L"Text loaded\nParsing...\n";
+  os_ << L"Text loaded\n"
+      "Parsing...\n";
   try {
     texts_.parse(temp_name);
     os_ << L"Text parsed\n";
@@ -285,7 +286,7 @@ void alekseev::Exec::process(Vector< std::wstring > & args)
     os_ << L"Saved\n";
     texts_.unload(temp_name);
     os_ << L"Unloaded\n";
-    os_ << args[0] << L" processed successfully!\n";
+    os_ << L"\"" << args[0] << L"\" processed successfully!\n";
   } catch (...) {
     texts_.unload(temp_name);
   }
@@ -297,7 +298,7 @@ void alekseev::Exec::new_(Vector< std::wstring > & args)
     throw std::invalid_argument("Bad arguments number!");
   }
   dicts_.create(args[0]);
-  os_ << L"An empty dictionary \"" << args[0] << "\" has been created";
+  os_ << L"An empty dictionary \"" << args[0] << "\" has been created\n";
 }
 
 void alekseev::Exec::load_dict(Vector< std::wstring > & args)
@@ -307,7 +308,8 @@ void alekseev::Exec::load_dict(Vector< std::wstring > & args)
   }
   os_ << "Loading...\n";
   dicts_.load(args[0], args[1]);
-  os_ << L"Successfully loaded dictionary \"" << args[0] << "\" from \"" << args[1] << "\"\n";
+  os_ << L"Successfully loaded dictionary \"" << args[0] << "\" with " << dicts_.current().size();
+  os_ << " word forms from \"" << args[1] << "\"\n";
 }
 
 void alekseev::Exec::save_dict(Vector< std::wstring > & args)
