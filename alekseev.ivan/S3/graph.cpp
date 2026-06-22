@@ -52,7 +52,7 @@ void alekseev::Graph::add_edge(const str & vertex1, const str & vertex2, size_t 
 {
   std::pair< str, str > key = std::make_pair(vertex1, vertex2);
   if (!has_some_edge(vertex1, vertex2)) {
-    edges_.insert(key, Vector< size_t >(1, weight));
+    edges_.insert(key, Vector< size_t >());
   }
   edges_.at(key).pushBack(weight);
 }
