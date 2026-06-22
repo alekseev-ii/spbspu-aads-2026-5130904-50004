@@ -38,6 +38,7 @@ namespace alekseev {
     {
       friend class List;
       LIter(Node< T > * current, Node< T > * fake_node);
+      LIter();
 
       LIter & operator++();
       LIter operator++(int);
@@ -51,12 +52,13 @@ namespace alekseev {
         Node< T > * fake_node_;
     };
 
-    struct LCIter: std::iterator< std::forward_iterator_tag, T, std::ptrdiff_t, const T *, const T
-          & >
+    struct LCIter:
+        std::iterator< std::forward_iterator_tag, T, std::ptrdiff_t, const T *, const T & >
     {
       friend class List;
       LCIter(Node< T > * current, Node< T > * fake_node);
       LCIter(LIter rhs);
+      LCIter();
 
       LCIter & operator++();
       LCIter operator++(int);
@@ -85,9 +87,6 @@ namespace alekseev {
       Node< T > * fake_node_;
       size_t size_;
   };
-
-  template< class T >
-  std::ostream & operator<<(std::ostream & os, const List< T > & l);
 
   template< class T >
   List< T >::List():
@@ -211,6 +210,12 @@ namespace alekseev {
   { }
 
   template< class T >
+  List< T >::LIter::LIter():
+    current_(nullptr),
+    fake_node_(nullptr)
+  { }
+
+  template< class T >
   typename List< T >::LIter & List< T >::LIter::operator++()
   {
     current_ = current_->next_;
@@ -258,6 +263,12 @@ namespace alekseev {
   template< class T >
   List< T >::LCIter::LCIter(LIter rhs):
     LCIter(rhs.current_, rhs.fake_node_)
+  { }
+
+  template< class T >
+  List< T >::LCIter::LCIter():
+    current_(nullptr),
+    fake_node_(nullptr)
   { }
 
   template< class T >
