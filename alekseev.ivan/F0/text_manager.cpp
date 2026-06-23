@@ -152,7 +152,7 @@ alekseev::wstr_cr alekseev::TextManager::correct(std::wistream & is, std::wostre
     if (start != i) {
       os << to_wstring(corrected, for_correct.punctuations, start, i);
     }
-    os << L" [!] " << for_correct.original[i] << L" [!] ";
+    os << L" [!] " << for_correct.original[i] << for_correct.punctuations[i] << L" [!] ";
     if (i < s - 1) {
       os << to_wstring(for_correct, i + 1, end, false);
     }
@@ -166,11 +166,12 @@ alekseev::wstr_cr alekseev::TextManager::correct(std::wistream & is, std::wostre
       std::wstring word;
       wgetline(is, word);
       corrected[i] = word;
+      for_correct.saved = false;
     } else if (ans > 0) {
       corrected[i] = case_from_mask(err.second[ans], mask_from_case(for_correct.original[i]));
+      for_correct.saved = false;
     }
     for_correct.errors.pop();
-    for_correct.saved = false;
   }
   for_correct.corrected = corrected;
   last_corrected_ = !name.empty() ? name : last_parsed_;

@@ -184,17 +184,13 @@ alekseev::Exec::Exec(std::wistream & is, std::wostream & os):
   try {
     dicts_.load(L"default_dictionary_requires",
         L"./default_dictionaries/default_dictionary_requires.txt");
-    std::wcout << L"r";
     dicts_.load(L"default_dictionary_functional",
         L"./default_dictionaries/default_dictionary_functional.txt");
-    std::wcout << L"f";
     if (opt == 0) {
       dicts_.load(L"default_dictionary_300_adjectives",
           L"./default_dictionaries/default_dictionary_300_adjectives.txt");
-      std::wcout << L"a";
       dicts_.load(L"default_dictionary_300_verbs",
           L"./default_dictionaries/default_dictionary_300_verbs.txt");
-      std::wcout << L"v";
       dicts_.load(L"default_dictionary_300_nouns",
           L"./default_dictionaries/default_dictionary_300_nouns.txt");
     } else if (opt == 1) {
@@ -205,7 +201,7 @@ alekseev::Exec::Exec(std::wistream & is, std::wostream & os):
       dicts_.load(L"default_dictionary_500_nouns",
           L"./default_dictionaries/default_dictionary_500_nouns.txt");
     }
-    std::wcout << L"Seccessfully loaded " << dicts_.size() << L" word forms\n";
+    std::wcout << L"Successfully loaded " << dicts_.size() << L" word forms\n";
   } catch (std::exception & e) {
     std::wcout << L"Unable to load default dictionary: " << e.what() << "\n";
   }
@@ -217,18 +213,34 @@ void alekseev::Exec::operator()(wstr_cr line)
   if (words.isEmpty()) {
     throw std::invalid_argument("Empty input!");
   }
-  if (!functions_.contains(words[0])) {
-    throw std::invalid_argument("Bad command name!");
+  std::wstring func_name = words[0];
+  if (!functions_.contains(func_name)) {
+    os_ << L"Bad command name!\n";
+
+    Vector< std::wstring > corrections;
+    if (functions_.contains(func_name + L"_txt")) {
+      corrections.pushBack(func_name + L"_txt");
+    }
+    if (functions_.contains(func_name + L"_dict")) {
+      corrections.pushBack(func_name + L"_dict");
+    }
+    corrections += damerau_find(func_name, functions_.begin(), functions_.end());
+    size_t ans = choose(corrections, is_, os_, 0, L"Perhaps you mean...");
+    if (ans == corrections.getSize()) {
+      return;
+    } else {
+      func_name = corrections.at(ans);
+    }
   }
   Vector< std::wstring > args = words;
   args.erase(0);
-  functions_.at(words[0])(args);
+  functions_.at(func_name)(args);
 }
 
 void alekseev::Exec::load_txt(Vector< std::wstring > & args)
 {
   if (args.getSize() != 2) {
-    throw std::invalid_argument("Bad arguments number!");
+    throw std::invalid_argument("Bad arguments number! Using: load_txt <text_name> <path_to_file>");
   }
   os_ << L"Loading text \"" << args[0] << "\" from " << args[1] << L"\n";
   texts_.load(args[1], args[0]);
@@ -242,7 +254,7 @@ void alekseev::Exec::save_txt(Vector< std::wstring > & args)
   } else if (args.getSize() == 2) {
     os_ << L"\"" << texts_.save(args[1], args[0]) << L"\" successfully saved\n";
   } else {
-    throw std::invalid_argument("Bad arguments number!");
+    throw std::invalid_argument("Bad arguments number! Using: save_txt [text_name] <path_to_file>");
   }
 }
 
@@ -263,7 +275,7 @@ void alekseev::Exec::unload_txt(Vector< std::wstring > & args)
     texts_.unload(args[0]);
     os_ << L"\"" << args[0] << L"\" unloaded\n";
   } else {
-    throw std::invalid_argument("Bad arguments number!");
+    throw std::invalid_argument("Bad arguments number! Using: unload_txt <text_name>");
   }
 }
 
@@ -276,26 +288,27 @@ void alekseev::Exec::parse(Vector< std::wstring > & args)
     os_ << L"Parsing...\n";
     os_ << L"\"" << texts_.parse(args[0]) << L"\" successfully parsed\n";
   } else {
-    throw std::invalid_argument("Bad arguments number!");
+    throw std::invalid_argument("Bad arguments number! Using: parse [text_name]");
   }
 }
 
 void alekseev::Exec::correct(Vector< std::wstring > & args)
 {
+  std::wstring text_name;
   if (args.isEmpty()) {
-    texts_.correct(is_, os_);
+    text_name = texts_.correct(is_, os_);
   } else if (args.getSize() == 1) {
-    texts_.correct(is_, os_, args[0]);
+    text_name = texts_.correct(is_, os_, args[0]);
   } else {
-    throw std::invalid_argument("Bad arguments number!");
+    throw std::invalid_argument("Bad arguments number! Using: correct [text_name]");
   }
-  os_ << L"\"" << args[0] << L"\" successfully corrected\n";
+  os_ << L"\"" << text_name << L"\" successfully corrected\n";
 }
 
 void alekseev::Exec::process(Vector< std::wstring > & args)
 {
   if (args.getSize() != 1) {
-    throw std::invalid_argument("Bad arguments number!");
+    throw std::invalid_argument("Bad arguments number! Using: process <path_to_file>");
   }
   std::wstring temp_name = L"__temporary_text_name_for_process__";
   while (texts_.contains(temp_name)) {
@@ -338,7 +351,7 @@ void alekseev::Exec::texts(Vector< std::wstring > &)
 void alekseev::Exec::new_(Vector< std::wstring > & args)
 {
   if (args.getSize() != 1) {
-    throw std::invalid_argument("Bad arguments number!");
+    throw std::invalid_argument("Bad arguments number! Using: new <dict_name>");
   }
   dicts_.create(args[0]);
   os_ << L"An empty dictionary \"" << args[0] << "\" has been created\n";
@@ -347,7 +360,8 @@ void alekseev::Exec::new_(Vector< std::wstring > & args)
 void alekseev::Exec::load_dict(Vector< std::wstring > & args)
 {
   if (args.getSize() != 2) {
-    throw std::invalid_argument("Bad arguments number!");
+    throw std::invalid_argument(
+        "Bad arguments number! Using: load_dict <dict_name> <path_to_file>");
   }
   os_ << "Loading...\n";
   dicts_.load(args[0], args[1]);
@@ -358,7 +372,8 @@ void alekseev::Exec::load_dict(Vector< std::wstring > & args)
 void alekseev::Exec::save_dict(Vector< std::wstring > & args)
 {
   if (args.getSize() != 2) {
-    throw std::invalid_argument("Bad arguments number!");
+    throw std::invalid_argument(
+        "Bad arguments number! Using: save_dict <dict_name> <path_to_file>");
   }
   os_ << "Saving...\n";
   dicts_.save(args[0], args[1]);
@@ -368,7 +383,7 @@ void alekseev::Exec::save_dict(Vector< std::wstring > & args)
 void alekseev::Exec::unload_dict(Vector< std::wstring > & args)
 {
   if (args.getSize() != 1) {
-    throw std::invalid_argument("Bad arguments number!");
+    throw std::invalid_argument("Bad arguments number! Using: <dict_name>");
   }
   dicts_.unload(args[0]);
   os_ << L"Unloaded dictionary \"" << args[0] << "\"\n";
@@ -377,7 +392,7 @@ void alekseev::Exec::unload_dict(Vector< std::wstring > & args)
 void alekseev::Exec::current(Vector< std::wstring > & args)
 {
   if (args.getSize() != 1) {
-    throw std::invalid_argument("Bad arguments number!");
+    throw std::invalid_argument("Bad arguments number! Using: current <name_of_loaded_dictionary>");
   }
   dicts_.set_current(args[0]);
 }
@@ -385,7 +400,7 @@ void alekseev::Exec::current(Vector< std::wstring > & args)
 void alekseev::Exec::add_word(Vector< std::wstring > & args)
 {
   if (args.getSize() != 1) {
-    throw std::invalid_argument("Bad arguments number!");
+    throw std::invalid_argument("Bad arguments number! Using: add <lemma>");
   }
   dicts_.add_word(args[0], is_, os_);
 }
@@ -393,7 +408,7 @@ void alekseev::Exec::add_word(Vector< std::wstring > & args)
 void alekseev::Exec::update_form(Vector< std::wstring > & args)
 {
   if (args.getSize() != 1) {
-    throw std::invalid_argument("Bad arguments number!");
+    throw std::invalid_argument("Bad arguments number! Using: update <lemma>");
   }
   dicts_.update_word(args[0], is_, os_);
 }
@@ -401,7 +416,7 @@ void alekseev::Exec::update_form(Vector< std::wstring > & args)
 void alekseev::Exec::delete_lemma(Vector< std::wstring > & args)
 {
   if (args.getSize() != 1) {
-    throw std::invalid_argument("Bad arguments number!");
+    throw std::invalid_argument("Bad arguments number! Using: delete_lemma <lemma>");
   }
   dicts_.delete_lemma(args[0], is_, os_);
 }
@@ -409,7 +424,7 @@ void alekseev::Exec::delete_lemma(Vector< std::wstring > & args)
 void alekseev::Exec::delete_form(Vector< std::wstring > & args)
 {
   if (args.getSize() != 1) {
-    throw std::invalid_argument("Bad arguments number!");
+    throw std::invalid_argument("Bad arguments number! Using: delete_form <word_form>");
   }
   dicts_.delete_form(args[0], is_, os_);
 }
@@ -432,7 +447,7 @@ void alekseev::Exec::dicts(Vector< std::wstring > &)
 void alekseev::Exec::max_variants_txt(Vector< std::wstring > & args)
 {
   if (args.getSize() != 1) {
-    throw std::invalid_argument("Bad arguments number!");
+    throw std::invalid_argument("Bad arguments number! Using: max_variants_txt <number>");
   }
   wchar_t * end_ptr = nullptr;
   size_t n = wcstoull(args[0].c_str(), std::addressof(end_ptr), 10);
@@ -445,7 +460,7 @@ void alekseev::Exec::max_variants_txt(Vector< std::wstring > & args)
 void alekseev::Exec::distance_of_find_txt(Vector< std::wstring > & args)
 {
   if (args.getSize() != 1) {
-    throw std::invalid_argument("Bad arguments number!");
+    throw std::invalid_argument("Bad arguments number! Using: distance_of_find_txt <number>");
   }
   wchar_t * end_ptr = nullptr;
   size_t n = wcstoull(args[0].c_str(), std::addressof(end_ptr), 10);
@@ -458,7 +473,7 @@ void alekseev::Exec::distance_of_find_txt(Vector< std::wstring > & args)
 void alekseev::Exec::max_variants_dict(Vector< std::wstring > & args)
 {
   if (args.getSize() != 1) {
-    throw std::invalid_argument("Bad arguments number!");
+    throw std::invalid_argument("Bad arguments number! Using: max_variants_dict <number>");
   }
   wchar_t * end_ptr = nullptr;
   size_t n = wcstoull(args[0].c_str(), std::addressof(end_ptr), 10);
@@ -471,7 +486,7 @@ void alekseev::Exec::max_variants_dict(Vector< std::wstring > & args)
 void alekseev::Exec::distance_of_find_dict(Vector< std::wstring > & args)
 {
   if (args.getSize() != 1) {
-    throw std::invalid_argument("Bad arguments number!");
+    throw std::invalid_argument("Bad arguments number! Using: distance_of_find_dict <number>");
   }
   wchar_t * end_ptr = nullptr;
   size_t n = wcstoull(args[0].c_str(), std::addressof(end_ptr), 10);
