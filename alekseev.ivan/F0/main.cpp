@@ -181,18 +181,23 @@ alekseev::Exec::Exec(std::wistream & is, std::wostream & os):
   if (opt == 2) {
     return;
   }
-  dicts_.load(L"default_dictionary_requiers", L"./dicts/default_dictionary_requiers");
-  dicts_.load(L"default_dictionary_functional", L"./dicts/default_dictionary_functional.txt");
-  if (opt == 0) {
-    dicts_.load(L"default_dictionary_300_adjectives",
-        L"./dicts/default_dictionary_300_adjectives.txt");
-    dicts_.load(L"default_dictionary_300_verbs", L"./dicts/default_dictionary_300_verbs.txt");
-    dicts_.load(L"default_dictionary_300_nouns", L"./dicts/default_dictionary_300_nouns.txt");
-  } else if (opt == 1) {
-    dicts_.load(L"default_dictionary_500_adjectives",
-        L"./dicts/default_dictionary_500_adjectives.txt");
-    dicts_.load(L"default_dictionary_500_verbs", L"./dicts/default_dictionary_500_verbs.txt");
-    dicts_.load(L"default_dictionary_500_nouns", L"./dicts/default_dictionary_500_nouns.txt");
+  try {
+    dicts_.load(L"default_dictionary_requires", L"./dicts/default_dictionary_requires.txt");
+    dicts_.load(L"default_dictionary_functional", L"./dicts/default_dictionary_functional.txt");
+    if (opt == 0) {
+      dicts_.load(L"default_dictionary_300_adjectives",
+          L"./dicts/default_dictionary_300_adjectives.txt");
+      dicts_.load(L"default_dictionary_300_verbs", L"./dicts/default_dictionary_300_verbs.txt");
+      dicts_.load(L"default_dictionary_300_nouns", L"./dicts/default_dictionary_300_nouns.txt");
+    } else if (opt == 1) {
+      dicts_.load(L"default_dictionary_500_adjectives",
+          L"./dicts/default_dictionary_500_adjectives.txt");
+      dicts_.load(L"default_dictionary_500_verbs", L"./dicts/default_dictionary_500_verbs.txt");
+      dicts_.load(L"default_dictionary_500_nouns", L"./dicts/default_dictionary_500_nouns.txt");
+    }
+    std::wcout << L"Seccessfully loaded " << dicts_.size() << L" word forms\n";
+  } catch (std::exception & e) {
+    std::wcout << L"Unable to load default dictionary: " << e.what() << "\n";
   }
 }
 
