@@ -182,18 +182,28 @@ alekseev::Exec::Exec(std::wistream & is, std::wostream & os):
     return;
   }
   try {
-    dicts_.load(L"default_dictionary_requires", L"./dicts/default_dictionary_requires.txt");
-    dicts_.load(L"default_dictionary_functional", L"./dicts/default_dictionary_functional.txt");
+    dicts_.load(L"default_dictionary_requires",
+        L"./default_dictionaries/default_dictionary_requires.txt");
+    std::wcout << L"r";
+    dicts_.load(L"default_dictionary_functional",
+        L"./default_dictionaries/default_dictionary_functional.txt");
+    std::wcout << L"f";
     if (opt == 0) {
       dicts_.load(L"default_dictionary_300_adjectives",
-          L"./dicts/default_dictionary_300_adjectives.txt");
-      dicts_.load(L"default_dictionary_300_verbs", L"./dicts/default_dictionary_300_verbs.txt");
-      dicts_.load(L"default_dictionary_300_nouns", L"./dicts/default_dictionary_300_nouns.txt");
+          L"./default_dictionaries/default_dictionary_300_adjectives.txt");
+      std::wcout << L"a";
+      dicts_.load(L"default_dictionary_300_verbs",
+          L"./default_dictionaries/default_dictionary_300_verbs.txt");
+      std::wcout << L"v";
+      dicts_.load(L"default_dictionary_300_nouns",
+          L"./default_dictionaries/default_dictionary_300_nouns.txt");
     } else if (opt == 1) {
       dicts_.load(L"default_dictionary_500_adjectives",
-          L"./dicts/default_dictionary_500_adjectives.txt");
-      dicts_.load(L"default_dictionary_500_verbs", L"./dicts/default_dictionary_500_verbs.txt");
-      dicts_.load(L"default_dictionary_500_nouns", L"./dicts/default_dictionary_500_nouns.txt");
+          L"./default_dictionaries/default_dictionary_500_adjectives.txt");
+      dicts_.load(L"default_dictionary_500_verbs",
+          L"./default_dictionaries/default_dictionary_500_verbs.txt");
+      dicts_.load(L"default_dictionary_500_nouns",
+          L"./default_dictionaries/default_dictionary_500_nouns.txt");
     }
     std::wcout << L"Seccessfully loaded " << dicts_.size() << L" word forms\n";
   } catch (std::exception & e) {
@@ -279,6 +289,7 @@ void alekseev::Exec::correct(Vector< std::wstring > & args)
   } else {
     throw std::invalid_argument("Bad arguments number!");
   }
+  os_ << L"\"" << args[0] << L"\" successfully corrected\n";
 }
 
 void alekseev::Exec::process(Vector< std::wstring > & args)
@@ -405,7 +416,7 @@ void alekseev::Exec::delete_form(Vector< std::wstring > & args)
 
 void alekseev::Exec::dicts(Vector< std::wstring > &)
 {
-  std::wcout << L"Loaded dicts:\n";
+  std::wcout << L"Loaded dictionaries:\n";
   for (auto name = dicts_.dicts_begin(); name != dicts_.dicts_end(); ++name) {
     os_ << "  ";
     if (*name == dicts_.current_dict_name()) {

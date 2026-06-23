@@ -173,7 +173,10 @@ alekseev::wstr_cr alekseev::TextManager::correct(std::wistream & is, std::wostre
     for_correct.saved = false;
   }
   for_correct.corrected = corrected;
-  last_corrected_ = name;
+  last_corrected_ = !name.empty() ? name : last_parsed_;
+  if (name.empty()) {
+    last_parsed_ = L"";
+  }
   return last_corrected_;
 }
 
@@ -241,16 +244,16 @@ void alekseev::TextManager::set_default_distance(size_t distance)
   distance_ = distance;
 }
 
-alekseev::CuckooHash< std::wstring, alekseev::text_t, unsigned long long(*)(const std::wstring &),
-  unsigned long long(*)(const std::wstring &), bool(*)(const std::wstring &, const std::wstring &) >
-::KeyIterator alekseev::TextManager::texts_begin() const
+alekseev::CuckooHash< std::wstring, alekseev::text_t, size_t (*)(alekseev::wstr_cr),
+  size_t (*)(alekseev::wstr_cr), bool(*)(alekseev::wstr_cr,
+      alekseev::wstr_cr) >::KeyIterator alekseev::TextManager::texts_begin() const
 {
   return texts_.begin();
 }
 
-alekseev::CuckooHash< std::wstring, alekseev::text_t, unsigned long long(*)(const std::wstring &),
-  unsigned long long(*)(const std::wstring &), bool(*)(const std::wstring &, const std::wstring &) >
-::KeyIterator alekseev::TextManager::texts_end() const
+alekseev::CuckooHash< std::wstring, alekseev::text_t, size_t (*)(alekseev::wstr_cr),
+  size_t (*)(alekseev::wstr_cr), bool(*)(alekseev::wstr_cr,
+      alekseev::wstr_cr) >::KeyIterator alekseev::TextManager::texts_end() const
 {
   return texts_.end();
 }

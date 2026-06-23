@@ -271,8 +271,8 @@ alekseev::pos alekseev::guess_pos(std::wstring word)
 }
 
 alekseev::Dictionary::Dictionary():
-  lemmas_(djb2_hash, poly_hash, equal, 512),
-  forms_(djb2_hash, poly_hash, equal, 16388),
+  lemmas_(djb2_hash, poly_hash, equal, 1024),
+  forms_(djb2_hash, poly_hash, equal, 32768),
   requires_(djb2_hash, poly_hash, equal, 128)
 { }
 
@@ -311,7 +311,7 @@ std::ifstream & alekseev::Dictionary::read(std::ifstream & is)
     if (line.empty()) {
       continue;
     }
-    std::wstring wline = converter.from_bytes(line);
+    std::wstring wline = rtrim(converter.from_bytes(line), is_whitespace);
     if (wline[0] == L'#') {
       continue;
     }
@@ -328,6 +328,9 @@ std::ifstream & alekseev::Dictionary::read(std::ifstream & is)
           lemmas_.insert(lemma.lemma_, lemma);
         }
         lemma = Lemma();
+      }
+      if (words.getSize() < 2) {
+        throw std::invalid_argument("Not enough words in lemma declaration while read");
       }
       lemma.lemma_ = words[0];
       while (lemmas_.contains(lemma.lemma_)) {
@@ -792,8 +795,8 @@ alekseev::Vector< std::wstring > alekseev::Dictionary::damerau_find_require(wstr
 }
 
 alekseev::DictionaryManager::DictionaryManager():
-  dicts_(djb2_hash, poly_hash, equal, 16),
-  max_variants_(5),
+  dicts_(djb2_hash, poly_hash, equal, 32),
+  max_variants_(7),
   distance_(1)
 { }
 
@@ -1198,16 +1201,16 @@ void alekseev::DictionaryManager::set_default_distance(size_t distance)
   }
 }
 
-alekseev::CuckooHash<std::wstring, alekseev::Dictionary, unsigned long long(*)(const std::wstring &)
-, unsigned long long(*)(const std::wstring &), bool(*)(const std::wstring &, const std::wstring &)>
-::KeyIterator alekseev::DictionaryManager::dicts_begin() const
+alekseev::CuckooHash< std::wstring, alekseev::Dictionary, size_t (*)(alekseev::wstr_cr),
+  size_t (*)(alekseev::wstr_cr), bool(*)(alekseev::wstr_cr,
+      alekseev::wstr_cr) >::KeyIterator alekseev::DictionaryManager::dicts_begin() const
 {
   return dicts_.begin();
 }
 
-alekseev::CuckooHash<std::wstring, alekseev::Dictionary, unsigned long long(*)(const std::wstring &)
-, unsigned long long(*)(const std::wstring &), bool(*)(const std::wstring &, const std::wstring &)>
-::KeyIterator alekseev::DictionaryManager::dicts_end() const
+alekseev::CuckooHash< std::wstring, alekseev::Dictionary, size_t (*)(alekseev::wstr_cr),
+  size_t (*)(alekseev::wstr_cr), bool(*)(alekseev::wstr_cr,
+      alekseev::wstr_cr) >::KeyIterator alekseev::DictionaryManager::dicts_end() const
 {
   return dicts_.end();
 }

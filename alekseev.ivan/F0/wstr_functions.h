@@ -9,8 +9,6 @@
 #include <initializer_list>
 #include "vector.h"
 
-
-
 namespace alekseev {
   using wstr_cr = const std::wstring &;
   size_t djb2_hash(wstr_cr line);

@@ -272,10 +272,12 @@ alekseev::ConsoleSetup::ConsoleSetup()
   SetConsoleOutputCP(CP_UTF8);
   SetConsoleCP(CP_UTF8);
 #else
-  char * old = std::setlocale(LC_ALL, nullptr); if (old) {
+  char * old = std::setlocale(LC_ALL, nullptr);
+  if (old) {
     _oldLocale = strdup(old);
-  } const char * locales[] = {"", "C.UTF-8", "en_US.UTF-8", "ru_RU.UTF-8"}; for (
-    const char * loc: locales) {
+  }
+  const char * locales[] = {"", "C.UTF-8", "en_US.UTF-8", "ru_RU.UTF-8"};
+  for (const char * loc: locales) {
     if (std::setlocale(LC_ALL, loc)) {
       break;
     }
