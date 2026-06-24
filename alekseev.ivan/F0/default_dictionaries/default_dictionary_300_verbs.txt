@@ -1,4 +1,5 @@
 быть verb imperf
+	быть
 	есть pres 3 sing
 	суть pres 3 plur
 	есть pres 3 plur
@@ -48,6 +49,7 @@
 	бывши past
 
 сказать verb perf
+	сказать
 	сказал past sing masc
 	сказала past sing fem
 	сказало past sing neut
@@ -124,6 +126,7 @@
 	сказаны past plur
 
 говорить verb imperf
+	говорить
 	говорю pres 1 sing
 	говорим pres 1 plur
 	говоришь pres 2 sing
@@ -257,6 +260,7 @@
 	говорены past plur
 
 знать verb imperf
+	знать
 	знаю pres 1 sing
 	знаем pres 1 plur
 	знаешь pres 2 sing
@@ -390,6 +394,7 @@
 	знаны past plur
 
 стать verb perf
+	стать
 	стал past sing masc
 	стала past sing fem
 	стало past sing neut
@@ -435,6 +440,7 @@
 	ставши past
 
 хотеть verb imperf
+	хотеть
 	хочу pres 1 sing
 	хотим pres 1 plur
 	хочешь pres 2 sing
@@ -512,6 +518,7 @@
 	хотевши past
 
 идти verb imperf
+	идти
 	иду pres 1 sing
 	идём pres 1 plur
 	идёшь pres 2 sing
@@ -584,6 +591,7 @@
 	шедши past
 
 иметь verb imperf
+	иметь
 	имею pres 1 sing
 	имеем pres 1 plur
 	имеешь pres 2 sing
@@ -682,6 +690,7 @@
 	имевши past
 
 видеть verb imperf
+	видеть
 	вижу pres 1 sing
 	видим pres 1 plur
 	видишь pres 2 sing
@@ -816,6 +825,7 @@
 	видены past plur
 
 думать verb imperf
+	думать
 	думаю pres 1 sing
 	думаем pres 1 plur
 	думаешь pres 2 sing
@@ -887,6 +897,7 @@
 	думавши past
 
 сделать verb perf
+	сделать
 	сделал past sing masc
 	сделала past sing fem
 	сделало past sing neut
@@ -963,6 +974,7 @@
 	сделаны past plur
 
 жить verb imperf
+	жить
 	живу pres 1 sing
 	живём pres 1 plur
 	живёшь pres 2 sing
@@ -1033,6 +1045,7 @@
 	живши past
 
 делать verb imperf
+	делать
 	делаю pres 1 sing
 	делаем pres 1 plur
 	делаешь pres 2 sing
@@ -1166,6 +1179,7 @@
 	деланы past plur
 
 смотреть verb imperf
+	смотреть
 	смотрю pres 1 sing
 	смотрим pres 1 plur
 	смотришь pres 2 sing
@@ -1270,6 +1284,7 @@
 	смотрены past plur
 
 работать verb imperf
+	работать
 	работаю pres 1 sing
 	работаем pres 1 plur
 	работаешь pres 2 sing
@@ -1341,6 +1356,7 @@
 	работавши past
 
 понять verb perf
+	понять
 	понял past sing masc
 	поняла past sing fem
 	поняло past sing neut
@@ -1417,6 +1433,7 @@
 	поняты past plur
 
 пойти verb perf
+	пойти
 	пошёл past sing masc
 	пошла past sing fem
 	пошло past sing neut
@@ -1465,6 +1482,7 @@
 	пойдя past
 
 спросить verb perf
+	спросить
 	спросил past sing masc
 	спросила past sing fem
 	спросило past sing neut
@@ -1541,6 +1559,7 @@
 	спрошены past plur
 
 дать verb perf
+	дать
 	дал past sing masc
 	дала past sing fem
 	дало past sing neut
@@ -1617,6 +1636,7 @@
 	даны past plur
 
 понимать verb imperf
+	понимать
 	понимаю pres 1 sing
 	понимаем pres 1 plur
 	понимаешь pres 2 sing
@@ -1719,6 +1739,7 @@
 	понимаемы pres plur
 
 получить verb perf
+	получить
 	получил past sing masc
 	получила past sing fem
 	получило past sing neut
@@ -1795,6 +1816,7 @@
 	получены past plur
 
 сидеть verb imperf
+	сидеть
 	сижу pres 1 sing
 	сидим pres 1 plur
 	сидишь pres 2 sing
@@ -1866,6 +1888,7 @@
 	сидевши past
 
 оказаться verb perf
+	оказаться
 	оказался past sing masc
 	оказалась past sing fem
 	оказалось past sing neut
@@ -1910,6 +1933,7 @@
 	оказавшись past
 
 взять verb perf
+	взять
 	взял past sing masc
 	взяла past sing fem
 	взяло past sing neut
@@ -1986,6 +2010,7 @@
 	взяты past plur
 
 прийти verb perf
+	прийти
 	пришёл past sing masc
 	пришла past sing fem
 	пришло past sing neut
@@ -2029,6 +2054,7 @@
 	прийдя past
 
 являться verb imperf
+	являться
 	являюсь pres 1 sing
 	являемся pres 1 plur
 	являешься pres 2 sing
@@ -2099,6 +2125,7 @@
 	являвшись past
 
 любить verb imperf
+	любить
 	люблю pres 1 sing
 	любим pres 1 plur
 	любишь pres 2 sing
@@ -2232,10 +2259,12 @@
 	люблены past plur
 
 стоить verb imperf
+	стоить
 	стоило past sing neut
 	стоит pres sing
 
 остаться verb perf
+	остаться
 	остался past sing masc
 	осталась past sing fem
 	осталось past sing neut
@@ -2280,6 +2309,7 @@
 	оставшись past
 
 выйти verb perf
+	выйти
 	вышел past sing masc
 	вышла past sing fem
 	вышло past sing neut
@@ -2326,6 +2356,7 @@
 	вышед past
 
 начать verb perf
+	начать
 	начал past sing masc
 	начала past sing fem
 	начало past sing neut
@@ -2402,6 +2433,7 @@
 	начаты past plur
 
 считать verb perf
+	считать
 	считал past sing masc
 	считала past sing fem
 	считало past sing neut
@@ -2478,6 +2510,7 @@
 	считаны past plur
 
 увидеть verb perf
+	увидеть
 	увидел past sing masc
 	увидела past sing fem
 	увидело past sing neut
@@ -2555,6 +2588,7 @@
 	увидены past plur
 
 казаться verb imperf
+	казаться
 	кажусь pres 1 sing
 	кажемся pres 1 plur
 	кажешься pres 2 sing
@@ -2625,6 +2659,7 @@
 	казавшись past
 
 писать verb imperf
+	писать
 	пишу pres 1 sing
 	пишем pres 1 plur
 	пишешь pres 2 sing
@@ -2727,6 +2762,7 @@
 	писаны past plur
 
 найти verb perf
+	найти
 	нашёл past sing masc
 	нашла past sing fem
 	нашло past sing neut
@@ -2803,6 +2839,7 @@
 	найдены past plur
 
 стоять verb imperf
+	стоять
 	стою pres 1 sing
 	стоим pres 1 plur
 	стоишь pres 2 sing
@@ -2874,6 +2911,7 @@
 	стоявши past
 
 решить verb perf
+	решить
 	решил past sing masc
 	решила past sing fem
 	решило past sing neut
@@ -2950,6 +2988,7 @@
 	решены past plur
 
 пройти verb perf
+	пройти
 	прошёл past sing masc
 	прошла past sing fem
 	прошло past sing neut
@@ -3026,6 +3065,7 @@
 	пройдены past plur
 
 принять verb perf
+	принять
 	принял past sing masc
 	приняла past sing fem
 	приняло past sing neut
@@ -3102,6 +3142,7 @@
 	приняты past plur
 
 давать verb imperf
+	давать
 	даю pres 1 sing
 	даём pres 1 plur
 	даёшь pres 2 sing
@@ -3204,6 +3245,7 @@
 	даваемы pres plur
 
 ответить verb perf
+	ответить
 	ответил past sing masc
 	ответила past sing fem
 	ответило past sing neut
@@ -3249,6 +3291,7 @@
 	ответивши past
 
 помнить verb imperf
+	помнить
 	помню pres 1 sing
 	помним pres 1 plur
 	помнишь pres 2 sing
@@ -3382,6 +3425,7 @@
 	помнены past plur
 
 ждать verb imperf
+	ждать
 	жду pres 1 sing
 	ждём pres 1 plur
 	ждёшь pres 2 sing
@@ -3453,6 +3497,7 @@
 	ждавши past
 
 находиться verb imperf
+	находиться
 	нахожусь pres 1 sing
 	находимся pres 1 plur
 	находишься pres 2 sing
@@ -3523,6 +3568,7 @@
 	находившись past
 
 написать verb perf
+	написать
 	написал past sing masc
 	написала past sing fem
 	написало past sing neut
@@ -3599,6 +3645,7 @@
 	написаны past plur
 
 оставаться verb imperf
+	оставаться
 	остаюсь pres 1 sing
 	остаёмся pres 1 plur
 	остаёшься pres 2 sing
@@ -3669,6 +3716,7 @@
 	остававшись past
 
 играть verb imperf
+	играть
 	играю pres 1 sing
 	играем pres 1 plur
 	играешь pres 2 sing
@@ -3802,6 +3850,7 @@
 	играны past plur
 
 лежать verb imperf
+	лежать
 	лежу pres 1 sing
 	лежим pres 1 plur
 	лежишь pres 2 sing
@@ -3873,6 +3922,7 @@
 	лежавши past
 
 подумать verb perf
+	подумать
 	подумал past sing masc
 	подумала past sing fem
 	подумало past sing neut
@@ -3918,6 +3968,7 @@
 	подумавши past
 
 уйти verb perf
+	уйти
 	ушёл past sing masc
 	ушла past sing fem
 	ушло past sing neut
@@ -3962,6 +4013,7 @@
 	уйдя past
 
 посмотреть verb perf
+	посмотреть
 	посмотрел past sing masc
 	посмотрела past sing fem
 	посмотрело past sing neut
@@ -4038,6 +4090,7 @@
 	посмотрены past plur
 
 вернуться verb perf
+	вернуться
 	вернулся past sing masc
 	вернулась past sing fem
 	вернулось past sing neut
@@ -4082,6 +4135,7 @@
 	вернувшись past
 
 следовать verb imperf
+	следовать
 	следую pres 1 sing
 	следуем pres 1 plur
 	следуешь pres 2 sing
@@ -4152,6 +4206,7 @@
 	следовавши past
 
 читать verb imperf
+	читать
 	читаю pres 1 sing
 	читаем pres 1 plur
 	читаешь pres 2 sing
@@ -4285,6 +4340,7 @@
 	читаны past plur
 
 бывать verb imperf
+	бывать
 	бываю pres 1 sing
 	бываем pres 1 plur
 	бываешь pres 2 sing
@@ -4356,6 +4412,7 @@
 	бывавши past
 
 ходить verb imperf
+	ходить
 	хожу pres 1 sing
 	ходим pres 1 plur
 	ходишь pres 2 sing
@@ -4428,6 +4485,7 @@
 	ходивши past
 
 начинать verb imperf
+	начинать
 	начинаю pres 1 sing
 	начинаем pres 1 plur
 	начинаешь pres 2 sing
@@ -4530,6 +4588,7 @@
 	начинаемы pres plur
 
 появиться verb perf
+	появиться
 	появился past sing masc
 	появилась past sing fem
 	появилось past sing neut
@@ -4575,6 +4634,7 @@
 	появясь past
 
 называть verb imperf
+	называть
 	называю pres 1 sing
 	называем pres 1 plur
 	называешь pres 2 sing
@@ -4677,6 +4737,7 @@
 	называемы pres plur
 
 прийтись verb perf
+	прийтись
 	пришёлся past sing masc
 	пришлась past sing fem
 	пришлось past sing neut
@@ -4732,10 +4793,12 @@
 	прийдясь past
 
 хотеться verb imperf
+	хотеться
 	хотелось past sing neut
 	хочется pres sing
 
 вести verb imperf
+	вести
 	веду pres 1 sing
 	ведём pres 1 plur
 	ведёшь pres 2 sing
@@ -4864,6 +4927,7 @@
 	ведомых pres plur
 
 показать verb perf
+	показать
 	показал past sing masc
 	показала past sing fem
 	показало past sing neut
@@ -4940,6 +5004,7 @@
 	показаны past plur
 
 поставить verb perf
+	поставить
 	поставил past sing masc
 	поставила past sing fem
 	поставило past sing neut
@@ -5016,6 +5081,7 @@
 	поставлены past plur
 
 бояться verb imperf
+	бояться
 	боюсь pres 1 sing
 	боимся pres 1 plur
 	боишься pres 2 sing
@@ -5086,6 +5152,7 @@
 	боявшись past
 
 происходить verb imperf
+	происходить
 	происхожу pres 1 sing
 	происходим pres 1 plur
 	происходишь pres 2 sing
@@ -5157,6 +5224,7 @@
 	происходивши past
 
 существовать verb imperf
+	существовать
 	существую pres 1 sing
 	существуем pres 1 plur
 	существуешь pres 2 sing
@@ -5227,6 +5295,7 @@
 	существовавши past
 
 становиться verb imperf
+	становиться
 	становлюсь pres 1 sing
 	становимся pres 1 plur
 	становишься pres 2 sing
@@ -5297,6 +5366,7 @@
 	становившись past
 
 слышать verb imperf
+	слышать
 	слышу pres 1 sing
 	слышим pres 1 plur
 	слышишь pres 2 sing
@@ -5400,6 +5470,7 @@
 	слышаны past plur
 
 смочь verb perf
+	смочь
 	смог past sing masc
 	смогла past sing fem
 	смогло past sing neut
@@ -5444,6 +5515,7 @@
 	смогши past
 
 заметить verb perf
+	заметить
 	заметил past sing masc
 	заметила past sing fem
 	заметило past sing neut
@@ -5520,6 +5592,7 @@
 	замечены past plur
 
 использовать verb perf
+	использовать
 	использовал past sing masc
 	использовала past sing fem
 	использовало past sing neut
@@ -5727,6 +5800,7 @@
 	использованы past plur
 
 пытаться verb imperf
+	пытаться
 	пытаюсь pres 1 sing
 	пытаемся pres 1 plur
 	пытаешься pres 2 sing
@@ -5797,6 +5871,7 @@
 	пытавшись past
 
 представить verb perf
+	представить
 	представил past sing masc
 	представила past sing fem
 	представило past sing neut
@@ -5873,6 +5948,7 @@
 	представлены past plur
 
 чувствовать verb imperf
+	чувствовать
 	чувствую pres 1 sing
 	чувствуем pres 1 plur
 	чувствуешь pres 2 sing
@@ -6005,6 +6081,7 @@
 	чувствованы past plur
 
 создать verb perf
+	создать
 	создал past sing masc
 	создала past sing fem
 	создало past sing neut
@@ -6081,6 +6158,7 @@
 	созданы past plur
 
 заниматься verb imperf
+	заниматься
 	занимаюсь pres 1 sing
 	занимаемся pres 1 plur
 	занимаешься pres 2 sing
@@ -6151,6 +6229,7 @@
 	занимавшись past
 
 продолжать verb imperf
+	продолжать
 	продолжаю pres 1 sing
 	продолжаем pres 1 plur
 	продолжаешь pres 2 sing
@@ -6253,6 +6332,7 @@
 	продолжаемы pres plur
 
 слушать verb imperf
+	слушать
 	слушаю pres 1 sing
 	слушаем pres 1 plur
 	слушаешь pres 2 sing
@@ -6386,6 +6466,7 @@
 	слушаны past plur
 
 узнать verb perf
+	узнать
 	узнал past sing masc
 	узнала past sing fem
 	узнало past sing neut
@@ -6462,6 +6543,7 @@
 	узнаны past plur
 
 приехать verb perf
+	приехать
 	приехал past sing masc
 	приехала past sing fem
 	приехало past sing neut
@@ -6505,6 +6587,7 @@
 	приехавши past
 
 отвечать verb imperf
+	отвечать
 	отвечаю pres 1 sing
 	отвечаем pres 1 plur
 	отвечаешь pres 2 sing
@@ -6576,6 +6659,7 @@
 	отвечавши past
 
 рассказывать verb imperf
+	рассказывать
 	рассказываю pres 1 sing
 	рассказываем pres 1 plur
 	рассказываешь pres 2 sing
@@ -6678,6 +6762,7 @@
 	рассказываемы pres plur
 
 рассказать verb perf
+	рассказать
 	рассказал past sing masc
 	рассказала past sing fem
 	рассказало past sing neut
@@ -6754,6 +6839,7 @@
 	рассказаны past plur
 
 представлять verb imperf
+	представлять
 	представляю pres 1 sing
 	представляем pres 1 plur
 	представляешь pres 2 sing
@@ -6856,6 +6942,7 @@
 	представляемы pres plur
 
 брать verb imperf
+	брать
 	беру pres 1 sing
 	берём pres 1 plur
 	берёшь pres 2 sing
@@ -6927,6 +7014,7 @@
 	бравши past
 
 забыть verb perf
+	забыть
 	забыл past sing masc
 	забыла past sing fem
 	забыло past sing neut
@@ -7004,6 +7092,7 @@
 	забыты past plur
 
 провести verb perf
+	провести
 	провёл past sing masc
 	провела past sing fem
 	провело past sing neut
@@ -7079,6 +7168,7 @@
 	проведены past plur
 
 спать verb imperf
+	спать
 	сплю pres 1 sing
 	спим pres 1 plur
 	спишь pres 2 sing
@@ -7149,6 +7239,7 @@
 	спавши past
 
 может verb imperf
+	может
 	могу pres 1 sing
 	можем pres 1 plur
 	можешь pres 2 sing
@@ -7218,6 +7309,7 @@
 	могши past
 
 помочь verb perf
+	помочь
 	помог past sing masc
 	помогла past sing fem
 	помогло past sing neut
@@ -7262,6 +7354,7 @@
 	помогши past
 
 приходить verb imperf
+	приходить
 	прихожу pres 1 sing
 	приходим pres 1 plur
 	приходишь pres 2 sing
@@ -7333,6 +7426,7 @@
 	приходивши past
 
 просить verb imperf
+	просить
 	прошу pres 1 sing
 	просим pres 1 plur
 	просишь pres 2 sing
@@ -7466,6 +7560,7 @@
 	прошены past plur
 
 вспомнить verb perf
+	вспомнить
 	вспомнил past sing masc
 	вспомнила past sing fem
 	вспомнило past sing neut
@@ -7542,6 +7637,7 @@
 	вспомнены past plur
 
 открыть verb perf
+	открыть
 	открыл past sing masc
 	открыла past sing fem
 	открыло past sing neut
@@ -7618,6 +7714,7 @@
 	открыты past plur
 
 привести verb perf
+	привести
 	привёл past sing masc
 	привела past sing fem
 	привело past sing neut
@@ -7693,6 +7790,7 @@
 	приведены past plur
 
 оставить verb perf
+	оставить
 	оставил past sing masc
 	оставила past sing fem
 	оставило past sing neut
@@ -7769,6 +7867,7 @@
 	оставлены past plur
 
 спрашивать verb imperf
+	спрашивать
 	спрашиваю pres 1 sing
 	спрашиваем pres 1 plur
 	спрашиваешь pres 2 sing
@@ -7871,6 +7970,7 @@
 	спрашиваемы pres plur
 
 принимать verb imperf
+	принимать
 	принимаю pres 1 sing
 	принимаем pres 1 plur
 	принимаешь pres 2 sing
@@ -7973,6 +8073,7 @@
 	принимаемы pres plur
 
 искать verb imperf
+	искать
 	ищу pres 1 sing
 	ищем pres 1 plur
 	ищешь pres 2 sing
@@ -8075,6 +8176,7 @@
 	исканы past plur
 
 войти verb perf
+	войти
 	вошёл past sing masc
 	вошла past sing fem
 	вошло past sing neut
@@ -8119,6 +8221,7 @@
 	войдя past
 
 назвать verb perf
+	назвать
 	назвал past sing masc
 	назвала past sing fem
 	назвало past sing neut
@@ -8195,6 +8298,7 @@
 	названы past plur
 
 успеть verb perf
+	успеть
 	успел past sing masc
 	успела past sing fem
 	успело past sing neut
@@ -8240,6 +8344,7 @@
 	успевши past
 
 произойти verb perf
+	произойти
 	произошёл past sing masc
 	произошла past sing fem
 	произошло past sing neut
@@ -8309,6 +8414,7 @@
 	произойдя past
 
 выходить verb imperf
+	выходить
 	выхожу pres 1 sing
 	выходим pres 1 plur
 	выходишь pres 2 sing
@@ -8380,6 +8486,7 @@
 	выходивши past
 
 предложить verb perf
+	предложить
 	предложил past sing masc
 	предложила past sing fem
 	предложило past sing neut
@@ -8456,6 +8563,7 @@
 	предложены past plur
 
 пить verb imperf
+	пить
 	пью pres 1 sing
 	пьём pres 1 plur
 	пьёшь pres 2 sing
@@ -8557,6 +8665,7 @@
 	питы past plur
 
 глядеть verb imperf
+	глядеть
 	гляжу pres 1 sing
 	глядим pres 1 plur
 	глядишь pres 2 sing
@@ -8628,6 +8737,7 @@
 	глядевши past
 
 ехать verb imperf
+	ехать
 	еду pres 1 sing
 	едем pres 1 plur
 	едешь pres 2 sing
@@ -8703,6 +8813,7 @@
 	ехавши past
 
 попасть verb perf
+	попасть
 	попал past sing masc
 	попала past sing fem
 	попало past sing neut
@@ -8748,6 +8859,7 @@
 	попавши past
 
 начаться verb perf
+	начаться
 	начался past sing masc
 	началась past sing fem
 	началось past sing neut
@@ -8792,6 +8904,7 @@
 	начавшись past
 
 верить verb imperf
+	верить
 	верю pres 1 sing
 	верим pres 1 plur
 	веришь pres 2 sing
@@ -8863,6 +8976,7 @@
 	веривши past
 
 держать verb imperf
+	держать
 	держу pres 1 sing
 	держим pres 1 plur
 	держишь pres 2 sing
@@ -8966,6 +9080,7 @@
 	держаны past plur
 
 позволять verb imperf
+	позволять
 	позволяю pres 1 sing
 	позволяем pres 1 plur
 	позволяешь pres 2 sing
@@ -9068,6 +9183,7 @@
 	позволяемы pres plur
 
 купить verb perf
+	купить
 	купил past sing masc
 	купила past sing fem
 	купило past sing neut
@@ -9144,6 +9260,7 @@
 	куплены past plur
 
 уходить verb perf
+	уходить
 	уходил past sing masc
 	уходила past sing fem
 	уходило past sing neut
@@ -9220,6 +9337,7 @@
 	ухожены past plur
 
 собираться verb imperf
+	собираться
 	собираюсь pres 1 sing
 	собираемся pres 1 plur
 	собираешься pres 2 sing
@@ -9290,6 +9408,7 @@
 	собиравшись past
 
 относиться verb imperf
+	относиться
 	отношусь pres 1 sing
 	относимся pres 1 plur
 	относишься pres 2 sing
@@ -9360,6 +9479,7 @@
 	относившись past
 
 требовать verb imperf
+	требовать
 	требую pres 1 sing
 	требуем pres 1 plur
 	требуешь pres 2 sing
@@ -9492,6 +9612,7 @@
 	требованы past plur
 
 подойти verb perf
+	подойти
 	подошёл past sing masc
 	подошла past sing fem
 	подошло past sing neut
@@ -9536,6 +9657,7 @@
 	подойдя past
 
 удаться verb perf
+	удаться
 	удался past sing masc
 	удалась past sing fem
 	удалось past sing neut
@@ -9580,6 +9702,7 @@
 	удавшись past
 
 получать verb imperf
+	получать
 	получаю pres 1 sing
 	получаем pres 1 plur
 	получаешь pres 2 sing
@@ -9682,6 +9805,7 @@
 	получаемы pres plur
 
 умереть verb perf
+	умереть
 	умер past sing masc
 	умерла past sing fem
 	умерло past sing neut
@@ -9729,6 +9853,7 @@
 	умерши past
 
 сесть verb perf
+	сесть
 	сел past sing masc
 	села past sing fem
 	село past sing neut
@@ -9774,6 +9899,7 @@
 	севши past
 
 случиться verb perf
+	случиться
 	случился past sing masc
 	случилась past sing fem
 	случилось past sing neut
@@ -9819,6 +9945,7 @@
 	случившись past
 
 проходить verb imperf
+	проходить
 	прохожу pres 1 sing
 	проходим pres 1 plur
 	проходишь pres 2 sing
@@ -9921,6 +10048,7 @@
 	проходимы pres plur
 
 составлять verb imperf
+	составлять
 	составляю pres 1 sing
 	составляем pres 1 plur
 	составляешь pres 2 sing
@@ -10023,6 +10151,7 @@
 	составляемы pres plur
 
 приходиться verb imperf
+	приходиться
 	прихожусь pres 1 sing
 	приходимся pres 1 plur
 	приходишься pres 2 sing
@@ -10093,6 +10222,7 @@
 	приходившись past
 
 установить verb perf
+	установить
 	установил past sing masc
 	установила past sing fem
 	установило past sing neut
@@ -10169,6 +10299,7 @@
 	установлены past plur
 
 поднять verb perf
+	поднять
 	поднял past sing masc
 	подняла past sing fem
 	подняло past sing neut
@@ -10255,6 +10386,7 @@
 	подняты past plur
 
 стараться verb imperf
+	стараться
 	стараюсь pres 1 sing
 	стараемся pres 1 plur
 	стараешься pres 2 sing
@@ -10325,6 +10457,7 @@
 	старавшись past
 
 уметь verb imperf
+	уметь
 	умею pres 1 sing
 	умеем pres 1 plur
 	умеешь pres 2 sing
@@ -10396,6 +10529,7 @@
 	умевши past
 
 встать verb perf
+	встать
 	встал past sing masc
 	встала past sing fem
 	встало past sing neut
@@ -10441,6 +10575,7 @@
 	вставши past
 
 проводить verb imperf
+	проводить
 	провожу pres 1 sing
 	проводим pres 1 plur
 	проводишь pres 2 sing
@@ -10543,6 +10678,7 @@
 	проводимы pres plur
 
 бросить verb perf
+	бросить
 	бросил past sing masc
 	бросила past sing fem
 	бросило past sing neut
@@ -10619,6 +10755,7 @@
 	брошены past plur
 
 род verb imperf
+	род
 	родился past sing masc
 	родилась past sing fem
 	родилось past sing neut
@@ -10733,6 +10870,7 @@
 	родившись past
 
 объяснить verb perf
+	объяснить
 	объяснил past sing masc
 	объяснила past sing fem
 	объяснило past sing neut
@@ -10810,6 +10948,7 @@
 	объяснены past plur
 
 снять verb perf
+	снять
 	снял past sing masc
 	сняла past sing fem
 	сняло past sing neut
@@ -10886,6 +11025,7 @@
 	сняты past plur
 
 нравиться verb imperf
+	нравиться
 	нравлюсь pres 1 sing
 	нравимся pres 1 plur
 	нравишься pres 2 sing
@@ -10956,6 +11096,7 @@
 	нравившись past
 
 услышать verb perf
+	услышать
 	услышал past sing masc
 	услышала past sing fem
 	услышало past sing neut
@@ -11033,6 +11174,7 @@
 	услышаны past plur
 
 связать verb perf
+	связать
 	связал past sing masc
 	связала past sing fem
 	связало past sing neut
@@ -11109,6 +11251,7 @@
 	связаны past plur
 
 позволить verb perf
+	позволить
 	позволил past sing masc
 	позволила past sing fem
 	позволило past sing neut
@@ -11186,6 +11329,7 @@
 	позволены past plur
 
 поехать verb perf
+	поехать
 	поехал past sing masc
 	поехала past sing fem
 	поехало past sing neut
@@ -11231,6 +11375,7 @@
 	поехавши past
 
 положить verb perf
+	положить
 	положил past sing masc
 	положила past sing fem
 	положило past sing neut
@@ -11307,6 +11452,7 @@
 	положены past plur
 
 входить verb imperf
+	входить
 	вхожу pres 1 sing
 	входим pres 1 plur
 	входишь pres 2 sing
@@ -11378,6 +11524,7 @@
 	входивши past
 
 оказываться verb imperf
+	оказываться
 	оказываюсь pres 1 sing
 	оказываемся pres 1 plur
 	оказываешься pres 2 sing
@@ -11448,6 +11595,7 @@
 	оказывавшись past
 
 показывать verb imperf
+	показывать
 	показываю pres 1 sing
 	показываем pres 1 plur
 	показываешь pres 2 sing
@@ -11550,6 +11698,7 @@
 	показываемы pres plur
 
 вызвать verb perf
+	вызвать
 	вызвал past sing masc
 	вызвала past sing fem
 	вызвало past sing neut
@@ -11626,6 +11775,7 @@
 	вызваны past plur
 
 касаться verb imperf
+	касаться
 	касаюсь pres 1 sing
 	касаемся pres 1 plur
 	касаешься pres 2 sing
@@ -11696,6 +11846,7 @@
 	касавшись past
 
 отметить verb perf
+	отметить
 	отметил past sing masc
 	отметила past sing fem
 	отметило past sing neut
@@ -11772,6 +11923,7 @@
 	отмечены past plur
 
 заявить verb perf
+	заявить
 	заявил past sing masc
 	заявила past sing fem
 	заявило past sing neut
@@ -11848,6 +12000,7 @@
 	заявлены past plur
 
 действовать verb imperf
+	действовать
 	действую pres 1 sing
 	действуем pres 1 plur
 	действуешь pres 2 sing
@@ -11918,6 +12071,7 @@
 	действовавши past
 
 получиться verb perf
+	получиться
 	получился past sing masc
 	получилась past sing fem
 	получилось past sing neut
@@ -11963,6 +12117,7 @@
 	получившись past
 
 кричать verb imperf
+	кричать
 	кричу pres 1 sing
 	кричим pres 1 plur
 	кричишь pres 2 sing
@@ -12034,6 +12189,7 @@
 	кричавши past
 
 остановиться verb perf
+	остановиться
 	остановился past sing masc
 	остановилась past sing fem
 	остановилось past sing neut
@@ -12079,6 +12235,7 @@
 	остановясь past
 
 предлагать verb imperf
+	предлагать
 	предлагаю pres 1 sing
 	предлагаем pres 1 plur
 	предлагаешь pres 2 sing
@@ -12181,6 +12338,7 @@
 	предлагаемы pres plur
 
 убить verb perf
+	убить
 	убил past sing masc
 	убила past sing fem
 	убило past sing neut
@@ -12257,6 +12415,7 @@
 	убиты past plur
 
 молчать verb imperf
+	молчать
 	молчу pres 1 sing
 	молчим pres 1 plur
 	молчишь pres 2 sing
@@ -12328,6 +12487,7 @@
 	молчавши past
 
 согласиться verb perf
+	согласиться
 	согласился past sing masc
 	согласилась past sing fem
 	согласилось past sing neut
@@ -12373,6 +12533,7 @@
 	согласясь past
 
 сообщить verb perf
+	сообщить
 	сообщил past sing masc
 	сообщила past sing fem
 	сообщило past sing neut
@@ -12449,6 +12610,7 @@
 	сообщены past plur
 
 бежать verb perf
+	бежать
 	бежал past sing masc
 	бежала past sing fem
 	бежало past sing neut
@@ -12559,6 +12721,7 @@
 	бежавших past plur
 
 кажется verb imperf
+	кажется
 	кажусь pres 1 sing
 	кажемся pres 1 plur
 	кажешься pres 2 sing
@@ -12629,6 +12792,7 @@
 	казавшись past
 
 петь verb imperf
+	петь
 	пою pres 1 sing
 	поём pres 1 plur
 	поёшь pres 2 sing
@@ -12730,6 +12894,7 @@
 	петы past plur
 
 вызывать verb imperf
+	вызывать
 	вызываю pres 1 sing
 	вызываем pres 1 plur
 	вызываешь pres 2 sing
@@ -12832,6 +12997,7 @@
 	вызываемы pres plur
 
 показаться verb perf
+	показаться
 	показался past sing masc
 	показалась past sing fem
 	показалось past sing neut
@@ -12876,6 +13042,7 @@
 	показавшись past
 
 принести verb perf
+	принести
 	принёс past sing masc
 	принесла past sing fem
 	принесло past sing neut
@@ -12952,6 +13119,7 @@
 	принесены past plur
 
 выглядеть verb perf
+	выглядеть
 	выглядел past sing masc
 	выглядела past sing fem
 	выглядело past sing neut
@@ -12997,6 +13165,7 @@
 	выглядевши past
 
 служить verb imperf
+	служить
 	служу pres 1 sing
 	служим pres 1 plur
 	служишь pres 2 sing
@@ -13130,6 +13299,7 @@
 	служены past plur
 
 попросить verb perf
+	попросить
 	попросил past sing masc
 	попросила past sing fem
 	попросило past sing neut
@@ -13206,6 +13376,7 @@
 	попрошены past plur
 
 состоять verb imperf
+	состоять
 	состою pres 1 sing
 	состоим pres 1 plur
 	состоишь pres 2 sing
@@ -13277,6 +13448,7 @@
 	состоявши past
 
 отдать verb perf
+	отдать
 	отдал past sing masc
 	отдала past sing fem
 	отдало past sing neut
@@ -13353,6 +13525,7 @@
 	отданы past plur
 
 выступать verb imperf
+	выступать
 	выступаю pres 1 sing
 	выступаем pres 1 plur
 	выступаешь pres 2 sing
@@ -13424,6 +13597,7 @@
 	выступавши past
 
 ставить verb imperf
+	ставить
 	ставлю pres 1 sing
 	ставим pres 1 plur
 	ставишь pres 2 sing
@@ -13557,6 +13731,7 @@
 	ставлены past plur
 
 возникать verb imperf
+	возникать
 	возникаю pres 1 sing
 	возникаем pres 1 plur
 	возникаешь pres 2 sing
@@ -13628,6 +13803,7 @@
 	возникавши past
 
 надеяться verb imperf
+	надеяться
 	надеюсь pres 1 sing
 	надеемся pres 1 plur
 	надеешься pres 2 sing
@@ -13698,6 +13874,7 @@
 	надеявшись past
 
 подняться verb perf
+	подняться
 	поднялся past sing masc
 	поднялась past sing fem
 	поднялось past sing neut
@@ -13752,6 +13929,7 @@
 	поднявшись past
 
 вспоминать verb imperf
+	вспоминать
 	вспоминаю pres 1 sing
 	вспоминаем pres 1 plur
 	вспоминаешь pres 2 sing
@@ -13854,6 +14032,7 @@
 	вспоминаемы pres plur
 
 называться verb imperf
+	называться
 	называюсь pres 1 sing
 	называемся pres 1 plur
 	называешься pres 2 sing
@@ -13924,6 +14103,7 @@
 	называвшись past
 
 помогать verb imperf
+	помогать
 	помогаю pres 1 sing
 	помогаем pres 1 plur
 	помогаешь pres 2 sing
@@ -13995,6 +14175,7 @@
 	помогавши past
 
 значить verb imperf
+	значить
 	значу pres 1 sing
 	значим pres 1 plur
 	значишь pres 2 sing
@@ -14128,6 +14309,7 @@
 	значены past plur
 
 возникнуть verb perf
+	возникнуть
 	возник past sing masc
 	возникла past sing fem
 	возникло past sing neut
@@ -14201,6 +14383,7 @@
 	возникши past
 
 звать verb imperf
+	звать
 	зову pres 1 sing
 	зовём pres 1 plur
 	зовёшь pres 2 sing
@@ -14303,6 +14486,7 @@
 	званы past plur
 
 позвонить verb perf
+	позвонить
 	позвонил past sing masc
 	позвонила past sing fem
 	позвонило past sing neut
@@ -14348,6 +14532,7 @@
 	позвонивши past
 
 хватать verb imperf
+	хватать
 	хватаю pres 1 sing
 	хватаем pres 1 plur
 	хватаешь pres 2 sing
@@ -14481,6 +14666,7 @@
 	хватаны past plur
 
 выпить verb perf
+	выпить
 	выпил past sing masc
 	выпила past sing fem
 	выпило past sing neut
@@ -14557,6 +14743,7 @@
 	выпиты past plur
 
 потерять verb perf
+	потерять
 	потерял past sing masc
 	потеряла past sing fem
 	потеряло past sing neut
@@ -14633,6 +14820,7 @@
 	потеряны past plur
 
 иметься verb imperf
+	иметься
 	имеюсь pres 1 sing
 	имеемся pres 1 plur
 	имеешься pres 2 sing
@@ -14703,6 +14891,7 @@
 	имевшись past
 
 получаться verb imperf
+	получаться
 	получаюсь pres 1 sing
 	получаемся pres 1 plur
 	получаешься pres 2 sing
@@ -14773,6 +14962,7 @@
 	получавшись past
 
 учиться verb imperf
+	учиться
 	учусь pres 1 sing
 	учимся pres 1 plur
 	учишься pres 2 sing
@@ -14843,6 +15033,7 @@
 	учившись past
 
 возвращаться verb imperf
+	возвращаться
 	возвращаюсь pres 1 sing
 	возвращаемся pres 1 plur
 	возвращаешься pres 2 sing
@@ -14913,6 +15104,7 @@
 	возвращавшись past
 
 расти verb imperf
+	расти
 	расту pres 1 sing
 	растём pres 1 plur
 	растёшь pres 2 sing
@@ -14983,6 +15175,7 @@
 	росши past
 
 обнаружить verb perf
+	обнаружить
 	обнаружил past sing masc
 	обнаружила past sing fem
 	обнаружило past sing neut
@@ -15059,6 +15252,7 @@
 	обнаружены past plur
 
 почувствовать verb perf
+	почувствовать
 	почувствовал past sing masc
 	почувствовала past sing fem
 	почувствовало past sing neut
@@ -15135,6 +15329,7 @@
 	почувствованы past plur
 
 передать verb perf
+	передать
 	передал past sing masc
 	передала past sing fem
 	передало past sing neut
@@ -15211,6 +15406,7 @@
 	переданы past plur
 
 желать verb imperf
+	желать
 	желаю pres 1 sing
 	желаем pres 1 plur
 	желаешь pres 2 sing
@@ -15282,6 +15478,7 @@
 	желавши past
 
 ожидать verb imperf
+	ожидать
 	ожидаю pres 1 sing
 	ожидаем pres 1 plur
 	ожидаешь pres 2 sing
@@ -15384,6 +15581,7 @@
 	ожидаемы pres plur
 
 составить verb perf
+	составить
 	составил past sing masc
 	составила past sing fem
 	составило past sing neut
@@ -15460,6 +15658,7 @@
 	составлены past plur
 
 нести verb imperf
+	нести
 	несу pres 1 sing
 	несём pres 1 plur
 	несёшь pres 2 sing
@@ -15561,6 +15760,7 @@
 	несены past plur
 
 определить verb perf
+	определить
 	определил past sing masc
 	определила past sing fem
 	определило past sing neut
@@ -15638,6 +15838,7 @@
 	определены past plur
 
 пользоваться verb imperf
+	пользоваться
 	пользуюсь pres 1 sing
 	пользуемся pres 1 plur
 	пользуешься pres 2 sing
@@ -15708,6 +15909,7 @@
 	пользовавшись past
 
 улыбнуться verb perf
+	улыбнуться
 	улыбнулся past sing masc
 	улыбнулась past sing fem
 	улыбнулось past sing neut
@@ -15752,6 +15954,7 @@
 	улыбнувшись past
 
 появляться verb imperf
+	появляться
 	появляюсь pres 1 sing
 	появляемся pres 1 plur
 	появляешься pres 2 sing
@@ -15822,6 +16025,7 @@
 	появлявшись past
 
 смеяться verb imperf
+	смеяться
 	смеюсь pres 1 sing
 	смеёмся pres 1 plur
 	смеёшься pres 2 sing
@@ -15892,6 +16096,7 @@
 	смеявшись past
 
 уехать verb perf
+	уехать
 	уехал past sing masc
 	уехала past sing fem
 	уехало past sing neut
@@ -15935,6 +16140,7 @@
 	уехавши past
 
 подходить verb imperf
+	подходить
 	подхожу pres 1 sing
 	подходим pres 1 plur
 	подходишь pres 2 sing
@@ -16006,6 +16212,7 @@
 	подходивши past
 
 судить verb imperf
+	судить
 	сужу pres 1 sing
 	судим pres 1 plur
 	судишь pres 2 sing
@@ -16139,6 +16346,7 @@
 	сужены past plur
 
 родиться verb perf
+	родиться
 	родился past sing masc
 	родилась past sing fem
 	родилось past sing neut
@@ -16253,6 +16461,7 @@
 	родившись past
 
 отказаться verb perf
+	отказаться
 	отказался past sing masc
 	отказалась past sing fem
 	отказалось past sing neut
@@ -16297,6 +16506,7 @@
 	отказавшись past
 
 считаться verb imperf
+	считаться
 	считаюсь pres 1 sing
 	считаемся pres 1 plur
 	считаешься pres 2 sing
@@ -16367,6 +16577,7 @@
 	считавшись past
 
 занять verb perf
+	занять
 	занял past sing masc
 	заняла past sing fem
 	заняло past sing neut
@@ -16443,6 +16654,7 @@
 	заняты past plur
 
 добавить verb perf
+	добавить
 	добавил past sing masc
 	добавила past sing fem
 	добавило past sing neut
@@ -16519,6 +16731,7 @@
 	добавлены past plur
 
 звонить verb imperf
+	звонить
 	звоню pres 1 sing
 	звоним pres 1 plur
 	звонишь pres 2 sing
@@ -16590,6 +16803,7 @@
 	звонивши past
 
 носить verb imperf
+	носить
 	ношу pres 1 sing
 	носим pres 1 plur
 	носишь pres 2 sing
@@ -16723,6 +16937,7 @@
 	ношены past plur
 
 начинаться verb imperf
+	начинаться
 	начинаюсь pres 1 sing
 	начинаемся pres 1 plur
 	начинаешься pres 2 sing
@@ -16793,6 +17008,7 @@
 	начинавшись past
 
 зависеть verb imperf
+	зависеть
 	завишу pres 1 sing
 	зависим pres 1 plur
 	зависишь pres 2 sing
@@ -16863,6 +17079,7 @@
 	зависевши past
 
 построить verb perf
+	построить
 	построил past sing masc
 	построила past sing fem
 	построило past sing neut
@@ -16939,6 +17156,7 @@
 	построены past plur
 
 создавать verb imperf
+	создавать
 	создаю pres 1 sing
 	создаём pres 1 plur
 	создаёшь pres 2 sing
@@ -17041,6 +17259,7 @@
 	создаваемы pres plur
 
 встретить verb perf
+	встретить
 	встретил past sing masc
 	встретила past sing fem
 	встретило past sing neut
@@ -17117,6 +17336,7 @@
 	встречены past plur
 
 принадлежать verb imperf
+	принадлежать
 	принадлежу pres 1 sing
 	принадлежим pres 1 plur
 	принадлежишь pres 2 sing
@@ -17188,6 +17408,7 @@
 	принадлежавши past
 
 произнести verb perf
+	произнести
 	произнёс past sing masc
 	произнесла past sing fem
 	произнесло past sing neut
@@ -17264,6 +17485,7 @@
 	произнесены past plur
 
 участвовать verb imperf
+	участвовать
 	участвую pres 1 sing
 	участвуем pres 1 plur
 	участвуешь pres 2 sing
@@ -17334,6 +17556,7 @@
 	участвовавши past
 
 занимать verb imperf
+	занимать
 	занимаю pres 1 sing
 	занимаем pres 1 plur
 	занимаешь pres 2 sing
@@ -17436,6 +17659,7 @@
 	занимаемы pres plur
 
 улыбаться verb imperf
+	улыбаться
 	улыбаюсь pres 1 sing
 	улыбаемся pres 1 plur
 	улыбаешься pres 2 sing
@@ -17506,6 +17730,7 @@
 	улыбавшись past
 
 направить verb perf
+	направить
 	направил past sing masc
 	направила past sing fem
 	направило past sing neut
@@ -17582,6 +17807,7 @@
 	направлены past plur
 
 обратиться verb perf
+	обратиться
 	обратился past sing masc
 	обратилась past sing fem
 	обратилось past sing neut
@@ -17627,6 +17853,7 @@
 	обратясь past
 
 выбрать verb perf
+	выбрать
 	выбрал past sing masc
 	выбрала past sing fem
 	выбрало past sing neut
@@ -17703,6 +17930,7 @@
 	выбраны past plur
 
 бить verb imperf
+	бить
 	бью pres 1 sing
 	бьём pres 1 plur
 	бьёшь pres 2 sing
@@ -17804,10 +18032,12 @@
 	биты past plur
 
 хватить verb perf
+	хватить
 	хватит fut sing
 	хватило past sing neut
 
 обещать verb perf
+	обещать
 	обещал past sing masc
 	обещала past sing fem
 	обещало past sing neut
@@ -18015,6 +18245,7 @@
 	обещаны past plur
 
 встречаться verb imperf
+	встречаться
 	встречаюсь pres 1 sing
 	встречаемся pres 1 plur
 	встречаешься pres 2 sing
@@ -18085,6 +18316,7 @@
 	встречавшись past
 
 напоминать verb imperf
+	напоминать
 	напоминаю pres 1 sing
 	напоминаем pres 1 plur
 	напоминаешь pres 2 sing
@@ -18187,6 +18419,7 @@
 	напоминаемы pres plur
 
 упасть verb perf
+	упасть
 	упал past sing masc
 	упала past sing fem
 	упало past sing neut
@@ -18232,6 +18465,7 @@
 	упавши past
 
 перестать verb perf
+	перестать
 	перестал past sing masc
 	перестала past sing fem
 	перестало past sing neut
@@ -18277,6 +18511,7 @@
 	переставши past
 
 обладать verb imperf
+	обладать
 	обладаю pres 1 sing
 	обладаем pres 1 plur
 	обладаешь pres 2 sing
@@ -18348,6 +18583,7 @@
 	обладавши past
 
 суть verb imperf
+	суть
 	есть pres 3 sing
 	суть pres 3 plur
 	есть pres 3 plur
@@ -18397,6 +18633,7 @@
 	бывши past
 
 плакать verb imperf
+	плакать
 	плачу pres 1 sing
 	плачем pres 1 plur
 	плачешь pres 2 sing
@@ -18468,6 +18705,7 @@
 	плакавши past
 
 состояться verb perf
+	состояться
 	состоялся past sing masc
 	состоялась past sing fem
 	состоялось past sing neut
@@ -18512,6 +18750,7 @@
 	состоявшись past
 
 поверить verb perf
+	поверить
 	поверил past sing masc
 	поверила past sing fem
 	поверило past sing neut
@@ -18557,6 +18796,7 @@
 	поверивши past
 
 собрать verb perf
+	собрать
 	собрал past sing masc
 	собрала past sing fem
 	собрало past sing neut
@@ -18633,6 +18873,7 @@
 	собраны past plur
 
 простить verb perf
+	простить
 	простил past sing masc
 	простила past sing fem
 	простило past sing neut
@@ -18709,6 +18950,7 @@
 	прощены past plur
 
 рассматривать verb imperf
+	рассматривать
 	рассматриваю pres 1 sing
 	рассматриваем pres 1 plur
 	рассматриваешь pres 2 sing
@@ -18811,6 +19053,7 @@
 	рассматриваемы pres plur
 
 перейти verb perf
+	перейти
 	перешёл past sing masc
 	перешла past sing fem
 	перешло past sing neut
@@ -18886,6 +19129,7 @@
 	перейдены past plur
 
 мешать verb imperf
+	мешать
 	мешаю pres 1 sing
 	мешаем pres 1 plur
 	мешаешь pres 2 sing
@@ -18957,6 +19201,7 @@
 	мешавши past
 
 давай verb imperf
+	давай
 	даю pres 1 sing
 	даём pres 1 plur
 	даёшь pres 2 sing
@@ -19059,6 +19304,7 @@
 	даваемы pres plur
 
 исчезнуть verb perf
+	исчезнуть
 	исчез past sing masc
 	исчезла past sing fem
 	исчезло past sing neut
@@ -19104,6 +19350,7 @@
 	исчезнувши past
 
 объявить verb perf
+	объявить
 	объявил past sing masc
 	объявила past sing fem
 	объявило past sing neut
@@ -19180,6 +19427,7 @@
 	объявлены past plur
 
 отличаться verb imperf
+	отличаться
 	отличаюсь pres 1 sing
 	отличаемся pres 1 plur
 	отличаешься pres 2 sing
@@ -19250,6 +19498,7 @@
 	отличавшись past
 
 обращаться verb imperf
+	обращаться
 	обращаюсь pres 1 sing
 	обращаемся pres 1 plur
 	обращаешься pres 2 sing
@@ -19320,6 +19569,7 @@
 	обращавшись past
 
 снимать verb imperf
+	снимать
 	снимаю pres 1 sing
 	снимаем pres 1 plur
 	снимаешь pres 2 sing
@@ -19422,6 +19672,7 @@
 	снимаемы pres plur
 
 пригласить verb perf
+	пригласить
 	пригласил past sing masc
 	пригласила past sing fem
 	пригласило past sing neut
@@ -19498,6 +19749,7 @@
 	приглашены past plur
 
 соответствовать verb imperf
+	соответствовать
 	соответствую pres 1 sing
 	соответствуем pres 1 plur
 	соответствуешь pres 2 sing
@@ -19568,6 +19820,7 @@
 	соответствовавши past
 
 закрыть verb perf
+	закрыть
 	закрыл past sing masc
 	закрыла past sing fem
 	закрыло past sing neut
@@ -19644,6 +19897,7 @@
 	закрыты past plur
 
 придумать verb perf
+	придумать
 	придумал past sing masc
 	придумала past sing fem
 	придумало past sing neut
@@ -19720,6 +19974,7 @@
 	придуманы past plur
 
 попробовать verb perf
+	попробовать
 	попробовал past sing masc
 	попробовала past sing fem
 	попробовало past sing neut
@@ -19796,6 +20051,7 @@
 	попробованы past plur
 
 приводить verb imperf
+	приводить
 	привожу pres 1 sing
 	приводим pres 1 plur
 	приводишь pres 2 sing
@@ -19898,6 +20154,7 @@
 	приводимы pres plur
 
 достигнуть verb perf
+	достигнуть
 	достиг past sing masc
 	достигла past sing fem
 	достигло past sing neut
@@ -20002,6 +20259,7 @@
 	достигнуты past plur
 
 утверждать verb imperf
+	утверждать
 	утверждаю pres 1 sing
 	утверждаем pres 1 plur
 	утверждаешь pres 2 sing
@@ -20073,6 +20331,7 @@
 	утверждавши past
 
 означать verb imperf
+	означать
 	означаю pres 1 sing
 	означаем pres 1 plur
 	означаешь pres 2 sing
@@ -20175,6 +20434,7 @@
 	означаемы pres plur
 
 платить verb imperf
+	платить
 	плачу pres 1 sing
 	платим pres 1 plur
 	платишь pres 2 sing
@@ -20277,6 +20537,7 @@
 	плачены past plur
 
 решать verb imperf
+	решать
 	решаю pres 1 sing
 	решаем pres 1 plur
 	решаешь pres 2 sing
@@ -20379,6 +20640,7 @@
 	решаемы pres plur
 
 определять verb imperf
+	определять
 	определяю pres 1 sing
 	определяем pres 1 plur
 	определяешь pres 2 sing
@@ -20481,6 +20743,7 @@
 	определяемы pres plur
 
 наблюдать verb imperf
+	наблюдать
 	наблюдаю pres 1 sing
 	наблюдаем pres 1 plur
 	наблюдаешь pres 2 sing
@@ -20583,6 +20846,7 @@
 	наблюдаемы pres plur
 
 погибнуть verb perf
+	погибнуть
 	погиб past sing masc
 	погибла past sing fem
 	погибло past sing neut
@@ -20628,6 +20892,7 @@
 	погибши past
 
 разговаривать verb imperf
+	разговаривать
 	разговариваю pres 1 sing
 	разговариваем pres 1 plur
 	разговариваешь pres 2 sing
@@ -20699,6 +20964,7 @@
 	разговаривавши past
 
 устроить verb perf
+	устроить
 	устроил past sing masc
 	устроила past sing fem
 	устроило past sing neut
@@ -20775,6 +21041,7 @@
 	устроены past plur
 
 есть verb imperf
+	есть
 	ем pres 1 sing
 	едим pres 1 plur
 	ешь pres 2 sing
@@ -20877,6 +21144,7 @@
 	едены past plur
 
 собраться verb perf
+	собраться
 	собрался past sing masc
 	собралась past sing fem
 	собралось past sing neut
@@ -20921,6 +21189,7 @@
 	собравшись past
 
 достать verb perf
+	достать
 	достал past sing masc
 	достала past sing fem
 	достало past sing neut
@@ -20966,6 +21235,7 @@
 	доставши past
 
 ездить verb imperf
+	ездить
 	езжу pres 1 sing
 	ездим pres 1 plur
 	ездишь pres 2 sing
@@ -21037,6 +21307,7 @@
 	ездивши past
 
 понравиться verb perf
+	понравиться
 	понравился past sing masc
 	понравилась past sing fem
 	понравилось past sing neut
@@ -21082,6 +21353,7 @@
 	понравясь past
 
 выполнять verb imperf
+	выполнять
 	выполняю pres 1 sing
 	выполняем pres 1 plur
 	выполняешь pres 2 sing
@@ -21184,6 +21456,7 @@
 	выполняемы pres plur
 
 заставить verb perf
+	заставить
 	заставил past sing masc
 	заставила past sing fem
 	заставило past sing neut
@@ -21260,6 +21533,7 @@
 	заставлены past plur
 
 объяснять verb imperf
+	объяснять
 	объясняю pres 1 sing
 	объясняем pres 1 plur
 	объясняешь pres 2 sing
@@ -21362,6 +21636,7 @@
 	объясняемы pres plur
 
 выполнить verb perf
+	выполнить
 	выполнил past sing masc
 	выполнила past sing fem
 	выполнило past sing neut
@@ -21438,6 +21713,7 @@
 	выполнены past plur
 
 указать verb perf
+	указать
 	указал past sing masc
 	указала past sing fem
 	указало past sing neut
@@ -21514,6 +21790,7 @@
 	указаны past plur
 
 вздохнуть verb perf
+	вздохнуть
 	вздохнул past sing masc
 	вздохнула past sing fem
 	вздохнуло past sing neut
@@ -21559,6 +21836,7 @@
 	вздохнувши past
 
 находить verb perf
+	находить
 	находил past sing masc
 	находила past sing fem
 	находило past sing neut
@@ -21635,6 +21913,7 @@
 	нахожены past plur
 
 закончить verb perf
+	закончить
 	закончил past sing masc
 	закончила past sing fem
 	закончило past sing neut
@@ -21711,6 +21990,7 @@
 	закончены past plur
 
 признать verb perf
+	признать
 	признал past sing masc
 	признала past sing fem
 	признало past sing neut
@@ -21787,6 +22067,7 @@
 	признаны past plur
 
 дойти verb perf
+	дойти
 	дошёл past sing masc
 	дошла past sing fem
 	дошло past sing neut
@@ -21831,6 +22112,7 @@
 	дойдя past
 
 кивнуть verb perf
+	кивнуть
 	кивнул past sing masc
 	кивнула past sing fem
 	кивнуло past sing neut
@@ -21876,6 +22158,7 @@
 	кивнувши past
 
 обратить verb perf
+	обратить
 	обратил past sing masc
 	обратила past sing fem
 	обратило past sing neut
@@ -21953,6 +22236,7 @@
 	обращены past plur
 
 узнавать verb imperf
+	узнавать
 	узнаю pres 1 sing
 	узнаём pres 1 plur
 	узнаёшь pres 2 sing
@@ -22055,6 +22339,7 @@
 	узнаваемы pres plur
 
 встретиться verb perf
+	встретиться
 	встретился past sing masc
 	встретилась past sing fem
 	встретилось past sing neut
@@ -22100,6 +22385,7 @@
 	встретясь past
 
 предусмотреть verb perf
+	предусмотреть
 	предусмотрел past sing masc
 	предусмотрела past sing fem
 	предусмотрело past sing neut
@@ -22176,6 +22462,7 @@
 	предусмотрены past plur
 
 обеспечивать verb imperf
+	обеспечивать
 	обеспечиваю pres 1 sing
 	обеспечиваем pres 1 plur
 	обеспечиваешь pres 2 sing
@@ -22278,6 +22565,7 @@
 	обеспечиваемы pres plur
 
 двигаться verb imperf
+	двигаться
 	двигаюсь pres 1 sing
 	движусь pres 1 sing
 	двигаемся pres 1 plur
@@ -22381,6 +22669,7 @@
 	двигавшись past
 
 содержать verb imperf
+	содержать
 	содержу pres 1 sing
 	содержим pres 1 plur
 	содержишь pres 2 sing
@@ -22479,6 +22768,7 @@
 	содержимых pres plur
 
 приезжать verb imperf
+	приезжать
 	приезжаю pres 1 sing
 	приезжаем pres 1 plur
 	приезжаешь pres 2 sing
@@ -22550,6 +22840,7 @@
 	приезжавши past
 
 держаться verb imperf
+	держаться
 	держусь pres 1 sing
 	держимся pres 1 plur
 	держишься pres 2 sing
@@ -22620,6 +22911,7 @@
 	державшись past
 
 обеспечить verb perf
+	обеспечить
 	обеспечил past sing masc
 	обеспечила past sing fem
 	обеспечило past sing neut
@@ -22696,6 +22988,7 @@
 	обеспечены past plur
 
 поступить verb perf
+	поступить
 	поступил past sing masc
 	поступила past sing fem
 	поступило past sing neut
@@ -22741,6 +23034,7 @@
 	поступивши past
 
 привыкнуть verb perf
+	привыкнуть
 	привык past sing masc
 	привыкла past sing fem
 	привыкло past sing neut
@@ -22786,6 +23080,7 @@
 	привыкши past
 
 открывать verb imperf
+	открывать
 	открываю pres 1 sing
 	открываем pres 1 plur
 	открываешь pres 2 sing
@@ -22888,6 +23183,7 @@
 	открываемы pres plur
 
 вырасти verb perf
+	вырасти
 	вырос past sing masc
 	выросла past sing fem
 	выросло past sing neut
@@ -22932,6 +23228,7 @@
 	выросши past
 
 зайти verb perf
+	зайти
 	зашёл past sing masc
 	зашла past sing fem
 	зашло past sing neut
@@ -22977,6 +23274,7 @@
 	зашедши past
 
 посвятить verb perf
+	посвятить
 	посвятил past sing masc
 	посвятила past sing fem
 	посвятило past sing neut
@@ -23054,6 +23352,7 @@
 	посвящены past plur
 
 стремиться verb imperf
+	стремиться
 	стремлюсь pres 1 sing
 	стремимся pres 1 plur
 	стремишься pres 2 sing
@@ -23124,6 +23423,7 @@
 	стремившись past
 
 измениться verb perf
+	измениться
 	изменился past sing masc
 	изменилась past sing fem
 	изменилось past sing neut

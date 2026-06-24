@@ -1,3 +1,312 @@
+я noun com
+	я nom sing
+	меня gen sing
+	мне dat sing
+	меня acc sing
+	мной ins sing
+	мною ins sing
+	мне pre sing
+
+он noun masc
+	он nom sing
+	его gen sing
+	него gen sing
+	ему dat sing
+	нему dat sing
+	его acc sing
+	него acc sing
+	им ins sing
+	ним ins sing
+	нём pre sing
+
+она noun fem
+	она nom sing
+	её gen sing
+	неё gen sing
+	ней gen sing
+	ей dat sing
+	ней dat sing
+	её acc sing
+	неё acc sing
+	ей ins sing
+	ею ins sing
+	ней ins sing
+	нею ins sing
+	ней pre sing
+	ея gen sing
+
+они noun com
+	они nom plur
+	их gen plur
+	них gen plur
+	им dat plur
+	ним dat plur
+	их acc plur
+	них acc plur
+	ими ins plur
+	ними ins plur
+	них pre plur
+
+мы noun com
+	мы nom plur
+	нас gen plur
+	нам dat plur
+	нас acc plur
+	нами ins plur
+	нас pre plur
+
+ты noun com
+	ты nom sing
+	тебя gen sing
+	тебе dat sing
+	тебя acc sing
+	тобой ins sing
+	тобою ins sing
+	тебе pre sing
+	те dat sing
+	те pre sing
+
+вы noun com
+	вы nom plur
+	вас gen plur
+	вам dat plur
+	вас acc plur
+	вами ins plur
+	вас pre plur
+
+его noun masc
+	он nom sing
+	его gen sing
+	него gen sing
+	ему dat sing
+	нему dat sing
+	его acc sing
+	него acc sing
+	им ins sing
+	ним ins sing
+	нём pre sing
+
+себя noun com
+	себя gen sing
+	себе dat sing
+	себя acc sing
+	собой ins sing
+	собою ins sing
+	себе pre sing
+
+кто noun masc
+	кто nom sing
+	кого gen sing
+	кому dat sing
+	кого acc sing
+	кем ins sing
+	ком pre sing
+
+ее noun fem
+	она nom sing
+	её gen sing
+	неё gen sing
+	ней gen sing
+	ей dat sing
+	ней dat sing
+	её acc sing
+	неё acc sing
+	ей ins sing
+	ею ins sing
+	ней ins sing
+	нею ins sing
+	ней pre sing
+	ея gen sing
+
+их noun com
+	они nom plur
+	их gen plur
+	них gen plur
+	им dat plur
+	ним dat plur
+	их acc plur
+	них acc plur
+	ими ins plur
+	ними ins plur
+	них pre plur
+
+ничто noun neut
+	ничто nom sing
+	ничего gen sing
+	ничему dat sing
+	ничем ins sing
+	ничто acc sing
+	ничё gen sing
+
+никто noun com
+	никто nom sing
+	никого gen sing
+	никому dat sing
+	никого acc sing
+	ником pre sing
+	никем ins sing
+
+оно noun neut
+	оно nom sing
+	его gen sing
+	него gen sing
+	ему dat sing
+	нему dat sing
+	его acc sing
+	него acc sing
+	им ins sing
+	ним ins sing
+	нём pre sing
+
+кто-то noun masc
+	кто-то nom sing
+	кого-то gen sing
+	кому-то dat sing
+	кого-то acc sing
+	кем-то ins sing
+	ком-то pre sing
+
+что-нибудь noun neut
+	что-нибудь nom sing
+	чего-нибудь gen sing
+	чему-нибудь dat sing
+	что-нибудь acc sing
+	чем-нибудь ins sing
+	чём-нибудь pre sing
+
+многое noun neut
+	многое nom sing
+	многого gen sing
+	многому dat sing
+	многое acc sing
+	многим ins sing
+	многом pre sing
+
+прочее noun neut
+	прочее nom sing
+	прочего gen sing
+	прочему dat sing
+	прочее acc sing
+	прочим ins sing
+	прочем pre sing
+
+нечто noun neut
+	нечто nom sing
+	нечто acc sing
+
+многие noun com
+	многие nom plur
+	многих gen plur
+	многим dat plur
+	многих acc plur
+	многими ins plur
+	многих pre plur
+
+кто-нибудь noun masc
+	кто-нибудь nom sing
+	кого-нибудь gen sing
+	кому-нибудь dat sing
+	кого-нибудь acc sing
+	кем-нибудь ins sing
+	ком-нибудь pre sing
+
+нечего noun com
+	нечего gen sing
+	нечему dat sing
+	нечем ins sing
+
+чего noun neut
+	что nom sing
+	чего gen sing
+	чему dat sing
+	что acc sing
+	чем ins sing
+	чём pre sing
+	чаво gen sing
+	чё nom sing
+	чё acc sing
+	чо nom sing
+	чо acc sing
+	шо nom sing
+	шо acc sing
+
+кое-что noun neut
+	кое-что nom sing
+	кое-чего gen sing
+	кое-чему dat sing
+	кое-что acc sing
+	кое-чем ins sing
+
+себе noun com
+	себя gen sing
+	себе dat sing
+	себя acc sing
+	собой ins sing
+	собою ins sing
+	себе pre sing
+
+что-либо noun neut
+	что-либо nom sing
+	чего-либо gen sing
+	чему-либо dat sing
+	что-либо acc sing
+	чем-либо ins sing
+	чём-либо pre sing
+
+се noun neut
+	сие nom sing
+	сего gen sing
+	сему dat sing
+	сие acc sing
+	сим ins sing
+	сем pre sing
+	сё nom sing
+	сё acc sing
+
+кое-кто noun masc
+	кое-кто nom sing
+	кое-кого gen sing
+	кое-кому dat sing
+	кое-кого acc sing
+	кое-кем ins sing
+	кое-ком pre sing
+
+кто-либо noun masc
+	кто-либо nom sing
+	кого-либо gen sing
+	кому-либо dat sing
+	кого-либо acc sing
+	кем-либо ins sing
+	ком-либо pre sing
+
+ком noun masc
+	кто nom sing
+	кого gen sing
+	кому dat sing
+	кого acc sing
+	кем ins sing
+	ком pre sing
+
+некто noun masc
+	некто nom sing
+
+немногие noun com
+	немногие nom plur
+	немногих gen plur
+	немногим dat plur
+	немногие acc plur
+	немногих acc plur
+	немногими ins plur
+	немногих pre plur
+
+чего-то noun neut
+	что-то nom sing
+	чего-то gen sing
+	чему-то dat sing
+	что-то acc sing
+	чем-то ins sing
+	чём-то pre sing
+
 год noun masc
 	год nom sing
 	года gen sing
