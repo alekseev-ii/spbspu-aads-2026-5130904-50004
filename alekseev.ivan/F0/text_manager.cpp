@@ -73,10 +73,11 @@ void alekseev::TextManager::load(wstr_cr file_name, wstr_cr text_name)
   try {
     std::string line;
     while (std::getline(f, line)) {
-      if (line.empty()) {
-        text += L"\n";
-      }
-      text += converter.from_bytes(line) + L"\n";
+      text += rtrim(converter.from_bytes(line), [](wchar_t ch)
+      {
+        return ch == L'\r';
+      });
+      text += L"\n";
     }
   } catch (...) {
     f.close();

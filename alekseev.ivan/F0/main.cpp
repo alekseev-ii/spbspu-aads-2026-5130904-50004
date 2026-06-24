@@ -175,7 +175,7 @@ alekseev::Exec::Exec(std::wistream & is, std::wostream & os):
     help(args);
   });
 
-  Vector< std::wstring > opts{L"Load ~1200 lemmas (~ ms)", L"Load ~1700 lemmas (~ ms)"};
+  Vector< std::wstring > opts{L"Load ~1200 lemmas (~ 23 s)", L"Load ~1700 lemmas (~ 1 m 17 s)"};
   size_t opt = choose(opts, is, os, 0, L"Do you want to load default dictionary?",
       L"Do not load default dictionary");
   if (opt == 2) {
@@ -195,11 +195,11 @@ alekseev::Exec::Exec(std::wistream & is, std::wostream & os):
           L"./default_dictionaries/default_dictionary_300_nouns.txt");
     } else if (opt == 1) {
       dicts_.load(L"default_dictionary_500_adjectives",
-          L"./default_dictionaries/default_dictionary_500_adjectives.txt");
+          L"./default_dictionaries/default_dictionary_500_adjectives.txt", 2048);
       dicts_.load(L"default_dictionary_500_verbs",
-          L"./default_dictionaries/default_dictionary_500_verbs.txt");
+          L"./default_dictionaries/default_dictionary_500_verbs.txt", 2048);
       dicts_.load(L"default_dictionary_500_nouns",
-          L"./default_dictionaries/default_dictionary_500_nouns.txt");
+          L"./default_dictionaries/default_dictionary_500_nouns.txt", 2048);
     }
     std::wcout << L"Successfully loaded " << dicts_.size() << L" word forms\n";
   } catch (std::exception & e) {
@@ -359,12 +359,20 @@ void alekseev::Exec::new_(Vector< std::wstring > & args)
 
 void alekseev::Exec::load_dict(Vector< std::wstring > & args)
 {
-  if (args.getSize() != 2) {
+  if (args.getSize() != 2 && args.getSize() != 3) {
     throw std::invalid_argument(
-        "Bad arguments number! Using: load_dict <dict_name> <path_to_file>");
+        "Bad arguments number! Using: load_dict <dict_name> <path_to_file> [lemmas_number]");
+  }
+  size_t n = 1024;
+  if (args.getSize() == 3) {
+    wchar_t * end_ptr = nullptr;
+    n = wcstoull(args[3].c_str(), std::addressof(end_ptr), 10);
+    if (*end_ptr != L'\0') {
+      throw std::invalid_argument("Bad lemmas_number");
+    }
   }
   os_ << "Loading...\n";
-  dicts_.load(args[0], args[1]);
+  dicts_.load(args[0], args[1], n);
   os_ << L"Successfully loaded dictionary \"" << args[0] << "\" with " << dicts_.current().size();
   os_ << " word forms from \"" << args[1] << "\"\n";
 }
@@ -526,8 +534,10 @@ void alekseev::Exec::help(Vector< std::wstring > &)
       "        Shows names of loaded texts\n"
 
       "\nFunctions for dictionaries:\n"
-      "    1. load_dict <dict_name> <path_to_file>\n"
-      "        Reads dictionary from a file, assigns it a name in the program\n"
+      "    1. load_dict <dict_name> <path_to_file> [lemmas_number]\n"
+      "        Reads dictionary from a file, assigns it a name in the program. "
+      "you can set lemmas_number equal to twice the number of lemmas in the loaded dictionary "
+      "to avoid rehashing during load (default 1024)\n"
       "    2. new <dict_name>\n"
       "        Creates an empty dictionary with the appropriate name\n"
       "    3. save_dict <dict_name> <path_to_file>\n"

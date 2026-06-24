@@ -93,6 +93,7 @@ namespace alekseev {
     Dictionary & operator=(Dictionary &&) noexcept = default;
 
     Dictionary();
+    Dictionary(size_t lemmas_cap, size_t forms_cap, size_t reqs_cap);
     explicit Dictionary(wstr_cr file_name);
 
     void read(wstr_cr file_name);
@@ -165,7 +166,7 @@ namespace alekseev {
     DictionaryManager();
 
     void create(wstr_cr name);
-    void load(wstr_cr name, wstr_cr file_name);
+    void load(wstr_cr name, wstr_cr file_name, size_t lemmas = 1024);
     void save(wstr_cr name, wstr_cr file_name);
     void unload(wstr_cr name);
     void set_current(wstr_cr name_of_loaded_dict);

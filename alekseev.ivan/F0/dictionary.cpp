@@ -271,9 +271,15 @@ alekseev::pos alekseev::guess_pos(std::wstring word)
 }
 
 alekseev::Dictionary::Dictionary():
-  lemmas_(djb2_hash, poly_hash, equal, 1024),
-  forms_(djb2_hash, poly_hash, equal, 32768),
-  requires_(djb2_hash, poly_hash, equal, 128)
+  lemmas_(djb2_hash, poly_hash, equal, 2048),
+  forms_(djb2_hash, poly_hash, equal, 65536),
+  requires_(djb2_hash, poly_hash, equal, 256)
+{ }
+
+alekseev::Dictionary::Dictionary(size_t lemmas_cap, size_t forms_cap, size_t reqs_cap):
+  lemmas_(djb2_hash, poly_hash, equal, lemmas_cap),
+  forms_(djb2_hash, poly_hash, equal, forms_cap),
+  requires_(djb2_hash, poly_hash, equal, reqs_cap)
 { }
 
 alekseev::Dictionary::Dictionary(wstr_cr file_name):
@@ -809,12 +815,13 @@ void alekseev::DictionaryManager::create(wstr_cr name)
   current_ = name;
 }
 
-void alekseev::DictionaryManager::load(wstr_cr name, wstr_cr file_name)
+void alekseev::DictionaryManager::load(wstr_cr name, wstr_cr file_name, size_t lemmas)
 {
   if (dicts_.contains(name)) {
     throw std::invalid_argument("Dictionary already exists");
   }
-  Dictionary d(file_name);
+  Dictionary d(lemmas, lemmas * 32, (lemmas + 4) / 4);
+  d.read(file_name);
   dicts_.insert(name, std::move(d));
   current_ = name;
 }
