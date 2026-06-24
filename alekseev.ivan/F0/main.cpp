@@ -33,7 +33,7 @@ namespace alekseev {
       void parse(Vector< std::wstring > & args);
       void correct(Vector< std::wstring > & args);
       void process(Vector< std::wstring > & args);
-      void texts(Vector< std::wstring > &);
+      void texts(Vector< std::wstring > &) const;
 
       void new_(Vector< std::wstring > & args);
       void load_dict(Vector< std::wstring > & args);
@@ -44,14 +44,14 @@ namespace alekseev {
       void update_form(Vector< std::wstring > & args);
       void delete_lemma(Vector< std::wstring > & args);
       void delete_form(Vector< std::wstring > & args);
-      void dicts(Vector< std::wstring > &);
+      void dicts(Vector< std::wstring > &) const;
 
       void max_variants_txt(Vector< std::wstring > & args);
       void distance_of_find_txt(Vector< std::wstring > & args);
       void max_variants_dict(Vector< std::wstring > & args);
       void distance_of_find_dict(Vector< std::wstring > & args);
 
-      void help(Vector< std::wstring > &);
+      void help(Vector< std::wstring > &) const;
   };
 }
 
@@ -267,7 +267,7 @@ void alekseev::Exec::unload_txt(Vector< std::wstring > & args)
         os_ << "Enter file name for saving >";
         std::wstring file_name;
         std::getline(is_, file_name);
-        os_ << L"Saving " << args[0] << L" to " << file_name << L"\n";
+        os_ << L"Saving \"" << args[0] << L"\" to " << file_name << L"\n";
         texts_.save(file_name, args[0]);
         os_ << L"\"" << args[0] << L"\" successfully saved\n";
       }
@@ -332,7 +332,7 @@ void alekseev::Exec::process(Vector< std::wstring > & args)
   }
 }
 
-void alekseev::Exec::texts(Vector< std::wstring > &)
+void alekseev::Exec::texts(Vector< std::wstring > &) const
 {
   os_ << L"Loaded texts:\n";
   std::wstring last_corrected = texts_.last_corrected();
@@ -437,7 +437,7 @@ void alekseev::Exec::delete_form(Vector< std::wstring > & args)
   dicts_.delete_form(args[0], is_, os_);
 }
 
-void alekseev::Exec::dicts(Vector< std::wstring > &)
+void alekseev::Exec::dicts(Vector< std::wstring > &) const
 {
   std::wcout << L"Loaded dictionaries:\n";
   for (auto name = dicts_.dicts_begin(); name != dicts_.dicts_end(); ++name) {
@@ -504,7 +504,7 @@ void alekseev::Exec::distance_of_find_dict(Vector< std::wstring > & args)
   dicts_.set_default_distance(n);
 }
 
-void alekseev::Exec::help(Vector< std::wstring > &)
+void alekseev::Exec::help(Vector< std::wstring > &) const
 {
   os_ << L"A program for finding typos in the text, correcting them, "
       "and managing dictionaries for these tasks\n"
