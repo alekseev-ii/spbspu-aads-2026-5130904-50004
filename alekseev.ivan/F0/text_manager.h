@@ -13,7 +13,7 @@ namespace alekseev {
   {
     Vector< std::wstring > original;
     Vector< std::wstring > corrected;
-    Vector< std::wstring > punctuations;
+    Vector< std::pair< std::wstring, std::wstring > > punctuations;
     Queue< std::pair< size_t, Vector< std::wstring > > > errors;
     bool saved = false;
   };
@@ -23,7 +23,7 @@ namespace alekseev {
   std::wstring to_wstring(const text_t & orig_text, size_t start = 0, size_t end = 0,
       bool corrected = true);
   std::wstring to_wstring(const Vector< std::wstring > & text,
-      const Vector< std::wstring > & punctuation, size_t start = 0, size_t end = 0);
+      const Vector< std::pair< std::wstring, std::wstring > > & punctuation, size_t start = 0, size_t end = 0);
 
   struct TextManager
   {

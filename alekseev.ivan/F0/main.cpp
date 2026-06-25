@@ -61,12 +61,14 @@ int main()
   alekseev::Exec exec(std::wcin, std::wcout);
 
   std::wstring line;
+  std::wcout << L">";
   while (alekseev::wgetline(std::wcin, line)) {
     try {
       if (line == L"exit") {
         return 0;
       }
       exec(line);
+      std::wcout << L">";
     } catch (std::invalid_argument & e) {
       std::wcout << e.what() << L"\n";
     } catch (std::out_of_range & e) {

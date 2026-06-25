@@ -8,16 +8,30 @@ alekseev::text_t alekseev::from_wstring(wstr_cr orig_text)
 {
   text_t res{{}, {}, {}, {}, false};
   res.original = split(replace(orig_text, L"\n", L"\n "));
-  res.punctuations = Vector< std::wstring >(res.original.getSize(), {});
+  res.punctuations = Vector< std::pair< std::wstring, std::wstring > >(res.original.getSize(),
+      {{}, {}});
   for (size_t i = 0; i < res.original.getSize(); ++i) {
+    size_t orig = res.original[i].size();
     std::wstring word = rtrim(res.original[i], [](wchar_t ch)
     {
       return is_punctuation(ch) || is_whitespace(ch);
     });
-    size_t a = res.original[i].size(), b = word.size();
-    if (a != b) {
-      res.punctuations[i] = res.original[i].substr(b, a - b);
+    size_t right = word.size();
+    word = ltrim(word, [](wchar_t ch)
+    {
+      return ch == L'\"' || ch == L'\'' || ch == L'«' || ch == L'(' || ch == L'…' || ch == '.';
+    });
+    size_t left = word.size();
+    std::pair< std::wstring, std::wstring > punctuation{{}, {}};
+    if (orig != right) {
+      punctuation.second = res.original[i].substr(right, orig - right);
+    }
+    if (left != right) {
+      punctuation.first = res.original[i].substr(0, right - left);
+    }
+    if (word.size() != orig) {
       res.original[i] = word;
+      res.punctuations[i] = punctuation;
     }
   }
   return res;
@@ -31,7 +45,7 @@ std::wstring alekseev::to_wstring(const text_t & orig_text, size_t start, size_t
 }
 
 std::wstring alekseev::to_wstring(const Vector< std::wstring > & text,
-    const Vector< std::wstring > & punctuation, size_t start, size_t end)
+    const Vector< std::pair< std::wstring, std::wstring > > & punctuation, size_t start, size_t end)
 {
   if (end == 0) {
     end = text.getSize();
@@ -44,8 +58,8 @@ std::wstring alekseev::to_wstring(const Vector< std::wstring > & text,
   }
   std::wstring res;
   for (size_t i = start; i < end; ++i) {
-    res += text[i] + punctuation[i];
-    if (!endswith(punctuation[i], L"\n")) {
+    res += punctuation[i].first + text[i] + punctuation[i].second;
+    if (!endswith(punctuation[i].second, L"\n")) {
       res += L" ";
     }
   }
@@ -153,7 +167,8 @@ alekseev::wstr_cr alekseev::TextManager::correct(std::wistream & is, std::wostre
     if (start != i) {
       os << to_wstring(corrected, for_correct.punctuations, start, i);
     }
-    os << L" [!] " << for_correct.original[i] << for_correct.punctuations[i] << L" [!] ";
+    os << L" [!] " << for_correct.punctuations[i].first;
+    os << for_correct.original[i] << for_correct.punctuations[i].second << L" [!] ";
     if (i < s - 1) {
       os << to_wstring(for_correct, i + 1, end, false);
     }
