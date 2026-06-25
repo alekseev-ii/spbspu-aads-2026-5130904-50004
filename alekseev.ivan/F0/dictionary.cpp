@@ -68,14 +68,16 @@ alekseev::Vector< std::wstring > alekseev::to_tags(const WordForm & wf)
 {
   Vector< std::wstring > res;
   res.resize(6);
-  if (wf.gender_ == feminine) {
-    res.pushBack(L"fem");
-  } else if (wf.gender_ == masculine) {
-    res.pushBack(L"masc");
-  } else if (wf.gender_ == neuter) {
-    res.pushBack(L"neut");
-  } else if (wf.gender_ == common) {
-    res.pushBack(L"common");
+  if (wf.pos_ != noun) {
+    if (wf.gender_ == feminine) {
+      res.pushBack(L"fem");
+    } else if (wf.gender_ == masculine) {
+      res.pushBack(L"masc");
+    } else if (wf.gender_ == neuter) {
+      res.pushBack(L"neut");
+    } else if (wf.gender_ == common) {
+      res.pushBack(L"common");
+    }
   }
   if (wf.number_ == singular) {
     res.pushBack(L"sing");
@@ -156,16 +158,14 @@ alekseev::WordForm alekseev::from_tags(const Vector< std::wstring > & tags, pos 
     } else if (tags[i] == L"plur") {
       wf.number_ = plural;
     }
-    if (p != noun) {
-      if (tags[i] == L"masc") {
-        wf.gender_ = masculine;
-      } else if (tags[i] == L"fem") {
-        wf.gender_ = feminine;
-      } else if (tags[i] == L"neut") {
-        wf.gender_ = neuter;
-      } else if (tags[i] == L"common") {
-        wf.gender_ = common;
-      }
+    if (tags[i] == L"masc") {
+      wf.gender_ = masculine;
+    } else if (tags[i] == L"fem") {
+      wf.gender_ = feminine;
+    } else if (tags[i] == L"neut") {
+      wf.gender_ = neuter;
+    } else if (tags[i] == L"common") {
+      wf.gender_ = common;
     }
     if (pre == wf) {
       throw std::invalid_argument("Bad tag");
@@ -399,6 +399,9 @@ std::ifstream & alekseev::Dictionary::read(std::ifstream & is)
         throw std::invalid_argument("Bad format (Word form before lemma)");
       }
       WordForm wf(words, lemma.pos_);
+      if (lemma.pos_ == noun) {
+        wf.gender_ = lemma.noun_gender_;
+      }
       lemma.forms_.pushBack(wf);
       if (lemma.pos_ != require) {
         if (!forms_.contains(wf.word_)) {
@@ -802,7 +805,7 @@ alekseev::Vector< std::wstring > alekseev::Dictionary::damerau_find_require(wstr
 
 alekseev::DictionaryManager::DictionaryManager():
   dicts_(djb2_hash, poly_hash, equal, 32),
-  max_variants_(7),
+  max_variants_(8),
   distance_(1)
 { }
 
@@ -977,14 +980,14 @@ void alekseev::DictionaryManager::update_word(std::wstring word, std::wistream &
   throw std::invalid_argument("Bad input");
 }
 
-alekseev::WordForm alekseev::DictionaryManager::delete_form(wstr_cr wordform, std::wistream & is,
-    std::wostream & os)
+bool alekseev::DictionaryManager::delete_form(wstr_cr wordform, std::wistream & is,
+    std::wostream & os, WordForm & deleted)
 {
   Dictionary & dict = current();
   std::pair< std::wstring, size_t > lp = choose_wordform(wordform, is, os);
 
-  if (!lp.first.empty()) {
-    return {};
+  if (lp.first.empty()) {
+    return false;
   }
   WordForm word = dict.forms_by_lemma(lp.first)[lp.second];
   if (word.pos_ == require) {
@@ -992,11 +995,12 @@ alekseev::WordForm alekseev::DictionaryManager::delete_form(wstr_cr wordform, st
   } else {
     dict.remove_form(word);
   }
-  return word;
+  deleted = word;
+  return true;
 }
 
-void alekseev::DictionaryManager::delete_lemma(wstr_cr lemma, std::wistream & is,
-    std::wostream & os)
+bool alekseev::DictionaryManager::delete_lemma(wstr_cr lemma, std::wistream & is,
+    std::wostream & os, std::wstring & deleted)
 {
   Dictionary & dict = current();
   if (dict.contains_lemma(lemma)) {
@@ -1011,7 +1015,7 @@ void alekseev::DictionaryManager::delete_lemma(wstr_cr lemma, std::wistream & is
       opts += dict.damerau_find_require(lemma, max_variants_ - opts.getSize(), distance_);
       size_t ind = choose(opts, is, os, max_variants_, L"What lemma you want to delete?");
       if (ind == opts.getSize()) {
-        return;
+        return false;
       }
       wstr_cr l = opts[ind];
       if (dict.contains_lemma(l)) {
@@ -1019,6 +1023,7 @@ void alekseev::DictionaryManager::delete_lemma(wstr_cr lemma, std::wistream & is
       } else if (dict.contains_require(l)) {
         dict.remove_require(l);
       }
+      deleted = l;
     }
   }
 }
@@ -1237,6 +1242,11 @@ alekseev::CuckooHash< std::wstring, alekseev::Dictionary, size_t (*)(alekseev::w
 std::wstring alekseev::DictionaryManager::current_dict_name() const
 {
   return current_;
+}
+
+void alekseev::DictionaryManager::reset_current()
+{
+  current_ = L"";
 }
 
 void alekseev::DictionaryManager::add_verb(wstr_cr word, std::wistream & is, std::wostream & os)
@@ -1472,7 +1482,7 @@ std::pair< std::wstring, size_t > alekseev::DictionaryManager::choose_wordform(w
       }
       if (wfs.isEmpty()) {
         os << L"No word found\n";
-        return std::make_pair< std::wstring, size_t >({}, 0);
+        return {{}, 0};
       }
     }
   }

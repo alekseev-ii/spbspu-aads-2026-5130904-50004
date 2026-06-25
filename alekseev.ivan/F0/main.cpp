@@ -71,8 +71,10 @@ int main()
       std::wcout << L">";
     } catch (std::invalid_argument & e) {
       std::wcout << e.what() << L"\n";
+      std::wcout << L">";
     } catch (std::out_of_range & e) {
       std::wcout << e.what() << L"\n";
+      std::wcout << L">";
     } catch (std::exception & e) {
       std::wcout << e.what() << L"\n";
       return 1;
@@ -184,6 +186,7 @@ alekseev::Exec::Exec(std::wistream & is, std::wostream & os):
     return;
   }
   try {
+    os_ << L"Loading...\n";
     dicts_.load(L"default_dictionary_requires",
         L"./default_dictionaries/default_dictionary_requires.txt");
     dicts_.load(L"default_dictionary_functional",
@@ -203,6 +206,7 @@ alekseev::Exec::Exec(std::wistream & is, std::wostream & os):
       dicts_.load(L"default_dictionary_500_nouns",
           L"./default_dictionaries/default_dictionary_500_nouns.txt", 2048);
     }
+    dicts_.reset_current();
     std::wcout << L"Successfully loaded " << dicts_.size() << L" word forms\n";
   } catch (std::exception & e) {
     std::wcout << L"Unable to load default dictionary: " << e.what() << "\n";
@@ -284,11 +288,13 @@ void alekseev::Exec::parse(Vector< std::wstring > & args)
 {
   if (args.isEmpty()) {
     os_ << L"Parsing...\n";
-    os_ << L"\"" << texts_.parse() << L"\" successfully parsed\n";
+    std::wstring name = texts_.parse();
+    os_ << texts_.number_of_typos(name) << L" typos detected\n";
+    os_ << L"\"" << name << L"\" successfully parsed\n";
   } else if (args.getSize() == 1) {
     os_ << L"Parsing...\n";
     std::wstring name = texts_.parse(args[0]);
-    os_ << texts_.number_of_typos(name) << L"typos detected\n";
+    os_ << texts_.number_of_typos(name) << L" typos detected\n";
     os_ << L"\"" << name << L"\" successfully parsed\n";
   } else {
     throw std::invalid_argument("Bad arguments number! Using: parse [text_name]");
@@ -322,7 +328,7 @@ void alekseev::Exec::process(Vector< std::wstring > & args)
       "Parsing...\n";
   try {
     texts_.parse(temp_name);
-    os_ << L"Text parsed\n";
+    os_ << L"Text parsed. " << texts_.number_of_typos(temp_name) << L" typos found\n";
     texts_.correct(is_, os_, temp_name);
     os_ << L"Corrected\n";
     os_ << L"Saving...\n";
@@ -370,7 +376,7 @@ void alekseev::Exec::load_dict(Vector< std::wstring > & args)
   size_t n = 1024;
   if (args.getSize() == 3) {
     wchar_t * end_ptr = nullptr;
-    n = wcstoull(args[3].c_str(), std::addressof(end_ptr), 10);
+    n = wcstoull(args[2].c_str(), std::addressof(end_ptr), 10);
     if (*end_ptr != L'\0') {
       throw std::invalid_argument("Bad lemmas_number");
     }
@@ -383,13 +389,18 @@ void alekseev::Exec::load_dict(Vector< std::wstring > & args)
 
 void alekseev::Exec::save_dict(Vector< std::wstring > & args)
 {
-  if (args.getSize() != 2) {
+  if (args.getSize() == 1 && dicts_.current_dict_name() != L"") {
+    os_ << "Saving...\n";
+    dicts_.save(dicts_.current_dict_name(), args[0]);
+    os_ << L"Saved dictionary \"" << dicts_.current_dict_name() << "\" to \"" << args[0] << "\"\n";
+  } else if (args.getSize() == 2) {
+    os_ << "Saving...\n";
+    dicts_.save(args[0], args[1]);
+    os_ << L"Saved dictionary \"" << args[0] << "\" to \"" << args[1] << "\"\n";
+  } else {
     throw std::invalid_argument(
-        "Bad arguments number! Using: save_dict <dict_name> <path_to_file>");
+        "Bad arguments number! Using: save_dict [dict_name] <path_to_file>");
   }
-  os_ << "Saving...\n";
-  dicts_.save(args[0], args[1]);
-  os_ << L"Saved dictionary \"" << args[0] << "\" to \"" << args[1] << "\"\n";
 }
 
 void alekseev::Exec::unload_dict(Vector< std::wstring > & args)
@@ -434,9 +445,13 @@ void alekseev::Exec::delete_lemma(Vector< std::wstring > & args)
     throw std::invalid_argument("Bad arguments number! Using: delete_lemma <lemma>");
   }
   size_t old_size = dicts_.current().size();
-  dicts_.delete_lemma(args[0], is_, os_);
-  os_ << L"Successfully deleted \"" << args[0];
-  os_ << L"\" with " << dicts_.current().size() - old_size << L" word forms\n";
+  std::wstring deleted;
+  if (dicts_.delete_lemma(args[0], is_, os_, deleted)) {
+    os_ << L"Successfully deleted \"" << args[0];
+    os_ << L"\" with " << dicts_.current().size() - old_size << L" word forms\n";
+  } else {
+    os_ << L"Failed to delete \"" << args[0] << L"\"\n";
+  }
 }
 
 void alekseev::Exec::delete_form(Vector< std::wstring > & args)
@@ -444,8 +459,12 @@ void alekseev::Exec::delete_form(Vector< std::wstring > & args)
   if (args.getSize() != 1) {
     throw std::invalid_argument("Bad arguments number! Using: delete_form <word_form>");
   }
-  WordForm wf = dicts_.delete_form(args[0], is_, os_);
-  os_ << L"Successfully deleted " << wf << L"\n";
+  WordForm wf;
+  if (dicts_.delete_form(args[0], is_, os_, wf)) {
+    os_ << L"Successfully deleted " << wf << L"\n";
+  } else {
+    os_ << L"Failed to delete \"" << args[0] << L"\"\n";
+  }
 }
 
 void alekseev::Exec::dicts(Vector< std::wstring > &) const
@@ -488,9 +507,12 @@ void alekseev::Exec::distance_of_find_txt(Vector< std::wstring > & args)
   if (*end_ptr != L'\0') {
     throw std::invalid_argument("Bad input");
   }
+  if (n == 0) {
+    throw std::invalid_argument("Distance must not be zero");
+  }
   size_t old_d = texts_.default_distance();
   texts_.default_distance(n);
-  std::wcout << L"Max variants for texts changed from " << old_d;
+  std::wcout << L"Distance of find for texts changed from " << old_d;
   os_ << L" to " << texts_.default_distance() << L"\n";
 }
 
@@ -506,7 +528,7 @@ void alekseev::Exec::max_variants_dict(Vector< std::wstring > & args)
   }
   size_t old_mv = dicts_.max_variants();
   dicts_.max_variants(n);
-  std::wcout << L"Max variants for texts changed from " << old_mv;
+  std::wcout << L"Max variants for dictionaries changed from " << old_mv;
   os_ << L" to " << dicts_.max_variants() << L"\n";
 }
 
@@ -520,9 +542,12 @@ void alekseev::Exec::distance_of_find_dict(Vector< std::wstring > & args)
   if (*end_ptr != L'\0') {
     throw std::invalid_argument("Bad input");
   }
+  if (n == 0) {
+    throw std::invalid_argument("Distance must not be zero");
+  }
   size_t old_d = dicts_.default_distance();
   dicts_.default_distance(n);
-  std::wcout << L"Max variants for texts changed from " << old_d;
+  std::wcout << L"Distance of find for dictionaries changed from " << old_d;
   os_ << L" to " << dicts_.default_distance() << L"\n";
 }
 
@@ -562,8 +587,8 @@ void alekseev::Exec::help(Vector< std::wstring > &) const
       "to avoid rehashing during load (default 1024)\n"
       "    2. new <dict_name>\n"
       "        Creates an empty dictionary with the appropriate name\n"
-      "    3. save_dict <dict_name> <path_to_file>\n"
-      "        Saves dictionary to file\n"
+      "    3. save_dict [dict_name] <path_to_file>\n"
+      "        Saves dictionary to file (default saves current dictionary)\n"
       "    4. unload_dict <dict_name>\n"
       "        Removes dictionary from the program\n"
       "    5. current <name_of_loaded_dict>\n"
@@ -584,7 +609,7 @@ void alekseev::Exec::help(Vector< std::wstring > &) const
       "        Sets the maximum number of options when working with texts (default 7)\n"
       "        Set 0 if you want to see all found variants\n"
       "    2. max_variants_dict <number>\n"
-      "        Sets the maximum number of options when working with dictionaries (default 7)\n"
+      "        Sets the maximum number of options when working with dictionaries (default 8)\n"
       "        Set 0 if you want to see all found variants\n"
       "    3. distance_of_find_txt <number>\n"
       "        Sets the maximum Damerau-Levenshtein distance for fuzzy search "

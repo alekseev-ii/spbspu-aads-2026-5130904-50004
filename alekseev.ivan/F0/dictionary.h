@@ -172,8 +172,9 @@ namespace alekseev {
     void set_current(wstr_cr name_of_loaded_dict);
     void add_word(wstr_cr word, std::wistream & is, std::wostream & os);
     void update_word(std::wstring word, std::wistream & is, std::wostream & os);
-    WordForm delete_form(wstr_cr wordform, std::wistream & is, std::wostream & os);
-    void delete_lemma(wstr_cr lemma, std::wistream & is, std::wostream & os);
+    bool delete_form(wstr_cr wordform, std::wistream & is, std::wostream & os, WordForm & deleted);
+    bool delete_lemma(wstr_cr lemma, std::wistream & is, std::wostream & os,
+        std::wstring & deleted);
 
     bool contains_form(wstr_cr wordform) const;
     bool is_require(wstr_cr word) const;
@@ -205,6 +206,7 @@ namespace alekseev {
     CuckooHash< std::wstring, Dictionary, size_t (*)(wstr_cr), size_t (*)(wstr_cr), bool(*)(
         wstr_cr, wstr_cr) >::KeyIterator dicts_end() const;
     std::wstring current_dict_name() const;
+    void reset_current();
 
     private:
       CuckooHash< std::wstring, Dictionary, size_t (*)(wstr_cr), size_t (*)(wstr_cr), bool(*)(

@@ -69,7 +69,7 @@ std::wstring alekseev::to_wstring(const Vector< std::wstring > & text,
 alekseev::TextManager::TextManager(DictionaryManager & dict):
   texts_(djb2_hash, poly_hash, equal, 32),
   dict_(dict),
-  max_variants_(4),
+  max_variants_(7),
   distance_(1)
 { }
 
@@ -126,7 +126,6 @@ alekseev::wstr_cr alekseev::TextManager::parse(wstr_cr name)
           Vector< std::wstring > corrections(1, L"No need correction");
           corrections += dict_.find_by_require(last_req, word, max_variants_, distance_);
           for_correct.typos.push(std::make_pair(i, corrections));
-          for_correct.saved = false;
         }
       }
       was_require = false;
@@ -138,7 +137,6 @@ alekseev::wstr_cr alekseev::TextManager::parse(wstr_cr name)
         corrections += dict_.damerau_find_form(word, max_variants_, distance_);
       }
       for_correct.typos.push(std::make_pair(i, corrections));
-      for_correct.saved = false;
       was_require = false;
     }
   }
