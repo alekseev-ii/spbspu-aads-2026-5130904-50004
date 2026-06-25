@@ -125,7 +125,7 @@ alekseev::wstr_cr alekseev::TextManager::parse(wstr_cr name)
         if (!dict_.matches_require(last_req, word)) {
           Vector< std::wstring > corrections(1, L"No need correction");
           corrections += dict_.find_by_require(last_req, word, max_variants_, distance_);
-          for_correct.errors.push(std::make_pair(i, corrections));
+          for_correct.typos.push(std::make_pair(i, corrections));
           for_correct.saved = false;
         }
       }
@@ -137,7 +137,7 @@ alekseev::wstr_cr alekseev::TextManager::parse(wstr_cr name)
       } else {
         corrections += dict_.damerau_find_form(word, max_variants_, distance_);
       }
-      for_correct.errors.push(std::make_pair(i, corrections));
+      for_correct.typos.push(std::make_pair(i, corrections));
       for_correct.saved = false;
       was_require = false;
     }
@@ -153,14 +153,14 @@ alekseev::wstr_cr alekseev::TextManager::correct(std::wistream & is, std::wostre
     throw std::invalid_argument("Bad text name for correct!");
   }
   text_t & for_correct = !name.empty() ? texts_.at(name) : texts_.at(last_parsed_);
-  if (for_correct.errors.empty()) {
+  if (for_correct.typos.empty()) {
     throw std::invalid_argument("Text not parsed!");
   }
   size_t s = for_correct.original.getSize();
   Vector< std::wstring > corrected(for_correct.original);
 
-  while (!for_correct.errors.empty()) {
-    std::pair< size_t, Vector< std::wstring > > & err = for_correct.errors.front();
+  while (!for_correct.typos.empty()) {
+    std::pair< size_t, Vector< std::wstring > > & err = for_correct.typos.front();
     size_t i = err.first;
     size_t start = i > 5 ? i - 5 : 0;
     size_t end = s - i > 5 ? i + 5 : s;
@@ -187,7 +187,7 @@ alekseev::wstr_cr alekseev::TextManager::correct(std::wistream & is, std::wostre
       corrected[i] = case_from_mask(err.second[ans], mask_from_case(for_correct.original[i]));
       for_correct.saved = false;
     }
-    for_correct.errors.pop();
+    for_correct.typos.pop();
   }
   for_correct.corrected = corrected;
   last_corrected_ = !name.empty() ? name : last_parsed_;
@@ -251,12 +251,27 @@ bool alekseev::TextManager::is_saved(wstr_cr name) const
   return texts_.at(name).saved;
 }
 
-void alekseev::TextManager::set_max_variants(size_t max_variants)
+size_t alekseev::TextManager::number_of_typos(wstr_cr name) const
+{
+  return texts_.at(name).typos.size();
+}
+
+size_t alekseev::TextManager::max_variants() const noexcept
+{
+  return max_variants_;
+}
+
+void alekseev::TextManager::max_variants(size_t max_variants) noexcept
 {
   max_variants_ = max_variants;
 }
 
-void alekseev::TextManager::set_default_distance(size_t distance)
+size_t alekseev::TextManager::default_distance() const noexcept
+{
+  return distance_;
+}
+
+void alekseev::TextManager::default_distance(size_t distance) noexcept
 {
   distance_ = distance;
 }

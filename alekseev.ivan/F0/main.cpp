@@ -262,23 +262,22 @@ void alekseev::Exec::save_txt(Vector< std::wstring > & args)
 
 void alekseev::Exec::unload_txt(Vector< std::wstring > & args)
 {
-  if (args.getSize() == 1) {
-    if (!texts_.is_saved(args[0])) {
-      wchar_t need_save = ask_yes_no(L"Do you want to save text before unloading?", is_, os_);
-      if (need_save == 'y') {
-        os_ << "Enter file name for saving >";
-        std::wstring file_name;
-        std::getline(is_, file_name);
-        os_ << L"Saving \"" << args[0] << L"\" to " << file_name << L"\n";
-        texts_.save(file_name, args[0]);
-        os_ << L"\"" << args[0] << L"\" successfully saved\n";
-      }
-    }
-    texts_.unload(args[0]);
-    os_ << L"\"" << args[0] << L"\" unloaded\n";
-  } else {
+  if (args.getSize() != 1) {
     throw std::invalid_argument("Bad arguments number! Using: unload_txt <text_name>");
   }
+  if (!texts_.is_saved(args[0])) {
+    wchar_t need_save = ask_yes_no(L"Do you want to save text before unloading?", is_, os_);
+    if (need_save == 'y') {
+      os_ << "Enter file name for saving >";
+      std::wstring file_name;
+      std::getline(is_, file_name);
+      os_ << L"Saving \"" << args[0] << L"\" to " << file_name << L"\n";
+      texts_.save(file_name, args[0]);
+      os_ << L"\"" << args[0] << L"\" successfully saved\n";
+    }
+  }
+  texts_.unload(args[0]);
+  os_ << L"\"" << args[0] << L"\" unloaded\n";
 }
 
 void alekseev::Exec::parse(Vector< std::wstring > & args)
@@ -288,7 +287,9 @@ void alekseev::Exec::parse(Vector< std::wstring > & args)
     os_ << L"\"" << texts_.parse() << L"\" successfully parsed\n";
   } else if (args.getSize() == 1) {
     os_ << L"Parsing...\n";
-    os_ << L"\"" << texts_.parse(args[0]) << L"\" successfully parsed\n";
+    std::wstring name = texts_.parse(args[0]);
+    os_ << texts_.number_of_typos(name) << L"typos detected\n";
+    os_ << L"\"" << name << L"\" successfully parsed\n";
   } else {
     throw std::invalid_argument("Bad arguments number! Using: parse [text_name]");
   }
@@ -323,6 +324,7 @@ void alekseev::Exec::process(Vector< std::wstring > & args)
     texts_.parse(temp_name);
     os_ << L"Text parsed\n";
     texts_.correct(is_, os_, temp_name);
+    os_ << L"Corrected\n";
     os_ << L"Saving...\n";
     texts_.save(args[0], temp_name);
     os_ << L"Saved\n";
@@ -404,7 +406,10 @@ void alekseev::Exec::current(Vector< std::wstring > & args)
   if (args.getSize() != 1) {
     throw std::invalid_argument("Bad arguments number! Using: current <name_of_loaded_dictionary>");
   }
+  std::wstring old_current = dicts_.current_dict_name();
   dicts_.set_current(args[0]);
+  os_ << L"Current dictionary switched from \"" << old_current;
+  os_ << "\" to \"" << dicts_.current_dict_name() << "\"\n";
 }
 
 void alekseev::Exec::add_word(Vector< std::wstring > & args)
@@ -428,7 +433,10 @@ void alekseev::Exec::delete_lemma(Vector< std::wstring > & args)
   if (args.getSize() != 1) {
     throw std::invalid_argument("Bad arguments number! Using: delete_lemma <lemma>");
   }
+  size_t old_size = dicts_.current().size();
   dicts_.delete_lemma(args[0], is_, os_);
+  os_ << L"Successfully deleted \"" << args[0];
+  os_ << L"\" with " << dicts_.current().size() - old_size << L" word forms\n";
 }
 
 void alekseev::Exec::delete_form(Vector< std::wstring > & args)
@@ -436,18 +444,18 @@ void alekseev::Exec::delete_form(Vector< std::wstring > & args)
   if (args.getSize() != 1) {
     throw std::invalid_argument("Bad arguments number! Using: delete_form <word_form>");
   }
-  dicts_.delete_form(args[0], is_, os_);
+  WordForm wf = dicts_.delete_form(args[0], is_, os_);
+  os_ << L"Successfully deleted " << wf << L"\n";
 }
 
 void alekseev::Exec::dicts(Vector< std::wstring > &) const
 {
   std::wcout << L"Loaded dictionaries:\n";
   for (auto name = dicts_.dicts_begin(); name != dicts_.dicts_end(); ++name) {
-    os_ << "  ";
     if (*name == dicts_.current_dict_name()) {
-      os_ << L"* ";
+      os_ << L"  * ";
     } else {
-      os_ << L"  ";
+      os_ << L"    ";
     }
     os_ << *name << L"\n";
   }
@@ -464,7 +472,10 @@ void alekseev::Exec::max_variants_txt(Vector< std::wstring > & args)
   if (*end_ptr != L'\0') {
     throw std::invalid_argument("Bad input");
   }
-  texts_.set_max_variants(n);
+  size_t old_mv = texts_.max_variants();
+  texts_.max_variants(n);
+  std::wcout << L"Max variants for texts changed from " << old_mv;
+  os_ << L" to " << texts_.max_variants() << L"\n";
 }
 
 void alekseev::Exec::distance_of_find_txt(Vector< std::wstring > & args)
@@ -477,7 +488,10 @@ void alekseev::Exec::distance_of_find_txt(Vector< std::wstring > & args)
   if (*end_ptr != L'\0') {
     throw std::invalid_argument("Bad input");
   }
-  texts_.set_default_distance(n);
+  size_t old_d = texts_.default_distance();
+  texts_.default_distance(n);
+  std::wcout << L"Max variants for texts changed from " << old_d;
+  os_ << L" to " << texts_.default_distance() << L"\n";
 }
 
 void alekseev::Exec::max_variants_dict(Vector< std::wstring > & args)
@@ -490,7 +504,10 @@ void alekseev::Exec::max_variants_dict(Vector< std::wstring > & args)
   if (*end_ptr != L'\0') {
     throw std::invalid_argument("Bad input");
   }
-  dicts_.set_max_variants(n);
+  size_t old_mv = dicts_.max_variants();
+  dicts_.max_variants(n);
+  std::wcout << L"Max variants for texts changed from " << old_mv;
+  os_ << L" to " << dicts_.max_variants() << L"\n";
 }
 
 void alekseev::Exec::distance_of_find_dict(Vector< std::wstring > & args)
@@ -503,7 +520,10 @@ void alekseev::Exec::distance_of_find_dict(Vector< std::wstring > & args)
   if (*end_ptr != L'\0') {
     throw std::invalid_argument("Bad input");
   }
-  dicts_.set_default_distance(n);
+  size_t old_d = dicts_.default_distance();
+  dicts_.default_distance(n);
+  std::wcout << L"Max variants for texts changed from " << old_d;
+  os_ << L" to " << dicts_.default_distance() << L"\n";
 }
 
 void alekseev::Exec::help(Vector< std::wstring > &) const
@@ -562,8 +582,10 @@ void alekseev::Exec::help(Vector< std::wstring > &) const
       "\nAdditional:\n"
       "    1. max_variants_txt <number>\n"
       "        Sets the maximum number of options when working with texts (default 7)\n"
+      "        Set 0 if you want to see all found variants\n"
       "    2. max_variants_dict <number>\n"
       "        Sets the maximum number of options when working with dictionaries (default 7)\n"
+      "        Set 0 if you want to see all found variants\n"
       "    3. distance_of_find_txt <number>\n"
       "        Sets the maximum Damerau-Levenshtein distance for fuzzy search "
       "when working with texts (default 1)\n"

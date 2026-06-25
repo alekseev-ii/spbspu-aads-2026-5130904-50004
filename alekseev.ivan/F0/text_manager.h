@@ -14,7 +14,7 @@ namespace alekseev {
     Vector< std::wstring > original;
     Vector< std::wstring > corrected;
     Vector< std::pair< std::wstring, std::wstring > > punctuations;
-    Queue< std::pair< size_t, Vector< std::wstring > > > errors;
+    Queue< std::pair< size_t, Vector< std::wstring > > > typos;
     bool saved = false;
   };
 
@@ -42,8 +42,11 @@ namespace alekseev {
 
     bool contains(wstr_cr text_name) const noexcept;
     bool is_saved(wstr_cr name) const;
-    void set_max_variants(size_t max_variants);
-    void set_default_distance(size_t distance);
+    size_t number_of_typos(wstr_cr name) const;
+    size_t max_variants() const noexcept;
+    void max_variants(size_t max_variants) noexcept;
+    size_t default_distance() const noexcept;
+    void default_distance(size_t distance) noexcept;
 
     CuckooHash< std::wstring, text_t, size_t (*)(wstr_cr), size_t (*)(wstr_cr), bool(*)(wstr_cr,
         wstr_cr) >::KeyIterator texts_begin() const;

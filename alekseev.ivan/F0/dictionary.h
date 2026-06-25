@@ -172,7 +172,7 @@ namespace alekseev {
     void set_current(wstr_cr name_of_loaded_dict);
     void add_word(wstr_cr word, std::wistream & is, std::wostream & os);
     void update_word(std::wstring word, std::wistream & is, std::wostream & os);
-    void delete_form(wstr_cr wordform, std::wistream & is, std::wostream & os);
+    WordForm delete_form(wstr_cr wordform, std::wistream & is, std::wostream & os);
     void delete_lemma(wstr_cr lemma, std::wistream & is, std::wostream & os);
 
     bool contains_form(wstr_cr wordform) const;
@@ -195,8 +195,11 @@ namespace alekseev {
 
     size_t size() const;
     bool contains_dict(wstr_cr dict_name) const;
-    void set_max_variants(size_t max_variants);
-    void set_default_distance(size_t distance);
+
+    size_t max_variants() const noexcept;
+    void max_variants(size_t max_variants) noexcept;
+    size_t default_distance() const noexcept;
+    void default_distance(size_t distance) noexcept;
     CuckooHash< std::wstring, Dictionary, size_t (*)(wstr_cr), size_t (*)(wstr_cr), bool(*)(
         wstr_cr, wstr_cr) >::KeyIterator dicts_begin() const;
     CuckooHash< std::wstring, Dictionary, size_t (*)(wstr_cr), size_t (*)(wstr_cr), bool(*)(

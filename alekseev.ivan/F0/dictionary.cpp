@@ -977,20 +977,22 @@ void alekseev::DictionaryManager::update_word(std::wstring word, std::wistream &
   throw std::invalid_argument("Bad input");
 }
 
-void alekseev::DictionaryManager::delete_form(wstr_cr wordform, std::wistream & is,
+alekseev::WordForm alekseev::DictionaryManager::delete_form(wstr_cr wordform, std::wistream & is,
     std::wostream & os)
 {
   Dictionary & dict = current();
   std::pair< std::wstring, size_t > lp = choose_wordform(wordform, is, os);
 
   if (!lp.first.empty()) {
-    const WordForm & word = dict.forms_by_lemma(lp.first)[lp.second];
-    if (word.pos_ == require) {
-      dict.remove_req_form(lp.first, lp.second);
-    } else {
-      dict.remove_form(word);
-    }
+    return {};
   }
+  WordForm word = dict.forms_by_lemma(lp.first)[lp.second];
+  if (word.pos_ == require) {
+    dict.remove_req_form(lp.first, lp.second);
+  } else {
+    dict.remove_form(word);
+  }
+  return word;
 }
 
 void alekseev::DictionaryManager::delete_lemma(wstr_cr lemma, std::wistream & is,
@@ -1196,12 +1198,22 @@ bool alekseev::DictionaryManager::contains_dict(wstr_cr dict_name) const
   return dicts_.contains(dict_name);
 }
 
-void alekseev::DictionaryManager::set_max_variants(size_t max_variants)
+size_t alekseev::DictionaryManager::max_variants() const noexcept
+{
+  return max_variants_;
+}
+
+void alekseev::DictionaryManager::max_variants(size_t max_variants) noexcept
 {
   max_variants_ = max_variants;
 }
 
-void alekseev::DictionaryManager::set_default_distance(size_t distance)
+size_t alekseev::DictionaryManager::default_distance() const noexcept
+{
+  return distance_;
+}
+
+void alekseev::DictionaryManager::default_distance(size_t distance) noexcept
 {
   if (distance != 0) {
     distance_ = distance;
