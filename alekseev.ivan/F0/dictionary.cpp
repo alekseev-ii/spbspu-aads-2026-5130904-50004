@@ -1005,27 +1005,33 @@ bool alekseev::DictionaryManager::delete_lemma(wstr_cr lemma, std::wistream & is
   Dictionary & dict = current();
   if (dict.contains_lemma(lemma)) {
     dict.remove_lemma(lemma);
-  } else if (dict.contains_require(lemma)) {
-    dict.remove_require(lemma);
-  } else {
-    os << L"Lemma \"" << lemma << "\" not found in current dictionary\n";
-    wchar_t ans = ask_yes_no(L"Do you want to search using fuzzy search?", is, os);
-    if (ans == 'y') {
-      Vector< std::wstring > opts = dict.damerau_find_lemma(lemma, max_variants_, distance_);
-      opts += dict.damerau_find_require(lemma, max_variants_ - opts.getSize(), distance_);
-      size_t ind = choose(opts, is, os, max_variants_, L"What lemma you want to delete?");
-      if (ind == opts.getSize()) {
-        return false;
-      }
-      wstr_cr l = opts[ind];
-      if (dict.contains_lemma(l)) {
-        dict.remove_lemma(l);
-      } else if (dict.contains_require(l)) {
-        dict.remove_require(l);
-      }
-      deleted = l;
-    }
+    deleted = lemma;
+    return true;
   }
+  if (dict.contains_require(lemma)) {
+    dict.remove_require(lemma);
+    deleted = lemma;
+    return true;
+  }
+  os << L"Lemma \"" << lemma << "\" not found in current dictionary\n";
+  wchar_t ans = ask_yes_no(L"Do you want to search using fuzzy search?", is, os);
+  if (ans == 'y') {
+    Vector< std::wstring > opts = dict.damerau_find_lemma(lemma, max_variants_, distance_);
+    opts += dict.damerau_find_require(lemma, max_variants_ - opts.getSize(), distance_);
+    size_t ind = choose(opts, is, os, max_variants_, L"What lemma you want to delete?");
+    if (ind == opts.getSize()) {
+      return false;
+    }
+    wstr_cr l = opts[ind];
+    if (dict.contains_lemma(l)) {
+      dict.remove_lemma(l);
+    } else if (dict.contains_require(l)) {
+      dict.remove_require(l);
+    }
+    deleted = l;
+    return true;
+  }
+  return false;
 }
 
 bool alekseev::DictionaryManager::contains_form(wstr_cr wordform) const
@@ -1068,8 +1074,7 @@ alekseev::Vector< std::wstring > alekseev::DictionaryManager::damerau_find_form(
     max_number = max_variants_;
   }
   Vector< std::wstring > res;
-  auto check = [&max_number, &res]()
-  {
+  auto check = [&max_number, &res]() {
     return res.getSize() < max_number || max_number == 0;
   };
   for (auto names_it = dicts_.begin(); names_it != dicts_.end() && check(); ++names_it) {
@@ -1092,8 +1097,7 @@ alekseev::Vector< std::wstring > alekseev::DictionaryManager::damerau_find_lemma
     max_number = max_variants_;
   }
   Vector< std::wstring > res;
-  auto check = [&max_number, &res]()
-  {
+  auto check = [&max_number, &res]() {
     return res.getSize() < max_number || max_number == 0;
   };
   for (auto names_it = dicts_.begin(); names_it != dicts_.end() && check(); ++names_it) {
@@ -1116,8 +1120,7 @@ alekseev::Vector< std::wstring > alekseev::DictionaryManager::find_by_require(ws
     max_number = max_variants_;
   }
   Vector< std::wstring > res;
-  auto check = [&max_number, &res]()
-  {
+  auto check = [&max_number, &res]() {
     return res.getSize() < max_number || max_number == 0;
   };
   for (auto names_it = dicts_.begin(); names_it != dicts_.end() && check(); ++names_it) {

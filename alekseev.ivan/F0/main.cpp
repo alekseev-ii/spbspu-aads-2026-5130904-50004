@@ -223,14 +223,9 @@ void alekseev::Exec::operator()(wstr_cr line)
   if (!functions_.contains(func_name)) {
     os_ << L"Bad command name!\n";
 
-    Vector< std::wstring > corrections;
-    if (functions_.contains(func_name + L"_txt")) {
-      corrections.pushBack(func_name + L"_txt");
-    }
-    if (functions_.contains(func_name + L"_dict")) {
-      corrections.pushBack(func_name + L"_dict");
-    }
-    corrections += damerau_find(func_name, functions_.begin(), functions_.end());
+    Vector< std::wstring > corrections = damerau_find(func_name, functions_.begin(), functions_.end());
+    corrections += damerau_find(func_name + L"_txt", functions_.begin(), functions_.end());
+    corrections += damerau_find(func_name + L"_dict", functions_.begin(), functions_.end());
     size_t ans = choose(corrections, is_, os_, 0, L"Perhaps you mean...");
     if (ans == corrections.getSize()) {
       return;
@@ -344,6 +339,10 @@ void alekseev::Exec::process(Vector< std::wstring > & args)
 
 void alekseev::Exec::texts(Vector< std::wstring > &) const
 {
+  if (texts_.texts_begin() == texts_.texts_end()) {
+    os_ << L"No texts loaded\n";
+    return;
+  }
   os_ << L"Loaded texts:\n";
   std::wstring last_corrected = texts_.last_corrected();
   std::wstring last_loaded = texts_.last_loaded();
@@ -389,7 +388,7 @@ void alekseev::Exec::load_dict(Vector< std::wstring > & args)
 
 void alekseev::Exec::save_dict(Vector< std::wstring > & args)
 {
-  if (args.getSize() == 1 && dicts_.current_dict_name() != L"") {
+  if (args.getSize() == 1 && !dicts_.current_dict_name().empty()) {
     os_ << "Saving...\n";
     dicts_.save(dicts_.current_dict_name(), args[0]);
     os_ << L"Saved dictionary \"" << dicts_.current_dict_name() << "\" to \"" << args[0] << "\"\n";
@@ -448,7 +447,7 @@ void alekseev::Exec::delete_lemma(Vector< std::wstring > & args)
   std::wstring deleted;
   if (dicts_.delete_lemma(args[0], is_, os_, deleted)) {
     os_ << L"Successfully deleted \"" << args[0];
-    os_ << L"\" with " << dicts_.current().size() - old_size << L" word forms\n";
+    os_ << L"\" with " << old_size - dicts_.current().size() << L" word forms\n";
   } else {
     os_ << L"Failed to delete \"" << args[0] << L"\"\n";
   }
@@ -469,6 +468,10 @@ void alekseev::Exec::delete_form(Vector< std::wstring > & args)
 
 void alekseev::Exec::dicts(Vector< std::wstring > &) const
 {
+  if (dicts_.dicts_begin() == dicts_.dicts_end()) {
+    os_ << L"No dictionaries loaded\n";
+    return;
+  }
   std::wcout << L"Loaded dictionaries:\n";
   for (auto name = dicts_.dicts_begin(); name != dicts_.dicts_end(); ++name) {
     if (*name == dicts_.current_dict_name()) {
