@@ -207,9 +207,9 @@ alekseev::Exec::Exec(std::wistream & is, std::wostream & os):
           L"./default_dictionaries/default_dictionary_500_nouns.txt", 2048);
     }
     dicts_.reset_current();
-    std::wcout << L"Successfully loaded " << dicts_.size() << L" word forms\n";
+    os_ << L"Successfully loaded " << dicts_.size() << L" word forms\n";
   } catch (std::exception & e) {
-    std::wcout << L"Unable to load default dictionary: " << e.what() << "\n";
+    os_ << L"Unable to load default dictionary: " << e.what() << L"\n";
   }
 }
 
@@ -244,7 +244,7 @@ void alekseev::Exec::load_txt(Vector< std::wstring > & args)
   if (args.getSize() != 2) {
     throw std::invalid_argument("Bad arguments number! Using: load_txt <text_name> <path_to_file>");
   }
-  os_ << L"Loading text \"" << args[0] << "\" from " << args[1] << L"\n";
+  os_ << L"Loading text \"" << args[0] << L"\" from " << args[1] << L"\n";
   texts_.load(args[1], args[0]);
   os_ << L"\"" << args[0] << L"\" successfully loaded\n";
 }
@@ -268,7 +268,7 @@ void alekseev::Exec::unload_txt(Vector< std::wstring > & args)
   if (!texts_.is_saved(args[0])) {
     wchar_t need_save = ask_yes_no(L"Do you want to save text before unloading?", is_, os_);
     if (need_save == 'y') {
-      os_ << "Enter file name for saving >";
+      os_ << L"Enter file name for saving >";
       std::wstring file_name;
       std::getline(is_, file_name);
       os_ << L"Saving \"" << args[0] << L"\" to " << file_name << L"\n";
@@ -368,7 +368,7 @@ void alekseev::Exec::new_(Vector< std::wstring > & args)
     throw std::invalid_argument("Bad arguments number! Using: new <dict_name>");
   }
   dicts_.create(args[0]);
-  os_ << L"An empty dictionary \"" << args[0] << "\" has been created\n";
+  os_ << L"An empty dictionary \"" << args[0] << L"\" has been created\n";
 }
 
 void alekseev::Exec::load_dict(Vector< std::wstring > & args)
@@ -385,22 +385,23 @@ void alekseev::Exec::load_dict(Vector< std::wstring > & args)
       throw std::invalid_argument("Bad lemmas_number");
     }
   }
-  os_ << "Loading...\n";
+  os_ << L"Loading...\n";
   dicts_.load(args[0], args[1], n);
-  os_ << L"Successfully loaded dictionary \"" << args[0] << "\" with " << dicts_.current().size();
-  os_ << " word forms from \"" << args[1] << "\"\n";
+  os_ << L"Successfully loaded dictionary \"" << args[0] << L"\" with " << dicts_.current().size();
+  os_ << L" word forms from " << args[1] << L"\n";
 }
 
 void alekseev::Exec::save_dict(Vector< std::wstring > & args)
 {
   if (args.getSize() == 1 && !dicts_.current_dict_name().empty()) {
-    os_ << "Saving...\n";
+    os_ << L"Saving...\n";
     dicts_.save(dicts_.current_dict_name(), args[0]);
-    os_ << L"Saved dictionary \"" << dicts_.current_dict_name() << "\" to \"" << args[0] << "\"\n";
+    os_ << L"Saved dictionary \"" << dicts_.current_dict_name() << L"\" to \"" << args[0] <<
+        L"\"\n";
   } else if (args.getSize() == 2) {
-    os_ << "Saving...\n";
+    os_ << L"Saving...\n";
     dicts_.save(args[0], args[1]);
-    os_ << L"Saved dictionary \"" << args[0] << "\" to \"" << args[1] << "\"\n";
+    os_ << L"Saved dictionary \"" << args[0] << L"\" to \"" << args[1] << L"\"\n";
   } else {
     throw std::invalid_argument(
         "Bad arguments number! Using: save_dict [dict_name] <path_to_file>");
@@ -413,7 +414,7 @@ void alekseev::Exec::unload_dict(Vector< std::wstring > & args)
     throw std::invalid_argument("Bad arguments number! Using: <dict_name>");
   }
   dicts_.unload(args[0]);
-  os_ << L"Unloaded dictionary \"" << args[0] << "\"\n";
+  os_ << L"Unloaded dictionary \"" << args[0] << L"\"\n";
 }
 
 void alekseev::Exec::current(Vector< std::wstring > & args)
@@ -424,7 +425,7 @@ void alekseev::Exec::current(Vector< std::wstring > & args)
   std::wstring old_current = dicts_.current_dict_name();
   dicts_.set_current(args[0]);
   os_ << L"Current dictionary switched from \"" << old_current;
-  os_ << "\" to \"" << dicts_.current_dict_name() << "\"\n";
+  os_ << L"\" to \"" << dicts_.current_dict_name() << L"\"\n";
 }
 
 void alekseev::Exec::add_word(Vector< std::wstring > & args)

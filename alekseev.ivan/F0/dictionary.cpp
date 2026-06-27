@@ -940,7 +940,7 @@ void alekseev::DictionaryManager::update_word(std::wstring word, std::wistream &
     }
   }
   const Lemma & l = dict.get_lemma(word);
-  os << "Found:\n";
+  os << L"Found:\n";
   os << l;
   bool has_forms = !l.forms_.isEmpty();
   Vector< std::wstring > opts{L"Add new form"};
@@ -963,7 +963,7 @@ void alekseev::DictionaryManager::update_word(std::wstring word, std::wistream &
       dict.remove_form(l.forms_[ind]);
     }
   }
-  os << "Enter new form with tags:\n";
+  os << L"Enter new form with tags:\n";
   std::wstring form;
   WordForm wf;
   while (wgetline(is, form)) {
@@ -1019,7 +1019,7 @@ bool alekseev::DictionaryManager::delete_lemma(wstr_cr lemma, std::wistream & is
     deleted = lemma;
     return true;
   }
-  os << L"Lemma \"" << lemma << "\" not found in current dictionary\n";
+  os << L"Lemma \"" << lemma << L"\" not found in current dictionary\n";
   wchar_t ans = ask_yes_no(L"Do you want to search using fuzzy search?", is, os);
   if (ans == 'y') {
     Vector< std::wstring > opts = dict.damerau_find_lemma(lemma, max_variants_, distance_);
@@ -1274,7 +1274,7 @@ void alekseev::DictionaryManager::add_verb(wstr_cr word, std::wistream & is, std
   dict.add_lemma(word, verb, nn_gender, verb_aspect);
   std::wstring past_masc, past_fem, past_neut, past_pl;
   os << L"Enter forms, leave the non-existing ones empty\n";
-  os << "Past tense:\n";
+  os << L"Past tense:\n";
   os << L"    Singular masculine (he) >";
   wgetline(is, past_masc);
   os << L"    Singular feminine (she) >";
@@ -1384,14 +1384,14 @@ void alekseev::DictionaryManager::add_adj(wstr_cr word, std::wistream & is, std:
 
   os << L"Plural:\n";
   for (size_t i = 0; i < 6; i++) {
-    os << "    " << std::left << std::setw(14) << cases_names[i] << " >";
+    os << L"    " << std::left << std::setw(14) << cases_names[i] << L" >";
     wgetline(is, form);
     if (!form.empty()) {
       dict.add_form(word, form, nn_gender, plural, cases[i], nn_tense, nn_person);
       ++c;
     }
   }
-  os << L"Successfully added " << c << " forms!\n";
+  os << L"Successfully added " << c << L" forms!\n";
 }
 
 void alekseev::DictionaryManager::add_noun(wstr_cr word, std::wistream & is, std::wostream & os)
@@ -1462,7 +1462,7 @@ void alekseev::DictionaryManager::add_req(wstr_cr word, std::wistream & is, std:
     dict.add_req_form(word, wf.word_, wf.gender_, wf.number_, wf.case_, wf.tense_, wf.person_);
     wgetline(is, line);
   }
-  os << L"Successfully added " << c << " forms!\n";
+  os << L"Successfully added " << c << L" forms!\n";
 }
 
 void alekseev::DictionaryManager::add_functional(wstr_cr word, std::wistream & is,
@@ -1471,7 +1471,7 @@ void alekseev::DictionaryManager::add_functional(wstr_cr word, std::wistream & i
   Dictionary & dict = current();
   dict.add_lemma(word, functional);
   dict.add_form(word, word, nn_gender, nn_number, nn_case, nn_tense, nn_person);
-  os << L"Successfully added functional " << word << "\n";
+  os << L"Successfully added functional " << word << L"\n";
 }
 
 std::pair< std::wstring, size_t > alekseev::DictionaryManager::choose_wordform(wstr_cr word,

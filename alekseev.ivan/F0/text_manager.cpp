@@ -51,7 +51,6 @@ std::wstring alekseev::to_wstring(const Vector< std::wstring > & text,
     end = text.getSize();
   }
   if (end > text.getSize() || end <= start) {
-    std::wcout << text.getSize() << L" " << start << L" " << end << L"\n";
     throw std::out_of_range("End greater than size of text or end <= start");
   }
   if (text.getSize() != punctuation.getSize()) {
@@ -180,7 +179,7 @@ alekseev::wstr_cr alekseev::TextManager::correct(std::wistream & is, std::wostre
                       : std::min(max_variants_ + 1, err.second.getSize());
     size_t ans = choose(err.second, is, os, n_opts, L"Choose correction:", L"Your variant...");
     if (ans == n_opts) {
-      os << "Enter your variant >";
+      os << L"Enter your variant >";
       std::wstring word;
       wgetline(is, word);
       corrected[i] = word;
