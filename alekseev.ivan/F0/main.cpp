@@ -37,6 +37,7 @@ namespace alekseev {
 
       void new_(Vector< std::wstring > & args);
       void load_dict(Vector< std::wstring > & args);
+      void load_default_dicts(Vector< std::wstring > & args);
       void save_dict(Vector< std::wstring > & args);
       void unload_dict(Vector< std::wstring > & args);
       void current(Vector< std::wstring > & args);
@@ -61,20 +62,16 @@ int main()
   alekseev::Exec exec(std::wcin, std::wcout);
 
   std::wstring line;
-  std::wcout << L">";
   while (alekseev::wgetline(std::wcin, line)) {
     try {
       if (line == L"exit") {
         return 0;
       }
       exec(line);
-      std::wcout << L">";
     } catch (std::invalid_argument & e) {
       std::wcout << e.what() << L"\n";
-      std::wcout << L">";
     } catch (std::out_of_range & e) {
       std::wcout << e.what() << L"\n";
-      std::wcout << L">";
     } catch (std::exception & e) {
       std::wcout << e.what() << L"\n";
       return 1;
@@ -124,6 +121,10 @@ alekseev::Exec::Exec(std::wistream & is, std::wostream & os):
   functions_.insert(L"load_dict", [this](Vector< std::wstring > & args)
   {
     load_dict(args);
+  });
+  functions_.insert(L"load_default_dicts", [this](Vector< std::wstring > & args)
+  {
+    load_default_dicts(args);
   });
   functions_.insert(L"save_dict", [this](Vector< std::wstring > & args)
   {
@@ -178,39 +179,6 @@ alekseev::Exec::Exec(std::wistream & is, std::wostream & os):
   {
     help(args);
   });
-
-  Vector< std::wstring > opts{L"Load ~1200 lemmas (~ 23 s)", L"Load ~1700 lemmas (~ 1 m 17 s)"};
-  size_t opt = choose(opts, is, os, 0, L"Do you want to load default dictionary?",
-      L"Do not load default dictionary");
-  if (opt == 2) {
-    return;
-  }
-  try {
-    os_ << L"Loading...\n";
-    dicts_.load(L"default_dictionary_requires",
-        L"./default_dictionaries/default_dictionary_requires.txt");
-    dicts_.load(L"default_dictionary_functional",
-        L"./default_dictionaries/default_dictionary_functional.txt");
-    if (opt == 0) {
-      dicts_.load(L"default_dictionary_300_adjectives",
-          L"./default_dictionaries/default_dictionary_300_adjectives.txt");
-      dicts_.load(L"default_dictionary_300_verbs",
-          L"./default_dictionaries/default_dictionary_300_verbs.txt");
-      dicts_.load(L"default_dictionary_300_nouns",
-          L"./default_dictionaries/default_dictionary_300_nouns.txt");
-    } else if (opt == 1) {
-      dicts_.load(L"default_dictionary_500_adjectives",
-          L"./default_dictionaries/default_dictionary_500_adjectives.txt", 2048);
-      dicts_.load(L"default_dictionary_500_verbs",
-          L"./default_dictionaries/default_dictionary_500_verbs.txt", 2048);
-      dicts_.load(L"default_dictionary_500_nouns",
-          L"./default_dictionaries/default_dictionary_500_nouns.txt", 2048);
-    }
-    dicts_.reset_current();
-    os_ << L"Successfully loaded " << dicts_.size() << L" word forms\n";
-  } catch (std::exception & e) {
-    os_ << L"Unable to load default dictionary: " << e.what() << L"\n";
-  }
 }
 
 void alekseev::Exec::operator()(wstr_cr line)
@@ -389,6 +357,58 @@ void alekseev::Exec::load_dict(Vector< std::wstring > & args)
   dicts_.load(args[0], args[1], n);
   os_ << L"Successfully loaded dictionary \"" << args[0] << L"\" with " << dicts_.current().size();
   os_ << L" word forms from " << args[1] << L"\n";
+}
+
+void alekseev::Exec::load_default_dicts(Vector< std::wstring > & args)
+{
+  Vector< std::wstring > opts{L"Load ~1200 lemmas (~ 30s)", L"Load ~1700 lemmas (~ 1m 30s)"};
+  size_t opt = choose(opts, is_, os_, 0, L"Do you want to load default dictionary?",
+      L"Do not load default dictionary");
+  if (opt == 2) {
+    return;
+  }
+  try {
+    os_ << L"Loading...\n";
+    if (!dicts_.contains_dict(L"default_dictionary_requires")) {
+      dicts_.load(L"default_dictionary_requires",
+          L"./default_dictionaries/default_dictionary_requires.txt");
+    }
+    if (!dicts_.contains_dict(L"default_dictionary_functional")) {
+      dicts_.load(L"default_dictionary_functional",
+          L"./default_dictionaries/default_dictionary_functional.txt");
+    }
+    if (opt == 0) {
+      if (!dicts_.contains_dict(L"default_dictionary_300_adjectives")) {
+        dicts_.load(L"default_dictionary_300_adjectives",
+            L"./default_dictionaries/default_dictionary_300_adjectives.txt");
+      }
+      if (!dicts_.contains_dict(L"default_dictionary_300_verbs")) {
+        dicts_.load(L"default_dictionary_300_verbs",
+            L"./default_dictionaries/default_dictionary_300_verbs.txt");
+      }
+      if (!dicts_.contains_dict(L"default_dictionary_300_nouns")) {
+        dicts_.load(L"default_dictionary_300_nouns",
+            L"./default_dictionaries/default_dictionary_300_nouns.txt");
+      }
+    } else if (opt == 1) {
+      if (!dicts_.contains_dict(L"default_dictionary_500_adjectives")) {
+        dicts_.load(L"default_dictionary_500_adjectives",
+            L"./default_dictionaries/default_dictionary_500_adjectives.txt", 2048);
+      }
+      if (!dicts_.contains_dict(L"default_dictionary_500_verbs")) {
+        dicts_.load(L"default_dictionary_500_verbs",
+            L"./default_dictionaries/default_dictionary_500_verbs.txt", 2048);
+      }
+      if (!dicts_.contains_dict(L"default_dictionary_500_nouns")) {
+        dicts_.load(L"default_dictionary_500_nouns",
+            L"./default_dictionaries/default_dictionary_500_nouns.txt", 2048);
+      }
+    }
+    dicts_.reset_current();
+    os_ << L"Successfully loaded. Now loaded " << dicts_.size() << L" word forms\n";
+  } catch (std::exception & e) {
+    os_ << L"Unable to load default dictionary: " << e.what() << L"\n";
+  }
 }
 
 void alekseev::Exec::save_dict(Vector< std::wstring > & args)
@@ -594,23 +614,25 @@ void alekseev::Exec::help(Vector< std::wstring > &) const
       "        Reads dictionary from a file, assigns it a name in the program. "
       "you can set lemmas_number equal to twice the number of lemmas in the loaded dictionary "
       "to avoid rehashing during load (default 1024)\n"
-      "    2. new <dict_name>\n"
+      "    2. load_default_dicts\n"
+      "        Loads default dictionaries\n"
+      "    3. new <dict_name>\n"
       "        Creates an empty dictionary with the appropriate name\n"
-      "    3. save_dict [dict_name] <path_to_file>\n"
+      "    4. save_dict [dict_name] <path_to_file>\n"
       "        Saves dictionary to file (default saves current dictionary)\n"
-      "    4. unload_dict <dict_name>\n"
+      "    5. unload_dict <dict_name>\n"
       "        Removes dictionary from the program\n"
-      "    5. current <name_of_loaded_dict>\n"
+      "    6. current <name_of_loaded_dict>\n"
       "        Set dictionary as current\n"
-      "    6. add <lemma>\n"
+      "    7. add <lemma>\n"
       "        Interactive addition of a new lemma to the current dictionary\n"
-      "    7. update <lemma>\n"
+      "    8. update <lemma>\n"
       "        Changing or adding a new word form to a lemma from the current dictionary\n"
-      "    8. delete_lemma <lemma>\n"
+      "    9. delete_lemma <lemma>\n"
       "        Delete lemma from current dictionary\n"
-      "    9. delete_form <word_form>\n"
+      "    10. delete_form <word_form>\n"
       "        Choose and delete word form from current dictionary\n"
-      "    10. dicts\n"
+      "    11. dicts\n"
       "        Shows names of loaded dicts\n"
 
       "\nAdditional:\n"

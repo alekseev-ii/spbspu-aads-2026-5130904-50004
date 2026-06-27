@@ -451,7 +451,7 @@ BOOST_AUTO_TEST_SUITE(IteratorTests)
       table.insert(i, "value_" + std::to_string(i));
     }
 
-    alekseev::Vector< int > keys_from_iterator;
+    alekseev::Vector< size_t > keys_from_iterator;
     for (auto it = table.begin(); it != table.end(); ++it) {
       keys_from_iterator.pushBack(*it);
     }
@@ -526,11 +526,11 @@ BOOST_AUTO_TEST_SUITE(IteratorTests)
         SimpleHash(), SimpleHash(), Equal(), 4);
 
     const size_t N = 20;
-    for (int i = 0; i < N; ++i) {
+    for (size_t i = 0; i < N; ++i) {
       table.insert(i, i * 10);
     }
 
-    alekseev::Vector< int > keys_from_iterator;
+    alekseev::Vector< size_t > keys_from_iterator;
     for (auto it = table.begin(); it != table.end(); ++it) {
       keys_from_iterator.pushBack(*it);
       BOOST_CHECK_EQUAL(table.at(*it), *it * 10);
