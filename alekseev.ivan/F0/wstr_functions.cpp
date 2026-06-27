@@ -353,10 +353,11 @@ alekseev::Vector< std::wstring > alekseev::damerau_find(wstr_cr bad_word,
 {
   Vector< std::wstring > res;
   size_t m = max_number == 0 ? candidates.getSize() : max_number;
-  long long int bad_word_size = bad_word.size();
+  size_t bad_word_size = bad_word.size();
   for (size_t i = 0; i < candidates.getSize() && res.getSize() < m; ++i) {
-    long long int cur_size = candidates[i].size();
-    if (std::abs(cur_size - bad_word_size) <= distance) {
+    size_t cur_size = candidates[i].size();
+    size_t dif = bad_word_size > cur_size ? bad_word_size - cur_size : cur_size - bad_word_size;
+    if (dif <= distance) {
       if (damerau_levenshtein(candidates[i], bad_word) <= distance) {
         res.pushBack(candidates[i]);
       }

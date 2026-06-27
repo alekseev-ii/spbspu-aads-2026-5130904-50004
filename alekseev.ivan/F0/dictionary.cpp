@@ -764,10 +764,11 @@ alekseev::Vector< alekseev::WordForm > alekseev::Dictionary::damerau_find_wfs(ws
   Vector< Vector< WordForm > > res(distance + 1, {});
   size_t count = 0;
   size_t m = max_number == 0 ? forms_.size() : max_number;
-  long long int bad_word_size = bad_word.size();
+  size_t bad_word_size = bad_word.size();
   for (auto wfs_it = forms_.begin(); wfs_it != forms_.end() && count < m; ++wfs_it) {
-    long long int cur_size = wfs_it->size();
-    if (std::abs(bad_word_size - cur_size) <= distance) {
+    size_t cur_size = wfs_it->size();
+    size_t dif = bad_word_size > cur_size ? bad_word_size - cur_size : cur_size - bad_word_size;
+    if (dif <= distance) {
       size_t cur_dist = damerau_levenshtein(*wfs_it, bad_word);
       if (cur_dist <= distance) {
         Vector< WordForm > found = get_homoforms(*wfs_it);
@@ -909,7 +910,7 @@ void alekseev::DictionaryManager::add_word(wstr_cr word, std::wistream & is, std
   } else if (p == require) {
     add_req(w, is, os);
   } else if (p == functional) {
-    add_functional(word, is, os);
+    add_functional(word, os);
   }
 }
 
@@ -1465,8 +1466,7 @@ void alekseev::DictionaryManager::add_req(wstr_cr word, std::wistream & is, std:
   os << L"Successfully added " << c << L" forms!\n";
 }
 
-void alekseev::DictionaryManager::add_functional(wstr_cr word, std::wistream & is,
-    std::wostream & os)
+void alekseev::DictionaryManager::add_functional(wstr_cr word, std::wostream & os)
 {
   Dictionary & dict = current();
   dict.add_lemma(word, functional);
