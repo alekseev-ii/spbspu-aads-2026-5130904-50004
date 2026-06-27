@@ -1,0 +1,285 @@
+ниже req
+	ниже gen
+
+из req
+	из gen
+
+касательно req
+	касательно gen
+
+близ req
+	близ gen
+
+сзади req
+	сзади gen
+
+впереди req
+	впереди gen
+
+из-за req
+	из-за gen
+
+внутрь req
+	внутрь gen
+
+путем req
+	путем gen
+
+у req
+	у gen
+
+мимо req
+	мимо gen
+
+ото req
+	ото gen
+
+помимо req
+	помимо gen
+
+ввиду req
+	ввиду gen
+
+кругом req
+	кругом gen
+
+возле req
+	возле gen
+
+поверх req
+	поверх gen
+
+исключая req
+	исключая gen
+
+выше req
+	выше gen
+
+внутри req
+	внутри gen
+
+сверх req
+	сверх gen
+
+изо req
+	изо gen
+
+средись req
+	средись gen
+
+окрест req
+	окрест gen
+
+вокруг req
+	вокруг gen
+
+вместо req
+	вместо gen
+
+до req
+	до gen
+
+позади req
+	позади gen
+
+напротив req
+	напротив gen
+
+прежде req
+	прежде gen
+
+поперек req
+	поперек gen
+
+среди req
+	среди gen
+
+вдоль req
+	вдоль gen
+
+безо req
+	безо gen
+
+вблизи req
+	вблизи gen
+
+против req
+	против gen
+
+снаружи req
+	снаружи gen
+
+посредством req
+	посредством gen
+
+вне req
+	вне gen
+
+из-под req
+	из-под gen
+
+около req
+	около gen
+
+после req
+	после gen
+
+от req
+	от gen
+
+ради req
+	ради gen
+
+без req
+	без gen
+
+свыше req
+	свыше gen
+
+соразмерно req
+	соразмерно dat
+
+наперекор req
+	наперекор dat
+
+благодаря req
+	благодаря dat
+
+сообразно req
+	сообразно dat
+
+ко req
+	ко dat
+
+согласно req
+	согласно dat
+
+наперерез req
+	наперерез dat
+
+подобно req
+	подобно dat
+
+к req
+	к dat
+
+навстречу req
+	навстречу dat
+
+вслед req
+	вслед dat
+
+спустя req
+	спустя acc
+
+через req
+	через acc
+
+про req
+	про acc
+
+сквозь req
+	сквозь acc
+
+над req
+	над ins
+
+надо req
+	надо ins
+
+пред req
+	пред ins
+
+перед req
+	перед ins
+
+предо req
+	предо ins
+
+при req
+	при pre
+
+накануне req
+	накануне pre
+
+вослед req
+	вослед gen
+	вослед dat
+
+вопреки req
+	вопреки gen
+	вопреки dat
+
+включая req
+	включая gen
+	включая acc
+
+в req
+	в acc
+	в pre
+
+на req
+	на acc
+	на pre
+
+о req
+	о acc
+	о pre
+
+об req
+	об acc
+	об pre
+
+обо req
+	обо acc
+	обо pre
+
+между req
+	между gen
+	между ins
+
+меж req
+	меж gen
+	меж ins
+
+под req
+	под acc
+	под ins
+
+за req
+	за acc
+	за ins
+
+по req
+	по dat
+	по acc
+	по pre
+
+с req
+	с gen
+	с acc
+	с ins
+
+я req
+	я 1 sing
+
+ты req
+	ты 2 sing
+
+он req
+	он 3 sing masc
+
+она req
+	она 3 sing fem
+
+оно req
+	оно 3 sing neut
+
+мы req
+	мы 1 plur
+
+вы req
+	вы 2 plur
+
+они req
+	они 3 plur
