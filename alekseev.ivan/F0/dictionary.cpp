@@ -237,6 +237,8 @@ std::wstring alekseev::to_wstring(const Lemma & lemma)
     res += L"adj\n";
   } else if (lemma.pos_ == require) {
     res += L"req\n";
+  } else if (lemma.pos_ == functional) {
+    res += L"func\n";
   }
   for (size_t j = 0; j < lemma.forms_.getSize(); ++j) {
     const WordForm & wf = lemma.forms_[j];
@@ -884,7 +886,7 @@ void alekseev::DictionaryManager::add_word(wstr_cr word, std::wistream & is, std
     ans = L'u';
   }
   if (ans != L'y') {
-    Vector< std::wstring > poses{L"verb", L"adjective", L"noun"};
+    Vector< std::wstring > poses{L"verb", L"adjective", L"noun", L"functional"};
     size_t pos_number = choose(poses, is, os, 0, L"Choose word class:", L"require");
     if (pos_number == 0) {
       p = verb;
@@ -893,6 +895,8 @@ void alekseev::DictionaryManager::add_word(wstr_cr word, std::wistream & is, std
     } else if (pos_number == 2) {
       p = noun;
     } else if (pos_number == 3) {
+      p = functional;
+    } else if (pos_number == 4) {
       p = require;
     }
   }
@@ -904,6 +908,8 @@ void alekseev::DictionaryManager::add_word(wstr_cr word, std::wistream & is, std
     add_noun(w, is, os);
   } else if (p == require) {
     add_req(w, is, os);
+  } else if (p == functional) {
+    add_functional(word, is, os);
   }
 }
 
@@ -1074,7 +1080,8 @@ alekseev::Vector< std::wstring > alekseev::DictionaryManager::damerau_find_form(
     max_number = max_variants_;
   }
   Vector< std::wstring > res;
-  auto check = [&max_number, &res]() {
+  auto check = [&max_number, &res]()
+  {
     return res.getSize() < max_number || max_number == 0;
   };
   for (auto names_it = dicts_.begin(); names_it != dicts_.end() && check(); ++names_it) {
@@ -1097,7 +1104,8 @@ alekseev::Vector< std::wstring > alekseev::DictionaryManager::damerau_find_lemma
     max_number = max_variants_;
   }
   Vector< std::wstring > res;
-  auto check = [&max_number, &res]() {
+  auto check = [&max_number, &res]()
+  {
     return res.getSize() < max_number || max_number == 0;
   };
   for (auto names_it = dicts_.begin(); names_it != dicts_.end() && check(); ++names_it) {
@@ -1120,7 +1128,8 @@ alekseev::Vector< std::wstring > alekseev::DictionaryManager::find_by_require(ws
     max_number = max_variants_;
   }
   Vector< std::wstring > res;
-  auto check = [&max_number, &res]() {
+  auto check = [&max_number, &res]()
+  {
     return res.getSize() < max_number || max_number == 0;
   };
   for (auto names_it = dicts_.begin(); names_it != dicts_.end() && check(); ++names_it) {
@@ -1294,7 +1303,8 @@ void alekseev::DictionaryManager::add_verb(wstr_cr word, std::wistream & is, std
   os << L"    3rd plural (they)     >";
   wgetline(is, pres_3p);
 
-  size_t c = 0;
+  dict.add_form(word, word, nn_gender, nn_number, nn_case, nn_tense, nn_person);
+  size_t c = 1;
   if (!past_masc.empty()) {
     dict.add_form(word, past_masc, masculine, singular, nn_case, past, nn_person);
     ++c;
@@ -1453,6 +1463,15 @@ void alekseev::DictionaryManager::add_req(wstr_cr word, std::wistream & is, std:
     wgetline(is, line);
   }
   os << L"Successfully added " << c << " forms!\n";
+}
+
+void alekseev::DictionaryManager::add_functional(wstr_cr word, std::wistream & is,
+    std::wostream & os)
+{
+  Dictionary & dict = current();
+  dict.add_lemma(word, functional);
+  dict.add_form(word, word, nn_gender, nn_number, nn_case, nn_tense, nn_person);
+  os << L"Successfully added functional " << word << "\n";
 }
 
 std::pair< std::wstring, size_t > alekseev::DictionaryManager::choose_wordform(wstr_cr word,

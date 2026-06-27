@@ -223,7 +223,8 @@ void alekseev::Exec::operator()(wstr_cr line)
   if (!functions_.contains(func_name)) {
     os_ << L"Bad command name!\n";
 
-    Vector< std::wstring > corrections = damerau_find(func_name, functions_.begin(), functions_.end());
+    Vector< std::wstring > corrections = damerau_find(func_name, functions_.begin(),
+        functions_.end());
     corrections += damerau_find(func_name + L"_txt", functions_.begin(), functions_.end());
     corrections += damerau_find(func_name + L"_dict", functions_.begin(), functions_.end());
     size_t ans = choose(corrections, is_, os_, 0, L"Perhaps you mean...");
@@ -352,9 +353,13 @@ void alekseev::Exec::texts(Vector< std::wstring > &) const
     tags += *name == last_corrected ? L"c" : L"";
     tags += *name == last_loaded ? L"l" : L"";
     tags += *name == last_parsed ? L"p" : L"";
-    os_ << std::left << std::setw(4) << tags << *name << L"\n";
+    os_ << std::left << std::setw(4) << tags << *name;
+    if (!texts_.is_saved(*name)) {
+      os_ << L"*";
+    }
+    os_ << L"\n";
   }
-  os_ << L"(c - last corrected text; l - last loaded; p - last parsed)\n";
+  os_ << L"(c - last corrected text; l - last loaded; p - last parsed; * - not saved)\n";
 }
 
 void alekseev::Exec::new_(Vector< std::wstring > & args)

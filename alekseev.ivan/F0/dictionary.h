@@ -219,6 +219,7 @@ namespace alekseev {
       void add_adj(wstr_cr word, std::wistream & is, std::wostream & os);
       void add_noun(wstr_cr word, std::wistream & is, std::wostream & os);
       void add_req(wstr_cr word, std::wistream & is, std::wostream & os);
+      void add_functional(wstr_cr word, std::wistream & is, std::wostream & os);
       std::pair< std::wstring, size_t > choose_wordform(wstr_cr word, std::wistream & is,
           std::wostream & os, size_t max_opts = 0, size_t distance = 0) const;
   };
