@@ -37,7 +37,7 @@ namespace alekseev {
 
       void new_(Vector< std::wstring > & args);
       void load_dict(Vector< std::wstring > & args);
-      void load_default_dicts(Vector< std::wstring > & args);
+      void load_default_dicts(Vector< std::wstring > &);
       void save_dict(Vector< std::wstring > & args);
       void unload_dict(Vector< std::wstring > & args);
       void current(Vector< std::wstring > & args);
@@ -359,7 +359,7 @@ void alekseev::Exec::load_dict(Vector< std::wstring > & args)
   os_ << L" word forms from " << args[1] << L"\n";
 }
 
-void alekseev::Exec::load_default_dicts(Vector< std::wstring > & args)
+void alekseev::Exec::load_default_dicts(Vector< std::wstring > &)
 {
   Vector< std::wstring > opts{L"Load ~1200 lemmas (~ 30s)", L"Load ~1700 lemmas (~ 1m 30s)"};
   size_t opt = choose(opts, is_, os_, 0, L"Do you want to load default dictionary?",
