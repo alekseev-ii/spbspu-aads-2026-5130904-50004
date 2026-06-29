@@ -20,7 +20,7 @@ namespace alekseev {
     void operator()(wstr_cr line);
 
     private:
-      CuckooHash< std::wstring, std::function< void(Vector< std::wstring > &) >, size_t(*)(wstr_cr),
+      CuckooHash< std::wstring, void(Exec::*)(Vector< std::wstring > &), size_t(*)(wstr_cr),
         size_t(*)(wstr_cr), bool(*)(wstr_cr, wstr_cr) > functions_;
       DictionaryManager dicts_;
       TextManager texts_;
@@ -33,7 +33,7 @@ namespace alekseev {
       void parse(Vector< std::wstring > & args);
       void correct(Vector< std::wstring > & args);
       void process(Vector< std::wstring > & args);
-      void texts(Vector< std::wstring > &) const;
+      void texts(Vector< std::wstring > &);
 
       void new_(Vector< std::wstring > & args);
       void load_dict(Vector< std::wstring > & args);
@@ -45,14 +45,14 @@ namespace alekseev {
       void update_form(Vector< std::wstring > & args);
       void delete_lemma(Vector< std::wstring > & args);
       void delete_form(Vector< std::wstring > & args);
-      void dicts(Vector< std::wstring > &) const;
+      void dicts(Vector< std::wstring > &);
 
       void max_variants_txt(Vector< std::wstring > & args);
       void distance_of_find_txt(Vector< std::wstring > & args);
       void max_variants_dict(Vector< std::wstring > & args);
       void distance_of_find_dict(Vector< std::wstring > & args);
 
-      void help(Vector< std::wstring > &) const;
+      void help(Vector< std::wstring > &);
   };
 }
 
@@ -85,100 +85,31 @@ alekseev::Exec::Exec(std::wistream & is, std::wostream & os):
   is_(is),
   os_(os)
 {
-  functions_.insert(L"load_txt", [this](Vector< std::wstring > & args)
-  {
-    load_txt(args);
-  });
-  functions_.insert(L"save_txt", [this](Vector< std::wstring > & args)
-  {
-    save_txt(args);
-  });
-  functions_.insert(L"unload_txt", [this](Vector< std::wstring > & args)
-  {
-    unload_txt(args);
-  });
-  functions_.insert(L"parse", [this](Vector< std::wstring > & args)
-  {
-    parse(args);
-  });
-  functions_.insert(L"correct", [this](Vector< std::wstring > & args)
-  {
-    correct(args);
-  });
-  functions_.insert(L"process", [this](Vector< std::wstring > & args)
-  {
-    process(args);
-  });
-  functions_.insert(L"texts", [this](Vector< std::wstring > & args)
-  {
-    texts(args);
-  });
+  functions_.insert(L"load_txt", &Exec::load_txt);
+  functions_.insert(L"save_txt", &Exec::save_txt);
+  functions_.insert(L"unload_txt", &Exec::unload_txt);
+  functions_.insert(L"parse", &Exec::parse);
+  functions_.insert(L"correct", &Exec::correct);
+  functions_.insert(L"process", &Exec::process);
+  functions_.insert(L"texts", &Exec::texts);
 
-  functions_.insert(L"new", [this](Vector< std::wstring > & args)
-  {
-    new_(args);
-  });
-  functions_.insert(L"load_dict", [this](Vector< std::wstring > & args)
-  {
-    load_dict(args);
-  });
-  functions_.insert(L"load_default_dicts", [this](Vector< std::wstring > & args)
-  {
-    load_default_dicts(args);
-  });
-  functions_.insert(L"save_dict", [this](Vector< std::wstring > & args)
-  {
-    save_dict(args);
-  });
-  functions_.insert(L"unload_dict", [this](Vector< std::wstring > & args)
-  {
-    unload_dict(args);
-  });
-  functions_.insert(L"current", [this](Vector< std::wstring > & args)
-  {
-    current(args);
-  });
-  functions_.insert(L"add", [this](Vector< std::wstring > & args)
-  {
-    add_word(args);
-  });
-  functions_.insert(L"update", [this](Vector< std::wstring > & args)
-  {
-    update_form(args);
-  });
-  functions_.insert(L"delete_lemma", [this](Vector< std::wstring > & args)
-  {
-    delete_lemma(args);
-  });
-  functions_.insert(L"delete_form", [this](Vector< std::wstring > & args)
-  {
-    delete_form(args);
-  });
-  functions_.insert(L"dicts", [this](Vector< std::wstring > & args)
-  {
-    dicts(args);
-  });
+  functions_.insert(L"new", &Exec::new_);
+  functions_.insert(L"load_dict", &Exec::load_dict);
+  functions_.insert(L"load_default_dicts", &Exec::load_default_dicts);
+  functions_.insert(L"save_dict", &Exec::save_dict);
+  functions_.insert(L"unload_dict", &Exec::unload_dict);
+  functions_.insert(L"current", &Exec::current);
+  functions_.insert(L"add", &Exec::add_word);
+  functions_.insert(L"update", &Exec::update_form);
+  functions_.insert(L"delete_lemma", &Exec::delete_lemma);
+  functions_.insert(L"delete_form", &Exec::delete_form);
+  functions_.insert(L"dicts", &Exec::dicts);
 
-  functions_.insert(L"max_variants_txt", [this](Vector< std::wstring > & args)
-  {
-    max_variants_txt(args);
-  });
-  functions_.insert(L"distance_of_find_txt", [this](Vector< std::wstring > & args)
-  {
-    distance_of_find_txt(args);
-  });
-  functions_.insert(L"max_variants_dict", [this](Vector< std::wstring > & args)
-  {
-    max_variants_dict(args);
-  });
-  functions_.insert(L"distance_of_find_dict", [this](Vector< std::wstring > & args)
-  {
-    distance_of_find_dict(args);
-  });
-  functions_.insert(L"help", [this](Vector< std::wstring > & args)
-  {
-    help(args);
-  });
+  functions_.insert(L"max_variants_txt", &Exec::max_variants_txt);
+  functions_.insert(L"distance_of_find_txt", &Exec::distance_of_find_txt);
+  functions_.insert(L"max_variants_dict", &Exec::max_variants_dict);
+  functions_.insert(L"distance_of_find_dict", &Exec::distance_of_find_dict);
+  functions_.insert(L"help", &Exec::help);
 }
 
 void alekseev::Exec::operator()(wstr_cr line)
@@ -204,7 +135,7 @@ void alekseev::Exec::operator()(wstr_cr line)
   }
   Vector< std::wstring > args = words;
   args.erase(0);
-  functions_.at(func_name)(args);
+  (this->*functions_.at(func_name))(args);
 }
 
 void alekseev::Exec::load_txt(Vector< std::wstring > & args)
@@ -306,7 +237,7 @@ void alekseev::Exec::process(Vector< std::wstring > & args)
   }
 }
 
-void alekseev::Exec::texts(Vector< std::wstring > &) const
+void alekseev::Exec::texts(Vector< std::wstring > &)
 {
   if (texts_.texts_begin() == texts_.texts_end()) {
     os_ << L"No texts loaded\n";
@@ -492,7 +423,7 @@ void alekseev::Exec::delete_form(Vector< std::wstring > & args)
   }
 }
 
-void alekseev::Exec::dicts(Vector< std::wstring > &) const
+void alekseev::Exec::dicts(Vector< std::wstring > &)
 {
   if (dicts_.dicts_begin() == dicts_.dicts_end()) {
     os_ << L"No dictionaries loaded\n";
@@ -580,7 +511,7 @@ void alekseev::Exec::distance_of_find_dict(Vector< std::wstring > & args)
   os_ << L" to " << dicts_.default_distance() << L"\n";
 }
 
-void alekseev::Exec::help(Vector< std::wstring > &) const
+void alekseev::Exec::help(Vector< std::wstring > &)
 {
   os_ << L"A program for finding typos in the text, correcting them, "
       "and managing dictionaries for these tasks\n"
