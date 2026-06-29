@@ -106,9 +106,9 @@ namespace alekseev {
 
   template< class Key, class Value, class Hash1, class Hash2, class Equal >
   CuckooHash< Key, Value, Hash1, Hash2, Equal >::CuckooHash(const CuckooHash & rhs):
-    table1_(rhs.capacity(), nullptr),
+    table1_(rhs.capacity() / 2, nullptr),
     hasher1_(rhs.hasher1_),
-    table2_(rhs.capacity(), nullptr),
+    table2_(rhs.capacity() / 2, nullptr),
     hasher2_(rhs.hasher2_),
     equal_(rhs.equal_),
     size_(rhs.size_),
@@ -333,8 +333,8 @@ namespace alekseev {
   Vector< Key > CuckooHash< Key, Value, Hash1, Hash2, Equal >::keys() const
   {
     Vector< Key > result;
-    result.resize(capacity());
-    for (size_t i = 0; i < capacity(); ++i) {
+    result.resize(size());
+    for (size_t i = 0; i < capacity() / 2; ++i) {
       if (table1_[i] != nullptr) {
         result.pushBack(table1_[i]->first);
       }
@@ -526,7 +526,7 @@ namespace alekseev {
   typename CuckooHash< Key, Value, Hash1, Hash2, Equal >::KeyIterator CuckooHash< Key, Value, Hash1,
     Hash2, Equal >::end() const
   {
-    return KeyIterator(false, capacity_, table1_, table2_);
+    return KeyIterator(false, capacity_ / 2, table1_, table2_);
   }
 
   template< class Key, class Value, class Hash1, class Hash2, class Equal >
