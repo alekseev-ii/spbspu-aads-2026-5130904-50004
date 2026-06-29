@@ -16,7 +16,7 @@ namespace alekseev {
     Vector & operator=(Vector && rhs) noexcept;
 
     Vector();
-    explicit Vector(std::initializer_list< T > init);
+    Vector(std::initializer_list< T > init);
     Vector(size_t size, const T & value);
 
     bool empty() const noexcept;
@@ -35,7 +35,6 @@ namespace alekseev {
     bool operator==(const Vector & rhs) const;
 
     void insert(size_t id, const T & value);
-    void insert(size_t id, const Vector & rhs, size_t begin, size_t end);
     void erase(size_t id);
     void erase(size_t begin, size_t end);
     Vector operator+(const Vector & rhs) const;
@@ -44,6 +43,50 @@ namespace alekseev {
     template< class Less >
     void bubbleSort(Less less);
     void resize(size_t new_capacity);
+
+    template< class U >
+    struct Basic_Iterator
+    {
+      using iterator_category = std::random_access_iterator_tag;
+      using value_type = T;
+      using difference_type = std::ptrdiff_t;
+      using pointer = U *;
+      using reference = U &;
+
+      Basic_Iterator();
+      Basic_Iterator(pointer current, pointer end);
+
+      Basic_Iterator & operator++();
+      Basic_Iterator operator++(int);
+      Basic_Iterator operator+(size_t ind) const;
+      Basic_Iterator & operator--();
+      Basic_Iterator operator--(int);
+      Basic_Iterator operator-(size_t ind) const;
+      Basic_Iterator & operator+=(size_t ind);
+      Basic_Iterator & operator-=(size_t ind);
+      bool operator==(const Basic_Iterator & rhs) const;
+      bool operator!=(const Basic_Iterator & rhs) const;
+      bool operator<(const Basic_Iterator & rhs) const;
+      bool operator>(const Basic_Iterator & rhs) const;
+      bool operator<=(const Basic_Iterator & rhs) const;
+      bool operator>=(const Basic_Iterator & rhs) const;
+
+      reference operator*();
+      pointer operator->();
+
+      private:
+        pointer current_, end_;
+    };
+
+    using Iterator = Basic_Iterator< T >;
+    using ConstIterator = Basic_Iterator< const T >;
+
+    Iterator begin();
+    Iterator end();
+    ConstIterator begin() const;
+    ConstIterator end() const;
+    ConstIterator cbegin() const;
+    ConstIterator cend() const;
 
     private:
       explicit Vector(size_t size);
@@ -94,6 +137,8 @@ alekseev::Vector< T >::Vector(Vector && rhs) noexcept:
   capacity_(rhs.capacity_)
 {
   rhs.data_ = nullptr;
+  rhs.size_ = 0;
+  rhs.capacity_ = 0;
 }
 
 template< class T >
@@ -260,26 +305,6 @@ void alekseev::Vector< T >::insert(size_t id, const T & value)
 }
 
 template< class T >
-void alekseev::Vector< T >::insert(size_t id, const Vector & rhs, size_t begin, size_t end)
-{
-  size_t len = end - begin;
-  Vector temp(size() + len);
-
-  for (size_t i = 0; i < size() + 1; ++i) {
-    if (i < id) {
-      temp[i] = (*this)[i];
-    } else if (i == id) {
-      for (size_t j = 0; j < len; ++j) {
-        temp[i + j] = rhs[begin + j];
-      }
-    } else {
-      temp[i + len] = (*this)[i - 1];
-    }
-  }
-  swap(temp);
-}
-
-template< class T >
 void alekseev::Vector< T >::erase(size_t id)
 {
   Vector temp(size() - 1);
@@ -363,6 +388,186 @@ void alekseev::Vector< T >::resize(size_t new_capacity)
   delete [] data_;
   data_ = temp;
   capacity_ = new_capacity;
+}
+
+template< class T >
+template< class U >
+alekseev::Vector< T >::Basic_Iterator< U >::Basic_Iterator():
+  current_(nullptr),
+  end_(nullptr)
+{ }
+
+template< class T >
+template< class U >
+alekseev::Vector< T >::Basic_Iterator< U >::Basic_Iterator(pointer current, pointer end):
+  current_(current),
+  end_(end)
+{ }
+
+template< class T >
+template< class U >
+typename alekseev::Vector< T >::template Basic_Iterator< U > &
+alekseev::Vector< T >::Basic_Iterator< U >::operator++()
+{
+  ++current_;
+  return *this;
+}
+
+template< class T >
+template< class U >
+typename alekseev::Vector< T >::template Basic_Iterator< U >
+alekseev::Vector< T >::Basic_Iterator< U >::operator++(int)
+{
+  auto temp = *this;
+  ++(*this);
+  return temp;
+}
+
+template< class T >
+template< class U >
+typename alekseev::Vector< T >::template Basic_Iterator< U >
+alekseev::Vector< T >::Basic_Iterator< U >::operator+(size_t ind) const
+{
+  return Basic_Iterator(current_ + ind, end_);
+}
+
+template< class T >
+template< class U >
+typename alekseev::Vector< T >::template Basic_Iterator< U > &
+alekseev::Vector< T >::Basic_Iterator< U >::operator--()
+{
+  --current_;
+  return *this;
+}
+
+template< class T >
+template< class U >
+typename alekseev::Vector< T >::template Basic_Iterator< U >
+alekseev::Vector< T >::Basic_Iterator< U >::operator--(int)
+{
+  auto temp = *this;
+  --(*this);
+  return temp;
+}
+
+template< class T >
+template< class U >
+typename alekseev::Vector< T >::template Basic_Iterator< U >
+alekseev::Vector< T >::Basic_Iterator< U >::operator-(size_t ind) const
+{
+  return Basic_Iterator(current_ - ind, end_);
+}
+
+template< class T >
+template< class U >
+typename alekseev::Vector< T >::template Basic_Iterator< U > &
+alekseev::Vector< T >::Basic_Iterator< U >::operator+=(size_t ind)
+{
+  current_ += ind;
+  return *this;
+}
+
+template< class T >
+template< class U >
+typename alekseev::Vector< T >::template Basic_Iterator< U > &
+alekseev::Vector< T >::Basic_Iterator< U >::operator-=(size_t ind)
+{
+  current_ -= ind;
+  return *this;
+}
+
+template< class T >
+template< class U >
+bool alekseev::Vector< T >::Basic_Iterator< U >::operator==(const Basic_Iterator & rhs) const
+{
+  return current_ == rhs.current_;
+}
+
+template< class T >
+template< class U >
+bool alekseev::Vector< T >::Basic_Iterator< U >::operator!=(const Basic_Iterator & rhs) const
+{
+  return !(*this == rhs);
+}
+
+template< class T >
+template< class U >
+bool alekseev::Vector< T >::Basic_Iterator< U >::operator<(const Basic_Iterator & rhs) const
+{
+  return current_ < rhs.current_;
+}
+
+template< class T >
+template< class U >
+bool alekseev::Vector< T >::Basic_Iterator< U >::operator>(const Basic_Iterator & rhs) const
+{
+  return rhs < *this;
+}
+
+template< class T >
+template< class U >
+bool alekseev::Vector< T >::Basic_Iterator< U >::operator<=(const Basic_Iterator & rhs) const
+{
+  return !(*this > rhs);
+}
+
+template< class T >
+template< class U >
+bool alekseev::Vector< T >::Basic_Iterator< U >::operator>=(const Basic_Iterator & rhs) const
+{
+  return !(*this < rhs);
+}
+
+template< class T >
+template< class U >
+typename alekseev::Vector< T >::template Basic_Iterator< U >::reference
+alekseev::Vector< T >::Basic_Iterator< U >::operator*()
+{
+  return *current_;
+}
+
+template< class T >
+template< class U >
+typename alekseev::Vector< T >::template Basic_Iterator< U >::pointer
+alekseev::Vector< T >::Basic_Iterator< U >::operator->()
+{
+  return current_;
+}
+
+template< class T >
+typename alekseev::Vector< T >::Iterator alekseev::Vector< T >::begin()
+{
+  return Iterator(data_, data_ + size());
+}
+
+template< class T >
+typename alekseev::Vector< T >::Iterator alekseev::Vector< T >::end()
+{
+  return Iterator(data_ + size(), data_ + size());
+}
+
+template< class T >
+typename alekseev::Vector< T >::ConstIterator alekseev::Vector< T >::begin() const
+{
+  return ConstIterator(data_, data_ + size());
+}
+
+template< class T >
+typename alekseev::Vector< T >::ConstIterator alekseev::Vector< T >::end() const
+{
+  return ConstIterator(data_ + size(), data_ + size());
+}
+
+template< class T >
+typename alekseev::Vector< T >::ConstIterator alekseev::Vector< T >::cbegin() const
+{
+  return begin();
+}
+
+template< class T >
+typename alekseev::Vector< T >::ConstIterator alekseev::Vector< T >::cend() const
+{
+  return end();
 }
 
 template< class T >
