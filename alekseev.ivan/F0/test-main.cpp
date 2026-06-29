@@ -253,11 +253,11 @@ BOOST_AUTO_TEST_SUITE(AccessMethods)
     }
 
     alekseev::Vector< int > keys = table.keys();
-    BOOST_CHECK_EQUAL(keys.getSize(), 10);
+    BOOST_CHECK_EQUAL(keys.size(), 10);
 
     for (int i = 0; i < 10; ++i) {
       bool found = false;
-      for (size_t j = 0; j < keys.getSize(); ++j) {
+      for (size_t j = 0; j < keys.size(); ++j) {
         if (keys[j] == i) {
           found = true;
           break;
@@ -475,11 +475,11 @@ BOOST_AUTO_TEST_SUITE(IteratorTests)
       keys_from_iterator.pushBack(*it);
     }
 
-    BOOST_CHECK_EQUAL(keys_from_iterator.getSize(), N);
+    BOOST_CHECK_EQUAL(keys_from_iterator.size(), N);
 
     for (size_t i = 0; i < N; ++i) {
       bool found = false;
-      for (size_t j = 0; j < keys_from_iterator.getSize() && !found; ++j) {
+      for (size_t j = 0; j < keys_from_iterator.size() && !found; ++j) {
         found = (keys_from_iterator.at(j) == i);
       }
       BOOST_CHECK(found);
@@ -555,11 +555,11 @@ BOOST_AUTO_TEST_SUITE(IteratorTests)
       BOOST_CHECK_EQUAL(table.at(*it), *it * 10);
     }
 
-    BOOST_CHECK_EQUAL(keys_from_iterator.getSize(), N);
+    BOOST_CHECK_EQUAL(keys_from_iterator.size(), N);
 
     for (size_t i = 0; i < N; ++i) {
       bool found = false;
-      for (size_t j = 0; j < keys_from_iterator.getSize() && !found; ++j) {
+      for (size_t j = 0; j < keys_from_iterator.size() && !found; ++j) {
         found = (keys_from_iterator.at(j) == i);
       }
       BOOST_CHECK(found);

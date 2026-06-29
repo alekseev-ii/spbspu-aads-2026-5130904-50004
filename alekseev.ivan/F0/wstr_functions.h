@@ -134,10 +134,10 @@ namespace alekseev {
   size_t choose(const Vector< T > & opts, std::wistream & is, std::wostream & os, size_t max_opts,
       wstr_cr what_is_your_choice, wstr_cr no_one, bool need_cycle)
   {
-    if (opts.isEmpty()) {
+    if (opts.empty()) {
       throw std::invalid_argument("Empty candidates");
     }
-    size_t s = opts.getSize();
+    size_t s = opts.size();
     size_t n_opts = (max_opts == 0) ? s : std::min(max_opts, s);
     os << what_is_your_choice << L"\n";
     for (size_t i = 0; i < n_opts; ++i) {

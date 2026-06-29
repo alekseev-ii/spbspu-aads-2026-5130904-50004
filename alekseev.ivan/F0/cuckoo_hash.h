@@ -502,7 +502,7 @@ namespace alekseev {
   CuckooHash< Key, Value, Hash1, Hash2, Equal >::KeyIterator::operator++()
   {
     ++index_;
-    while (first_table_ && index_ < t1_.getSize()) {
+    while (first_table_ && index_ < t1_.size()) {
       if (t1_[index_] == nullptr) {
         ++index_;
       } else {
@@ -513,7 +513,7 @@ namespace alekseev {
       first_table_ = false;
       index_ = 0;
     }
-    while (index_ < t2_.getSize()) {
+    while (index_ < t2_.size()) {
       if (t2_[index_] == nullptr) {
         ++index_;
       } else {

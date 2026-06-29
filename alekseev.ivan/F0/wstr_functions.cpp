@@ -162,15 +162,15 @@ alekseev::Vector< bool > alekseev::mask_from_case(wstr_cr str)
 std::wstring alekseev::case_from_mask(wstr_cr str, const Vector< bool > & mask)
 {
   std::wstring res;
-  for (size_t i = 0; i < std::min(str.size(), mask.getSize()); ++i) {
+  for (size_t i = 0; i < std::min(str.size(), mask.size()); ++i) {
     if (mask[i]) {
       res += to_upper(str[i]);
     } else {
       res += to_lower(str[i]);
     }
   }
-  if (str.size() > mask.getSize()) {
-    res += str.substr(mask.getSize(), str.size() - mask.getSize());
+  if (str.size() > mask.size()) {
+    res += str.substr(mask.size(), str.size() - mask.size());
   }
   return res;
 }
@@ -352,9 +352,9 @@ alekseev::Vector< std::wstring > alekseev::damerau_find(wstr_cr bad_word,
     const Vector< std::wstring > & candidates, size_t max_number, size_t distance)
 {
   Vector< std::wstring > res;
-  size_t m = max_number == 0 ? candidates.getSize() : max_number;
+  size_t m = max_number == 0 ? candidates.size() : max_number;
   size_t bad_word_size = bad_word.size();
-  for (size_t i = 0; i < candidates.getSize() && res.getSize() < m; ++i) {
+  for (size_t i = 0; i < candidates.size() && res.size() < m; ++i) {
     size_t cur_size = candidates[i].size();
     size_t dif = bad_word_size > cur_size ? bad_word_size - cur_size : cur_size - bad_word_size;
     if (dif <= distance) {

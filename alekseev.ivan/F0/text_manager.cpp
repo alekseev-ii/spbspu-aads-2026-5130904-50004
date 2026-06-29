@@ -8,9 +8,9 @@ alekseev::text_t alekseev::from_wstring(wstr_cr orig_text)
 {
   text_t res{{}, {}, {}, {}, false};
   res.original = split(replace(orig_text, L"\n", L"\n "));
-  res.punctuations = Vector< std::pair< std::wstring, std::wstring > >(res.original.getSize(),
+  res.punctuations = Vector< std::pair< std::wstring, std::wstring > >(res.original.size(),
       {{}, {}});
-  for (size_t i = 0; i < res.original.getSize(); ++i) {
+  for (size_t i = 0; i < res.original.size(); ++i) {
     size_t orig = res.original[i].size();
     std::wstring word = rtrim(res.original[i], [](wchar_t ch)
     {
@@ -48,12 +48,12 @@ std::wstring alekseev::to_wstring(const Vector< std::wstring > & text,
     const Vector< std::pair< std::wstring, std::wstring > > & punctuation, size_t start, size_t end)
 {
   if (end == 0) {
-    end = text.getSize();
+    end = text.size();
   }
-  if (end > text.getSize() || end <= start) {
+  if (end > text.size() || end <= start) {
     throw std::out_of_range("End greater than size of text or end <= start");
   }
-  if (text.getSize() != punctuation.getSize()) {
+  if (text.size() != punctuation.size()) {
     throw std::out_of_range("text and punctuations do not match");
   }
   std::wstring res;
@@ -110,7 +110,7 @@ alekseev::wstr_cr alekseev::TextManager::parse(wstr_cr name)
   }
   std::wstring last_req;
   bool was_require = false;
-  for (size_t i = 0; i < for_correct.original.getSize(); ++i) {
+  for (size_t i = 0; i < for_correct.original.size(); ++i) {
     std::wstring word = lower_case(for_correct.original[i]);
     if (word.empty()) {
       continue;
@@ -152,7 +152,7 @@ alekseev::wstr_cr alekseev::TextManager::correct(std::wistream & is, std::wostre
   if (for_correct.typos.empty()) {
     throw std::invalid_argument("Text not parsed!");
   }
-  size_t s = for_correct.original.getSize();
+  size_t s = for_correct.original.size();
   Vector< std::wstring > corrected(for_correct.original);
 
   while (!for_correct.typos.empty()) {
@@ -170,8 +170,8 @@ alekseev::wstr_cr alekseev::TextManager::correct(std::wistream & is, std::wostre
     }
     os << L"\n";
     size_t n_opts = max_variants_ == 0 ?
-                      err.second.getSize() :
-                      std::min(max_variants_ + 1, err.second.getSize());
+                      err.second.size() :
+                      std::min(max_variants_ + 1, err.second.size());
     size_t ans = choose(err.second, is, os, n_opts, L"Choose correction:", L"Your variant...");
     if (ans == n_opts) {
       os << L"Enter your variant >";
@@ -204,7 +204,7 @@ alekseev::wstr_cr alekseev::TextManager::save(wstr_cr file_name, wstr_cr text_na
   if (!f.is_open()) {
     throw std::invalid_argument("Can not open file!");
   }
-  f << converter.to_bytes(to_wstring(for_save, 0, 0, !for_save.corrected.isEmpty()));
+  f << converter.to_bytes(to_wstring(for_save, 0, 0, !for_save.corrected.empty()));
   if (f.good()) {
     for_save.saved = true;
   }

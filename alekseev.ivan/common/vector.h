@@ -10,32 +10,32 @@ namespace alekseev {
   struct Vector
   {
     ~Vector();
-    Vector(const Vector< T > & rhs);
-    Vector< T > & operator=(const Vector< T > & rhs);
-    Vector(Vector< T > && rhs) noexcept;
-    Vector< T > & operator=(Vector< T > && rhs) noexcept;
+    Vector(const Vector & rhs);
+    Vector & operator=(const Vector & rhs);
+    Vector(Vector && rhs) noexcept;
+    Vector & operator=(Vector && rhs) noexcept;
 
     Vector();
     explicit Vector(std::initializer_list< T > init);
     Vector(size_t size, const T & value);
 
-    bool isEmpty() const noexcept;
-    size_t getSize() const noexcept;
-    size_t getCapacity() const noexcept;
+    bool empty() const noexcept;
+    size_t size() const noexcept;
+    size_t capacity() const noexcept;
 
     T & operator[](size_t id) noexcept;
     const T & operator[](size_t id) const noexcept;
     T & at(size_t id);
     const T & at(size_t id) const;
-    void swap(Vector< T > & rhs) noexcept;
+    void swap(Vector & rhs) noexcept;
     void pushFront(const T & value);
     void pushBack(const T &);
     void push_back(const T & value);
     void popBack();
-    bool operator==(const Vector< T > & rhs) const;
+    bool operator==(const Vector & rhs) const;
 
     void insert(size_t id, const T & value);
-    void insert(size_t id, const Vector< T > & rhs, size_t begin, size_t end);
+    void insert(size_t id, const Vector & rhs, size_t begin, size_t end);
     void erase(size_t id);
     void erase(size_t begin, size_t end);
     Vector operator+(const Vector & rhs) const;
@@ -66,29 +66,29 @@ alekseev::Vector< T >::~Vector()
 }
 
 template< class T >
-alekseev::Vector< T >::Vector(const Vector< T > & rhs)
+alekseev::Vector< T >::Vector(const Vector & rhs)
 {
-  data_ = new T[rhs.getSize()];
-  for (size_t i = 0; i < rhs.getSize(); ++i) {
+  data_ = new T[rhs.size()];
+  for (size_t i = 0; i < rhs.size(); ++i) {
     data_[i] = rhs.data_[i];
   }
-  size_ = rhs.getSize();
+  size_ = rhs.size();
   capacity_ = size_;
 }
 
 template< class T >
-alekseev::Vector< T > & alekseev::Vector< T >::operator=(const Vector< T > & rhs)
+alekseev::Vector< T > & alekseev::Vector< T >::operator=(const Vector & rhs)
 {
   if (this == std::addressof(rhs)) {
     return *this;
   }
-  Vector< T > cpy(rhs);
+  Vector cpy(rhs);
   swap(cpy);
   return *this;
 }
 
 template< class T >
-alekseev::Vector< T >::Vector(Vector< T > && rhs) noexcept:
+alekseev::Vector< T >::Vector(Vector && rhs) noexcept:
   data_(rhs.data_),
   size_(rhs.size_),
   capacity_(rhs.capacity_)
@@ -97,9 +97,9 @@ alekseev::Vector< T >::Vector(Vector< T > && rhs) noexcept:
 }
 
 template< class T >
-alekseev::Vector< T > & alekseev::Vector< T >::operator=(Vector< T > && rhs) noexcept
+alekseev::Vector< T > & alekseev::Vector< T >::operator=(Vector && rhs) noexcept
 {
-  Vector< T > cpy(std::move(rhs));
+  Vector cpy(std::move(rhs));
   swap(cpy);
   return *this;
 }
@@ -124,19 +124,19 @@ alekseev::Vector< T >::Vector(std::initializer_list< T > init):
 }
 
 template< class T >
-bool alekseev::Vector< T >::isEmpty() const noexcept
+bool alekseev::Vector< T >::empty() const noexcept
 {
   return !size_;
 }
 
 template< class T >
-size_t alekseev::Vector< T >::getSize() const noexcept
+size_t alekseev::Vector< T >::size() const noexcept
 {
   return size_;
 }
 
 template< class T >
-size_t alekseev::Vector< T >::getCapacity() const noexcept
+size_t alekseev::Vector< T >::capacity() const noexcept
 {
   return capacity_;
 }
@@ -144,7 +144,7 @@ size_t alekseev::Vector< T >::getCapacity() const noexcept
 template< class T >
 T & alekseev::Vector< T >::operator[](size_t id) noexcept
 {
-  return const_cast< T & >((*static_cast< const Vector< T > * >(this))[id]);
+  return const_cast< T & >((*static_cast< const Vector * >(this))[id]);
 }
 
 template< class T >
@@ -156,7 +156,7 @@ const T & alekseev::Vector< T >::operator[](size_t id) const noexcept
 template< class T >
 T & alekseev::Vector< T >::at(size_t id)
 {
-  const Vector< T > * cthis = this;
+  const Vector * cthis = this;
   const T & cr = cthis->at(id);
   T & r = const_cast< T & >(cr);
   return r;
@@ -165,14 +165,14 @@ T & alekseev::Vector< T >::at(size_t id)
 template< class T >
 const T & alekseev::Vector< T >::at(size_t id) const
 {
-  if (id < getSize()) {
+  if (id < size()) {
     return (*this)[id];
   }
   throw std::out_of_range("index out of range");
 }
 
 template< class T >
-void alekseev::Vector< T >::swap(Vector< T > & rhs) noexcept
+void alekseev::Vector< T >::swap(Vector & rhs) noexcept
 {
   T * tmp = data_;
   data_ = rhs.data_;
@@ -184,9 +184,9 @@ void alekseev::Vector< T >::swap(Vector< T > & rhs) noexcept
 template< class T >
 void alekseev::Vector< T >::pushFront(const T & value)
 {
-  Vector< T > v(getSize() + 1);
+  Vector v(size() + 1);
   v[0] = value;
-  for (size_t i = 1; i < v.getSize(); ++i) {
+  for (size_t i = 1; i < v.size(); ++i) {
     v[i] = (*this)[i - 1];
   }
   swap(v);
@@ -216,11 +216,11 @@ void alekseev::Vector< T >::pushBack(const T & value)
 template< class T >
 void alekseev::Vector< T >::push_back(const T & value)
 {
-  Vector< T > v(getSize() + 1);
-  for (size_t i = 0; i < getSize(); ++i) {
+  Vector v(size() + 1);
+  for (size_t i = 0; i < size(); ++i) {
     v[i] = (*this)[i];
   }
-  v[getSize()] = value;
+  v[size()] = value;
   swap(v);
 }
 
@@ -234,10 +234,10 @@ void alekseev::Vector< T >::popBack()
 }
 
 template< class T >
-bool alekseev::Vector< T >::operator==(const Vector< T > & rhs) const
+bool alekseev::Vector< T >::operator==(const Vector & rhs) const
 {
-  bool isEqual = getSize() == rhs.getSize();
-  for (size_t i = 0; isEqual && i < getSize(); ++i) {
+  bool isEqual = size() == rhs.size();
+  for (size_t i = 0; isEqual && i < size(); ++i) {
     isEqual = (*this)[i] == rhs[i];
   }
   return isEqual;
@@ -246,8 +246,8 @@ bool alekseev::Vector< T >::operator==(const Vector< T > & rhs) const
 template< class T >
 void alekseev::Vector< T >::insert(size_t id, const T & value)
 {
-  Vector< T > temp(getSize() + 1);
-  for (size_t i = 0; i < getSize() + 1; ++i) {
+  Vector temp(size() + 1);
+  for (size_t i = 0; i < size() + 1; ++i) {
     if (i < id) {
       temp[i] = (*this)[i];
     } else if (i == id) {
@@ -260,12 +260,12 @@ void alekseev::Vector< T >::insert(size_t id, const T & value)
 }
 
 template< class T >
-void alekseev::Vector< T >::insert(size_t id, const Vector< T > & rhs, size_t begin, size_t end)
+void alekseev::Vector< T >::insert(size_t id, const Vector & rhs, size_t begin, size_t end)
 {
   size_t len = end - begin;
-  Vector< T > temp(getSize() + len);
+  Vector temp(size() + len);
 
-  for (size_t i = 0; i < getSize() + 1; ++i) {
+  for (size_t i = 0; i < size() + 1; ++i) {
     if (i < id) {
       temp[i] = (*this)[i];
     } else if (i == id) {
@@ -282,8 +282,8 @@ void alekseev::Vector< T >::insert(size_t id, const Vector< T > & rhs, size_t be
 template< class T >
 void alekseev::Vector< T >::erase(size_t id)
 {
-  Vector< T > temp(getSize() - 1);
-  for (size_t i = 0; i < getSize() - 1; ++i) {
+  Vector temp(size() - 1);
+  for (size_t i = 0; i < size() - 1; ++i) {
     size_t j = i < id ? i : i + 1;
     temp[i] = (*this)[j];
   }
@@ -294,8 +294,8 @@ template< class T >
 void alekseev::Vector< T >::erase(size_t begin, size_t end)
 {
   size_t len = end - begin;
-  Vector< T > temp(getSize() - len);
-  for (size_t i = 0; i < getSize() - len; ++i) {
+  Vector temp(size() - len);
+  for (size_t i = 0; i < size() - len; ++i) {
     size_t j = i < begin ? i : i + len;
     temp[i] = (*this)[j];
   }
@@ -305,12 +305,12 @@ void alekseev::Vector< T >::erase(size_t begin, size_t end)
 template< class T >
 alekseev::Vector< T > alekseev::Vector< T >::operator+(const Vector & rhs) const
 {
-  Vector temp(getSize() + rhs.getSize());
-  for (size_t i = 0; i < getSize(); ++i) {
+  Vector temp(size() + rhs.size());
+  for (size_t i = 0; i < size(); ++i) {
     temp[i] = (*this)[i];
   }
-  for (size_t i = 0; i < rhs.getSize(); ++i) {
-    temp[i + getSize()] = rhs[i];
+  for (size_t i = 0; i < rhs.size(); ++i) {
+    temp[i + size()] = rhs[i];
   }
   return temp;
 }
@@ -334,7 +334,7 @@ void alekseev::Vector< T >::bubbleSort(Less less)
   Vector temp = *this;
   while (swapped) {
     swapped = false;
-    for (size_t i = 0; i < getSize() - 1; ++i) {
+    for (size_t i = 0; i < size() - 1; ++i) {
       if (less(temp[i + 1], temp[i])) {
         swapped = true;
         T t = temp[i];
@@ -349,12 +349,16 @@ void alekseev::Vector< T >::bubbleSort(Less less)
 template< class T >
 void alekseev::Vector< T >::resize(size_t new_capacity)
 {
-  if (new_capacity <= getSize()) {
+  if (new_capacity <= size()) {
     return;
   }
   T * temp = new T[new_capacity];
-  for (size_t i = 0; i < getSize(); ++i) {
-    temp[i] = data_[i];
+  try {
+    for (size_t i = 0; i < size(); ++i) {
+      temp[i] = data_[i];
+    }
+  } catch (...) {
+    delete[] temp;
   }
   delete [] data_;
   data_ = temp;
