@@ -71,6 +71,8 @@ namespace alekseev {
 
     KeyIterator begin() const;
     KeyIterator end() const;
+    KeyIterator сbegin() const;
+    KeyIterator сend() const;
 
     private:
       Vector< std::pair< Key, Value > * > table1_;
@@ -525,6 +527,20 @@ namespace alekseev {
     Hash2, Equal >::end() const
   {
     return KeyIterator(false, capacity_, table1_, table2_);
+  }
+
+  template< class Key, class Value, class Hash1, class Hash2, class Equal >
+  typename CuckooHash<Key, Value, Hash1, Hash2, Equal>::KeyIterator CuckooHash<Key, Value, Hash1,
+  Hash2, Equal>::сbegin() const
+  {
+    return begin();
+  }
+
+  template< class Key, class Value, class Hash1, class Hash2, class Equal >
+  typename CuckooHash<Key, Value, Hash1, Hash2, Equal>::KeyIterator CuckooHash<Key, Value, Hash1,
+  Hash2, Equal>::сend() const
+  {
+    return end();
   }
 }
 
