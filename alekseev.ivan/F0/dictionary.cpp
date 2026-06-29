@@ -297,12 +297,7 @@ void alekseev::Dictionary::read(wstr_cr file_name)
   if (!is.is_open()) {
     throw std::invalid_argument("Failed to open file");
   }
-  try {
-    read(is);
-  } catch (...) {
-    is.close();
-    throw;
-  }
+  read(is);
   is.close();
 }
 

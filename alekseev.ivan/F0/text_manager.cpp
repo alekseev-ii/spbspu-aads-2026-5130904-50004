@@ -84,18 +84,13 @@ void alekseev::TextManager::load(wstr_cr file_name, wstr_cr text_name)
   if (!f.is_open()) {
     throw std::invalid_argument("Can not open file!");
   }
-  try {
-    std::string line;
-    while (std::getline(f, line)) {
-      text += rtrim(converter.from_bytes(line), [](wchar_t ch)
-      {
-        return ch == L'\r';
-      });
-      text += L"\n";
-    }
-  } catch (...) {
-    f.close();
-    throw;
+  std::string line;
+  while (std::getline(f, line)) {
+    text += rtrim(converter.from_bytes(line), [](wchar_t ch)
+    {
+      return ch == L'\r';
+    });
+    text += L"\n";
   }
   f.close();
   text_t t = from_wstring(text);
@@ -174,9 +169,9 @@ alekseev::wstr_cr alekseev::TextManager::correct(std::wistream & is, std::wostre
       os << to_wstring(for_correct, i + 1, end, false);
     }
     os << L"\n";
-    size_t n_opts = max_variants_ == 0
-                      ? err.second.getSize()
-                      : std::min(max_variants_ + 1, err.second.getSize());
+    size_t n_opts = max_variants_ == 0 ?
+                      err.second.getSize() :
+                      std::min(max_variants_ + 1, err.second.getSize());
     size_t ans = choose(err.second, is, os, n_opts, L"Choose correction:", L"Your variant...");
     if (ans == n_opts) {
       os << L"Enter your variant >";
@@ -209,14 +204,9 @@ alekseev::wstr_cr alekseev::TextManager::save(wstr_cr file_name, wstr_cr text_na
   if (!f.is_open()) {
     throw std::invalid_argument("Can not open file!");
   }
-  try {
-    f << converter.to_bytes(to_wstring(for_save, 0, 0, !for_save.corrected.isEmpty()));
-    if (f.good()) {
-      for_save.saved = true;
-    }
-  } catch (...) {
-    f.close();
-    throw;
+  f << converter.to_bytes(to_wstring(for_save, 0, 0, !for_save.corrected.isEmpty()));
+  if (f.good()) {
+    for_save.saved = true;
   }
   f.close();
   return text_name.empty() ? last_corrected_ : text_name;
