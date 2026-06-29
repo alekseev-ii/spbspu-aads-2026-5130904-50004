@@ -447,4 +447,13 @@ BOOST_AUTO_TEST_SUITE(VectorIterator)
     BOOST_CHECK_EQUAL(*it, 3);
   }
 
+BOOST_AUTO_TEST_CASE(IterratorDiff)
+{
+  alekseev::Vector< int > v = {0, 1, 2, 3, 4, 5};
+  auto it0 = v.begin(), it3 = v.begin() + 3;
+  BOOST_CHECK_EQUAL(*it0, 0);
+  BOOST_CHECK_EQUAL(*it3, 3);
+  BOOST_CHECK_EQUAL(it3 - it0, 3);
+}
+
 BOOST_AUTO_TEST_SUITE_END()

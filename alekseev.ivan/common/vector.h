@@ -64,6 +64,7 @@ namespace alekseev {
       Basic_Iterator operator-(size_t ind) const;
       Basic_Iterator & operator+=(size_t ind);
       Basic_Iterator & operator-=(size_t ind);
+      difference_type operator-(Basic_Iterator rhs) const;
       bool operator==(const Basic_Iterator & rhs) const noexcept;
       bool operator!=(const Basic_Iterator & rhs) const noexcept;
       bool operator<(const Basic_Iterator & rhs) const noexcept;
@@ -476,6 +477,14 @@ alekseev::Vector< T >::Basic_Iterator< U >::operator-=(size_t ind)
 {
   current_ -= ind;
   return *this;
+}
+
+template< class T >
+template< class U >
+typename alekseev::Vector< T >::template Basic_Iterator< U >::difference_type
+alekseev::Vector< T >::Basic_Iterator< U >::operator-(Basic_Iterator rhs) const
+{
+  return current_ - rhs.current_;
 }
 
 template< class T >
