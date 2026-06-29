@@ -116,11 +116,16 @@ namespace alekseev {
     max_load_factor_(rhs.max_load_factor_)
   {
     for (size_t i = 0; i < (rhs.capacity_ / 2); ++i) {
-      if (rhs.table1_[i] != nullptr) {
-        table1_[i] = new std::pair< Key, Value >(*rhs.table1_[i]);
-      }
-      if (rhs.table2_[i] != nullptr) {
-        table2_[i] = new std::pair< Key, Value >(*rhs.table2_[i]);
+      try {
+        if (rhs.table1_[i] != nullptr) {
+          table1_[i] = new std::pair< Key, Value >(*rhs.table1_[i]);
+        }
+        if (rhs.table2_[i] != nullptr) {
+          table2_[i] = new std::pair< Key, Value >(*rhs.table2_[i]);
+        }
+      } catch (...) {
+        clear();
+        throw;
       }
     }
   }
