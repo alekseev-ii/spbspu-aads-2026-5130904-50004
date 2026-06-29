@@ -3,6 +3,7 @@
 
 #include <utility>
 #include <cmath>
+#include <initializer_list>
 #include "vector.h"
 
 namespace alekseev {
@@ -10,6 +11,8 @@ namespace alekseev {
   struct CuckooHash
   {
     CuckooHash(Hash1 h1, Hash2 h2, Equal e, size_t cap = 128, double max_load_factor = 0.5);
+    CuckooHash(std::initializer_list< std::pair< Key, Value > > init_list,
+        Hash1 h1, Hash2 h2, Equal e, size_t cap = 128, double max_load_factor = 0.5);
     ~CuckooHash();
     CuckooHash(const CuckooHash & rhs);
     CuckooHash & operator=(const CuckooHash & rhs);
@@ -39,8 +42,8 @@ namespace alekseev {
     void clear() noexcept;
     void set_max_load_factor(double max_load_factor) noexcept;
 
-    struct KeyIterator: std::iterator< std::forward_iterator_tag, Key, std::ptrdiff_t, const Key *,
-          const Key & >
+    struct KeyIterator: std::iterator< std::forward_iterator_tag, Key, std::ptrdiff_t,
+          const Key *, const Key & >
     {
       using iterator_category = std::forward_iterator_tag;
       using value_type = Key;
@@ -85,6 +88,10 @@ namespace alekseev {
       double max_load_factor_;
   };
 
+  template< class Value >
+  using CuckooHashWStr = CuckooHash< std::wstring, Value, size_t(*)(const std::wstring &), size_t(
+    *)(const std::wstring &), bool (*)(const std::wstring &, const std::wstring &) >;
+
   template< class Key, class Value, class Hash1, class Hash2, class Equal >
   CuckooHash< Key, Value, Hash1, Hash2, Equal >::CuckooHash(Hash1 h1, Hash2 h2, Equal e, size_t cap,
       double max_load_factor):
@@ -97,6 +104,20 @@ namespace alekseev {
     capacity_(cap + (cap % 2)),
     max_load_factor_(max_load_factor)
   { }
+
+  template< class Key, class Value, class Hash1, class Hash2, class Equal >
+  CuckooHash< Key, Value, Hash1, Hash2, Equal >::CuckooHash(
+      std::initializer_list< std::pair< Key, Value > > init_list, Hash1 h1, Hash2 h2, Equal e,
+      size_t cap, double max_load_factor):
+    CuckooHash(h1, h2, e, cap, max_load_factor)
+  {
+    if (static_cast< size_t >(std::ceil(capacity() * max_load_factor_)) < init_list.size()) {
+      rehash(static_cast< size_t >(init_list.size() / max_load_factor_));
+    }
+    for (auto it = init_list.begin(); it != init_list.end(); ++it) {
+      insert(it->first, it->second);
+    }
+  }
 
   template< class Key, class Value, class Hash1, class Hash2, class Equal >
   CuckooHash< Key, Value, Hash1, Hash2, Equal >::~CuckooHash()
@@ -536,15 +557,15 @@ namespace alekseev {
   }
 
   template< class Key, class Value, class Hash1, class Hash2, class Equal >
-  typename CuckooHash<Key, Value, Hash1, Hash2, Equal>::KeyIterator CuckooHash<Key, Value, Hash1,
-  Hash2, Equal>::сbegin() const
+  typename CuckooHash< Key, Value, Hash1, Hash2, Equal >::KeyIterator CuckooHash< Key, Value, Hash1,
+    Hash2, Equal >::сbegin() const
   {
     return begin();
   }
 
   template< class Key, class Value, class Hash1, class Hash2, class Equal >
-  typename CuckooHash<Key, Value, Hash1, Hash2, Equal>::KeyIterator CuckooHash<Key, Value, Hash1,
-  Hash2, Equal>::сend() const
+  typename CuckooHash< Key, Value, Hash1, Hash2, Equal >::KeyIterator CuckooHash< Key, Value, Hash1,
+    Hash2, Equal >::сend() const
   {
     return end();
   }
