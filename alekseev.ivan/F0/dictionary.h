@@ -147,12 +147,9 @@ namespace alekseev {
         size_t distance = 2) const;
 
     private:
-      CuckooHash< std::wstring, Lemma, size_t (*)(wstr_cr), size_t (*)(wstr_cr), bool(*)(wstr_cr,
-          wstr_cr) > lemmas_;
-      CuckooHash< std::wstring, Vector< std::pair< std::wstring, size_t > >, size_t (*)(wstr_cr),
-        size_t (*)(wstr_cr), bool(*)(wstr_cr, wstr_cr) > forms_;
-      CuckooHash< std::wstring, Lemma, size_t (*)(wstr_cr), size_t (*)(wstr_cr), bool(*)(wstr_cr,
-          wstr_cr) > requires_;
+      CuckooHashWStr< Lemma > lemmas_;
+      CuckooHashWStr< Vector< std::pair< std::wstring, size_t > > > forms_;
+      CuckooHashWStr< Lemma > requires_;
   };
 
   struct DictionaryManager
@@ -209,8 +206,7 @@ namespace alekseev {
     void reset_current();
 
     private:
-      CuckooHash< std::wstring, Dictionary, size_t (*)(wstr_cr), size_t (*)(wstr_cr), bool(*)(
-          wstr_cr, wstr_cr) > dicts_;
+      CuckooHashWStr< Dictionary > dicts_;
       std::wstring current_;
       size_t max_variants_;
       size_t distance_;

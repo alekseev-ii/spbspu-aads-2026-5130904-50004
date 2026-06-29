@@ -58,8 +58,7 @@ namespace alekseev {
     std::wstring last_corrected() const;
 
     private:
-      CuckooHash< std::wstring, text_t, size_t (*)(wstr_cr), size_t (*)(wstr_cr), bool(*)(wstr_cr,
-          wstr_cr) > texts_;
+      CuckooHashWStr< text_t > texts_;
       std::wstring last_loaded_;
       std::wstring last_parsed_;
       std::wstring last_corrected_;

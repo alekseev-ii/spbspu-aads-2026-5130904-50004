@@ -20,8 +20,7 @@ namespace alekseev {
     void operator()(wstr_cr line);
 
     private:
-      CuckooHash< std::wstring, void(Exec::*)(Vector< std::wstring > &), size_t(*)(wstr_cr),
-        size_t(*)(wstr_cr), bool(*)(wstr_cr, wstr_cr) > functions_;
+      CuckooHashWStr< void(Exec::*)(Vector< std::wstring > &) > functions_;
       DictionaryManager dicts_;
       TextManager texts_;
       std::wistream & is_;
