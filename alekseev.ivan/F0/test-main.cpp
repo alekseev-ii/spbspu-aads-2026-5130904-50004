@@ -46,6 +46,25 @@ BOOST_AUTO_TEST_SUITE(BasicOperations)
     BOOST_CHECK_CLOSE(table.load_factor(), 0.0, 0.001);
   }
 
+  BOOST_AUTO_TEST_CASE(InitiazerListConstructor)
+  {
+    alekseev::CuckooHash< int, std::string, SimpleHash, SimpleHash, Equal > table(
+        {
+          {1, "first"},
+          {2, "second"},
+          {3, "third"}
+        },
+        SimpleHash(),
+        SimpleHash(),
+        Equal(), 2);
+
+    BOOST_CHECK_EQUAL(table.size(), 3);
+    BOOST_CHECK_EQUAL(table.capacity(), 6);
+    BOOST_CHECK_EQUAL(table.at(1), "first");
+    BOOST_CHECK_EQUAL(table.at(2), "second");
+    BOOST_CHECK_EQUAL(table.at(3), "third");
+  }
+
   BOOST_AUTO_TEST_CASE(InsertAndFind)
   {
     alekseev::CuckooHash< int, std::string, SimpleHash, SimpleHash, Equal > table(SimpleHash(),
