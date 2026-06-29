@@ -29,14 +29,14 @@ alekseev::WordForm::WordForm(std::wstring wordform, pos p, gender g, number n, c
 alekseev::WordForm::WordForm(const Vector< std::wstring > & tags, pos p):
   WordForm()
 {
-  *this = from_tags(tags, p);
+  *this = from_tags(tags.cbegin(), tags.cend(), p);
 }
 
 alekseev::WordForm::WordForm(wstr_cr wordform, pos p, const Vector< std::wstring > & tags):
   WordForm()
 {
-  Vector< std::wstring > word(1, wordform);
-  *this = from_tags(word + tags, p);
+  Vector< std::wstring > full_tags = Vector< std::wstring >(1, wordform) + tags;
+  *this = from_tags(full_tags.cbegin(), full_tags.cend(), p);
 }
 
 bool alekseev::WordForm::operator==(const WordForm & rhs) const
@@ -114,57 +114,58 @@ alekseev::Vector< std::wstring > alekseev::to_tags(const WordForm & wf)
   return res;
 }
 
-alekseev::WordForm alekseev::from_tags(const Vector< std::wstring > & tags, pos p)
+alekseev::WordForm alekseev::from_tags(Vector< std::wstring >::ConstIterator tags_beg,
+    Vector< std::wstring >::ConstIterator tags_end, pos p)
 {
-  WordForm wf(tags[0], p);
+  WordForm wf(*(tags_beg++), p);
   if (p == functional) {
     return wf;
   }
-  for (size_t i = 1; i < tags.size(); ++i) {
+  for (; tags_beg != tags_end; ++tags_beg) {
     WordForm pre = wf;
     if (p == noun || p == adj || p == require) {
-      if (tags[i] == L"nom") {
+      if (*tags_beg == L"nom") {
         wf.case_ = nominative;
-      } else if (tags[i] == L"gen") {
+      } else if (*tags_beg == L"gen") {
         wf.case_ = genitive;
-      } else if (tags[i] == L"dat") {
+      } else if (*tags_beg == L"dat") {
         wf.case_ = dative;
-      } else if (tags[i] == L"acc") {
+      } else if (*tags_beg == L"acc") {
         wf.case_ = accusative;
-      } else if (tags[i] == L"ins") {
+      } else if (*tags_beg == L"ins") {
         wf.case_ = instrumental;
-      } else if (tags[i] == L"pre") {
+      } else if (*tags_beg == L"pre") {
         wf.case_ = prepositional;
       }
     }
     if (p == verb || p == require) {
-      if (tags[i] == L"pres") {
+      if (*tags_beg == L"pres") {
         wf.tense_ = present;
-      } else if (tags[i] == L"past") {
+      } else if (*tags_beg == L"past") {
         wf.tense_ = past;
-      } else if (tags[i] == L"fut") {
+      } else if (*tags_beg == L"fut") {
         wf.tense_ = future;
       }
-      if (tags[i] == L"1") {
+      if (*tags_beg == L"1") {
         wf.person_ = first;
-      } else if (tags[i] == L"2") {
+      } else if (*tags_beg == L"2") {
         wf.person_ = second;
-      } else if (tags[i] == L"3") {
+      } else if (*tags_beg == L"3") {
         wf.person_ = third;
       }
     }
-    if (tags[i] == L"sing") {
+    if (*tags_beg == L"sing") {
       wf.number_ = singular;
-    } else if (tags[i] == L"plur") {
+    } else if (*tags_beg == L"plur") {
       wf.number_ = plural;
     }
-    if (tags[i] == L"masc") {
+    if (*tags_beg == L"masc") {
       wf.gender_ = masculine;
-    } else if (tags[i] == L"fem") {
+    } else if (*tags_beg == L"fem") {
       wf.gender_ = feminine;
-    } else if (tags[i] == L"neut") {
+    } else if (*tags_beg == L"neut") {
       wf.gender_ = neuter;
-    } else if (tags[i] == L"common") {
+    } else if (*tags_beg == L"common") {
       wf.gender_ = common;
     }
     if (pre == wf) {
@@ -174,11 +175,13 @@ alekseev::WordForm alekseev::from_tags(const Vector< std::wstring > & tags, pos 
   return wf;
 }
 
-alekseev::Vector< std::wstring > alekseev::to_words(const Vector< WordForm > & wfs)
+alekseev::Vector< std::wstring > alekseev::to_words(Vector< WordForm >::ConstIterator wfs_beg,
+    Vector< WordForm >::ConstIterator wfs_end)
 {
-  Vector< std::wstring > res(wfs.size(), L"");
-  for (size_t i = 0; i < wfs.size(); ++i) {
-    res[i] = wfs[i].word_;
+  Vector< std::wstring > res(wfs_end - wfs_beg, L"");
+  auto cur = res.begin();
+  for (; wfs_beg != wfs_end; ++wfs_beg) {
+    *cur = wfs_beg->word_;
   }
   return res;
 }
@@ -187,8 +190,8 @@ std::wstring alekseev::to_wstring(const WordForm & wf)
 {
   std::wstring res(wf.word_);
   Vector< std::wstring > t = to_tags(wf);
-  for (size_t i = 0; i < t.size(); ++i) {
-    res += L" " + t[i];
+  for (auto it = t.cbegin(); it != t.cend(); ++it) {
+    res += L" " + *it;
   }
   return res;
 }
@@ -197,8 +200,8 @@ std::wostream & alekseev::operator<<(std::wostream & os, const WordForm & wf)
 {
   Vector< std::wstring > t = to_tags(wf);
   os << wf.word_;
-  for (size_t i = 0; i < t.size(); ++i) {
-    os << L" " << t[i];
+  for (auto it = t.cbegin(); it != t.cend(); ++it) {
+    os << L" " << *it;
   }
   return os;
 }
@@ -240,9 +243,8 @@ std::wstring alekseev::to_wstring(const Lemma & lemma)
   } else if (lemma.pos_ == functional) {
     res += L"func\n";
   }
-  for (size_t j = 0; j < lemma.forms_.size(); ++j) {
-    const WordForm & wf = lemma.forms_[j];
-    res += L"    " + to_wstring(wf) + L"\n";
+  for (auto it = lemma.forms_.cbegin(); it != lemma.forms_.cend(); ++it) {
+    res += L"    " + to_wstring(*it) + L"\n";
   }
   return res;
 }
@@ -495,22 +497,22 @@ void alekseev::Dictionary::remove_lemma(const std::wstring & lemma)
   if (!lemmas_.contains(lemma)) {
     return;
   }
-  Lemma l = lemmas_.at(lemma);
-  lemmas_.remove(lemma);
-  for (size_t i = 0; i < l.forms_.size(); ++i) {
-    if (!forms_.contains(l.forms_[i].word_)) {
+  Lemma & l = lemmas_.at(lemma);
+  for (auto it = l.forms_.cbegin(); it != l.forms_.cend(); ++it) {
+    if (!forms_.contains(it->word_)) {
       continue;
     }
-    Vector< std::pair< std::wstring, size_t > > & wfs = find_homoforms(l.forms_[i].word_);
+    Vector< std::pair< std::wstring, size_t > > & wfs = find_homoforms(it->word_);
     for (size_t j = 0; j < wfs.size(); ++j) {
       if (wfs[j].first == lemma) {
         wfs.erase(j);
       }
     }
     if (wfs.empty()) {
-      forms_.remove(l.forms_[i].word_);
+      forms_.remove(it->word_);
     }
   }
+  lemmas_.remove(lemma);
 }
 
 void alekseev::Dictionary::remove_form(const WordForm & wordform)
@@ -565,10 +567,10 @@ bool alekseev::Dictionary::contains_form(const WordForm & wordform) const
   if (!forms_.contains(wordform.word_)) {
     return false;
   }
-  Vector< std::pair< std::wstring, size_t > > wfs = forms_.at(wordform.word_);
-  for (size_t i = 0; i < wfs.size(); ++i) {
-    const Lemma & l = lemmas_.at(wfs[i].first);
-    if (l.forms_[wfs[i].second] == wordform) {
+  const Vector< std::pair< std::wstring, size_t > > & wfs = forms_.at(wordform.word_);
+  for (auto it = wfs.begin(); it != wfs.end(); ++it) {
+    const Lemma & l = lemmas_.at(it->first);
+    if (l.forms_[it->second] == wordform) {
       return true;
     }
   }
@@ -596,10 +598,10 @@ std::pair< std::wstring, size_t > & alekseev::Dictionary::lemma_pair_by_wordform
     const WordForm & wordform)
 {
   Vector< std::pair< std::wstring, size_t > > & wfs = find_homoforms(wordform.word_);
-  for (size_t i = 0; i < wfs.size(); ++i) {
-    Lemma & l = lemmas_.at(wfs[i].first);
-    if (l.forms_[wfs[i].second] == wordform) {
-      return wfs[i];
+  for (auto it = wfs.begin(); it != wfs.end(); ++it) {
+    Lemma & l = lemmas_.at(it->first);
+    if (l.forms_[it->second] == wordform) {
+      return *it;
     }
   }
   throw std::out_of_range("Wordform not found");
@@ -609,10 +611,10 @@ const std::pair< std::wstring, size_t > & alekseev::Dictionary::lemma_pair_by_wo
     const WordForm & wordform) const
 {
   const Vector< std::pair< std::wstring, size_t > > & wfs = find_homoforms(wordform.word_);
-  for (size_t i = 0; i < wfs.size(); ++i) {
-    const Lemma & l = lemmas_.at(wfs[i].first);
-    if (l.forms_[wfs[i].second] == wordform) {
-      return wfs[i];
+  for (auto it = wfs.begin(); it != wfs.end(); ++it) {
+    const Lemma & l = lemmas_.at(it->first);
+    if (l.forms_[it->second] == wordform) {
+      return *it;
     }
   }
   throw std::out_of_range("Wordform not found");
@@ -634,8 +636,8 @@ alekseev::Vector< alekseev::WordForm > alekseev::Dictionary::get_homoforms(wstr_
 {
   Vector< WordForm > res;
   const Vector< std::pair< std::wstring, size_t > > & wfs = forms_.at(wordform);
-  for (size_t i = 0; i < wfs.size(); ++i) {
-    res.pushBack(lemmas_.at(wfs[i].first).forms_[wfs[i].second]);
+  for (auto it = wfs.begin(); it != wfs.end(); ++it) {
+    res.pushBack(lemmas_.at(it->first).forms_[it->second]);
   }
   return res;
 }
@@ -681,12 +683,13 @@ alekseev::Vector< alekseev::pos > alekseev::Dictionary::pos_of_form(wstr_cr word
 }
 
 alekseev::Vector< alekseev::WordForm > alekseev::Dictionary::filter_by_require(wstr_cr require,
-    const Vector< WordForm > & forms) const
+    Vector< WordForm >::ConstIterator forms_beg,
+    Vector< WordForm >::ConstIterator forms_end) const
 {
   Vector< WordForm > res;
-  for (size_t i = 0; i < forms.size(); ++i) {
-    if (matches_require(require, forms[i])) {
-      res.pushBack(forms[i]);
+  for (; forms_beg != forms_end; ++forms_beg) {
+    if (matches_require(require, *forms_beg)) {
+      res.pushBack(*forms_beg);
     }
   }
   return res;
@@ -698,8 +701,8 @@ bool alekseev::Dictionary::matches_case(wstr_cr wordform, case_e expected_case) 
     return false;
   }
   Vector< WordForm > wfs = get_homoforms(wordform);
-  for (size_t i = 0; i < wfs.size(); ++i) {
-    if (wfs[i].case_ == expected_case || wfs[i].case_ == nn_case) {
+  for (auto it = wfs.begin(); it != wfs.end(); ++it) {
+    if (it->case_ == expected_case || it->case_ == nn_case) {
       return true;
     }
   }
@@ -712,8 +715,8 @@ bool alekseev::Dictionary::matches_person(wstr_cr wordform, person expected_pers
     return false;
   }
   Vector< WordForm > wfs = get_homoforms(wordform);
-  for (size_t i = 0; i < wfs.size(); ++i) {
-    if (wfs[i].person_ == expected_person || wfs[i].person_ == nn_person) {
+  for (auto it = wfs.begin(); it != wfs.end(); ++it) {
+    if (it->person_ == expected_person || it->person_ == nn_person) {
       return true;
     }
   }
@@ -726,8 +729,8 @@ bool alekseev::Dictionary::matches_require(wstr_cr require, wstr_cr word) const
     return false;
   }
   Vector< WordForm > wfs = get_homoforms(word);
-  for (size_t i = 0; i < wfs.size(); ++i) {
-    if (matches_require(require, wfs[i])) {
+  for (auto it = wfs.begin(); it != wfs.end(); ++it) {
+    if (matches_require(require, *it)) {
       return true;
     }
   }
@@ -740,8 +743,8 @@ bool alekseev::Dictionary::matches_require(wstr_cr require, const WordForm & wor
     return false;
   }
   const Vector< WordForm > & reqs = requires_.at(require).forms_;
-  for (size_t i = 0; i < reqs.size(); ++i) {
-    if (matches(reqs[i], word)) {
+  for (auto it = reqs.begin(); it != reqs.end(); ++it) {
+    if (matches(*it, word)) {
       return true;
     }
   }
@@ -1055,12 +1058,14 @@ bool alekseev::DictionaryManager::is_require(wstr_cr word) const
 }
 
 alekseev::Vector< alekseev::WordForm > alekseev::DictionaryManager::filter_by_require(
-    wstr_cr require, const Vector< WordForm > & wfs) const
+    wstr_cr require,
+    Vector< WordForm >::ConstIterator wfs_beg,
+    Vector< WordForm >::ConstIterator wfs_end) const
 {
   Vector< WordForm > result;
-  for (size_t i = 0; i < wfs.size(); ++i) {
-    if (matches_require(require, wfs[i])) {
-      result.pushBack(wfs[i]);
+  for (; wfs_beg != wfs_end; ++wfs_beg) {
+    if (matches_require(require, *wfs_beg)) {
+      result.pushBack(*wfs_beg);
     }
   }
   return result;
@@ -1130,7 +1135,9 @@ alekseev::Vector< std::wstring > alekseev::DictionaryManager::find_by_require(ws
   };
   for (auto names_it = dicts_.begin(); names_it != dicts_.end() && check(); ++names_it) {
     const Dictionary & dict = dicts_.at(*names_it);
-    res += to_words(filter_by_require(require, dict.damerau_find_wfs(wordform, 0, distance)));
+    Vector< WordForm > wfs = dict.damerau_find_wfs(wordform, 0, distance);
+    Vector< WordForm > filtered = filter_by_require(require, wfs.cbegin(), wfs.cend());
+    res += to_words(filtered.cbegin(), filtered.cend());
   }
   while (res.size() > max_number && max_number != 0) {
     res.popBack();

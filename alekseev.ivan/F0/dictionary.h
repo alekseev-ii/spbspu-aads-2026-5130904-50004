@@ -64,8 +64,10 @@ namespace alekseev {
 
   bool matches(const WordForm & req, const WordForm & word);
   Vector< std::wstring > to_tags(const WordForm & wf);
-  WordForm from_tags(const Vector< std::wstring > & tags, pos p);
-  Vector< std::wstring > to_words(const Vector< WordForm > & wfs);
+  WordForm from_tags(Vector< std::wstring >::ConstIterator tags_beg,
+      Vector< std::wstring >::ConstIterator tags_end, pos p);
+  Vector< std::wstring > to_words(Vector< WordForm >::ConstIterator wfs_beg,
+      Vector< WordForm >::ConstIterator wfs_end);
   std::wstring to_wstring(const WordForm & wf);
   std::wostream & operator<<(std::wostream & os, const WordForm & wf);
 
@@ -128,7 +130,9 @@ namespace alekseev {
     Vector< WordForm > & forms_by_lemma(wstr_cr lemma);
     pos pos_of_lemma(wstr_cr lemma) const;
     Vector< pos > pos_of_form(wstr_cr wordform) const;
-    Vector< WordForm > filter_by_require(wstr_cr require, const Vector< WordForm > & forms) const;
+    Vector< WordForm > filter_by_require(wstr_cr require,
+        Vector< WordForm >::ConstIterator forms_beg,
+        Vector< WordForm >::ConstIterator forms_end) const;
 
     bool matches_case(wstr_cr wordform, case_e expected_case) const;
     bool matches_person(wstr_cr wordform, person expected_person) const;
@@ -175,7 +179,9 @@ namespace alekseev {
 
     bool contains_form(wstr_cr wordform) const;
     bool is_require(wstr_cr word) const;
-    Vector< WordForm > filter_by_require(wstr_cr require, const Vector< WordForm > & wfs) const;
+    Vector< WordForm > filter_by_require(wstr_cr require,
+        Vector< WordForm >::ConstIterator wfs_beg,
+        Vector< WordForm >::ConstIterator wfs_end) const;
     Vector< std::wstring > damerau_find_form(wstr_cr wordform, size_t max_number = 0,
         size_t distance = 0) const;
     Vector< std::wstring > damerau_find_lemma(wstr_cr wordform, size_t max_number = 0,
