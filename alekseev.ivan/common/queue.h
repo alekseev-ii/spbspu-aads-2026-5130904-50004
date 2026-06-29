@@ -25,6 +25,7 @@ namespace alekseev {
     const T & back() const;
     bool empty() const;
     size_t size() const;
+    void clear() noexcept;
 
     void swap(Queue & rhs) noexcept;
 
@@ -92,6 +93,9 @@ namespace alekseev {
   void Queue< T >::pop()
   {
     queue_.pop_front();
+    if (queue_.empty()) {
+      tail_ = queue_.before_begin();
+    }
   }
 
   template< class T >
@@ -128,6 +132,13 @@ namespace alekseev {
   size_t Queue< T >::size() const
   {
     return queue_.size();
+  }
+
+  template< class T >
+  void Queue< T >::clear() noexcept
+  {
+    queue_.clear();
+    tail_ = queue_.before_begin();
   }
 
   template< class T >

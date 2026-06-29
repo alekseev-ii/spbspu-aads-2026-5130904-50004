@@ -118,7 +118,7 @@ BOOST_AUTO_TEST_SUITE(HashTableTests)
     ht.insert("second", 2);
 
     Vector< str > keys = ht.keys();
-    BOOST_CHECK_EQUAL(keys.getSize(), 2);
+    BOOST_CHECK_EQUAL(keys.size(), 2);
   }
 
 BOOST_AUTO_TEST_SUITE_END()

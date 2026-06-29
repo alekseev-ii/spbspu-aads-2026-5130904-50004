@@ -21,6 +21,7 @@ namespace alekseev {
     T & top();
     bool empty() const;
     size_t size() const;
+    void clear() noexcept;
 
     private:
       List< T > stack_;
@@ -60,6 +61,12 @@ namespace alekseev {
   size_t Stack< T >::size() const
   {
     return stack_.size();
+  }
+
+  template< class T >
+  void Stack< T >::clear() noexcept
+  {
+    stack_.clear();
   }
 }
 

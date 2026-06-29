@@ -93,7 +93,7 @@ alekseev::Ht_Graphs alekseev::input_graphs(std::ifstream & input)
       continue;
     }
     Vector< str > words = split(line, ' ');
-    if (words.getSize() == 3 && number > 0) {
+    if (words.size() == 3 && number > 0) {
       --number;
       current.ins_vertex(words[0]);
       current.ins_vertex(words[1]);
@@ -103,7 +103,7 @@ alekseev::Ht_Graphs alekseev::input_graphs(std::ifstream & input)
         current = Graph();
         has_graph = false;
       }
-    } else if (words.getSize() == 2 && number == 0 && !has_graph) {
+    } else if (words.size() == 2 && number == 0 && !has_graph) {
       name = words[0];
       number = stoull(words[1]);
       has_graph = true;
@@ -143,19 +143,19 @@ alekseev::Vector< std::string > alekseev::split(const str & s, char delim)
 void alekseev::graphs(Ht_Graphs & graphs, const Vector< str > &)
 {
   Vector< str > names = graphs.keys();
-  if (names.isEmpty()) {
+  if (names.empty()) {
     std::cout << "\n";
     return;
   }
   names.bubbleSort(str_less);
-  for (size_t i = 0; i < names.getSize(); ++i) {
+  for (size_t i = 0; i < names.size(); ++i) {
     std::cout << names[i] << "\n";
   }
 }
 
 void alekseev::vertexes(Ht_Graphs & graphs, const Vector< str > & args)
 {
-  if (args.isEmpty()) {
+  if (args.empty()) {
     throw std::invalid_argument("Invalid arguments");
   }
   if (!graphs.contains(args[0])) {
@@ -166,19 +166,19 @@ void alekseev::vertexes(Ht_Graphs & graphs, const Vector< str > & args)
   for (auto it = names.begin(); it != names.end(); ++it) {
     vect_names.pushBack(*it);
   }
-  if (vect_names.isEmpty()) {
+  if (vect_names.empty()) {
     std::cout << "\n";
     return;
   }
   vect_names.bubbleSort(str_less);
-  for (size_t i = 0; i < vect_names.getSize(); ++i) {
+  for (size_t i = 0; i < vect_names.size(); ++i) {
     std::cout << vect_names[i] << "\n";
   }
 }
 
 void alekseev::bounds(Ht_Graphs & graphs, const Vector< str > & args, bool out)
 {
-  if (args.getSize() != 2) {
+  if (args.size() != 2) {
     throw std::invalid_argument("Invalid arguments");
   }
   if (!graphs.contains(args[0])) {
@@ -199,19 +199,19 @@ void alekseev::bounds(Ht_Graphs & graphs, const Vector< str > & args, bool out)
       const std::pair< str, Vector< size_t > > & p2) {
         return str_less(p1.first, p2.first);
       });
-  for (size_t i = 0; i < edges.getSize(); ++i) {
+  for (size_t i = 0; i < edges.size(); ++i) {
     Vector< size_t > & weights = edges[i].second;
     std::cout << edges[i].first;
 
     weights.bubbleSort([](size_t a, size_t b) {
       return a < b;
     });
-    for (size_t j = 0; j < weights.getSize(); ++j) {
+    for (size_t j = 0; j < weights.size(); ++j) {
       std::cout << " " << weights[j];
     }
     std::cout << "\n";
   }
-  if (edges.isEmpty()) {
+  if (edges.empty()) {
     std::cout << "\n";
   }
 }
@@ -228,7 +228,7 @@ void alekseev::inbound(Ht_Graphs & graphs, const Vector< str > & args)
 
 void alekseev::bind(Ht_Graphs & graphs, const Vector< str > & args)
 {
-  if (args.getSize() != 4) {
+  if (args.size() != 4) {
     throw std::invalid_argument("Invalid arguments");
   }
   if (!graphs.contains(args[0])) {
@@ -260,7 +260,7 @@ void alekseev::bind(Ht_Graphs & graphs, const Vector< str > & args)
 
 void alekseev::cut(Ht_Graphs & graphs, const Vector< str > & args)
 {
-  if (args.getSize() != 4) {
+  if (args.size() != 4) {
     throw std::invalid_argument("Invalid arguments");
   }
   if (!graphs.contains(args[0])) {
@@ -277,18 +277,18 @@ void alekseev::cut(Ht_Graphs & graphs, const Vector< str > & args)
 
 void alekseev::create(Ht_Graphs & graphs, const Vector< str > & args)
 {
-  if (args.isEmpty()) {
+  if (args.empty()) {
     throw std::invalid_argument("Invalid arguments");
   }
   if (graphs.contains(args[0])) {
     throw std::invalid_argument("Invalid arguments");
   }
   Graph graph;
-  if (args.getSize() > 1) {
-    if (args.getSize() != std::stoull(args[1]) + 2) {
+  if (args.size() > 1) {
+    if (args.size() != std::stoull(args[1]) + 2) {
       throw std::invalid_argument("Invalid arguments");
     }
-    for (size_t i = 2; i < args.getSize(); ++i) {
+    for (size_t i = 2; i < args.size(); ++i) {
       graph.add_vertex(args[i]);
     }
   }
@@ -297,7 +297,7 @@ void alekseev::create(Ht_Graphs & graphs, const Vector< str > & args)
 
 void alekseev::merge(Ht_Graphs & graphs, const Vector< str > & args)
 {
-  if (args.getSize() != 3) {
+  if (args.size() != 3) {
     throw std::invalid_argument("Invalid arguments");
   }
   if (graphs.contains(args[0]) || !graphs.contains(args[1]) || !graphs.contains(args[2])) {
@@ -309,7 +309,7 @@ void alekseev::merge(Ht_Graphs & graphs, const Vector< str > & args)
 
 void alekseev::extract(Ht_Graphs & graphs, const Vector< str > & args)
 {
-  if (args.getSize() < 3) {
+  if (args.size() < 3) {
     throw std::invalid_argument("Invalid arguments");
   }
   if (graphs.contains(args[0]) || !graphs.contains(args[1])) {
@@ -318,9 +318,9 @@ void alekseev::extract(Ht_Graphs & graphs, const Vector< str > & args)
 
   Graph graph;
   size_t number = std::stoull(args[2]);
-  if (number > 0 && args.getSize() == number + 3) {
+  if (number > 0 && args.size() == number + 3) {
     List< str > vertexes;
-    for (size_t i = 3; i < args.getSize(); ++i) {
+    for (size_t i = 3; i < args.size(); ++i) {
       vertexes.push_front(args[i]);
     }
     graph = extract_graph(graphs.at(args[1]), vertexes);
@@ -346,13 +346,13 @@ alekseev::Exec::Exec():
 
 void alekseev::Exec::operator()(Ht_Graphs & graphs, Vector< str > words)
 {
-  if (words.isEmpty()) {
+  if (words.empty()) {
     throw std::invalid_argument("Invalid arguments");
   }
   if (!cmds.contains(words[0])) {
     throw std::invalid_argument("Invalid arguments");
   }
-  Vector< str > args;
-  args.insert(0, words, 1, words.getSize());
-  cmds.at(words[0])(graphs, args);
+  str name = words[0];
+  words.erase(0);
+  cmds.at(name)(graphs, words);
 }

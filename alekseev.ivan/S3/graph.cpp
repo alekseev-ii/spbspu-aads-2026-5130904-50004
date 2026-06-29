@@ -67,7 +67,7 @@ void alekseev::Graph::ins_edge(const str & vertex1, const str & vertex2, size_t 
 
 void alekseev::Graph::add_edges(const str & vertex1, const str & vertex2, Vector< size_t > weights)
 {
-  for (size_t i = 0; i < weights.getSize(); ++i) {
+  for (size_t i = 0; i < weights.size(); ++i) {
     add_edge(vertex1, vertex2, weights[i]);
   }
 }
@@ -93,7 +93,7 @@ bool alekseev::Graph::has_edge(const str & vertex1, const str & vertex2, size_t 
   }
   const Vector< size_t > & weights = edges_.at(std::pair< str, str >(vertex1, vertex2));
   bool res = false;
-  for (size_t i = 0; i < weights.getSize() && !res; ++i) {
+  for (size_t i = 0; i < weights.size() && !res; ++i) {
     res = (weights[i] == weight);
   }
   return res;
@@ -122,15 +122,15 @@ void alekseev::Graph::remove_edge(const str & vertex1, const str & vertex2, size
 {
   Vector< size_t > & edges = edges_.at(std::make_pair(vertex1, vertex2));
   size_t id = 0;
-  while (id < edges.getSize()) {
+  while (id < edges.size()) {
     if (edges[id] == weight) {
       break;
     }
     ++id;
   }
-  if (id < edges.getSize()) {
+  if (id < edges.size()) {
     edges.erase(id);
-    if (edges.isEmpty()) {
+    if (edges.empty()) {
       edges_.remove(std::pair< str, str >(vertex1, vertex2));
     }
   }
@@ -179,7 +179,7 @@ alekseev::Graph alekseev::merge_graphs(const Graph & graph1, const Graph & graph
   current2 = vertexes2.begin();
   for (; current2 != vertexes2.end(); ++current2) {
     Vector< std::pair< str, Vector< size_t > > > inbounds = graph2.inbounds(*current2);
-    for (size_t i = 0; i < inbounds.getSize(); ++i) {
+    for (size_t i = 0; i < inbounds.size(); ++i) {
       merged.add_edges(inbounds[i].first, *current2, inbounds[i].second);
     }
   }
@@ -198,7 +198,7 @@ alekseev::Graph alekseev::extract_graph(const Graph & source, const List< str > 
   }
   for (auto current_vertex = vertexes.begin(); current_vertex != vertexes.end(); ++current_vertex) {
     Vector< std::pair< str, Vector< size_t > > > inbounds = source.inbounds(*current_vertex);
-    for (size_t i = 0; i < inbounds.getSize(); ++i) {
+    for (size_t i = 0; i < inbounds.size(); ++i) {
       if (extracted.has_vertex(inbounds[i].first)) {
         extracted.add_edges(inbounds[i].first, *current_vertex, inbounds[i].second);
       }

@@ -73,7 +73,7 @@ alekseev::Vector< std::string > alekseev::split(const std::string & s, char deli
 
 void alekseev::print(big_tree_t & bigTree, const Vector< std::string > & args)
 {
-  if (args.getSize() != 1) {
+  if (args.size() != 1) {
     throw std::invalid_argument("Wrong number of arguments");
   }
 
@@ -93,7 +93,7 @@ void alekseev::print(big_tree_t & bigTree, const Vector< std::string > & args)
 
 void alekseev::complement(big_tree_t & bigTree, const Vector< std::string > & args)
 {
-  if (args.getSize() != 3) {
+  if (args.size() != 3) {
     throw std::invalid_argument("Wrong number of arguments");
   }
   BSTree< int, std::string, std::less< > > & a = bigTree.at(args[1]);
@@ -112,7 +112,7 @@ void alekseev::complement(big_tree_t & bigTree, const Vector< std::string > & ar
 
 void alekseev::intersect(big_tree_t & bigTree, const Vector< std::string > & args)
 {
-  if (args.getSize() != 3) {
+  if (args.size() != 3) {
     throw std::invalid_argument("Wrong number of arguments");
   }
   BSTree< int, std::string, std::less< > > & a = bigTree.at(args[1]);
@@ -131,7 +131,7 @@ void alekseev::intersect(big_tree_t & bigTree, const Vector< std::string > & arg
 
 void alekseev::union_(big_tree_t & bigTree, const Vector< std::string > & args)
 {
-  if (args.getSize() != 3) {
+  if (args.size() != 3) {
     throw std::invalid_argument("Wrong number of arguments");
   }
   BSTree< int, std::string, std::less< > > & a = bigTree.at(args[1]);
@@ -161,15 +161,15 @@ alekseev::Exec::Exec():
 void alekseev::Exec::operator()(const std::string & line)
 {
   Vector< std::string > words = split(line, ' ');
-  if (words.isEmpty()) {
+  if (words.empty()) {
     throw std::invalid_argument("wrong input");
   }
   if (!cmds.contains(words[0])) {
     throw std::invalid_argument("wrong command name");
   }
-  Vector< std::string > args;
-  args.insert(0, words, 1, words.getSize());
-  cmds.at(words[0])(bigTree, args);
+  std::string name = words[0];
+  words.erase(0);
+  cmds.at(name)(bigTree, words);
 }
 
 std::ifstream & alekseev::Exec::input_dicts(std::ifstream & is)
@@ -180,15 +180,15 @@ std::ifstream & alekseev::Exec::input_dicts(std::ifstream & is)
   std::string line;
   while (std::getline(is, line)) {
     Vector< std::string > words = split(line, ' ');
-    if (words.isEmpty()) {
+    if (words.empty()) {
       continue;
     }
-    if (words.getSize() % 2 != 1) {
+    if (words.size() % 2 != 1) {
       throw std::invalid_argument("wrong input");
     }
     std::string name = words[0];
     BSTree< int, std::string, std::less< > > dataset(std::less< >{});
-    for (size_t i = 1; i < words.getSize(); i += 2) {
+    for (size_t i = 1; i < words.size(); i += 2) {
       dataset.push(std::stoi(words[i]), words[i + 1]);
     }
     bigTree.push(name, dataset);
