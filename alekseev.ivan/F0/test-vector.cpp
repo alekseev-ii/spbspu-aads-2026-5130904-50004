@@ -1,5 +1,7 @@
 #include <boost/test/unit_test.hpp>
 #include <string>
+
+#include "dictionary.h"
 #include "vector.h"
 
 BOOST_AUTO_TEST_SUITE(VectorConstruction)
@@ -423,12 +425,26 @@ BOOST_AUTO_TEST_SUITE(VectorIterator)
       { }
     };
 
-    alekseev::Vector v = {TestStruct(1), TestStruct(2), TestStruct(3)};
+    alekseev::Vector< TestStruct > v = {TestStruct(1), TestStruct(2), TestStruct(3)};
     auto it = v.begin();
 
     BOOST_CHECK_EQUAL(it->value, 1);
     ++it;
     BOOST_CHECK_EQUAL(it->value, 2);
+  }
+
+  BOOST_AUTO_TEST_CASE(IteratorPrePostIncrement_Const)
+  {
+    const alekseev::Vector< int > v = {1, 2, 3};
+    auto it = v.cbegin();
+
+    auto post = it++;
+    BOOST_CHECK_EQUAL(*post, 1);
+    BOOST_CHECK_EQUAL(*it, 2);
+
+    auto pre = ++it;
+    BOOST_CHECK_EQUAL(*pre, 3);
+    BOOST_CHECK_EQUAL(*it, 3);
   }
 
 BOOST_AUTO_TEST_SUITE_END()

@@ -64,15 +64,17 @@ namespace alekseev {
       Basic_Iterator operator-(size_t ind) const;
       Basic_Iterator & operator+=(size_t ind);
       Basic_Iterator & operator-=(size_t ind);
-      bool operator==(const Basic_Iterator & rhs) const;
-      bool operator!=(const Basic_Iterator & rhs) const;
-      bool operator<(const Basic_Iterator & rhs) const;
-      bool operator>(const Basic_Iterator & rhs) const;
-      bool operator<=(const Basic_Iterator & rhs) const;
-      bool operator>=(const Basic_Iterator & rhs) const;
+      bool operator==(const Basic_Iterator & rhs) const noexcept;
+      bool operator!=(const Basic_Iterator & rhs) const noexcept;
+      bool operator<(const Basic_Iterator & rhs) const noexcept;
+      bool operator>(const Basic_Iterator & rhs) const noexcept;
+      bool operator<=(const Basic_Iterator & rhs) const noexcept;
+      bool operator>=(const Basic_Iterator & rhs) const noexcept;
 
-      reference operator*();
-      pointer operator->();
+      reference operator*() noexcept;
+      pointer operator->() noexcept;
+      reference operator*() const noexcept;
+      pointer operator->() const noexcept;
 
       private:
         pointer current_, end_;
@@ -105,7 +107,7 @@ alekseev::Vector< T >::Vector():
 template< class T >
 alekseev::Vector< T >::~Vector()
 {
-  delete [] data_;
+  delete[] data_;
 }
 
 template< class T >
@@ -478,42 +480,48 @@ alekseev::Vector< T >::Basic_Iterator< U >::operator-=(size_t ind)
 
 template< class T >
 template< class U >
-bool alekseev::Vector< T >::Basic_Iterator< U >::operator==(const Basic_Iterator & rhs) const
+bool alekseev::Vector< T >::Basic_Iterator< U >::operator==(
+    const Basic_Iterator & rhs) const noexcept
 {
   return current_ == rhs.current_;
 }
 
 template< class T >
 template< class U >
-bool alekseev::Vector< T >::Basic_Iterator< U >::operator!=(const Basic_Iterator & rhs) const
+bool alekseev::Vector< T >::Basic_Iterator< U >::operator!=(
+    const Basic_Iterator & rhs) const noexcept
 {
   return !(*this == rhs);
 }
 
 template< class T >
 template< class U >
-bool alekseev::Vector< T >::Basic_Iterator< U >::operator<(const Basic_Iterator & rhs) const
+bool alekseev::Vector< T >::Basic_Iterator< U >::operator<(
+    const Basic_Iterator & rhs) const noexcept
 {
   return current_ < rhs.current_;
 }
 
 template< class T >
 template< class U >
-bool alekseev::Vector< T >::Basic_Iterator< U >::operator>(const Basic_Iterator & rhs) const
+bool alekseev::Vector< T >::Basic_Iterator< U >::operator>(
+    const Basic_Iterator & rhs) const noexcept
 {
   return rhs < *this;
 }
 
 template< class T >
 template< class U >
-bool alekseev::Vector< T >::Basic_Iterator< U >::operator<=(const Basic_Iterator & rhs) const
+bool alekseev::Vector< T >::Basic_Iterator< U >::operator<=(
+    const Basic_Iterator & rhs) const noexcept
 {
   return !(*this > rhs);
 }
 
 template< class T >
 template< class U >
-bool alekseev::Vector< T >::Basic_Iterator< U >::operator>=(const Basic_Iterator & rhs) const
+bool alekseev::Vector< T >::Basic_Iterator< U >::operator>=(
+    const Basic_Iterator & rhs) const noexcept
 {
   return !(*this < rhs);
 }
@@ -521,7 +529,7 @@ bool alekseev::Vector< T >::Basic_Iterator< U >::operator>=(const Basic_Iterator
 template< class T >
 template< class U >
 typename alekseev::Vector< T >::template Basic_Iterator< U >::reference
-alekseev::Vector< T >::Basic_Iterator< U >::operator*()
+alekseev::Vector< T >::Basic_Iterator< U >::operator*() noexcept
 {
   return *current_;
 }
@@ -529,7 +537,23 @@ alekseev::Vector< T >::Basic_Iterator< U >::operator*()
 template< class T >
 template< class U >
 typename alekseev::Vector< T >::template Basic_Iterator< U >::pointer
-alekseev::Vector< T >::Basic_Iterator< U >::operator->()
+alekseev::Vector< T >::Basic_Iterator< U >::operator->() noexcept
+{
+  return current_;
+}
+
+template< class T >
+template< class U >
+typename alekseev::Vector< T >::template Basic_Iterator< U >::reference
+alekseev::Vector< T >::Basic_Iterator< U >::operator*() const noexcept
+{
+  return *current_;
+}
+
+template< class T >
+template< class U >
+typename alekseev::Vector< T >::template Basic_Iterator< U >::pointer
+alekseev::Vector< T >::Basic_Iterator< U >::operator->() const noexcept
 {
   return current_;
 }

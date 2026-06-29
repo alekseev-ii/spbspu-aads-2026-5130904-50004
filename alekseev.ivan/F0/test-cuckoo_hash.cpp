@@ -469,7 +469,7 @@ BOOST_AUTO_TEST_SUITE(IteratorTests)
     for (size_t i = 0; i < N; ++i) {
       table.insert(i, "value_" + std::to_string(i));
     }
-
+    BOOST_CHECK_EQUAL(table.size(), N);
     alekseev::Vector< size_t > keys_from_iterator;
     for (auto it = table.begin(); it != table.end(); ++it) {
       keys_from_iterator.pushBack(*it);
