@@ -68,11 +68,11 @@ int main()
         return 0;
       }
       exec(line);
-    } catch (std::invalid_argument & e) {
+    } catch (const std::invalid_argument & e) {
       std::wcout << e.what() << L"\n";
-    } catch (std::out_of_range & e) {
+    } catch (const std::out_of_range & e) {
       std::wcout << e.what() << L"\n";
-    } catch (std::exception & e) {
+    } catch (const std::exception & e) {
       std::wcout << e.what() << L"\n";
       return 1;
     }
@@ -406,7 +406,7 @@ void alekseev::Exec::load_default_dicts(Vector< std::wstring > &)
     }
     dicts_.reset_current();
     os_ << L"Successfully loaded. Now loaded " << dicts_.size() << L" word forms\n";
-  } catch (std::exception & e) {
+  } catch (const std::exception & e) {
     os_ << L"Unable to load default dictionary: " << e.what() << L"\n";
   }
 }

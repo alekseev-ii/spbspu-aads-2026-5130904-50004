@@ -970,7 +970,7 @@ void alekseev::DictionaryManager::update_word(std::wstring word, std::wistream &
   while (wgetline(is, form)) {
     try {
       wf = WordForm(split(form), l.pos_);
-    } catch (std::invalid_argument & e) {
+    } catch (const std::invalid_argument & e) {
       os << L"Bad input or bad tags\n";
     }
     if (!wf.word_.empty()) {
