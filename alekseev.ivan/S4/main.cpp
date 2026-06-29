@@ -167,9 +167,9 @@ void alekseev::Exec::operator()(const std::string & line)
   if (!cmds.contains(words[0])) {
     throw std::invalid_argument("wrong command name");
   }
-  Vector< std::string > args;
-  args.insert(0, words, 1, words.size());
-  cmds.at(words[0])(bigTree, args);
+  std::string name = words[0];
+  words.erase(0);
+  cmds.at(name)(bigTree, words);
 }
 
 std::ifstream & alekseev::Exec::input_dicts(std::ifstream & is)

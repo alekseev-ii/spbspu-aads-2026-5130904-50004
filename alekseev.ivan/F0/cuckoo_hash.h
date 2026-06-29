@@ -435,7 +435,6 @@ namespace alekseev {
   typename CuckooHash< Key, Value, Hash1, Hash2, Equal >::KeyIterator::reference
   CuckooHash< Key, Value, Hash1, Hash2, Equal >::KeyIterator::operator*() const noexcept
   {
-    auto c = *cur1_;
     if (cur1_ != end1_) {
       return (*cur1_)->first;
     }

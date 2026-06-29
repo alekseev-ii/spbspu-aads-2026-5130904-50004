@@ -352,7 +352,7 @@ void alekseev::Exec::operator()(Ht_Graphs & graphs, Vector< str > words)
   if (!cmds.contains(words[0])) {
     throw std::invalid_argument("Invalid arguments");
   }
-  Vector< str > args;
-  args.insert(0, words, 1, words.size());
-  cmds.at(words[0])(graphs, args);
+  str name = words[0];
+  words.erase(0);
+  cmds.at(name)(graphs, words);
 }
