@@ -258,7 +258,6 @@ BOOST_AUTO_TEST_SUITE(VectorResize)
   BOOST_AUTO_TEST_CASE(ResizeLarger)
   {
     alekseev::Vector< int > v = {1, 2, 3};
-    size_t old_capacity = v.capacity();
     v.resize(10);
 
     BOOST_CHECK(v.capacity() >= 10);
