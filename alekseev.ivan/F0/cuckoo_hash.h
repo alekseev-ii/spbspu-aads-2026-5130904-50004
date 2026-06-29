@@ -157,7 +157,8 @@ namespace alekseev {
   CuckooHash< Key, Value, Hash1, Hash2, Equal > & CuckooHash< Key, Value, Hash1, Hash2,
     Equal >::operator=(CuckooHash && rhs) noexcept
   {
-    swap(rhs);
+    CuckooHash temp(std::move(rhs));
+    swap(temp);
     return *this;
   }
 
